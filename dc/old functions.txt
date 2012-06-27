@@ -1,0 +1,98 @@
+function fill(
+		$id,
+		$name,
+		$description,
+		$start_datetime,
+		$end_datetime,
+		$enroll,
+		$enroll_datetime,
+		$enroll_max,
+		$price,
+		$price_member,
+		$location,
+		$active,
+		$category,
+		$pay_option,
+		$commission,
+		$user_id,
+		$user_ip,
+		$datetime_created,
+		$datetime_updated,
+		$bbcode_bitfield,
+		$bbcode_uid,
+		$bbcode_options) 
+	{
+        $this->id = $id;
+        $this->name = $name;
+        $this->description = $description;
+        $this->start_datetime = new DateTime( $start_datetime);
+        $this->end_datetime = new DateTime($end_datetime);
+        $this->enroll = $enroll;
+        $this->enroll_datetime = new DateTime( $enroll_datetime);
+        $this->enroll_max = $enroll_max;
+        $this->price = $price;
+        $this->price_member = $price_member;
+        $this->location = $location;
+		$this->active = $active;
+        $this->category = $category;
+        $this->pay_option = $pay_option;
+        $this->commission = $commission;
+        $this->user_id = $user_id;
+        $this->user_ip = $user_ip;
+        $this->datetime_created = new DateTime($datetime_created);
+        $this->datetime_updated = new DateTime( $datetime_updated);
+		$this->bbcode_bitfield = $bbcode_bitfield;
+		$this->bbcode_uid = $bbcode_uid;
+		$this->bbcode_options = $bbcode_options;
+    } 
+
+
+function get_activity($activity){
+		global $db, $user;										// get database connection
+		$activity_OBJ = new activity();							// new emty activity
+		$sql = 'SELECT *, count(*) amount FROM `dc_activity` WHERE id = ' . (int)$activity;	// select activity
+		$result = $db->sql_query($sql);							// send query
+		$row = $db->sql_fetchrow($result);						// get row from the db
+		if($row['amount'] != 1){
+			trigger_error($user->lang['DC_ACT_NO_ACT']);
+			return null;
+		}
+		$activity_OBJ->fill(
+			$row['id'],
+			$row['name'], 
+			$row['description'],
+			$row['start_datetime'],
+			$row['end_datetime'],
+			$row['enroll'],
+			$row['enroll_datetime'],
+			$row['enroll_max'],
+			$row['price'],
+			$row['price_member'],
+			$row['location'],
+			$row['active'],
+			$row['category'],
+			$row['pay_option'],
+			$row['commission'],
+			$row['user_id'],
+			$row['user_ip'],
+			$row['datetime_created'],
+			$row['datetime_updated'],
+			$row['bbcode_bitfield'],
+			$row['bbcode_uid'],
+			$row['bbcode_options']
+		); // fill the new activity 
+		$db->sql_freeresult($result); 							// remove query
+		return $activity_OBJ;									// send the new activity object
+	}
+
+	function get_user_read_all_activity($user_id){
+		global $db;												// get database connection
+		$sql = 'SELECT * FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\'';	// select all the readed activitys 
+		$result = $db->sql_query($sql);							// send query
+		while ($row = $db->sql_fetchrow($result))				// walk true all returned rows
+		{
+			$readed[$row['activity_id']] = 1;
+		}
+		$db->sql_freeresult($result);							// remove query
+		return $readed;	
+	}

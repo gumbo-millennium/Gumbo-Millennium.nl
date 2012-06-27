@@ -1,0 +1,8 @@
+Subject: Melding gesloten - {POST_SUBJECT}
+
+Hallo {USERNAME},
+
+Je hebt deze e-mail ontvangen omdat je melding over het bericht "{POST_SUBJECT}" in "{TOPIC_TITLE}" op {SITENAME} is afgehandeld door een moderator of een beheerder. Je melding is nu gesloten. Als je nog vragen hebt, neem dan contact op met {CLOSER_NAME} door middel van een PB.
+
+
+{EMAIL_SIG}

@@ -1,0 +1,19 @@
+Subject: Welkom op "{SITENAME}"
+
+{WELCOME_MSG}
+
+Deze e-mail bevat enkele belangrijke gegevens. Zorg dus dat je deze bewaart. Je gegevens zijn als volgt:
+
+----------------------------
+Gebruikersnaam: {USERNAME}
+
+Forum URL: {U_BOARD}
+----------------------------
+
+Op dit moment is je account inactief en moet door een beheerder worden goedgekeurd voordat je kunt inloggen. Je ontvangt een e-mail zodra dit is gebeurd.
+
+Je wachtwoord is veilig opgeslagen in onze database en kan niet meer worden opgevraagd. In geval dat je het bent vergeten, kun je het laten resetten met het bij het account behorende e-mailadres.
+
+Bedankt voor je registratie.
+
+{EMAIL_SIG}

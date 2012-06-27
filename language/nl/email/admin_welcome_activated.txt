@@ -1,0 +1,9 @@
+Subject: Account geactiveerd
+
+Hallo {USERNAME},
+
+Je account op "{SITENAME}" is nu geactiveerd, je kunt je gebruikersnaam en wachtwoord nu gebruiken om in te loggen.
+
+Je wachtwoord is veilig opgeslagen in onze database en kan niet worden achterhaald. Als je je wachtwoord bent vergeten, kun je het laten resetten via bij het account behorende e-mailadres. 
+
+{EMAIL_SIG}

@@ -1,0 +1,20 @@
+Subject: Welkom bij "{SITENAME}"
+
+{WELCOME_MSG}
+
+Bewaar deze e-mail goed ter informatie. Je accountinformatie is als volgt:
+
+----------------------------
+Gebruikersnaam: {USERNAME}
+----------------------------
+
+Je wachtwoord is veilig opgeslagen in onze database en kan niet worden opgevraagd. Indien je het bent vergeten, kun je het laten resetten in combinatie met het e-mailadres behorende bij het account.
+
+Bezoek de volgende link om je account te activeren:
+
+{U_ACTIVATE}
+
+
+Dank je voor het registreren.
+
+{EMAIL_SIG}

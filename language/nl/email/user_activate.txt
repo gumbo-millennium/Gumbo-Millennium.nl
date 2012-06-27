@@ -1,0 +1,9 @@
+Subject: Je moet je account opnieuw activeren!
+
+Hallo {USERNAME},
+
+Je account op "{SITENAME}" is gedeactiveerd, waarschijnlijk door wijzigingen in je profiel. Om je account weer actief te maken dien je op onderstaande link te klikken:
+
+{U_ACTIVATE}
+
+{EMAIL_SIG}

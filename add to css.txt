@@ -1,0 +1,19 @@
+/* special for dc activity*/
+#activity_enrolled_wapper {
+		margin:0 auto;
+		width: 50%;
+		float:center;
+		
+}
+
+#activity_enrolled_block1 {
+		float:left;
+		width: 50%;
+		
+		
+}
+#activity_enrolled_block2 {
+		float:right;
+		text-align: left;
+		width: 50%;
+}

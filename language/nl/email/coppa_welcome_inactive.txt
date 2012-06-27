@@ -1,0 +1,42 @@
+Subject: Welkom op "{SITENAME}"
+
+{WELCOME_MSG}
+
+Door de COPPA-wetgeving is je account momenteel inactief.
+
+Print dit bericht uit en laat je ouders/voogd dit formulier ondertekenen. Fax het daarna naar:
+
+{FAX_INFO}
+
+OF e-mail het naar:
+
+{MAIL_INFO}
+
+------------------------------ KNIP HIER ------------------------------
+Toestemming om gebruik te maken van "{SITENAME}" - {U_BOARD}
+
+Gebruikersnaam: {USERNAME}
+E-mail: {EMAIL_ADDRESS}
+
+IK HEB DE INFORMATIE DIE MIJN KIND OPGEGEVEN HEEFT GECONTROLEERD EN GEEF BIJ DEZE TOESTEMMING AAN {SITENAME} OM DEZE GEGEVENS OP TE SLAAN.
+IK BEGRIJP DAT DEZE INFORMATIE ALTIJD VERANDERD KAN WORDEN DOOR MIDDEL VAN HET INVOEREN VAN EEN WACHTWOORD.
+IK BEGRIJP DAT ER ALTIJD VERZOCHT KAN WORDEN DEZE INFORMATIE TE VERWIJDEREN VAN {SITENAME}.
+
+
+Ouder of voogd
+(vul naam in): _____________________
+
+(handtekening): __________________
+
+Datum: _______________
+
+------------------------------ KNIP HIER ------------------------------
+
+
+Als de beheerder het bovenstaande formulier heeft ontvangen via fax of e-mail zal je account geactiveerd worden. 
+
+Jouw wachtwoord is veilig opgeslagen in onze database en kan niet worden opgevraagd. Indien je het bent vergeten, kun je het laten resetten in combinatie met het e-mailadres behorende bij het account.
+
+Bedankt voor je registratie.
+
+{EMAIL_SIG}

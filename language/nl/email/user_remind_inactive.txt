@@ -1,0 +1,11 @@
+Subject: Inactief account herinnering
+
+Hallo {USERNAME},
+
+Deze melding is een herinnering dat je account op"{SITENAME}", aangemaakt op {REGISTER_DATE}, nog inactief is. Als je dit account wilt activeren, kun je naar de volgende link gaan:
+
+{U_ACTIVATE}
+
+Bedankt voor je registratie op "{SITENAME}", en we zien je graag op het forum.
+
+{EMAIL_SIG}

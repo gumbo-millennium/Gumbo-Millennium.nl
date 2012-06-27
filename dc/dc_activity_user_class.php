@@ -1,0 +1,297 @@
+<?php
+
+/*
+made: Gerco Versloot
+the user class
+
+Functions summary:
+	get_full_list_active()
+		// get a list of objects of all the active activitys
+		
+	get_all_activitys()
+		// get a list of objects of all the activitys 
+		
+	get_comming()
+		// get a list of object of all the activitys that are comming
+	
+	get_activity($activity)
+		// get a activity:
+		
+	user_all_groups($user_id) (Static)
+		// get all the groeps of the user
+	
+	get_read($user_id, $activity)
+		// get all activity(s) the user has readed $array[key] 
+			// $activity = one activity_id; return: true: user has readed, false: user not readed
+			// $activity = "all"; returns a list of all readed activitys: $array[key] = activity 
+		
+	set_read($user_id, $activity_id)
+		// set a activity to readed
+	
+	get_paid($user_id, $activity_id, $status)
+		// $user = "all": return a list of all users payments and what they have to pay
+		// $user = user id: return a list of the user payment paid and the amount is has to pay
+		// $activity_id = "all" return all the activitys
+		// $activity_id = activity id: retrun only the given activity
+		// $status = "all"/"yes"/"no"/"maybe"; the statuses of the users
+		// RETURN: $array[activity_id] = array (["user_id"] => user_id, ["price"] => price, ["price_payed"] => price_paid ) OR NULL if nothing is found
+	
+	search($user_id, $name, $start_datetime, $end_datetime, $active, $description)
+		// search for activitys 
+		// return array of object acitivies from the found activities 
+		// if a parameter is not needed fill in NULL
+			// example: search(1, "going to the beach", null, null, 1 , null)
+				// finds all activities with a name like 'going to the beach' and is active
+				// like: $array ([0] => object(id = 4), [1] =>object(id = 20) )
+*/
+
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+	
+class activity_user{
+
+	// get list of all the activity
+	function get_full_list_active($user_id){
+		global $db;												// get database connection
+		$sql = 'SELECT * FROM dc_activity_full_list_active';	// select all the activity's that are active (db view)
+		$sql_result = $db->sql_query($sql);
+		$index = 0;
+		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		{
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			if($activity->user_acces($user_id)){
+				$full_list[$index] = $activity;
+				$index++;
+			}
+		}
+		$db->sql_freeresult($result);							// remove query
+		return $full_list;										// send the array
+	}
+	
+	
+	function get_all_activitys(){
+		global $db;												// get database connection
+		$sql = 'SELECT * FROM dc_activity';	// select all the activity's that are active (db view)
+		$sql_result = $db->sql_query($sql);
+		$index = 0;
+		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		{
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			if($activity->user_acces($user_id)){
+				$full_list[$index] = $activity;
+				$index++;
+			}
+		}
+		$db->sql_freeresult($result);							// remove query
+		return $full_list;
+	}
+	
+	// get a list of all the comming activity's 
+	function get_comming(){
+		global $db;												// get database connection
+		$sql = 'SELECT * FROM `dc_activity_comming_active`';	// select alle the activity's that where startdate => than now and are active (db view)
+		$sql_result = $db->sql_query($sql);
+		$index = 0;
+		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		{
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			$comming_list[$index] = $activity;
+			$index++;
+		}
+		$db->sql_freeresult($result);							// remove query
+		return $comming_list;									// send array
+	}
+	
+	// get one activity
+	function get_activity($activity){
+		global $db, $user;										// get database connection
+		$activity_OBJ = new activity();							// new emty activity 
+		if(($activity_OBJ->fill($activity)) == null)
+		{
+			trigger_error($user->lang['DC_ACT_ERROR_LOAD']);
+			return null;
+		}
+		return $activity_OBJ;									// send the new activity object
+	}
+
+	// get all groups of a user
+	public static function user_all_groups($user_id){
+		global $db;
+		$counter = 0;
+		$sql = "SELECT group_id FROM dc_user_group WHERE user_id = '". $user_id ."' AND user_pending = 0";
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))				// walk true all the rows
+		{
+			$group_list[$counter]= $row["group_id"];
+			$counter++;
+		}
+		return $group_list;
+	}
+
+// user get read
+	// $activity: id of the activity 
+	//				or null: all the activitys
+	function get_read($user_id, $activity){
+		global $db;												// get database connection
+		switch ($activity){
+			case "all":
+				$activity_sql = "";
+				break;
+			default:
+				if(gettype($activity) != "integer")
+					return null;
+				$activity_sql = "AND activity_id = ". $activity;
+		}
+		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\''. $activity_sql;							// get if user readed 
+		$result = $db->sql_query($sql);							// send query
+		
+		if($activity == "all"){
+			while ($row = $db->sql_fetchrow($result))				// walk true all the rows
+			{
+				$activity_list[$counter]= $row["activity_id"];
+				$counter++;
+			}
+			return $activity_list;
+		}
+		if($row['count'] != 1)
+			return null;
+		$db->sql_freeresult($result);							// remove query
+		return true;	
+	}
+	
+	// user set read
+	function set_read($user_id, $activity_id = "all"){
+		global $db;												// get database connection
+		if(gettype($user_id) != "integer")
+			return null;
+		if(gettype($activity_id) != "activity_id")
+			return null;
+		$sql = "SELECT COUNT(*) count FROM `dc_users` WHERE user_id ='" . $user_id . "'";  // check if the user id exist
+		$result = $db->sql_query($sql);							// send query
+		$result = $db->sql_fetchrow($result);
+		if( $result['count'] != 1 )								// if not found or there are more id's
+			return null;
+		$sql = "SELECT COUNT(*) count FROM `dc_activity` WHERE id ='" . $activity_id . "'";  // check if the user id exist
+		$result = $db->sql_query($sql);							// send query
+		$result = $db->sql_fetchrow($result);
+		if( $result['count'] != 1 )								// if not found or there are more id's
+			return null;
+		$db->sql_freeresult($result);							// remove query
+		$sql = 'INSERT INTO `dc_activity_read`(`activity_id`, `user_id`) VALUES ('. $activity_id . ','.$user_id.')';	// get if user readed 
+		$result = $db->sql_query($sql);							// send query
+		$db->sql_freeresult($result);							// remove query
+		return true;
+	}
+	
+	function get_paid($user_id, $activity_id, $status){
+		global $db, $user;												// get database connection
+		
+		// build status query
+		switch(trim($status)){										// check status
+			case "yes":										// all the users with acces
+				$status_sql = " WHERE status = 'yes'";					// set SQL WHERE statment
+				break;			
+			case "no":									// all the users who had acces
+				$status_sql = " WHERE status = 'no'";					// set SQL WHERE statment 
+				break;
+			case "maybe":									// all the users who had acces
+				$status_sql = " WHERE status = 'maybe'";					// set SQL WHERE statment 
+				break;
+			case "all":											// all the users
+				$status_sql = "WHERE status != null"; 									// set SQL WHERE statment:  status != null: fix for next statments
+				break;
+			default:											// wrong status
+				global $user;
+				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				return null;									
+		}
+		
+		// build user query
+		switch ($user_id){
+			case "all":
+				$user_sql = "";
+				break;
+			default:
+				if(gettype($user_id) != "integer")
+					return null;
+				$user_sql = "AND user_id = ". $user_id;
+		}
+		
+		// build acitivity query
+		switch ($activity_id){
+			case "all":
+				$act_sql = "";
+				break;
+			default:
+				if(gettype($activity_id) != "integer")
+					return null;
+				$act_sql = "AND activity_id = ". $activity_id;
+		}
+		
+		// build total query
+		$sql = 'SELECT price, price_payed, user_id, activity_id, COUNT(*) count FROM dc_activity_enroll '. $status_sql . $user_sql . $act_sql;
+		$result = $db->sql_query($sql);							// send query
+		
+		if($row['count'] != 1)
+			return null;
+		while ($row = $db->sql_fetchrow($result))				// walk true all the rows
+		{
+			$pay_list["activity_id"]= array(
+				"user_id"		=> $row["user_id"],
+				"price"			=> $row["price"],
+				"price_payed"	=> $row["price_payed"]
+			);
+		}
+		return $pay_list;
+		$db->sql_freeresult($result);							// remove query
+		
+	}
+	
+	function search($user_id, $name, $start_datetime, $end_datetime, $active, $description){
+		global $db;
+		// check for sql injection
+		if(gettype($user_id) != "integer")
+			return null; 
+			
+		// construct WHERE statement and check for sql injection
+		$where = "";
+		if($active != null && gettype($active) == "integer")
+			$where .= " AND active = ". $active;
+		if($name != null && gettype($name) == "String")
+			$where .= " AND name LIKE  '%". $name . "%'";
+		if($description != null && gettype($description) == "String")
+			$where .= " AND description LIKE '%". $description ."%'";
+		if($start_datetime != null && $start_datetime instanceof DateTime)
+			$where .= " AND start_datetime >= '". $start_datetime->format('Y-m-d H:i:s') ."'";
+		if($end_datetime != null && $end_datetime instanceof DateTime)
+			$where .= " AND stop_datetime <= '". $end_datetime->format('Y-m-d H:i:s') ."'";
+		
+		$result = array();
+		$sql= "SELECT id FROM `dc_activity` WHERE 
+			(id IN 
+				(SELECT activity_id FROM  dc_activity_groupacces WHERE disabled = 0 AND group_id IN
+					(SELECT group_id FROM dc_user_group WHERE user_id = ".$user_id." ) )
+			OR id IN
+				(SELECT activity_id FROM  dc_activity_user_manage WHERE disabled = 0 AND user_id = ".$user_id.")
+			)
+			". $where;
+		$sql_result = $db->sql_query($sql);
+		$index = 0;
+		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		{
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			$result[$index] = $activity;
+			$index++;
+		}
+		return $result;
+	}
+
+}
+
+?>

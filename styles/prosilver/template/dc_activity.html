@@ -1,0 +1,131 @@
+<!-- INCLUDE overall_header.html -->
+<div class="clear"></div>
+<div id="p1" class="post bg2">
+	<div class="inner">
+		<span class="corners-top"><span></span></span>
+		<div class="postbody">
+			<h2 class="first"><a href="#p2">{TITLE}</a></h3>
+			<div class="content">
+				{DESCRIPTION}
+			</div>
+		</div>
+	
+		<dl class="postprofile" id="profile2">
+			<dt>
+				<strong>{LANG_DATE}:</strong>
+			</dt>
+				<dd>{START_DATE_TIME}</dd>
+				<dd>{LANG_TILL}</dd>
+				<dd>{END_DATE_TIME}</dd>
+			<dt>&nbsp;</dt>
+			
+			<dt>
+				<strong>{LANG_PRICE}:</strong>
+			</dt>
+				<dd>&#8364;{PRICE}</dd>	
+				<dt>&nbsp;</dt>
+			<dt><strong>{LANG_PRICE} {LANG_MEMBER}:</strong></dt>
+				<dd>&#8364;{PRICE_MEMBER}</dd>	
+			
+			<dt>&nbsp;</dt>
+			
+			<dt><strong>{LANG_LOCATION}:</strong></dt>
+				<dd>{LOCATION}</dd>	
+				
+			<dt>&nbsp;</dt>
+			
+			<dt><strong>{LANG_ENROLL_FORCE}:</strong></dt>
+			<!-- IF ENROLL -->
+					<dd>{LANG_YES}</dd>
+					<dt>&nbsp;</dt>
+				<dt><strong>{LANG_ENROLL_TIME}:</strong></dt>
+						<dd>{ENROLL_DATE}</dd>
+			<!-- ELSE -->
+				<dd>{LANG_NO}</dd>
+			<!-- ENDIF -->
+		</dl>
+		<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>
+		<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+
+<hr class="divider" />
+
+<div id="p2" class="post bg1">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<div class="postbody">
+		<h3 ><a href="#p3">{LANG_ENROLLS}</a></h3>
+		<div class="content">
+			<!-- IF USERS_ENROLLED_CHECK -->
+			{LANG_ENROLL_AMOUNT}: {USERS_ENROLLED_AMOUNT}
+			<div id="activity_enrolled_wapper">
+				<div id="activity_enrolled_block1">
+					<dl  id="enroll_list">
+						 <!-- BEGIN users_enrolled1 -->
+						<dt>
+							<a href="{users_enrolled1.USER_LINK}">{users_enrolled1.USER_NAME} </a>
+						</dt>
+						<!-- END users_enrolled1 -->
+					</dl>
+				</div>
+				<div id="activity_enrolled_block2">
+					<dl  id="enroll_list">
+						 <!-- BEGIN users_enrolled2 -->
+						<dt>
+							<a href="{users_enrolled2.USER_LINK}">{users_enrolled2.USER_NAME} </a>
+						</dt>
+						<!-- END users_enrolled2 -->
+					</dl>
+				</div>
+			</div>
+			<!-- ELSE -->
+				{LANG_ENROLL_NOBODY}
+			<!-- ENDIF -->
+		</div>
+	</div>
+	<dl class="postprofile" id="profile2">
+	<!-- IF not S_IS_BOT and S_USER_LOGGED_IN -->
+		<!-- IF USER_ENROLLED_CHECK  && CHANCE == FALSE-->
+			<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
+					<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
+						<dd>&#8364;{USER_ENROLLED_PAID}</dd>
+					<dt>&nbsp;</dt>
+					<dt><strong>{LANG_SUBSCRIBE}:</strong></dd>
+						<dd><a href="{URL_CHANCE_STATUS}">{USER_ENROLLED_STATUS}</a></dd>
+					<dt>&nbsp;</dt>
+					<form action="{URL_STATUS}" method="GET">
+						<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
+						<!-- IF COMMENT_SAVED -->
+						<dd>{LANG_SAVED}</dd>
+						<!-- ENDIF -->
+						<dd><input type="submit" value="{LANG_SAVE_COMMENT}"></dd>
+						<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
+						<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
+						
+					</form>
+			<!-- ELSE -->
+					<dt>{LANG_ENROLL_CLOSED}</dt>
+			<!-- ENDIF -->
+		<!-- ELSE -->
+			<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
+					<dt><strong>{LANG_SUBSCRIBE}:</strong></dt>
+						<dd><a href="{URL_CHANCE_STATUS_YES}">{LANG_YES}</a></dd>
+						<dd><a href="{URL_CHANCE_STATUS_NO}">{LANG_NO}</a></dd>
+						<dd><a href="{URL_CHANCE_STATUS_MAYBE}">{LANG_MAYBE}</a></dd>
+						<!-- IF CHANCE -->
+							<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+						<!-- ENDIF -->
+			<!-- ELSE -->
+					<dt>{LANG_ENROLL_CLOSED}</dt>
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+	<!-- ELSE -->
+		<dt><a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a></dt>
+	<!-- ENDIF -->
+	</dl>
+	<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

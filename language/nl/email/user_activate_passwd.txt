@@ -1,0 +1,17 @@
+Subject: Nieuw wachtwoord activeren
+
+Hallo {USERNAME},
+
+Je ontvangt deze e-mail omdat je (of iemand die namens jou) een nieuw wachtwoord aangevraagd heeft voor jouw account op {SITENAME}. Mocht je deze niet hebben aangevraagd, negeer deze e-mail dan en klik vooral niet op onderstaande link! Als je deze melding blijft ontvangen, neem dan contact op met de beheerder. 
+
+Om het nieuwe wachtwoord te activeren, hoef je alleen op deze link klikken:
+
+{U_ACTIVATE}
+
+Als het is gelukt kun je het volgende wachtwoord te gebruiken:
+
+Wachtwoord: {PASSWORD}
+
+Je kunt natuurlijk dit wachtwoord via je profiel wijzigen. Mocht je hiermee problemen hebben, neem dan contact op met de beheerder.
+
+{EMAIL_SIG}
