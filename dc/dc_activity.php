@@ -14,6 +14,10 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('mods/dc_activity');
 
+if(!isset($_GET["act"])){
+	trigger_error($user->lang['DC_ACT_NO_ACT']);
+}
+
 // Build main objecs
 $activity_controller = new activity_user();									// build user controller
 $activity =  $activity_controller->get_activity(request_var('act', 0));		// build activity by id (default = 0)
@@ -21,7 +25,7 @@ $activity =  $activity_controller->get_activity(request_var('act', 0));		// buil
 // get authorisation 
 if (!$activity->user_acces($user->data['user_id']))
 {
-     //trigger_error('NOT_AUTHORISED');
+     trigger_error('NOT_AUTHORISED');
 }
 // set activity readed
 /*

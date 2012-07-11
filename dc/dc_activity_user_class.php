@@ -67,7 +67,7 @@ class activity_user{
 				$index++;
 			}
 		}
-		$db->sql_freeresult($result);							// remove query
+		$db->sql_freeresult($sql_result);							// remove query
 		return $full_list;										// send the array
 	}
 	

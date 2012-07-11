@@ -57,6 +57,7 @@
 <!-- ENDIF -->
 
 <form id="acp_activity_new" method="post" action="{U_ACTION}">
+
 <!-- BEGIN options -->
 	<!-- IF options.S_LEGEND -->
 		<!-- IF not options.S_FIRST_ROW -->
@@ -65,9 +66,27 @@
 		<fieldset>
 			<legend>{options.LEGEND}</legend>
 	<!-- ELSE -->
-		<!-- IF options.KEY == DESCRIPTION -->
-		<div id="format-buttons">
-		
+		<!-- IF options.legend2 == 'DESCRIPTION' -->
+		<dl>
+			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+			<dd>GRATUS BESCHRIJVING</dd>
+		</dl>
+		<!-- ELSE -->
+		<dl>
+			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+			<dd>{options.CONTENT}</dd>
+		</dl>
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+<!-- END options -->
+
+<!-- IF S_AUTH -->
+	<!-- BEGIN auth_tpl -->
+		{auth_tpl.TPL}
+	<!-- END auth_tpl -->
+<!-- ENDIF -->
+
+	<div id="format-buttons">
 				<input type="button" class="button2" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" onmouseout="helpline('tip')" />
 				<input type="button" class="button2" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px;" onclick="bbstyle(2)" onmouseover="helpline('i')" onmouseout="helpline('tip')" />
 				<input type="button" class="button2" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px;" onclick="bbstyle(4)" onmouseover="helpline('u')" onmouseout="helpline('tip')" />
@@ -93,7 +112,9 @@
 					<input type="button" class="button2" name="addbbcode{custom_tags.BBCODE_ID}" value="{custom_tags.BBCODE_TAG}" onclick="bbstyle({custom_tags.BBCODE_ID})"<!-- IF custom_tags.BBCODE_HELPLINE !== '' --> onmouseover="helpline('cb_{custom_tags.BBCODE_ID}')" onmouseout="helpline('tip')"<!-- ENDIF --> />
 				<!-- END custom_tags -->
 			<!-- ENDIF -->
+
 			</div>
+
 			<p><input type="text" class="text full" style="border: 0; background: none;" name="helpbox" value="{L_STYLES_TIP}" /></p>
 
 			<dl>
@@ -103,6 +124,7 @@
 						colorPalette('h', 8, 10);
 					// ]]>
 					</script>
+
 					<strong>{L_SMILIES}</strong><br />
 					<!-- BEGIN smiley -->
 						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
@@ -110,20 +132,11 @@
 					<!-- IF S_SHOW_SMILEY_LINK -->
 						<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
 					<!-- ENDIF -->
-					
 				</dt>
 				<dd>
-					{options.CONTENT}
+				<textarea name="description" id="config[description]" rows="10" cols="45" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{DONATION_DRAFT}</textarea>
 				</dd>
 			</dl>
-		<!-- ELSE -->
-		<dl>
-			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
-			<dd>{options.CONTENT}</dd>
-		</dl>
-		<!-- ENDIF -->
-	<!-- ENDIF -->
-<!-- END options -->
 </fieldset>
 <fieldset>
 	<legend>{SUBMIT}</legend>

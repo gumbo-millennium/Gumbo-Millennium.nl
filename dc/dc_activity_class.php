@@ -101,7 +101,7 @@
 	getDatetimeUpdated()
 		
  */
- define("MEMBER_GROUP_ID", 9);
+ define("MEMBER_GROUP_ID", 9); // set the id of the Gumbo member groep
  
  
 class activity {
@@ -159,7 +159,7 @@ class activity {
         $this->location = $row['location'];
 		$this->active = (bool) $row['active'];
         $this->category = $row['category'];
-        $this->pay_option = $row['pay_option'];
+        $this->pay_option = $row['pay_options'];
         $this->commission = $row['commission'];
         $this->user_id = (int) $row['user_id'];
         $this->user_ip = $row['user_ip'];
@@ -941,7 +941,7 @@ class activity {
 		$sql ="SELECT COUNT(*) count FROM `dc_groups` WHERE group_id ='" . $commission . "'";  // check if the group id exist
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);
-		if( $row["count"] != 1 )					// if not found or there are more id's
+		if( $row["count"] != 1 )								// if not found or there are more id's
 			return null;
 		$db->sql_freeresult($result);							// remove query
 		if($this->commission != $commission)

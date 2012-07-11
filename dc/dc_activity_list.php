@@ -17,14 +17,6 @@ $user->setup('mods/dc_activity');
 // Build main objecs
 $activity_controller = new activity_user();
 
-/*
-// get authorisation 
-if (!$activity->user_acces($user->data['user_id']))
-{
-     //trigger_error('NOT_AUTHORISED');
-}
-*/
-
 if(($full_list = $activity_controller->get_full_list_active($user->data['user_id'])) != null){
 	$template->assign_var('LIST_AVAILABLE', true);
 	$row_count = 1;
