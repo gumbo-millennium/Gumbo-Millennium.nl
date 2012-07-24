@@ -1,0 +1,101 @@
+<!-- IF S_IN_SEARCH_POPUP -->
+	<!-- INCLUDE simple_header.html -->
+	<!-- INCLUDE grouplist_search.html -->
+	<form method="post" id="results" action="{S_MODE_ACTION}" onsubmit="insert_marked(this.user); return false">
+
+<!-- ELSEIF S_SEARCH_USER -->
+	<!-- INCLUDE overall_header.html -->	
+	<!-- INCLUDE grouplist_search.html -->
+	<form method="post" action="{S_MODE_ACTION}">
+
+<!-- ELSE -->
+	<!-- INCLUDE overall_header.html -->
+	<form method="post" action="{S_MODE_ACTION}">
+
+<!-- ENDIF -->
+
+
+		<h2 class="solo">{PAGE_TITLE}<!-- IF SEARCH_WORDS -->: <a href="{U_SEARCH_WORDS}">{SEARCH_WORDS}</a><!-- ENDIF --></h2>
+
+		<div class="panel">
+			<div class="inner"><span class="corners-top"><span></span></span>
+
+			<ul class="linklist">
+				<li>
+				<strong style="font-size: 0.95em;">
+				<!-- BEGIN first_char -->
+					<a href="{first_char.U_SORT}">{first_char.DESC}</a>&nbsp; 
+				<!-- END first_char -->
+				</strong>
+				</li>
+				<li class="rightside pagination">
+					{TOTAL_GROUPS} &bull; 
+					<!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF -->
+				</li>
+			</ul>
+
+			<span class="corners-bottom"><span></span></span></div>
+		</div>
+
+	<!-- IF not S_SHOW_GROUP or not .memberrow -->
+	<div class="forumbg forumbg-table">
+		<div class="inner"><span class="corners-top"><span></span></span>
+
+		<table class="table1" cellspacing="1" id="memberlist">
+		<thead>
+		<tr>
+			<th class="name"><a href="{U_SORT_USERNAME}">{L_GROUPNAME}</a></th>
+		</tr>
+		</thead>
+		<tbody>
+	<!-- ENDIF -->
+		<!-- BEGIN memberrow -->
+	<tr class="<!-- IF memberrow.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<td><!-- IF S_IN_SEARCH_POPUP and not S_SELECT_SINGLE --><input type="checkbox" name="user" value="{memberrow.GROUPNAME}" /> <!-- ENDIF -->{memberrow.GROUPNAME_FULL}<!-- IF S_SELECT_SINGLE --><br />[&nbsp;<a href="#" onclick="insert_single('{memberrow.A_GROUPNAME}'); return false;">{L_SELECT}</a>&nbsp;]<!-- ENDIF --></td>
+	</tr>
+		<!-- BEGINELSE -->
+	<tr class="bg1">
+		<td colspan="4">{NO_GROUPS}</td>
+	</tr>
+		<!-- END memberrow -->
+	</tbody>
+	</table>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- IF S_IN_SEARCH_POPUP and not S_SELECT_SINGLE -->
+<fieldset class="display-actions">
+	<input type="submit" name="submit" value="{L_SELECT_MARKED}" class="button2" />
+	<div><a href="#" onclick="marklist('results', 'user', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('results', 'user', false); return false;">{L_UNMARK_ALL}</a></div>
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF S_IN_SEARCH_POPUP -->
+</form>
+<form method="post" id="sort-results" action="{S_MODE_ACTION}">
+<!-- ENDIF -->
+
+<!-- IF S_IN_SEARCH_POPUP and not S_SEARCH_USER -->
+<fieldset class="display-options">
+	<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
+	<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
+	<label for="sk">{L_SELECT_SORT_METHOD}: <select name="sk" id="sk">{S_MODE_SELECT}</select></label> 
+	<label for="sd">{L_ORDER} <select name="sd" id="sd">{S_ORDER_SELECT}</select> <input type="submit" name="sort" value="{L_SUBMIT}" class="button2" /></label>
+</fieldset>
+<!-- ENDIF -->
+
+</form>
+
+<hr />
+
+<ul class="linklist">
+	<li class="rightside pagination">{TOTAL_USERS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+</ul>
+
+<!-- IF S_IN_SEARCH_POPUP -->
+	<!-- INCLUDE simple_footer.html -->
+<!-- ELSE -->
+	<!-- INCLUDE jumpbox.html -->
+	<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

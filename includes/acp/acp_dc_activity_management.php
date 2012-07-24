@@ -64,16 +64,20 @@ class acp_dc_activity_management
 						'enroll_date'			=> array('lang' => 'ACP_DC_ACT_ENROLL_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)'),
 						'enroll_time'			=> array('lang' => 'ACP_DC_ACT_ENROLL_TIME',		'validate' => 'string',	'type' => 'text:10:8', 'explain' => true, 'append'  => '<br>(HH:MM:SS)'),
 						'price'					=> array('lang' => 'ACP_DC_ACT_PRICE',				'validate' => 'string',	'type' => 'text:10:8', 'explain' => true, 'append' => ' euro'),
-						'price_member'			=> array('lang' => 'ACP_DC_ACT_PRICE_MEMBER',				'validate' => 'string',	'type' => 'text:10:8', 'explain' => true, 'append' => ' euro'),
+						'price_member'			=> array('lang' => 'ACP_DC_ACT_PRICE_MEMBER',		'validate' => 'string',	'type' => 'text:10:8', 'explain' => true, 'append' => ' euro'),
 						
-						'legend3'				=> 'ACP_DC_ACT_DESCRIPTION',
+						'legend3'				=> 'ACP_DC_ACT_ACCES',
+						'add_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_MANAGER',		'validate' => 'string',	'type' => 'custom', 'method' => 'select_user', 'explain' => true),
+						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',				'validate' => 'string',	'type' => 'custom', 'method' => 'select_group', 'explain' => true),
+						
+						'legend4'				=> 'ACP_DC_ACT_DESCRIPTION',
 						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'string',	'type' => 'custom', 'method' => 'acp_description', 'explain' => true),
 												
 					)
 				);
 				
 				// Description is custom made because of the bbcode and smilies
-				$template->assign_var('DESCRIPTION', 'description');			
+				$template->assign_var('DESCRIPTION', 'description');							
 				
 				// Generate smilies on inline displaying
 				generate_smilies('inline', '');
@@ -116,9 +120,8 @@ class acp_dc_activity_management
 		// We validate the complete config if whished
 		validate_config_vars($display_vars['vars'], $cfg_array, $error);
 		
-		$submit = false;
-		$error[] = "te veel henk";
-		$error[] = "te veel iemand anders";
+		
+		
 		
 		if ($submit && !check_form_key($form_key))
 		{
@@ -127,9 +130,13 @@ class acp_dc_activity_management
 		// Do not write values if there is an error
 		if (sizeof($error))
 		{
+			var_dump($error);
 			$submit = false;
 		}
 
+		$error[] = "te veel henk";
+		$error[] = "te veel iemand anders";
+		
 		// We go through the display_vars to make sure no one is trying to set variables he/she is not allowed to...
 		foreach ($display_vars['vars'] as $config_name => $null)
 		{
@@ -155,7 +162,8 @@ class acp_dc_activity_management
 			}
 			
 		}
-
+		
+		
 		// send succesfull update
 		if ($submit)
 		{
@@ -239,6 +247,26 @@ class acp_dc_activity_management
 		$options .= '<option value="2"' . (($value == 1) ? ' selected="selected"' : '') . '>' . $user->lang['IDEAL'] . '</option>';
 		
 		return $options;
+   }
+   
+   function select_user($value, $key){
+		
+		global $user, $phpbb_root_path, $phpEx;
+		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;form=acp_activity_new&amp;field='.$key);
+		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
+		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
+		return $string;	
+		return "";
+   }
+   
+   function select_group($value, $key){
+		
+		global $user, $phpbb_root_path, $phpEx;
+		$href = append_sid($phpbb_root_path. "grouplist.".$phpEx, 'mode=searchgroup&amp;exclude_groups=BOTS,REGISTERED_COPPA,NEWLY_REGISTERED&amp;form=acp_activity_new&amp;field='.$key);
+		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
+		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_GROUP'].'</a> ]</dd>';
+		return $string;	
+		return "";
    }
   
    function acp_description($value, $key){

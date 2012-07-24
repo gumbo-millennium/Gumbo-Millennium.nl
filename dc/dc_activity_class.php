@@ -521,7 +521,7 @@ class activity {
 			}
 		}
 		$db->sql_freeresult($result);							// remove query
-		return $acces_list;
+		return (isset($acces_list)? $acces_list : 0);
 	}
 	
 	// set groupacces status

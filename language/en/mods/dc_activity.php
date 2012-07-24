@@ -86,8 +86,27 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_PRICE_EXPLAIN'  		=> 'The price non Gumbo Millennium members have to pay',
 	'ACP_DC_ACT_PRICE_MEMBER'  			=> 'Price for Gumbo Millennium members',
     'ACP_DC_ACT_PRICE_MEMBER_EXPLAIN'  	=> 'The price Gumbo Millennium members have to pay',
+    'ACP_DC_ACT_ACCES'  				=> 'Acces settings',
+    'ACP_DC_ACT_ADD_MANAGER'  			=> 'Add manager(s)',
+    'ACP_DC_ACT_ADD_MANAGER_EXPLAIN'  	=> 'Add a person(s) who get the acces to chance this event <br> This option is optional',
+	'ACP_DC_ACT_ADD_GROUP'  			=> 'Add groups(s)',
+    'ACP_DC_ACT_ADD_GROUP_EXPLAIN'  	=> 'Add group(s) who get the acces to this event <br> Default is everyone',
     'CASH'  							=> 'Cash',
     'IDEAL'  							=> 'iDeal',
 
 ));
+
+// For group list
+$lang = array_merge($lang, array(
+    'FIND_GROUP'  						=> 'Find a group',
+    'NO_GROUPS'  						=> 'No groups found for this search criterion.',
+    'GROUPLIST'  						=> 'Group list',
+    'FIND_GROUPNAME_EXPLAIN'	=> 'Use this form to search for specific groups. You do not need to fill out all fields. To match partial data use * as a wildcard. Use the mark checkboxes to select one or more usernames (several usernames may be accepted depending on the form itself) and click the Select Marked button to return to the previous form.',
+    'GROUPNAME'  						=> 'Group name',
+    'SORT_GROUPNAME'  					=> 'Group name',
+	'L_FIND_GROUP'						=> 'Find a group',
+	'LIST_GROUP'						=> '1 Group',
+	'LIST_GROUPS'						=> '%d Groups',
+));
+
 ?>
