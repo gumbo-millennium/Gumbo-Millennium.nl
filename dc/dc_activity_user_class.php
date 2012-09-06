@@ -1,12 +1,25 @@
 <?php
 
 /*
-made: Gerco Versloot
+*
+* @package phpBB3
+* @version $Id$
+* @athor: Gerco Versloot
+* @date: 6 - 8 - 2012
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @Gumbo millennium
+*/
+
+/**
+* @ignore
+
 the user class
 
 Functions summary:
 	get_full_list_active()
 		// get a list of objects of all the active activitys
+	
+	get_comming_active_activities()
 		
 	get_all_activitys()
 		// get a list of objects of all the activitys 
@@ -17,9 +30,7 @@ Functions summary:
 	get_activity($activity)
 		// get a activity:
 		
-	user_all_groups($user_id) (Static)
-		// get all the groeps of the user
-	
+
 	get_read($user_id, $activity)
 		// get all activity(s) the user has readed $array[key] 
 			// $activity = one activity_id; return: true: user has readed, false: user not readed
@@ -58,7 +69,7 @@ class activity_user{
 		$sql = 'SELECT * FROM dc_activity_full_list_active';	// select all the activity's that are active (db view)
 		$sql_result = $db->sql_query($sql);
 		$index = 0;
-		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
 			$activity = new activity();
 			$activity->fill((int)$row['id']);
@@ -71,13 +82,34 @@ class activity_user{
 		return $full_list;										// send the array
 	}
 	
+	function get_comming_active_activities($user_id){
+		global $db;												// get database connection
+		$sql = 'SELECT * FROM dc_activity_comming_active';	// select all the activity's that are active (db view)
+		$sql_result = $db->sql_query($sql);
+		$index = 0;
+		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
+		{
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			if($activity->user_acces($user_id)){
+				$full_list[$index] = $activity;
+				$index++;
+			}
+		}
+		if($index == 0){
+			return null;
+		}
+		$db->sql_freeresult($sql_result);							// remove query
+		return $full_list;										// send the array
+	}
+	
 	
 	function get_all_activitys(){
 		global $db;												// get database connection
 		$sql = 'SELECT * FROM dc_activity';	// select all the activity's that are active (db view)
 		$sql_result = $db->sql_query($sql);
 		$index = 0;
-		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
 			$activity = new activity();
 			$activity->fill((int)$row['id']);
@@ -96,7 +128,7 @@ class activity_user{
 		$sql = 'SELECT * FROM `dc_activity_comming_active`';	// select alle the activity's that where startdate => than now and are active (db view)
 		$sql_result = $db->sql_query($sql);
 		$index = 0;
-		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
 			$activity = new activity();
 			$activity->fill((int)$row['id']);
@@ -119,20 +151,6 @@ class activity_user{
 		return $activity_OBJ;									// send the new activity object
 	}
 
-	// get all groups of a user
-	public static function user_all_groups($user_id){
-		global $db;
-		$counter = 0;
-		$sql = "SELECT group_id FROM dc_user_group WHERE user_id = '". $user_id ."' AND user_pending = 0";
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))				// walk true all the rows
-		{
-			$group_list[$counter]= $row["group_id"];
-			$counter++;
-		}
-		return $group_list;
-	}
-
 // user get read
 	// $activity: id of the activity 
 	//				or null: all the activitys
@@ -151,7 +169,7 @@ class activity_user{
 		$result = $db->sql_query($sql);							// send query
 		
 		if($activity == "all"){
-			while ($row = $db->sql_fetchrow($result))				// walk true all the rows
+			while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 			{
 				$activity_list[$counter]= $row["activity_id"];
 				$counter++;
@@ -239,7 +257,7 @@ class activity_user{
 		
 		if($row['count'] != 1)
 			return null;
-		while ($row = $db->sql_fetchrow($result))				// walk true all the rows
+		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
 			$pay_list["activity_id"]= array(
 				"user_id"		=> $row["user_id"],
@@ -282,7 +300,7 @@ class activity_user{
 			". $where;
 		$sql_result = $db->sql_query($sql);
 		$index = 0;
-		while ($row = $db->sql_fetchrow($sql_result))				// walk true all the rows
+		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
 			$activity = new activity();
 			$activity->fill((int)$row['id']);

@@ -1,12 +1,26 @@
 <?php
+
+/**
+*
+* @package phpBB3
+* @version $Id$
+* @athor: Gerco Versloot
+* @date: 6 - 8 - 2012
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @Gumbo millennium
+*/
+
+/**
+* @ignore
+*/
 define('IN_PHPBB', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-include ($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
-include ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
+include($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
+include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 
 // Start session management
@@ -67,10 +81,13 @@ if($status != 0){															// if a new status
 }
 
 // get comment
-$comment = utf8_normalize_nfc(request_var('comment', '', true)); 			// get new comment (default = "": no new comment)
-if($comment != ""){															// check for a new comment
-	$current_status = $activity->get_all_status("all");						// get the users who has a status
-	if(array_key_exists($user->data['user_id'] ,$current_status)){ 			// check if user has enrolled
+// Used the salt because the default must be a string to check if there is a new comment. 
+// I wanted to use a boolean as default but that is impassable because than the input has to be aan boolean. 
+// So if the input is the salt there is no new comment. 
+$salt = (String)mt_rand(); 													// create (string) salt for gettting the comment 
+$comment = utf8_normalize_nfc(request_var('comment', $salt)); 									// get new comment (default = $salt: no new comment)
+if($comment != $salt){														// check for a new comment
+	if(array_key_exists($user->data['user_id'], $activity->get_all_status("all"))){ 			// check if user has enrolled
 		$activity->set_user_comment($user->data['user_id'],$comment); 		// set new comment
 		$template->assign_var('COMMENT_SAVED', true);						// set template saved	
 	}
@@ -92,21 +109,20 @@ function user_new_status($new_status, $activity){
 	}
 }
 
-
+$enroll_list = $activity->get_all_status("yes");				// get enroll_list
 //check for enroll
 if( $activity->getEnroll() == 1 ){										//need enroll?postprofile
 	$template->assign_var('ENROLL', true);								// set enroll
-	if(($enroll_list = $activity->get_all_status("yes")) != null){		// get enroll_list
-		$template->assign_var('ENROLL_MAX', (count($enroll_list) < $activity->getEnrollMax()) || ($activity->getEnrollMax() == 0) ? true : false); // check the limit of subscriptions is reached
-		if($enroll_date_time = $activity->getEnrollDateTime()){			// get max enroll date and time
-			$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
-			if($enroll_date_time > new DateTime("now")){				// check if the enroll date time is past
-				$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
-			}else{
-				$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
-			}
+		$template->assign_var('ENROLL_MAX', ((count($enroll_list) < $activity->getEnrollMax()) || ($activity->getEnrollMax() == 0)) ? true : false); // check the limit of subscriptions is reached
+		$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
+		$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
+		if($enroll_date_time > new DateTime("now")){				// check if the enroll date time is past
+			$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
+		}else{
+			$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
 		}
-	}		
+		
+			
 }
 
 // some more default variables
@@ -115,15 +131,15 @@ $template->assign_var('PRICE_MEMBER', $activity->getPriceMember());		// set pric
 $template->assign_var('LOCATION', $activity->getLocation());			// set location
 
 // list of all user that are enrolled in 2 rows
-if(($users_enroll_list = $activity->get_all_status("yes")) != 0){		// get a list of all enrolled users	
-	$users_enrolled = count($users_enroll_list);						// count amount enrolled users
+if($enroll_list!= 0){		// get a list of all enrolled users	
+	$users_enrolled = count($enroll_list);						// count amount enrolled users
 	$template->assign_var('USERS_ENROLLED_AMOUNT', $users_enrolled);	// set template amount
 	$template->assign_var('USERS_ENROLLED_CHECK', true);				// set force enroll
 	// split the group into two lists
 	$split = $users_enrolled / 2 ;										// caluclate the half of all enrolled users
 	$counter = 0;														// counter for splitting
 	$enroll_block = 1;													// current list with users
-	foreach ($users_enroll_list as $id => $value)						// split enrolled users in two groups
+	foreach ($enroll_list as $id => $value)						// split enrolled users in two groups
 	{
 		if($split <= $counter)											// if the half of the group is splitted
 			$enroll_block = 2;											// set next blok
@@ -191,12 +207,12 @@ page_header($activity->getName());
 // set template
 $template->assign_block_vars('navlinks', array(
             'FORUM_NAME'         => 'Activity list', //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
-            'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.            
+            'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 );
 
 $template->assign_block_vars('navlinks', array(
             'FORUM_NAME'         => 'Activity', //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
-            'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity.$phpEx")) //The path to the custom file relative to the phpbb root path.            
+            'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity.$phpEx", "act=".$activity->getId())) //The path to the custom file relative to the phpbb root path.            
 );
 $template->set_filenames(array(
     'body' => 'dc_activity.html',

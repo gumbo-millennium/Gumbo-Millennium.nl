@@ -1,6 +1,16 @@
 <?php
 /**
-* DO NOT CHANGE
+*
+* @package phpBB3
+* @version $Id$
+* @athor: Gerco Versloot
+* @date: 6 - 8 - 2012
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @Gumbo millennium
+*/
+
+/**
+* @ignore
 */
 if (!defined('IN_PHPBB'))
 {
@@ -36,25 +46,25 @@ $lang = array_merge($lang, array(
     'DC_ACT_ALREADY_STATUS'    			=> 'The user already has this status.',
     'DC_ACT_WRONG_STATUS'    			=> 'Wrong status',
     'DC_ACT_IN_PAST'    				=> 'This activity is in the past. Something in the past can not chance.',
-    'DC_ACT_NOT_ENROLLED'    			=> 'User is not subscribed',
+    'DC_ACT_NOT_ENROLLED'    			=> 'User is not enrolled',
     'DC_ACT_ERROR_NO_ROWS_ADDED'    	=> 'No new rows added',
     'DC_ACT_ERROR_TO_MANY_ROWS_ADDED'   => 'No new rows added',
     'DC_ACT_NO_ACT'   					=> 'Activity not fount',
     'DC_ACT_ERROR_LOAD'   				=> 'Error while loading activity',
     'DC_ACT'   							=> 'Activity',
     'DC_ACT_LANG_TILL'   				=> 'Till',
-    'DC_ACT_LANG_ENROLLS'   			=> 'Subscriptions',
-    'DC_ACT_LANG_SUBSCRIBE'   			=> 'Subscribe',
+    'DC_ACT_LANG_ENROLLS'   			=> 'Entered',
+    'DC_ACT_LANG_SUBSCRIBE'   			=> 'Enroll',
     'DC_ACT_LANG_DATE'   				=> 'Date',
     'DC_ACT_LANG_PRICE'   				=> 'Price',
     'DC_ACT_LANG_MEMBER'   				=> 'Member',
     'DC_ACT_LANG_LOCATION'  			=> 'Location',
     'DC_ACT_SAVE_COMMENT'  				=> 'Save comment',
-    'DC_ACT_ENROLL_NOBODY'  			=> 'Nobody subscribed',
-    'DC_ACT_ENROLL_FORCE'  				=> 'Subscribe required',
-    'DC_ACT_ENROLL_TIME'  				=> 'Subscribe until',
-    'DC_ACT_ENROLL_AMOUNT'  			=> 'Amount subscribed',
-    'DC_ACT_ENROLL_CLOSED'  			=> 'Subscriptions closed',
+    'DC_ACT_ENROLL_NOBODY'  			=> 'Nobody enrolled for this event',
+    'DC_ACT_ENROLL_FORCE'  				=> 'Enroll required',
+    'DC_ACT_ENROLL_TIME'  				=> 'Enroll until',
+    'DC_ACT_ENROLL_AMOUNT'  			=> 'Users who enrolled',
+    'DC_ACT_ENROLL_CLOSED'  			=> 'Enrollments closed',
 ));
 
 // management side
@@ -73,15 +83,19 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_END_TIME_EXPLAIN'		=> 'Enter the end time',
     'ACP_DC_ACT_NAME'  					=> 'Name of the event',
     'ACP_DC_ACT_NAME_EXPLAIN'  			=> 'Give the new event a name',
-    'ACP_DC_ACT_ENROL'  				=> 'Subscribe',
-    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Force the users to subscribe for this event',
+    'ACP_DC_ACT_ENROL'  				=> 'Enroll',
+    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Force the users to enroll for this event',
     'ACP_DC_ACT_LOCATION'  				=> 'Location',
     'ACP_DC_ACT_LOCATION_EXPLAIN'  		=> 'Enter the location from where the activity starts',
     'ACP_DC_ACT_PAY_OPTION'  			=> 'Payment',
-    'ACP_DC_ACT_ENROLL_DATE'  			=> 'Max subscribe date',
-    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can subscribe <br> 0 is ininity',
-	'ACP_DC_ACT_ENROLL_TIME'  			=> 'Max subscribe time',
-    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can subscribe on de max subscribe day <br> 0 is the all day long',
+    'ACP_DC_ACT_COMMISSION'  			=> 'Commission',
+    'ACP_DC_ACT_COMMISSION_EXPLAIN'  	=> 'What commission is making this event',
+    'ACP_DC_ACT_ENROLL_DATE'  			=> 'Max enroll date',
+    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can enroll <br> If left empty the dat wil be the start date',
+	'ACP_DC_ACT_ENROLL_TIME'  			=> 'Max enroll time',
+    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can enroll on de max enroll day <br> If left empty the dat wil be the start time',
+    'ACP_DC_ACT_ENROLL_MAX'  			=> 'Max users',
+    'ACP_DC_ACT_ENROLL_MAX_EXPLAIN'  	=> 'The max amount of user that can join this event <br> 0 is unlimited',
     'ACP_DC_ACT_PRICE'  				=> 'Price',
     'ACP_DC_ACT_PRICE_EXPLAIN'  		=> 'The price non Gumbo Millennium members have to pay',
 	'ACP_DC_ACT_PRICE_MEMBER'  			=> 'Price for Gumbo Millennium members',
@@ -90,9 +104,17 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_ADD_MANAGER'  			=> 'Add manager(s)',
     'ACP_DC_ACT_ADD_MANAGER_EXPLAIN'  	=> 'Add a person(s) who get the acces to chance this event <br> This option is optional',
 	'ACP_DC_ACT_ADD_GROUP'  			=> 'Add groups(s)',
-    'ACP_DC_ACT_ADD_GROUP_EXPLAIN'  	=> 'Add group(s) who get the acces to this event <br> Default is everyone',
+    'ACP_DC_ACT_ADD_GROUP_EXPLAIN'  	=> 'Add group(s) who get the acces to this event',
+    'NOT_EMPTY'  						=> 'is not allowed to be empty',
+    'NOT_PREG'  						=> 'has forbidden characters',
+    'WRONG_FORMAT'  					=> 'has the wrong format',
     'CASH'  							=> 'Cash',
-    'IDEAL'  							=> 'iDeal',
+    'IDEAL'  							=> 'iDeal (not supported yet)',
+    'CANT_LATER'  						=> 'can\'t be later than',
+    'CANT_PAST'  						=> 'can\'t be in the past',
+    'NOT_FOUND'  						=> 'not found',
+    'UNVALID'  							=> 'is unvalid',
+    'OVERVIEW'  						=> 'Events overview',
 
 ));
 

@@ -4,7 +4,8 @@ $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+include($phpbb_root_path . 'includes/functions_display.' . $phpEx
+include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
 
 // Start session management
 $user->session_begin();
@@ -160,7 +161,7 @@ print_r($activity->get_group_acces_list("enable"));
 
 // user group list
 print ("<br>all user groups: ");
-print_r ($activitys_controller->user_all_groups($user->data['user_id']));
+print_r (all_user_groups($user->data['user_id']));
 
 
 // kijk of een user toegang heeft to deze activiteit

@@ -3,9 +3,10 @@
 *
 * @package phpBB3
 * @version $Id$
-* @copyright (c) 2005 phpBB Group
+* @athor: Gerco Versloot
+* @date: 6 - 8 - 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
+* @Gumbo millennium
 */
 
 /**
@@ -27,6 +28,7 @@ $user->add_lang('common');
 
 // Grab data
 $mode		= request_var('mode', '');
+$separator	= request_var('separator', '');
 $action		= request_var('action', '');
 $group_id	= request_var('u', ANONYMOUS);
 $groupname	= request_var('un', '', true);
@@ -168,6 +170,7 @@ $check_params = array(
 	'first_char'	=> array('first_char', ''),
 	'exclude_groups'=> array('exclude_groups', ''),
 	'mode'			=> array('mode', ''),
+	'separator'		=> array('separator', ''),
 );
 
 $u_first_char_params = array();
@@ -328,7 +331,8 @@ $template->assign_vars(array(
 	'S_SHOW_GROUP'		=> ($mode == 'group') ? true : false,
 	'S_MODE_SELECT'		=> $s_sort_key,
 	'S_ORDER_SELECT'	=> $s_sort_dir,
-	'S_MODE_ACTION'		=> $pagination_url)
+	'S_MODE_ACTION'		=> $pagination_url,
+	'SEPARATOR'			=> $separator )
 );
 
 // Output the page

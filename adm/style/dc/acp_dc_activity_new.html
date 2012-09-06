@@ -103,14 +103,7 @@
 						colorPalette('h', 8, 10);
 					// ]]>
 					</script>
-					<strong>{L_SMILIES}</strong><br />
-					<!-- BEGIN smiley -->
-						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
-					<!-- END smiley -->
-					<!-- IF S_SHOW_SMILEY_LINK -->
-						<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
-					<!-- ENDIF -->
-					
+	
 				</dt>
 				<dd>
 					{options.CONTENT}
@@ -125,6 +118,16 @@
 	<!-- ENDIF -->
 <!-- END options -->
 </fieldset>
+<div id="smiley-box">
+	<strong>{L_SMILIES}</strong><br />
+	<!-- BEGIN smiley -->
+		<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+	<!-- END smiley -->
+	
+	<!-- IF S_SHOW_SMILEY_LINK and S_SMILIES_ALLOWED-->
+		<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
+	<!-- ENDIF -->
+</div>
 <fieldset>
 	<legend>{SUBMIT}</legend>
 	<p class="submit-buttons">
@@ -133,7 +136,6 @@
 	</p>
 	{S_FORM_TOKEN}
 </fieldset>	
-	
 </form>
 
 
