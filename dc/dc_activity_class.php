@@ -46,8 +46,19 @@
 	get_user_manage_list($status)
 		// get a list of all the user who can manage this acitvity how has $status : "enable"/"disable"/"all"
 		
-	set_user_manager($user_id, $new_status)
-		// add or change a user a manage of this activity $new_status = "enable"/"disable"
+	set_user_manager($user_id_list, $new_status, $full_list = 0)	
+	// description:
+		// 	set users as managers for this activity (for users that are not in the Activity Commission)
+	//inputs: 	
+		//		user_id_list: array of user id's who gets a new status
+		//		new_status: string of the new status of the user id's: enable (set as manager), disable (remove as manager)
+		//		full_list: optional setting, if true all other user id's in the db that are not on the user id list will be chanced to disable
+					// default is false, so it won't chance other statuses of user id's in the db
+	// returns:
+		//		succes:	1
+		//		wrong status: false (check error log)
+		//		no rows added: false (check error log)
+
 		
 	get_chance_list()
 		// get the list of all the chances of this activity
@@ -58,9 +69,23 @@
 	get_group_acces_list($status)
 		// get a list of all the groups that can see this activity $status = "enable"/"disable"/"all"
 		
-	set_group_acces($group_id, $new_status)
-		// add of chance the acces of a group $new_status =  "enable"/"disable"
-		
+	// set_group_acces($group_id_list, $new_status, $full_list = 0) 
+		// description:
+		// 		Set groups to see this activity
+		//inputs: 	
+		//		group_id_list: array of group id's who gets a new status
+		//		new_status: string of the new status of the groups id's: enable (set as see activity), disable (set as disable form seing the activity)
+		//		full_list: optional setting, if true all other groep id's in the db that are not on the group id list will be chanced to disable
+					// default is false, so it won't chance other statuses of group id's in the db
+		// returns:
+		//		succes:	true
+		//		wrong status: false (check error log)
+		//		activity is in the past: false (check error log)
+	
+	is_manager($user_id)
+		// checks is the user is a manager 
+
+	
 	user_acces($user_id)
 		// checks if the user have acces to this activity
 		// returns a boolean
@@ -85,6 +110,7 @@
 	setName($name)
 	setDescription($description)
 	getDescription()
+	getDescription_edit()
 	getStartDatetime()
 	setStartDatetime($startDatetime)
 	getEndDatetime()
@@ -115,12 +141,16 @@
 		
  */
  define("MEMBER_GROUP_ID", 9); // set the id of the Gumbo member groep
+ define("AC_GROUP_ID", 14); // set the id of the Gumbo activity groep
+ define("DC_GROUP_ID", 15); // set the id of the Gumbo digitale commisie groep
+ define("BESTUUR_GROUP_ID", 13); // set the id of the Gumbo bestuur groep
+ 
  include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
  
 class activity {
     // declare varibles 
-    private $id = null;					// activity id
-    public $name;					// name of the activity
+    private $id = null;				// activity id
+    private $name;					// name of the activity
     private $description;			// description of the activity 
     private $start_datetime;		// start date and time of the activity
     private $end_datetime;			// end date and time of the activity
@@ -148,7 +178,7 @@ class activity {
 	// fill the activiy from the database
     function fill($id) 
 	{
-		global $db;
+		global $db, $user;
 		if(gettype($id) != "integer")
 			return null;
 		$sql = 'SELECT *, count(*) amount FROM `dc_activity` WHERE id = ' . (int)$id;
@@ -158,7 +188,7 @@ class activity {
 			trigger_error($user->lang['DC_ACT_NO_ACT']);
 			return null;
 		}
-        $this->id = (int)$row['id'];
+        $this->id = $id;
         $this->name = $row['name'];
         $this->description = (String)$row['description'];
         $this->start_datetime = new DateTime( $row['start_datetime']);
@@ -221,7 +251,7 @@ class activity {
 			$user_list[$row['user_id']] = array(
 			'username' 			=> $row['username'],
 			'comments' 			=> htmlspecialchars_decode($row['comments']),
-			'datetime' 			=> $row['datetime'],
+			'datetime' 			=> new DateTime($row['datetime']),
 			'status' 			=> $row['status'],
 			'price_payed' 		=> $row['price_payed'])	;  	
 		}
@@ -365,25 +395,29 @@ class activity {
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
 			if(!$status){ 										// check the status
-				$acces_list[$row['user_id']] = array( 'created' => $row['created'], 'disabled' => $row['disabled']);  	// makes an array: accesList[user_id][created][disabled]
+				$acces_list[$row['user_id']] = array( 'created' => new DateTime($row['created']), 'disabled' =>(int)$row['disabled']);  	// makes an array: accesList[user_id][created][disabled]
 			}else { 
-				$acces_list[$row['user_id']] = $row['created'];   	// makes an array: accesList[user_id][created] 
+				$acces_list[$row['user_id']] = new DateTime($row['created']);   	// makes an array: accesList[user_id][created] 
 			}
 		}
 		$db->sql_freeresult($result);							// remove query
 		return $acces_list;
 	}
 	
-	// set user acces
-		//$status: 	
-		//		acces: set user to get acces
-		//		disabled: disable the user acces
+	// set_user_managerset 
+		// description:
+		// 	set users as managers for this activity (for users that are not in the Activity Commission)
+		//inputs: 	
+		//		user_id_list: array of user id's who gets a new status
+		//		new_status: string of the new status of the user id's: enable (set as manager), disable (remove as manager)
+		//		full_list: optional setting, if true all other user id's in the db that are not on the user id list will be chanced to disable
+					// default is false, so it won't chance other statuses of user id's in the db
 		// returns:
 		//		succes:	1
 		//		wrong status: false (check error log)
-		//		user already this status: false (check error log)
-	function set_user_manager($user_id, $new_status){
-		global $db;
+		//		no rows added: false (check error log)
+	function set_user_manager($user_id_list, $new_status, $full_list = 0){
+		global $db, $user;
 		// check if activity is allowed to chanced
 		if($this->start_datetime < new DateTime("now") ){
 			$this->set_error_log("Function: set_user_manager; Activity is in the past");
@@ -391,7 +425,8 @@ class activity {
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null;
 		}
-		switch(trim($new_status)){									// convert new_status to 'disabled'(as in the db)
+		// check if $new status is valid and convert new_status to 'disabled'(as in the db)
+		switch(trim($new_status)){									// remove spaces
 			case "enable":											// if new_status is enbable
 				$new_status = 0;									// set new status to enabled (disabled = 0)
 				break;			
@@ -404,55 +439,92 @@ class activity {
 				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
 				return null;									
 		}
+		
+		
+		if(!is_array($user_id_list)){									// check if user id list is an array
+			$this->set_error_log('Function: set_user_manager; user_id_list not an array');	// set administator log
+			trigger_error('User_id_list is not an array');				// send error to the user
+		}
+		
+		if(!count($user_id_list)){									// check if user id list is an array
+			$this->set_error_log('Function: set_user_manager; user_id_list is empty');	// set administator log
+			trigger_error('user_id_list is empty');				// send error to the user
+		}
+		
 		// check if the user is in the db //
-		$all_users_acces = $this->get_user_manage_list("all");		// get a list of all the users with acces
-		if(isset($all_users_acces[$user_id])){
-			if($all_users_acces[$user_id]['disabled'] == $new_status){	// currrent status is same as new_status 
-				$this->set_error_log("Function: get_user_manage_list; User already this status");
-				global $user;
-				trigger_error($user->lang['DC_ACT_ALREADY_STATUS']);
-				return null;									// return fase: user already this status
+		$current_managers = $this->get_user_manage_list("all");		// get a list of all the users with acces
+		$current_managers_status_chance = array();						// the list of all managers who status chances 
+		// check for exisiting managers with no status chance
+		foreach($user_id_list AS $key => $current_user_id){				// loop through all user id (current_user_id) from the user_id_list
+			if(isset($current_managers[$current_user_id])){				// check if user id is in the current manager list
+				if( $current_managers[$current_user_id]['disabled'] != $new_status){ 	// check if current_user_id status is thesame as new status
+					// the user id exist and has new status
+					$current_managers_status_chance[] = $current_user_id;
+				}
+				unset($current_managers[$current_user_id]);				// remove user id from the current_managers list
+				unset($user_id_list[array_search($current_user_id, $user_id_list)]);	// remove user id from the user id list (the input) 
 			}
-			$sql = "UPDATE `dc_activity_user_manage` SET disabled = '".$new_status."' WHERE user_id = '". $user_id ."' AND activity_id = '". $this->id. "'"; 
-			$db->sql_query($sql);
-			switch($result = $db->sql_affectedrows()){
-				case 0:
+		}
+		// update current managers with a status chance
+		if(count($current_managers_status_chance)){
+			foreach($current_managers_status_chance AS $key => $user_id){		// loop through all managers with a new status
+				$sql_ary = array(
+					'disabled'      => $new_status								// set new status
+				);
+
+				$sql = 'UPDATE dc_activity_user_manage
+					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					WHERE user_id = ' . (int) $user_id.' AND activity_id = ' .(int) $this->id;
+				$db->sql_query($sql);
+				if(!$db->sql_affectedrows()){									// check for chanced reocords
+					// no chanced records
 					$this->set_error_log("Function: set_user_manager; UPDATE status: No new record");
-					global $user;
 					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
-					return null;
-				case 1:
-					return true;
-				default:
-					$this->set_error_log("Function: set_user_manager; UPDATE status: To many new record");
-					global $user;
-					trigger_error($user->lang['DC_ACT_ERROR_TO_MANY_ROWS_ADDED']);
-					return null;
+				}
+				
+			}
+			unset($current_managers_status_chance);
+			
+		}
+		
+		// insert new managers
+		if(count($user_id_list)){
+			$sql_ary = array();
+			foreach($user_id_list AS $key => $user_id){
+				$sql_ary[] = array(
+					'activity_id'	=> (int)$this->id,
+					'user_id'		=> (int)$user_id,
+					'disabled'		=> (int)$new_status,
+				);
+			}
+			$db->sql_multi_insert('dc_activity_user_manage', $sql_ary);
+			if(!$db->sql_affectedrows()){									// check for chanced reocords
+
+					// no chanced records
+					$this->set_error_log("Function: set_user_manager; UPDATE status: No new record");
+					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
 			}
 		}
-		// User is not in de the db //
-		$sql_ary = array(
-			'activity_id'	=> (int)$this->id,
-			'user_id'		=> (int)$user_id,
-			'disabled'		=> (int)$new_status,
-		);
-		$sql = "INSERT INTO `dc_activity_user_manage` ". $db->sql_build_array('INSERT', $sql_ary); 
-		$db->sql_query($sql);
-		switch($result = $db->sql_affectedrows()){
-			case 0:
-				$this->set_error_log("Function: set_user_manager; INSERT status: No new records");
-				global $user;
-				trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
-				return null;
-			case 1:
-				return true;
-			default:
-				$this->set_error_log("Function: set_user_manager; INSERT status: To many new record");
-				global $user;
-				trigger_error($user->lang['DC_ACT_ERROR_TO_MANY_ROWS_ADDED']);
-				return null;
+		
+		//disable managers (only if full list is enabled)
+		if(count($current_managers) && $full_list){
+			foreach($current_managers AS $user_id => $value){		// loop through all managers with a new status
+				$sql_ary = array(
+					'disabled'      => (int) 1								// set new status
+				);
+
+				$sql = 'UPDATE dc_activity_user_manage
+					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					WHERE user_id = ' . (int) $user_id .' AND activity_id = ' .(int) $this->id;
+				$db->sql_query($sql);
+				
+			}
+			unset($current_managers_status_chance);
 		}
+		
+		return true;															// return succesful
 	}
+	
 	// get changelog
 	function get_chance_list(){
 		global $db;
@@ -472,9 +544,6 @@ class activity {
 	function set_chance_log($user_id, $user_ip, $modification){
 		global $db;
 		$modification = utf8_normalize_nfc(htmlspecialchars($modification));
-		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-		$allow_bbcode = $allow_urls = $allow_smilies = false;
-		generate_text_for_storage($modification, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 		$sql_ary = array(
 			'activity_id'	=> (int)$this->id,
 			'user_id'		=> (int)$user_id,
@@ -504,6 +573,7 @@ class activity {
 	
 	
 	// get list of groupacces
+		//return array: arrayList[group_id] =  date created
 	function get_group_acces_list($status){
 		global $db;												// get connection to the database
 		switch(trim($status)){										// check status
@@ -537,23 +607,31 @@ class activity {
 		return (isset($acces_list)? $acces_list : 0);
 	}
 	
-	// set groupacces status
-		//$status: 	
-		//		acces: set user to get acces
-		//		disabled: disable the user acces
+	// set_group_acces 
+		// description:
+		// 		Set groups to see this activity
+		//inputs: 	
+		//		group_id_list: array of group id's who gets a new status
+		//		new_status: string of the new status of the groups id's: enable (set as see activity), disable (set as disable form seing the activity)
+		//		full_list: optional setting, if true all other groep id's in the db that are not on the group id list will be chanced to disable
+					// default is false, so it won't chance other statuses of group id's in the db
 		// returns:
-		//		succes:	1
+		//		succes:	true
 		//		wrong status: false (check error log)
-		//		user already this status: false (check error log)
-	function set_group_acces($group_id, $new_status){
+		//		activity is in the past: false (check error log)
+	function set_group_acces($group_id_list, $new_status, $full_list = 0){
+		global $db;
+		
+		// check if the activity is allowed to be added
 		if($this->start_datetime < new DateTime("now") ){
 				$this->set_error_log("Function: set_group_acces; Activity is in the past");
 				global $user;
 				trigger_error($user->lang['DC_ACT_IN_PAST']);
 				return null;
 		}
-		global $db;
-		switch(trim($new_status)){									// convert new_status to 'disabled'(as in the db)
+		
+		// check if the new status is valid and convert new_status to 'disabled'(as in the db)
+		switch(trim($new_status)){									// remove spaces
 			case "enable":											// if new_status is enbable
 				$new_status = 0;									// set new status to enabled (disabled = 0)
 				break;			
@@ -566,65 +644,119 @@ class activity {
 				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
 				return null;									
 		}
-		// check if the group is in the db //
-		$all_group_acces = $this->get_group_acces_list("all"); // get a list of all groups with acces
-		if(isset($group_id_acces[$group_id])){							// group is in the array
-			if($group_id_acces[$group_id]['disabled'] == $new_status){				// currrent status is same as new_status 
-				$this->set_error_log("Function: get_group_acces_list; User already this status");
-				return null;									// return fase: user already this status
-			}
-			$sql = "UPDATE `dc_activity_groupacces` SET disabled = '".$new_status."' WHERE group_id = '". $group_id ."' AND activity_id = '". $this->id. "'"; 
-			$db->sql_query($sql);
-			switch($result = $db->sql_affectedrows()){
-				case 0:
-					$this->set_error_log("Function: set_group_acces; UPDATE group acces: No new records");
-					global $user;
-					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
-					return null;
-				case 1:
-					return true;
-				default:
-					$this->set_error_log("Function: set_group_acces; UPDATE group acces: To many new records");
-					global $user;
-					trigger_error($user->lang['DC_ACT_ERROR_TO_MANY_ROWS_ADDED']);
-					return null;
-			}
-		}	
 		
-		// group is not in de the db //
-		$sql_ary = array(
-			'activity_id'	=> (int)$this->id,
-			'group_id'		=> (int)$group_id,
-			'disabled'		=> (int)$new_status,
-		);
-		$sql = "INSERT INTO `dc_activity_groupacces` ". $db->sql_build_array('INSERT', $sql_ary); 
-		$db->sql_query($sql);
-		switch($result = $db->sql_affectedrows()){
-			case 0:
-				$this->set_error_log("Function: set_group_acces; INSERT group acces: No new records");
-				global $user;
-				trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
-				return null;
-			case 1:
-				return true;
-			default:
-				$this->set_error_log("Function: set_group_acces; INSERT group acces: To many new records");
-				global $user;
-				trigger_error($user->lang['DC_ACT_ERROR_TO_MANY_ROWS_ADDED']);
-				return null;
+		if(!is_array($group_id_list)){									// check if user id list is an array
+			$this->set_error_log('Function: set_group_acces; group_id_list not an array');	// set administator log
+			trigger_error('group_id_list is not an array');				// send error to the user
 		}
+		
+		if(!count($group_id_list)){									// check if user id list is emty
+			$this->set_error_log('Function: set_group_acces; group_id_list is empty');	// set administator log
+			trigger_error('group_id_list is empty');				// send error to the user
+		}
+		
+		// check if the group is in the db //
+		$groups_accces_list = $this->get_group_acces_list("all"); // get a list of all groups with acces
+		$group_acces_chance_list = array();							// the list of all groups that need s acces chance 
+		foreach($group_id_list AS $key => $current_group_id){		// loop through all group id
+			if(isset($groups_accces_list[$current_group_id])){ // check if current group id is in the group_acces list
+				if( $groups_accces_list[$current_group_id]['disabled'] != $new_status){	// check if group status is thesame as the current status
+					$group_acces_chance_list[] = $current_group_id;
+				}
+				// no status chance needed
+				unset($groups_accces_list[$current_group_id]);			// remove from the group acces list 
+				unset($group_id_list[array_search($current_group_id, $group_id_list)]);	// remove from the input list
+			}
+		}
+		// now we have 3 list:
+			// group_acces_chance_list: groups that are in the db and need a status chance
+			// groups_accces_list: the groups that where not in the input 
+			// groups_id_list: all groups that are not in the db
+		
+		// update current groups with a status chance
+		if(count($group_acces_chance_list)){
+			foreach($group_acces_chance_list AS $key => $group_id){		// loop through all groups with a new status
+				$sql_ary = array(
+					'disabled'      => $new_status								// set new status
+				);
+
+				$sql = 'UPDATE dc_activity_groupacces
+					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					WHERE group_id = ' . (int) $group_id.' AND activity_id = ' .(int) $this->id;
+				$db->sql_query($sql);
+				
+			}
+			unset($group_acces_chance_list);
+			
+		}
+		
+		//insert new groups
+		if(count($group_id_list)){
+			$sql_ary = array();
+			foreach($group_id_list AS $key => $group_id){
+				$sql_ary[] = array(
+					'activity_id'	=> (int)$this->id,
+					'group_id'		=> (int)$group_id,
+					'disabled'		=> (int)$new_status
+				);
+			}
+			$db->sql_multi_insert('dc_activity_groupacces', $sql_ary);
+			if(!$db->sql_affectedrows()){									// check for chanced reocords
+				// no chanced records
+				$this->set_error_log("Function: set_group_acces; UPDATE status: No new record");
+				trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
+			}
+		}
+		
+		//disable groups (only if full list is enabled)
+		if(count($groups_accces_list) && $full_list){
+			foreach($groups_accces_list AS $group_id => $value){		// loop through all managers with a new status
+				$sql_ary = array(
+					'disabled'      => (int) 1								// set new status
+				);
+
+				$sql = 'UPDATE dc_activity_groupacces
+					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					WHERE group_id = ' . (int) $group_id .' AND activity_id = ' .(int) $this->id;
+				$db->sql_query($sql);
+				
+			}
+			unset($groups_accces_list);
+		}
+		
+		return true;															// return succesful	
+	}
+	
+	
+	// checks is the user is a manager 
+		// returns a boolean
+	function is_manager($user_id){
+		// check for special manager acces
+		$managers_list = $this->get_user_manage_list("enable");
+		if(isset($managers_list[$user_id])){			// get a list of all manages en compare with the user id 
+			return true;														// the manages and user id match
+		}
+		// check for default acces groups as AC, Bestuur and DC
+		$default_acces = array(AC_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID);		// get all default groeps: AC Bestuur DC
+		foreach($default_acces AS $key => $groep_id_acces){					// loop true all the groep ID's 
+			if(in_array($groep_id_acces, all_user_groups($user_id)))			// get all the joind groeps id of the user and compare with the default groep id
+				return true;													// the groups id matches 
+		}
+		return null;															// no matches
 	}	
 	
 	// check if the users has acces to this activity
 	function user_acces($user_id){
-		$group_acces_list = $this->get_group_acces_list("enable");
-		if($group_acces_list == true){
-			foreach($group_acces_list AS $key => $value){
-				if(in_array($key, all_user_groups($user_id)))
-					return true;
+		if($this->active){												// check for recular acces 
+			$group_acces_list = $this->get_group_acces_list("enable");
+			if($group_acces_list == true){
+				foreach($group_acces_list AS $key => $value){
+					if(in_array($key, all_user_groups($user_id)))
+						return true;
+				}
 			}
 		}
-		return null;
+		return false;
 	}
 	
 	// add error
@@ -685,12 +817,12 @@ class activity {
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null;
 		}
-		
+		$sql= '';
 		$sql_array = array(
 			 'name'				=> (String)$this->name,
 			 'description'		=> (String)$this->description,
 			 'start_datetime'	=> (String)$this->start_datetime->format('Y-m-d H:i:s'),
-			 'stop_datetime'	=> (String)$this->stop_datetime->format('Y-m-d H:i:s'),
+			 'stop_datetime'	=> (String)$this->end_datetime->format('Y-m-d H:i:s'),
 			 'enroll'			=> (bool)$this->enroll,
 			 'enroll_datetime'	=> (String)$this->enroll_datetime->format('Y-m-d H:i:s'),
 			 'enroll_max'		=> (int)$this->enroll_max,
@@ -714,19 +846,25 @@ class activity {
 		}else{
 			$sql = "UPDATE dc_activity SET ". $db->sql_build_array('UPDATE', $sql_array) . "WHERE id = ". (int)$this->id;
 			$modification = null;
-			foreach($chance_log AS $row => $value){
+			foreach($this->chance_log AS $row => $value){
 				$modification .= $row . ":".$value;
 			}
-			set_chance_log($user->data['user_id'], $user->ip, $modification);
+			$this->set_chance_log($user->data['user_id'], $user->ip, $modification);
+			
 		}
-		$db->sql_query($sql);
-		if($db->sql_affectedrows()){
+		$result = $db->sql_query($sql);
+		if($this->id == null){
 			$this->id = $db->sql_nextid();
-			return true;
+		}
+		return true;
+		/* DOENST WORK ???
+		if($db->sql_affectedrows($result)){	
+			print'henk';
 		}else{
 			$this->set_error_log("Function: save(); Save the activity: No new or chanced rows");
 			return false;
 		}
+		*/
 	}
 	
 	function pay($user_id, $amount){
@@ -786,8 +924,8 @@ class activity {
 	
 	public function getDescription_edit(){
 		$description = htmlspecialchars_decode($this->description);
-		$description = decode_message($description, $this->bbcode_uid);
-		return $description;
+		$description = generate_text_for_edit($description, $this->bbcode_uid, $this->bbcode_options);
+		return $description['text'];
     }
 
     public function getStartDatetime(){
@@ -837,7 +975,6 @@ class activity {
     }
 
     public function setEnrollDateTime($enrollDateTime){
-	
 		if(!($enrollDateTime instanceof DateTime )) 
 			return null;
 		if($enrollDateTime < new DateTime("now"))
@@ -909,7 +1046,7 @@ class activity {
 	public function setActive($active){
 		if(gettype($active) != "integer")
 			return null;
-		if(!(($active = 0) || ($active = 1)))
+		if(!(($active == 0) || ($active == 1)))
 			return null;
 		if($this->active != $active)
 				$this->chance_log["active"] = $this->active . "->". $active . ";";

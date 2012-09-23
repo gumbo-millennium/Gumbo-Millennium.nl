@@ -20,6 +20,7 @@ Functions summary:
 		// get a list of objects of all the active activitys
 	
 	get_comming_active_activities()
+		// get all activitys that are active and in the future  
 		
 	get_all_activitys()
 		// get a list of objects of all the activitys 
@@ -29,9 +30,8 @@ Functions summary:
 	
 	get_activity($activity)
 		// get a activity:
-		
 
-	get_read($user_id, $activity)
+		get_read($user_id, $activity)
 		// get all activity(s) the user has readed $array[key] 
 			// $activity = one activity_id; return: true: user has readed, false: user not readed
 			// $activity = "all"; returns a list of all readed activitys: $array[key] = activity 

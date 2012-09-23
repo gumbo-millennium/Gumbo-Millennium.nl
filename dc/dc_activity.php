@@ -36,8 +36,10 @@ if(!isset($_GET["act"])){
 $activity_controller = new activity_user();									// build user controller
 $activity =  $activity_controller->get_activity(request_var('act', 0));		// build activity by id (default = 0)
 
+$manager = $activity->is_manager($user->data['user_id']);
+
 // get authorisation 
-if (!$activity->user_acces($user->data['user_id']))
+if (!($activity->user_acces($user->data['user_id']) || $manager) )
 {
      trigger_error('NOT_AUTHORISED');
 }
@@ -139,7 +141,7 @@ if($enroll_list!= 0){		// get a list of all enrolled users
 	$split = $users_enrolled / 2 ;										// caluclate the half of all enrolled users
 	$counter = 0;														// counter for splitting
 	$enroll_block = 1;													// current list with users
-	foreach ($enroll_list as $id => $value)						// split enrolled users in two groups
+	foreach ($enroll_list as $id => $value)								// split enrolled users in two groups
 	{
 		if($split <= $counter)											// if the half of the group is splitted
 			$enroll_block = 2;											// set next blok
@@ -197,6 +199,18 @@ $template->assign_var('LANG_PAID', strtolower($user->lang['PAID']));
 $template->assign_var('LANG_CANCEL', $user->lang['CANCEL']);
 $template->assign_var('LANG_SAVED', $user->lang['SAVED']);
 $template->assign_var('LANG_TO', strtolower($user->lang['TO']));
+
+// if a user is a manager: some exta functions and assignments
+$template->assign_var('IS_MANAGER', $manager);
+if($manager){
+	$template->assign_var('OVERVIEW_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_OVERVIEW'])));
+	$template->assign_var('OVERVIEW_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" ));	
+	
+	$template->assign_var('EDIT_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_EDIT'])));
+	$template->assign_var('EDIT_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=edit_activity&id=".$activity->getId() ));
+}
+
+
 
 // other assignments
 $template->assign_var('FORM_HIDDEN_ACT',$activity->getId() );

@@ -24,7 +24,7 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('mods/foo');
 
-
+/*
 // Setup $auth_admin class so we can add tabulated survey permission options
 include($phpbb_root_path . 'includes/acp/auth.' . $phpEx);
 $auth_admin = new auth_admin();
@@ -35,7 +35,7 @@ $auth_admin->acl_add_option(array(
     'local'        => array('a_survey_design', 'a_survey_takeforothers', 'a_survey_viewhiddenresults'),
     'global'    => array()
 ));
-
+*/
 /*
 $message = $user->lang['ADDED_PERMISSIONS'] . '<br /><br />';
 $message .= $user->lang['REMOVE_INSTALL'];

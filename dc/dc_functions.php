@@ -65,14 +65,12 @@ function valid_time($time_input){
 // output is a array of all group id;
 function all_user_groups($user_id){
 	global $db;
-	$counter = 0;
 	$sql = "SELECT group_id FROM dc_user_group WHERE user_id = '". $user_id ."' AND user_pending = 0";
 	$result = $db->sql_query($sql);
 	$group_list = array();
 	while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 	{
-		$group_list[$counter]= $row["group_id"];
-		$counter++;
+		$group_list[]= $row["group_id"];
 	}
 	return $group_list;
 }

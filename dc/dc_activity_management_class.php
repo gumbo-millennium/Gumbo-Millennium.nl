@@ -1,9 +1,87 @@
 <?php
 
 /*
-made: Gerco Versloot
-activity management class
-
+*
+* @package phpBB3
+* @version $Id$
+* @athor: Gerco Versloot
+* @date: 6 - 8 - 2012
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @Gumbo millennium
 */
+include_once('dc_activity_user_class.php');
+include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
+
+class activity_management extends activity_user {
+
+	function get_comming($user_id, $short, $order){
+		global $db;
+
+		$is_manager = false;
+		// check is user is in default managers groups
+		$managers_groups = array(AC_GROUP_ID, DC_GROUP_ID, BESTUUR_GROUP_ID);
+		foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
+			if(in_array($groep_id_acces, all_user_groups($user_id))){			// get all the joind groeps id of the user and compare with the default groep id
+				$is_manager = true;											// the groups id matches
+				break;
+			}
+		}
+		// if user is not a default manager, get all the activitys that the user is a special manager
+		if(!$is_manager){
+			$sql_array = array(
+					'SELECT'    => 'activity_id',
+
+					'FROM'      => array(
+						'dc_activity_user_manage' => 'a',
+					),
+
+					'WHERE'     =>  'user_id = ' . (int)$user_id .' AND disabled =  0'
+				);
+
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+
+				// Run the built query statement
+				$result = $db->sql_query($sql);
+				$acitivity_ids = array();
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$acitivity_ids[] = $row['activity_id'];
+				}
+		}
+		
+		// set shorting and order options
+		$short_array = array('name', 'start_datetime', 'stop_datetime', 'active');
+		$order_array = array('ASC', 'DESC');
+		
+		// check if the short is valid
+		if(!in_array($short, $short_array)){
+			$short = 'start_datetime';
+		}
+		
+		// check if the order is valid
+		if(!in_array($order, $order_array)){
+			$order = 'DESC';
+		}
+
+		// build sql
+		$sql = 'SELECT id
+				FROM dc_activity
+				WHERE start_datetime >= NOW() '. (!$is_manager ? ' AND ' . $db->sql_in_set('id', $acitivity_ids ): '' ) .'
+				ORDER BY '. $short .' '.$order;
+		$result = $db->sql_query($sql);				// send sql
+		$activity_list = array();
+		
+		// build return list
+		while ($row = $db->sql_fetchrow($result)){
+			$activity = new activity();
+			$activity->fill((int)$row['id']);
+			$activity_list[$activity->getId()] = $activity; 
+		}
+		$db->sql_freeresult($result);
+		
+		return $activity_list;
+	}
+
+}
 
 ?>
