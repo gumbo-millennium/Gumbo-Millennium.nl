@@ -6,7 +6,11 @@
 
 	<ul class="linklist">
 		<li><a href="{OVERVIEW_URL}" >{OVERVIEW_NAME}</a> &#8226; </li>
-		<li><a href="{EDIT_URL}" >{EDIT_NAME}</a> &#8226; </li>
+		<!-- IF IS_PAST -->
+			<li><a href="{RECYLCLE_URL}" >{RECYLCLE_NAME}</a> &#8226; </li>
+		<!-- ELSE -->
+			<li><a href="{EDIT_URL}" >{EDIT_NAME}</a> &#8226; </li>
+		<!-- ENDIF -->
 
 		</ul>
 
@@ -42,7 +46,6 @@
 				<dd>&#8364;{PRICE_MEMBER}</dd>	
 			
 			<dt>&nbsp;</dt>
-			
 			<dt><strong>{LANG_LOCATION}:</strong></dt>
 				<dd>{LOCATION}</dd>	
 				
@@ -57,6 +60,12 @@
 			<!-- ELSE -->
 				<dd>{LANG_NO}</dd>
 			<!-- ENDIF -->
+			<dt>&nbsp;</dt>
+			
+			<dt><strong>{LANG_UNSUBSCRIBE}:</strong></dt>
+				<dd>{UNSUBSCRIBE_MAX_DATETIME}</dd>	
+				
+			
 		</dl>
 		<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>
 		<span class="corners-bottom"><span></span></span>
@@ -101,12 +110,16 @@
 	<dl class="postprofile" id="profile2">
 	<!-- IF not S_IS_BOT and S_USER_LOGGED_IN -->
 		<!-- IF USER_ENROLLED_CHECK  && CHANCE == FALSE-->
-			<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
 					<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
 						<dd>&#8364;{USER_ENROLLED_PAID}</dd>
 					<dt>&nbsp;</dt>
 					<dt><strong>{LANG_SUBSCRIBE}:</strong></dd>
-						<dd><a href="{URL_CHANCE_STATUS}">{USER_ENROLLED_STATUS}</a></dd>
+						
+						<dd>{USER_ENROLLED_STATUS}</dd>
+						
+						<!-- IF UNSUBSCRIBE_DATE_CHECK -->
+							<dd><a href="{URL_CHANCE_STATUS}">Chance</a></dd>
+						<!-- ENDIF -->
 					<dt>&nbsp;</dt>
 					<form action="{URL_STATUS}" method="GET">
 						<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
@@ -117,19 +130,16 @@
 						<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
 						<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
 						
-					</form>
-			<!-- ELSE -->
-					<dt>{LANG_ENROLL_CLOSED}</dt>
-			<!-- ENDIF -->
+					</form>	
 		<!-- ELSE -->
-			<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
+			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
 					<dt><strong>{LANG_SUBSCRIBE}:</strong></dt>
+						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
 						<dd><a href="{URL_CHANCE_STATUS_YES}">{LANG_YES}</a></dd>
-						<dd><a href="{URL_CHANCE_STATUS_NO}">{LANG_NO}</a></dd>
-						<dd><a href="{URL_CHANCE_STATUS_MAYBE}">{LANG_MAYBE}</a></dd>
-						<!-- IF CHANCE -->
-							<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
 						<!-- ENDIF -->
+						<dd><a href="{URL_CHANCE_STATUS_NO}">{LANG_NO}</a></dd>
+						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+
 			<!-- ELSE -->
 					<dt>{LANG_ENROLL_CLOSED}</dt>
 			<!-- ENDIF -->

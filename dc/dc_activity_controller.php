@@ -172,7 +172,7 @@ print($toegang);
 
 // controleer zoeken
 print("<br> de zoek functie: ");
-foreach($activitys_controller->search(2, "google", new DateTime("now"), new DateTime("5-5-2030"), 1, "enter") AS $key => $value){
+foreach($activitys_controller->search(2, "google", new DateTime("now"), new DateTime("5-5-2030"), 1, "enter", 100) AS $key => $value){
 	print( "<br>" . $value->getName() );
 }
 ////////////////////// end ////////////////////////////////////////////

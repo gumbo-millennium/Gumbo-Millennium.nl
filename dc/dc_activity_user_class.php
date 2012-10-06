@@ -259,7 +259,7 @@ class activity_user{
 			return null;
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
-			$pay_list["activity_id"]= array(
+			$pay_list[$row["activity_id"]]= array(
 				"user_id"		=> $row["user_id"],
 				"price"			=> $row["price"],
 				"price_payed"	=> $row["price_payed"]
@@ -270,44 +270,100 @@ class activity_user{
 		
 	}
 	
-	function search($user_id, $name, $start_datetime, $end_datetime, $active, $description){
+	function search($parameters, $limit = 100, $offset = null, $order = null, $short = null){
 		global $db;
-		// check for sql injection
-		if(gettype($user_id) != "integer")
-			return null; 
+
+		// construct WHERE statement
+		$sql_where = array();
+		/*
+		$parameters['start_datetime']['begin']['end'];	
+		$parameters['end_datetime']['begin']['end'];
+		*/	
+		if(count($parameters)){
 			
-		// construct WHERE statement and check for sql injection
-		$where = "";
-		if($active != null && gettype($active) == "integer")
-			$where .= " AND active = ". $active;
-		if($name != null && gettype($name) == "String")
-			$where .= " AND name LIKE  '%". $name . "%'";
-		if($description != null && gettype($description) == "String")
-			$where .= " AND description LIKE '%". $description ."%'";
-		if($start_datetime != null && $start_datetime instanceof DateTime)
-			$where .= " AND start_datetime >= '". $start_datetime->format('Y-m-d H:i:s') ."'";
-		if($end_datetime != null && $end_datetime instanceof DateTime)
-			$where .= " AND stop_datetime <= '". $end_datetime->format('Y-m-d H:i:s') ."'";
+			foreach($parameters AS $field => $value){
+				switch($field){
+					case 'user_id':
+						$sql_where[] .= (string)("user_id = '".(int)$value . "'" ); 
+						break;
+					case 'name':
+						$sql_where[] .= (string)("UPPER(name) LIKE UPPER('%".$value."%')"); 
+						break;
+					case 'start_datetime':
+						if($value['begin'] instanceof DateTime && $value['end'] instanceof DateTime){
+							$sql_where[] = (string)("start_datetime BETWEEN '".$value['end']->format('Y-m-d H:i:s'))."' AND '".$value['begin']->format('Y-m-d H:i:s')."'";
+						}						
+						break;
+					case 'end_datetime':
+						if($value['begin'] instanceof DateTime && $value['end'] instanceof DateTime){
+							$sql_where[] = (string)("stop_datetime BETWEEN '".$value['end']->format('Y-m-d H:i:s'))."' AND '".$value['begin']->format('Y-m-d H:i:s')."'";
+						}	
+						break;
+					case 'enroll_datetime':
+						if($value['begin'] instanceof DateTime && $value['end'] instanceof DateTime){
+							$sql_where[] = (string)("enroll_datetime BETWEEN '".$value['end']->format('Y-m-d H:i:s'))."' AND '".$value['begin']->format('Y-m-d H:i:s')."'";
+						}	
+						break;
+					case 'datetime_created':
+						if($value['begin'] instanceof DateTime && $value['end'] instanceof DateTime){
+							$sql_where[] = (string)("datetime_created BETWEEN '".$value['end']->format('Y-m-d H:i:s'))."' AND '".$value['begin']->format('Y-m-d H:i:s')."'";
+						}	
+						break;
+					case 'datetime_updated':
+						if($value['begin'] instanceof DateTime && $value['end'] instanceof DateTime){
+							$sql_where[] = (string)("datetime_updated BETWEEN '".$value['end']->format('Y-m-d H:i:s'))."' AND '".$value['begin']->format('Y-m-d H:i:s')."'";
+						}	
+						break;
+					case 'active':
+						$sql_where[] =  (string)"active = '". (bool)$value ."'"; 
+						break;
+					case 'description':
+						$sql_where[] = "UPPER(description) LIKE UPPER('%".(string)$value ."%')"; 
+						break;
+					case 'location':
+						$sql_where[] = "UPPER(location) LIKE UPPER('%".(string)$value ."%')"; 
+						break;	
+				}
+			}
+			// build input string
+			$sql_where_string =" WHERE " . $sql_where[0];
+			for($i  = 1; $i < (count($sql_where)); $i++){
+				$sql_where_string .= " AND " . $sql_where[$i];
+			}
+		}else{
+			$sql_where_string = "";
+		}
+		
+		
+		
+		// set shorting and order options
+		$short_array = array('name', 'start_datetime', 'stop_datetime', 'active');
+		$order_array = array('ASC', 'DESC');
+		
+		// check if the short is valid
+		if(!in_array($short, $short_array)){
+			$short = 'start_datetime';
+		}
+		
+		// check if the order is valid
+		if(!in_array($order, $order_array)){
+			$order = 'DESC';
+		}
+		
 		
 		$result = array();
-		$sql= "SELECT id FROM `dc_activity` WHERE 
-			(id IN 
-				(SELECT activity_id FROM  dc_activity_groupacces WHERE disabled = 0 AND group_id IN
-					(SELECT group_id FROM dc_user_group WHERE user_id = ".$user_id." ) )
-			OR id IN
-				(SELECT activity_id FROM  dc_activity_user_manage WHERE disabled = 0 AND user_id = ".$user_id.")
-			)
-			". $where;
-		$sql_result = $db->sql_query($sql);
-		$index = 0;
+		$sql= "SELECT id FROM `dc_activity` ". $sql_where_string ."
+		ORDER BY ". $short .' '.$order;
+		$sql_result = $db->sql_query_limit($sql, $limit, $offset);
+
 		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
 			$activity = new activity();
 			$activity->fill((int)$row['id']);
-			$result[$index] = $activity;
-			$index++;
+			$result[$activity->getId()] = $activity;
 		}
 		return $result;
+		
 	}
 
 }

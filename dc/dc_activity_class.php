@@ -28,7 +28,7 @@
 		// fill this activity from the database
 		
 	get_all_status($status)     			
-		// returns a array with all the user with $status = 	"yes"/"no"/"maybe";
+		// returns a array with all the user with $status = 	"yes"/"no"/"maybe"/"all";
 		
 	get_user_status($user)
 		// get the current status of a user_erro
@@ -69,7 +69,7 @@
 	get_group_acces_list($status)
 		// get a list of all the groups that can see this activity $status = "enable"/"disable"/"all"
 		
-	// set_group_acces($group_id_list, $new_status, $full_list = 0) 
+	set_group_acces($group_id_list, $new_status, $full_list = 0) 
 		// description:
 		// 		Set groups to see this activity
 		//inputs: 	
@@ -155,6 +155,7 @@ class activity {
     private $start_datetime;		// start date and time of the activity
     private $end_datetime;			// end date and time of the activity
     private $enroll;				// must enroll for the activity (0 = no 1 = yes)
+    private $unsubscribe_max_datetime;// the date and time the users are allowed to unsubscribe
     private $enroll_datetime;		// end date and time to enroll
     private $enroll_max;			// max user to enroll
     private $price;					// the price for a not gumbo member
@@ -173,7 +174,9 @@ class activity {
 	// some extra varibles for parsing text 
 	private $bbcode_bitfield;
 	private $bbcode_uid;
-	private $bbcode_options;
+	private $enable_magic_url;
+	private $enable_bbcode;
+	private $enable_smilies;
 	
 	// fill the activiy from the database
     function fill($id) 
@@ -195,9 +198,10 @@ class activity {
         $this->end_datetime = new DateTime($row['stop_datetime']);
         $this->enroll = $row['enroll'];
         $this->enroll_datetime = new DateTime( $row['enroll_datetime'] );
+        $this->unsubscribe_max_datetime = new DateTime( $row['unsubscribe_max'] );
         $this->enroll_max =(int) $row['enroll_max'];
-        $this->price =(double) $row['price'];
-        $this->price_member = (double) $row['price_member'];
+        $this->price =(float) $row['price'];
+        $this->price_member = (float) $row['price_member'];
         $this->location = $row['location'];
 		$this->active = (bool) $row['active'];
         $this->category = $row['category'];
@@ -207,9 +211,14 @@ class activity {
         $this->user_ip = $row['user_ip'];
         $this->datetime_created = new DateTime($row['datetime_created']);
         $this->datetime_updated = new DateTime( $row['datetime_updated']);
+		
 		$this->bbcode_bitfield = $row['bbcode_bitfield'];
 		$this->bbcode_uid = $row['bbcode_uid'];
-		$this->bbcode_options = $row['bbcode_options'];
+		$this->enable_magic_url = $row['enable_magic_url'];
+		$this->enable_bbcode = $row['enable_bbcode'];
+		$this->enable_smilies = $row['enable_smilies'];
+		
+		
 		$db->sql_freeresult($result); 							// remove query
 		return true;
     } 
@@ -253,7 +262,7 @@ class activity {
 			'comments' 			=> htmlspecialchars_decode($row['comments']),
 			'datetime' 			=> new DateTime($row['datetime']),
 			'status' 			=> $row['status'],
-			'price_payed' 		=> $row['price_payed'])	;  	
+			'price_paid' 		=> $row['price_payed'])	;  	
 		}
 		$db->sql_freeresult($result);							// remove query
 		return $user_list;										// send array
@@ -283,15 +292,15 @@ class activity {
 		}
 		$comment = utf8_normalize_nfc($comment);
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-		$allow_bbcode = $allow_urls = $allow_smilies = false;
-		generate_text_for_storage($comment, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+		$enable_bbcode = $enable_magic_url = $enable_smilies = false;
+		generate_text_for_storage($comment, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
 		$sql_ary = array(
 			'activity_id'	=> (int)$this->id,
 			'user_id'		=> (int)$user_id,
 			'user_ip'		=> (String)$user_ip,
 			'comments'		=> (String)htmlspecialchars($comment),
-			'price'			=> (double)$this->calculate_price($user_id),
-			'price_payed'	=> (double)'0.00',
+			'price'			=> (float)$this->calculate_price($user_id),
+			'price_payed'	=> (float)'0.00',
 			'status'		=> (String)$new_status
 		);	
 
@@ -304,7 +313,7 @@ class activity {
 				SET '.$db->sql_build_array('UPDATE', $sql_ary) . ', datetime = CURRENT_TIMESTAMP
 				WHERE activity_id = '. intval($this->id) .' AND user_id = '. intval($user_id); // constructs a query that changes the status of user and this activity
 		}
-		$db->sql_query($sql);								// send query
+		$result = $db->sql_query($sql);								// send query
 		if($db->sql_affectedrows()){						// check if something changed
 			$db->sql_freeresult($result);					// remove query
 			return true;										// send user enrolled
@@ -371,7 +380,7 @@ class activity {
 		// if wrong status: NULL
 		// if all: an array: accesList[user_id][created][disabled] (disabled is no acces to the activity)
 		//	else: an array: accesList[user_id][created]
-	function get_user_manage_list($status){
+	function get_group_manage_list($status){
 		global $db;												// get connection to the database
 		switch(trim($status)){										// check status
 			case "enable":										// all the users with acces
@@ -384,20 +393,20 @@ class activity {
 				$status = "";									// set SQL WHERE statment
 				break;
 			default:											// wrong status
-				$this->set_error_log("Function: get_user_manage_list; Wrong status: " . $status);
+				$this->set_error_log("Function: get_group_manage_list; Wrong status: " . $status);
 				global $user;
 				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
 				return null;									
 		}
-		$sql = 'SELECT user_id, created, disabled FROM `dc_activity_user_manage` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
+		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
 		$result = $db->sql_query($sql);							// send query
 		$acces_list = array();
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
 			if(!$status){ 										// check the status
-				$acces_list[$row['user_id']] = array( 'created' => new DateTime($row['created']), 'disabled' =>(int)$row['disabled']);  	// makes an array: accesList[user_id][created][disabled]
+				$acces_list[$row['group_id']] = array( 'created' => new DateTime($row['created']), 'disabled' =>(int)$row['disabled']);  	// makes an array: accesList[user_id][created][disabled]
 			}else { 
-				$acces_list[$row['user_id']] = new DateTime($row['created']);   	// makes an array: accesList[user_id][created] 
+				$acces_list[$row['group_id']] = new DateTime($row['created']);   	// makes an array: accesList[user_id][created] 
 			}
 		}
 		$db->sql_freeresult($result);							// remove query
@@ -408,7 +417,7 @@ class activity {
 		// description:
 		// 	set users as managers for this activity (for users that are not in the Activity Commission)
 		//inputs: 	
-		//		user_id_list: array of user id's who gets a new status
+		//		group_id_list: array of user id's who gets a new status
 		//		new_status: string of the new status of the user id's: enable (set as manager), disable (remove as manager)
 		//		full_list: optional setting, if true all other user id's in the db that are not on the user id list will be chanced to disable
 					// default is false, so it won't chance other statuses of user id's in the db
@@ -416,12 +425,11 @@ class activity {
 		//		succes:	1
 		//		wrong status: false (check error log)
 		//		no rows added: false (check error log)
-	function set_user_manager($user_id_list, $new_status, $full_list = 0){
+	function set_group_manager($group_id_list, $new_status, $full_list = 0){
 		global $db, $user;
 		// check if activity is allowed to chanced
 		if($this->start_datetime < new DateTime("now") ){
-			$this->set_error_log("Function: set_user_manager; Activity is in the past");
-			global $user;
+			$this->set_error_log("Function: set_group_manager; Activity is in the past");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null;
 		}
@@ -434,51 +442,50 @@ class activity {
 				$new_status = 1;									// set new status to disable (disabled = 1)
 				break;
 			default:												// wrong new_status
-				$this->set_error_log("Function: set_user_manager; Wrong status: " . $new_status);
-				global $user;
+				$this->set_error_log("Function: set_group_manager; Wrong status: " . $new_status);
 				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
 				return null;									
 		}
 		
 		
-		if(!is_array($user_id_list)){									// check if user id list is an array
-			$this->set_error_log('Function: set_user_manager; user_id_list not an array');	// set administator log
-			trigger_error('User_id_list is not an array');				// send error to the user
+		if(!is_array($group_id_list)){									// check if group id list is an array
+			$this->set_error_log('Function: set_group_manager; group_id_list not an array');	// set administator log
+			trigger_error('group_id_list is not an array');				// send error to the group
 		}
 		
-		if(!count($user_id_list)){									// check if user id list is an array
-			$this->set_error_log('Function: set_user_manager; user_id_list is empty');	// set administator log
-			trigger_error('user_id_list is empty');				// send error to the user
+		if(!count($group_id_list)){									// check if group id list is an array
+			$this->set_error_log('Function: set_group_manager; group_id_list is empty');	// set administator log
+			trigger_error('group_id_list is empty');				// send error to the group
 		}
 		
-		// check if the user is in the db //
-		$current_managers = $this->get_user_manage_list("all");		// get a list of all the users with acces
+		// check if the group is in the db //
+		$current_managers = $this->get_group_manage_list("all");		// get a list of all the groups with acces
 		$current_managers_status_chance = array();						// the list of all managers who status chances 
 		// check for exisiting managers with no status chance
-		foreach($user_id_list AS $key => $current_user_id){				// loop through all user id (current_user_id) from the user_id_list
-			if(isset($current_managers[$current_user_id])){				// check if user id is in the current manager list
-				if( $current_managers[$current_user_id]['disabled'] != $new_status){ 	// check if current_user_id status is thesame as new status
-					// the user id exist and has new status
-					$current_managers_status_chance[] = $current_user_id;
+		foreach($group_id_list AS $key => $current_group_id){				// loop through all group id (current_group_id) from the group_id_list
+			if(isset($current_managers[$current_group_id])){				// check if group id is in the current manager list
+				if( $current_managers[$current_group_id]['disabled'] != $new_status){ 	// check if current_group_id status is thesame as new status
+					// the group id exist and has new status
+					$current_managers_status_chance[] = $current_group_id;
 				}
-				unset($current_managers[$current_user_id]);				// remove user id from the current_managers list
-				unset($user_id_list[array_search($current_user_id, $user_id_list)]);	// remove user id from the user id list (the input) 
+				unset($current_managers[$current_group_id]);				// remove group id from the current_managers list
+				unset($group_id_list[array_search($current_group_id, $group_id_list)]);	// remove group id from the group id list (the input) 
 			}
 		}
 		// update current managers with a status chance
 		if(count($current_managers_status_chance)){
-			foreach($current_managers_status_chance AS $key => $user_id){		// loop through all managers with a new status
+			foreach($current_managers_status_chance AS $key => $group_id){		// loop through all managers with a new status
 				$sql_ary = array(
 					'disabled'      => $new_status								// set new status
 				);
 
-				$sql = 'UPDATE dc_activity_user_manage
+				$sql = 'UPDATE dc_activity_group_manage
 					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-					WHERE user_id = ' . (int) $user_id.' AND activity_id = ' .(int) $this->id;
+					WHERE group_id = ' . (int) $group_id.' AND activity_id = ' .(int) $this->id;
 				$db->sql_query($sql);
 				if(!$db->sql_affectedrows()){									// check for chanced reocords
 					// no chanced records
-					$this->set_error_log("Function: set_user_manager; UPDATE status: No new record");
+					$this->set_error_log("Function: set_group_manager; UPDATE status: No new record");
 					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
 				}
 				
@@ -488,34 +495,34 @@ class activity {
 		}
 		
 		// insert new managers
-		if(count($user_id_list)){
+		if(count($group_id_list)){
 			$sql_ary = array();
-			foreach($user_id_list AS $key => $user_id){
+			foreach($group_id_list AS $key => $group_id){
 				$sql_ary[] = array(
 					'activity_id'	=> (int)$this->id,
-					'user_id'		=> (int)$user_id,
+					'group_id'		=> (int)$group_id,
 					'disabled'		=> (int)$new_status,
 				);
 			}
-			$db->sql_multi_insert('dc_activity_user_manage', $sql_ary);
+			$db->sql_multi_insert('dc_activity_group_manage', $sql_ary);
 			if(!$db->sql_affectedrows()){									// check for chanced reocords
 
 					// no chanced records
-					$this->set_error_log("Function: set_user_manager; UPDATE status: No new record");
+					$this->set_error_log("Function: set_group_manager; UPDATE status: No new record");
 					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
 			}
 		}
 		
 		//disable managers (only if full list is enabled)
 		if(count($current_managers) && $full_list){
-			foreach($current_managers AS $user_id => $value){		// loop through all managers with a new status
+			foreach($current_managers AS $group_id => $value){		// loop through all managers with a new status
 				$sql_ary = array(
 					'disabled'      => (int) 1								// set new status
 				);
 
-				$sql = 'UPDATE dc_activity_user_manage
+				$sql = 'UPDATE dc_activity_group_manage
 					SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-					WHERE user_id = ' . (int) $user_id .' AND activity_id = ' .(int) $this->id;
+					WHERE group_id = ' . (int) $group_id .' AND activity_id = ' .(int) $this->id;
 				$db->sql_query($sql);
 				
 			}
@@ -731,15 +738,15 @@ class activity {
 	// checks is the user is a manager 
 		// returns a boolean
 	function is_manager($user_id){
-		// check for special manager acces
-		$managers_list = $this->get_user_manage_list("enable");
-		if(isset($managers_list[$user_id])){			// get a list of all manages en compare with the user id 
-			return true;														// the manages and user id match
-		}
+		
 		// check for default acces groups as AC, Bestuur and DC
+		$user_groups = all_user_groups($user_id);								// get all groups of a users
+		$managers_list = $this->get_group_manage_list("enable");				// get all managers groups
 		$default_acces = array(AC_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID);		// get all default groeps: AC Bestuur DC
-		foreach($default_acces AS $key => $groep_id_acces){					// loop true all the groep ID's 
-			if(in_array($groep_id_acces, all_user_groups($user_id)))			// get all the joind groeps id of the user and compare with the default groep id
+		foreach($user_groups AS $key => $groep_id){						// loop true all the groep ID's 
+			if(in_array($groep_id, $default_acces))							// 
+				return true;													// the groups id matches 
+			if(isset($managers_list[$groep_id]))			
 				return true;													// the groups id matches 
 		}
 		return null;															// no matches
@@ -766,8 +773,8 @@ class activity {
 			
 		$error = utf8_normalize_nfc(htmlspecialchars($error));
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-		$allow_bbcode = $allow_urls = $allow_smilies = false;
-		generate_text_for_storage($error, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+		$enable_bbcode = $enable_magic_url = $enable_smilies = false;
+		generate_text_for_storage($error, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
 		$sql_ary = array(
 			'activity_id'	=> (int)$this->id,
 			'user_id'		=> (int)$user->data['user_id'],
@@ -825,13 +832,19 @@ class activity {
 			 'stop_datetime'	=> (String)$this->end_datetime->format('Y-m-d H:i:s'),
 			 'enroll'			=> (bool)$this->enroll,
 			 'enroll_datetime'	=> (String)$this->enroll_datetime->format('Y-m-d H:i:s'),
+			 'unsubscribe_max'	=> (String)$this->unsubscribe_max_datetime->format('Y-m-d H:i:s'),
 			 'enroll_max'		=> (int)$this->enroll_max,
-			 'price'			=> (double)$this->price,
-			 'price_member'		=> (double)$this->price_member,
+			 'price'			=> (float)$this->price,
+			 'price_member'		=> (float)$this->price_member,
 			 'location'			=> (String)$this->location,
 			 'active'			=> (bool)$this->active,
 			 'category'			=> (int)$this->category,
 			 'pay_options'		=> (String)$this->pay_option,
+			 'bbcode_bitfield'	=> (String)$this->bbcode_bitfield,
+			'bbcode_uid'		=> (String)$this->bbcode_uid,
+			'enable_magic_url'	=> (bool)$this->enable_magic_url,
+			'enable_bbcode'		=> (bool)$this->enable_bbcode,
+			'enable_smilies'	=> (bool)$this->enable_smilies,
 		);
 		if($this->id == null){		// check if this is a new activity 
 			$now = new DateTime("now"); 
@@ -839,12 +852,10 @@ class activity {
 			$sql_array['user_id']					= (int)$user->data['user_id'];
 			$sql_array['user_ip']					= (String)$user->ip;
 			$sql_array['datetime_created']			= (String)$now->format('Y-m-d H:i:s');
-			$sql_array['bbcode_bitfield']			= $this->bbcode_bitfield;
-			$sql_array['bbcode_uid']				= $this->bbcode_uid;
-			$sql_array['bbcode_options']			= $this->bbcode_options;
+
 			$sql = "INSERT INTO dc_activity ". $db->sql_build_array('INSERT', $sql_array);
 		}else{
-			$sql = "UPDATE dc_activity SET ". $db->sql_build_array('UPDATE', $sql_array) . "WHERE id = ". (int)$this->id;
+			$sql = "UPDATE dc_activity SET ". $db->sql_build_array('UPDATE', $sql_array) . " WHERE id = ". (int)$this->id;
 			$modification = null;
 			foreach($this->chance_log AS $row => $value){
 				$modification .= $row . ":".$value;
@@ -893,7 +904,7 @@ class activity {
     }
 
     public function getName(){
-		return $this->name;
+		return  htmlspecialchars_decode($this->name);
     }
 
     public function setName($name){
@@ -904,28 +915,43 @@ class activity {
     }
 
     public function setDescription($description){
-		$description = preg_replace( "/[<>]/","",$description);
 		$description = utf8_normalize_nfc($description);
-		$uid = $bitfield = $options = '';
-		$allow_bbcode = $allow_urls = $allow_smilies = true;
-		generate_text_for_storage($description, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+			
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$enable_bbcode = $enable_magic_url = $enable_smilies = true;
+		generate_text_for_storage($description, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
 		$this->bbcode_uid = $uid;
 		$this->bbcode_bitfield = $bitfield;
-		$this->bbcode_options = $options;		
-		$this->description=htmlspecialchars($description);
+		$this->enable_magic_url = $enable_magic_url;
+		$this->enable_bbcode = $enable_bbcode ;
+		$this->enable_smilies = $enable_smilies;
+
+		$this->description=$description;
+		
+	
     }
 	
 	public function getDescription(){
-		$description = htmlspecialchars_decode($this->description);
+		$description = $this->description;
 		
-		$description = generate_text_for_display($description, $this->bbcode_uid, $this->bbcode_bitfield, $this->bbcode_options);
+		$options = 	(($this->enable_bbcode) ? OPTION_FLAG_BBCODE : 0) +
+					(($this->enable_smilies) ? OPTION_FLAG_SMILIES : 0) + 
+					(($this->enable_smilies) ? OPTION_FLAG_LINKS : 0);
+	
+
+		$description = generate_text_for_display($description, $this->bbcode_uid, $this->bbcode_bitfield, $options);
 		return $description;
     }
 	
 	public function getDescription_edit(){
-		$description = htmlspecialchars_decode($this->description);
-		$description = generate_text_for_edit($description, $this->bbcode_uid, $this->bbcode_options);
-		return $description['text'];
+		$description = $this->description;
+		$options = 	(($this->enable_bbcode) ? OPTION_FLAG_BBCODE : 0) +
+					(($this->enable_smilies) ? OPTION_FLAG_SMILIES : 0) + 
+					(($this->enable_smilies) ? OPTION_FLAG_LINKS : 0);
+	
+		$description = generate_text_for_edit($description, $this->bbcode_uid, $this->bbcode_bitfield, $options);
+
+		return $description["text"];
     }
 
     public function getStartDatetime(){
@@ -954,8 +980,8 @@ class activity {
 		if($endDatetime < $this->start_datetime)
 			return null;
 		if(($this->end_datetime != $endDatetime) && ($this->id != 0))
-			$this->chance_log["endDatetime"] = $this->stop_datetime->format('Y-m-d H:i:s') . "->". $endDatetime->format('Y-m-d H:i:s') . ";";
-		$this->stop_datetime = $endDatetime;
+			$this->chance_log["endDatetime"] = $this->end_datetime->format('Y-m-d H:i:s') . "->". $endDatetime->format('Y-m-d H:i:s') . ";";
+		$this->end_datetime = $endDatetime;
     }
 
     public function getEnroll(){
@@ -970,11 +996,9 @@ class activity {
 		$this->enroll = $enroll;
     }
 
-    public function getEnrollDateTime(){
-		return $this->enroll_datetime;
-    }
 
-    public function setEnrollDateTime($enrollDateTime){
+	
+	public function setEnrollDateTime($enrollDateTime){
 		if(!($enrollDateTime instanceof DateTime )) 
 			return null;
 		if($enrollDateTime < new DateTime("now"))
@@ -984,6 +1008,28 @@ class activity {
 		if(($this->enroll_datetime != $enrollDateTime) && ($this->id != 0))
 			$this->chance_log["enrollDateTime"] = $this->enroll_datetime->format('Y-m-d H:i:s') . "->". $enrollDateTime->format('Y-m-d H:i:s') . ";";
         $this->enroll_datetime = $enrollDateTime;
+    }
+	   
+	public function getUnsubscribeMaxDatetime(){
+		return $this->unsubscribe_max_datetime;
+    }
+	
+    public function setUnsubscribeMaxDatetime($unsubscribe_max_datetime){
+		if(!($unsubscribe_max_datetime instanceof DateTime )) 
+			return null;
+		if($unsubscribe_max_datetime < new DateTime("now"))
+			return null;
+		if($unsubscribe_max_datetime > $this->start_datetime)
+			return null;
+		if($unsubscribe_max_datetime < $this->enroll_datetime)
+			return null;
+		if(($this->unsubscribe_max_datetime != $unsubscribe_max_datetime) && ($this->id != 0))
+			$this->chance_log["unsubscribe_max_datetime"] = $this->unsubscribe_max_datetime->format('Y-m-d H:i:s') . "->". $unsubscribe_max_datetime->format('Y-m-d H:i:s') . ";";
+        $this->unsubscribe_max_datetime = $unsubscribe_max_datetime;
+    }
+	
+	public function getEnrollDateTime(){
+		return $this->enroll_datetime;
     }
 
     public function getEnrollMax(){
@@ -1024,12 +1070,12 @@ class activity {
 		if($priceMember < 0)
 			return null;
 		if($this->price_member != $priceMember)
-			$this->chance_log["price_member"] = $this->price_member . "->". $price_member . ";";
+			$this->chance_log["price_member"] = $this->price_member . "->". $priceMember . ";";
 		$this->price_member = $priceMember;
     }
 
     public function getLocation(){
-		return $this->location;
+		return  htmlspecialchars_decode($this->location);
     }
 
     public function setLocation($location){

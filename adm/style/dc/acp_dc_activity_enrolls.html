@@ -1,0 +1,35 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<h1>{L_TITLE} {L_ACT_NAME}</h1>
+
+<p>{L_TITLE_EXPLAIN}</p>
+<!-- IF L_ACT_ENROLLS -->
+<table cellspacing="1">
+<thead>
+<tr>
+	<th>{L_USER_NAME}</th>
+	<th>{L_COMMENT}</th>
+	<th>{L_STATUS}</th>
+	<th>{L_PRICE_PAID}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN users -->
+	<!-- IF users.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+	<td style="text-align: left;"><a href="{users.USER_LINK}">{users.USER_NAME}</a></td>
+	<td style="text-align: center;">{users.COMMENT}</td>
+	<td style="text-align: center;">{users.STATUS}</td>
+	<td style="text-align: center;">{users.PRICE_PAID}</td>
+</tr>
+<!-- END users -->
+</tbody>
+</table>
+<!-- ELSE -->
+{L_ACT_NO_ENROLLS}
+<!-- ENDIF -->
+
+
+
+<!-- INCLUDE overall_footer.html -->

@@ -37,6 +37,7 @@ $activity_controller = new activity_user();									// build user controller
 $activity =  $activity_controller->get_activity(request_var('act', 0));		// build activity by id (default = 0)
 
 $manager = $activity->is_manager($user->data['user_id']);
+$in_the_past = ($activity->getStartDatetime() < new DateTime('now') ? true : false) ;
 
 // get authorisation 
 if (!($activity->user_acces($user->data['user_id']) || $manager) )
@@ -106,23 +107,47 @@ $template->assign_var('END_DATE_TIME', $user->format_date( $activity->getEndDate
 function user_new_status($new_status, $activity){
 	global $user;
 	$current_status = $activity->get_all_status("all");
-	if( $current_status[$user->data['user_id']]['status'] != $new_status){
-		$activity->set_user_status($user->data['user_id'], $user->ip, $current_status[$user->data['user_id']]['comments'], $new_status);
+	if(!isset($current_status[$user->data['user_id']])){						// check for fist enroll
+			$activity->set_user_status($user->data['user_id'], $user->ip, '', $new_status);				// set new status without comment
+	}else{																	// user is already enrolled
+		if( $current_status[$user->data['user_id']]['status'] != $new_status){
+			$activity->set_user_status($user->data['user_id'], $user->ip, $current_status[$user->data['user_id']]['comments'], $new_status);		// set new status with comment
+		}
 	}
 }
 
+// user enrolle status
+if(($user_current_status = $activity->get_user_status($user->data['user_id'])) != null){	// check if user is enrolled
+	$all_users_enroll_list = $activity->get_all_status("all");								// get a list of all enrolled users
+	$template->assign_var('USER_ENROLLED_CHECK', true);										// set user enrolled
+	$template->assign_var('USER_ENROLLED_PAID',  $all_users_enroll_list[$user->data['user_id']]["price_paid"]);	// set user amount paid
+	$template->assign_var('USER_ENROLLED_STATUS', ucfirst( $all_users_enroll_list[$user->data['user_id']]["status"]) );	// set current user status
+	$template->assign_var('USER_ENROLLED_COMMENT', $all_users_enroll_list[$user->data['user_id']]["comments"]);		// get current comment
+	
+}else{
+	$template->assign_var('USER_ENROLLED_CHECK', false); 									// user not enrolled
+}
+
+
 $enroll_list = $activity->get_all_status("yes");				// get enroll_list
 //check for enroll
-if( $activity->getEnroll() == 1 ){										//need enroll?postprofile
+if( $activity->getEnroll() == 1 ){										//need enroll
 	$template->assign_var('ENROLL', true);								// set enroll
-		$template->assign_var('ENROLL_MAX', ((count($enroll_list) < $activity->getEnrollMax()) || ($activity->getEnrollMax() == 0)) ? true : false); // check the limit of subscriptions is reached
-		$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
-		$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
-		if($enroll_date_time > new DateTime("now")){				// check if the enroll date time is past
-			$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
-		}else{
-			$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
-		}
+	$template->assign_var('ENROLL_MAX', $enroll_max = ((count($enroll_list) < $activity->getEnrollMax()) || ($activity->getEnrollMax() == 0)) ? true : false); // check the limit of subscriptions is reached
+	$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
+	$unsubscribe_date_time = $activity->getUnsubscribeMaxDatetime();			// get the time the user has to unsubscribe
+	$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
+	$template->assign_var('UNSUBSCRIBE_MAX_DATETIME',$user->format_date( $unsubscribe_date_time->getTimestamp() )); // set end enroll date time
+	if($enroll_date_time > new DateTime("now")){					// check if the enroll date time or  is past
+		$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
+	}else{
+		$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
+	}
+	if($unsubscribe_date_time > new DateTime("now")){				// check if the unsubscrive date time or  is past
+		$template->assign_var('UNSUBSCRIBE_DATE_CHECK', true);		// enroll date time not past
+	}else{
+		$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enroll date time past
+	}	
 		
 			
 }
@@ -157,17 +182,7 @@ if($enroll_list!= 0){		// get a list of all enrolled users
 	$template->assign_var('USERS_ENROLLED_CHECK', false); 				// set no forced enroll
 }
 
-// user enrolle status
-if(($user_current_status = $activity->get_user_status($user->data['user_id'])) != null){	// check if user is enrolled
-	$all_users_enroll_list = $activity->get_all_status("all");								// get a list of all enrolled users
-	$template->assign_var('USER_ENROLLED_CHECK', true);										// set user enrolled
-	$template->assign_var('USER_ENROLLED_PAID',  $all_users_enroll_list[$user->data['user_id']]["price_payed"]);	// set user amount paid
-	$template->assign_var('USER_ENROLLED_STATUS', ucfirst( $all_users_enroll_list[$user->data['user_id']]["status"]) );	// set current user status
-	$template->assign_var('USER_ENROLLED_COMMENT', $all_users_enroll_list[$user->data['user_id']]["comments"]);		// get current comment
-	
-}else{
-	$template->assign_var('USER_ENROLLED_CHECK', false); 									// user not enrolled
-}
+
 
 // links
 $template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" .$activity->getId()));
@@ -181,6 +196,7 @@ $template->assign_var('URL_CHANCE_STATUS', append_sid($phpbb_root_path.'dc/dc_ac
 $template->assign_var('LANG_TILL', strtolower($user->lang['DC_ACT_LANG_TILL']));
 $template->assign_var('LANG_ENROLLS', $user->lang['DC_ACT_LANG_ENROLLS']);
 $template->assign_var('LANG_SUBSCRIBE', $user->lang['DC_ACT_LANG_SUBSCRIBE']);
+$template->assign_var('LANG_UNSUBSCRIBE', $user->lang['DC_ACT_UNSUBSCRIBE']);
 $template->assign_var('LANG_DATE', $user->lang['DC_ACT_LANG_DATE']);
 $template->assign_var('LANG_PRICE', $user->lang['DC_ACT_LANG_PRICE']);
 $template->assign_var('LANG_MEMBER', strtolower($user->lang['DC_ACT_LANG_MEMBER']));
@@ -208,6 +224,10 @@ if($manager){
 	
 	$template->assign_var('EDIT_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_EDIT'])));
 	$template->assign_var('EDIT_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=edit_activity&id=".$activity->getId() ));
+	
+	$template->assign_var('IS_PAST', $in_the_past);
+	$template->assign_var('RECYLCLE_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_RECYCLE'])));
+	$template->assign_var('RECYCLE_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=recycle_activity&id=".$activity->getId() ));
 }
 
 

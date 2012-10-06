@@ -46,25 +46,26 @@ $lang = array_merge($lang, array(
     'DC_ACT_ALREADY_STATUS'    			=> 'The user already has this status.',
     'DC_ACT_WRONG_STATUS'    			=> 'Wrong status',
     'DC_ACT_IN_PAST'    				=> 'This event is in the past. Something in the past can not chance.',
-    'DC_ACT_NOT_ENROLLED'    			=> 'User is not enrolled',
+    'DC_ACT_NOT_ENROLLED'    			=> 'User is not subscripted',
     'DC_ACT_ERROR_NO_ROWS_ADDED'    	=> 'No new rows added',
     'DC_ACT_ERROR_TO_MANY_ROWS_ADDED'   => 'No new rows added',
     'DC_ACT_NO_ACT'   					=> 'Event not fount',
     'DC_ACT_ERROR_LOAD'   				=> 'Error while loading this event',
     'DC_ACT'   							=> 'Event',
     'DC_ACT_LANG_TILL'   				=> 'Till',
-    'DC_ACT_LANG_ENROLLS'   			=> 'Entered',
-    'DC_ACT_LANG_SUBSCRIBE'   			=> 'Enroll',
+    'DC_ACT_LANG_ENROLLS'   			=> 'Subscribe list',
+    'DC_ACT_LANG_SUBSCRIBE'   			=> 'Subscription',
     'DC_ACT_LANG_DATE'   				=> 'Date',
     'DC_ACT_LANG_PRICE'   				=> 'Price',
     'DC_ACT_LANG_MEMBER'   				=> 'Member',
     'DC_ACT_LANG_LOCATION'  			=> 'Location',
     'DC_ACT_SAVE_COMMENT'  				=> 'Save comment',
-    'DC_ACT_ENROLL_NOBODY'  			=> 'Nobody enrolled for this event',
-    'DC_ACT_ENROLL_FORCE'  				=> 'Enroll required',
-    'DC_ACT_ENROLL_TIME'  				=> 'Enroll until',
-    'DC_ACT_ENROLL_AMOUNT'  			=> 'Users who enrolled',
-    'DC_ACT_ENROLL_CLOSED'  			=> 'Enrollments closed',
+    'DC_ACT_ENROLL_NOBODY'  			=> 'Nobody subscripted for this event',
+    'DC_ACT_ENROLL_FORCE'  				=> 'Subscription required',
+    'DC_ACT_ENROLL_TIME'  				=> 'Subscription open till',
+    'DC_ACT_ENROLL_AMOUNT'  			=> 'Users who subscripted',
+    'DC_ACT_ENROLL_CLOSED'  			=> 'Subscriptions closed',
+    'DC_ACT_UNSUBSCRIBE'  				=> 'The time you are allowed to unsubscribe',
 ));
 
 // management side
@@ -83,33 +84,35 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_END_TIME_EXPLAIN'		=> 'Enter the end time',
     'ACP_DC_ACT_NAME'  					=> 'Name of the event',
     'ACP_DC_ACT_NAME_EXPLAIN'  			=> 'Give the new event a name',
-    'ACP_DC_ACT_ENROL'  				=> 'Enroll',
-    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Force the users to enroll for this event',
+    'ACP_DC_ACT_ENROL'  				=> 'Subscribe',
+    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Force the users to subscribe for this event',
     'ACP_DC_ACT_LOCATION'  				=> 'Location',
     'ACP_DC_ACT_LOCATION_EXPLAIN'  		=> 'Enter the location from where the event starts',
     'ACP_DC_ACT_PAY_OPTION'  			=> 'Payment',
     'ACP_DC_ACT_COMMISSION'  			=> 'Commission',
     'ACP_DC_ACT_COMMISSION_EXPLAIN'  	=> 'What commission is making this event',
-    'ACP_DC_ACT_ENROLL_DATE'  			=> 'Max enroll date',
-    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can enroll <br> If left empty the dat wil be the start date',
-	'ACP_DC_ACT_ENROLL_TIME'  			=> 'Max enroll time',
-    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can enroll on de max enroll day <br> If left empty the dat wil be the start time',
+    'ACP_DC_ACT_ENROLL_DATE'  			=> 'Max subscribe date',
+    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can subscribe. <br>If left empty the max subscribe date will equal with the start date',
+	'ACP_DC_ACT_ENROLL_TIME'  			=> 'Max subscribe time',
+    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can subscribe on de max subscribe day. <br>If left empty the max subscribe time will equal with the start time',
     'ACP_DC_ACT_ENROLL_MAX'  			=> 'Max users',
-    'ACP_DC_ACT_ENROLL_MAX_EXPLAIN'  	=> 'The max amount of user that can join this event <br> 0 is unlimited',
+    'ACP_DC_ACT_ENROLL_MAX_EXPLAIN'  	=> 'The max amount of user that can subscribe to this event <br>0 is unlimited',
     'ACP_DC_ACT_PRICE'  				=> 'Price',
     'ACP_DC_ACT_PRICE_EXPLAIN'  		=> 'The price non Gumbo Millennium members have to pay',
 	'ACP_DC_ACT_PRICE_MEMBER'  			=> 'Price for Gumbo Millennium members',
     'ACP_DC_ACT_PRICE_MEMBER_EXPLAIN'  	=> 'The price Gumbo Millennium members have to pay',
     'ACP_DC_ACT_ACCES'  				=> 'Acces settings',
-    'ACP_DC_ACT_ADD_MANAGER'  			=> 'Add manager(s)',
-    'ACP_DC_ACT_ADD_MANAGER_EXPLAIN'  	=> 'Add a person(s) who get the acces to chance this event <br> This option is optional',
-	'ACP_DC_ACT_ADD_GROUP'  			=> 'Add groups(s)',
-    'ACP_DC_ACT_ADD_GROUP_EXPLAIN'  	=> 'Add group(s) who get the acces to this event',
+    'ACP_DC_ACT_ADD_GROUP_MANAGER'  			=> 'Add group manager(s)',
+    'ACP_DC_ACT_ADD_GROUP_MANAGER_EXPLAIN'  	=> 'Add group(s) who get the acces to this event and chance this event',
+	'ACP_DC_ACT_ADD_GROUP'  			=> 'Add view groups(s)',
+    'ACP_DC_ACT_ADD_GROUP_EXPLAIN'  	=> 'Add group(s) who get the acces to view this event',
     'NOT_EMPTY'  						=> 'is not allowed to be empty',
     'NOT_PREG'  						=> 'has forbidden characters',
     'WRONG_FORMAT'  					=> 'has the wrong format',
     'CASH'  							=> 'Cash',
     'IDEAL'  							=> 'iDeal (not supported yet)',
+    'DEACTIVE'  						=> 'Deactive',
+    'STATE'  							=> 'State',
     'CANT_LATER'  						=> 'can\'t be later than',
     'CANT_PAST'  						=> 'can\'t be in the past',
     'NOT_FOUND'  						=> 'not found',
@@ -117,8 +120,39 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_OVERVIEW'  				=> 'Events overview',
     'ACP_DC_ACT_OVERVIEW_EXPLAIN'  		=> 'All future events',
     'ACP_DC_ACT_EDIT'  					=> 'Edit this event',
+	'ACP_DC_ACT_EDIT_EXPLAIN'  			=> 'If you like you can chance this event',
+	'ACP_DC_ACT_RECYCLE'  				=> 'Recycle this event',
+	'ACP_DC_ACT_RECYCLE_EXPLAIN'  		=> 'Making a new event from a old event without the old data like start date and time',
+	'ACP_DC_ACT_PAST'  					=> 'All events that past',
+	'ACP_DC_ACT_PAST_EXPLAIN'  			=> 'The list of all events that are past. You can recycle or preview the event. <br>Use the input fields to find all other events.',
+	'ADVANCED_SEARCH'  					=> 'Advanced search',
+	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE'  			=> 'End date to unsubscribe',
+	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br>If left empty the max subscribe date will equal with the start date',
+	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE'  			=> 'End time to unsubscribe',
+	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE_EXPLAIN'  	=> 'The time the user has to unsubscribe from this event. <br>If left empty the max subscribe time will equal with the start time',
 
+	
 ));
+
+// For management past activities
+$lang = array_merge($lang, array(
+    'ACP_DC_ACT_START_DATE_FROM'  		=> 'Start date from',
+    'ACP_DC_ACT_START_DATE_TO'  		=> 'Start date to',
+	'ACP_DC_ACT_END_DATE_FROM'  		=> 'End date from',
+    'ACP_DC_ACT_END_DATE_TO'  			=> 'End date to',
+	
+));
+
+// For management enrolls/subscribe list 
+$lang = array_merge($lang, array(
+    'ACP_DC_ACT_ENROLL'  				=> 'All users who subscribed: ',
+    'ACP_DC_ACT_ENROLL_EXPLAIN'  		=> 'The list of all users who subscribed this activity.',
+    'ACP_DC_ACT_COMMENT'  				=> 'Comment',
+    'ACP_DC_ACT_STATUS'  				=> 'Status',
+	
+));
+
+
 
 // For group list
 $lang = array_merge($lang, array(

@@ -5,41 +5,73 @@
 <h1>{L_TITLE}</h1>
 
 <p>{L_TITLE_EXPLAIN}</p>
+{CURRENT_MODE}
 
-<form id="acp_comming_events" method="post" action="{U_ACTION}">
 <fieldset class="tabulated">
 
 <table cellspacing="1">
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
-	<th>{L_EVENT_ACTIVATE}</th>
-	<th>{L_EVENT_PREVIEW}</th>
+	<th>{L_EVENT_STATE}</th>
 	<th>{L_ACTION}</th>
 </tr>
 </thead>
 <tbody>
 <!-- BEGIN events -->
 	<!-- IF events.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-	<td style="text-align: center;"><a href="{events.EVENT_PREVIEW}">{events.EVENT_TITLE}</a></td>
+	<td style="text-align: left;"><a href="{events.EVENT_PREVIEW}">{events.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events.EVENT_ENTERED}</td>
 	<!-- IF events.EVENT_ACTIVE -->
-		<td style="text-align: center;">{L_EVENT_ACTIVE}(<a href="{events.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>)</td>
+		<td style="text-align: center;">{L_EVENT_ACTIVE}</td>
 	<!-- ELSE -->
-		<td style="text-align: center;"><a href="{events.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a></td>
+		<td style="text-align: center;">{L_EVENT_DEACTIVE}</td>        
 	<!-- ENDIF -->
-	<td style="text-align: center;"><a href="{events.EVENT_PREVIEW}">{L_EVENT_PREVIEW}</a></td>
-	<td style="text-align: center;"><a href="{events.U_EDIT}">{L_EVENT_EDIT}</a></td>
+	<td style="text-align: center;">
+		<a href="{events.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
+		<a href="{events.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+		<!-- IF events.EVENT_ACTIVE -->
+			<a href="{events.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
+		<!-- ELSE -->
+			<a href="{events.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
+		<!-- ENDIF -->
+	</td>
 </tr>
 <!-- END events -->
 </tbody>
 </table>
 
-<p class="quick">
-	{S_FORM_TOKEN}
-</p>
+
 </fieldset>
-</form>
+<br><br>
+<h1>{L_TITLE_PAST}</h1>
+
+<p>{L_TITLE_PAST_EXPLAIN}</p>
+
+<table cellspacing="1">
+<thead>
+<tr>
+	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_STARTDATETIME}</th>
+	<th>{L_EVENT_ENROLLED}</th>
+	<th>{L_ACTION}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN events_past -->
+	<!-- IF events_past.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+	<td style="text-align: left;"><a href="{events_past.EVENT_PREVIEW}">{events_past.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_past.START_DATE_TIME}</td>
+	<td style="text-align: center;">{events_past.EVENT_ENTERED}</td>
+	<td style="text-align: center;"><a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
+</tr>
+<!-- END events_past -->
+</tbody>
+</table>
+
+
 
 <!-- INCLUDE overall_footer.html -->
