@@ -459,6 +459,7 @@ $lang = array_merge($lang, array(
 	'PRIVATE_MESSAGES'		=> 'Private messages',
 	'PRIVATE_MESSAGING'		=> 'Private messaging',
 	'PROFILE'				=> 'User Control Panel',
+	'PORTAL_INDEX'			=> 'Portal',
 
 	'RANK'						=> 'Rank',
 	'READING_FORUM'				=> 'Viewing topics in %s',
