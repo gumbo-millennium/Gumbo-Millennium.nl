@@ -186,8 +186,14 @@ class acp_dc_activity_management
 						'price_member'			=> array('lang' => 'ACP_DC_ACT_PRICE_MEMBER',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money')),
 						
 						'legend3'				=> 'ACP_DC_ACT_ACCES',
-						'add_group_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true),
-						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'preg'=> '[<>]'),
+						//add_group_manager: funtion select groups params: {config_value}, {key}, the group id's of excluded groups in the grouplist: 
+						/*
+							6 = BOTS
+							3 = REGISTERED_COPPA
+							7 = NEWLY_REGISTERED
+						*/
+						'add_group_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7)), 'explain' => true),
+						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7)), 'preg'=> '[<>]'),
 						
 						'legend4'				=> 'ACP_DC_ACT_DESCRIPTION',
 						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'acp_description', 'explain' => true),
@@ -420,8 +426,7 @@ class acp_dc_activity_management
 							'legend1'				=> 'GENERAL_SETTINGS',		
 							
 							'select_user'			=> array('lang' => 'ACP_DC_SELECT_USER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_user_selection', 'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list), 'explain' => true),
-							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),
-													
+							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),						
 						
 						)
 					);	
@@ -1034,10 +1039,11 @@ class acp_dc_activity_management
 		return $output;
    }
    
-   function select_group($value, $key){
+   function select_group($value, $key, $excude){
 		
 		global $user, $phpbb_root_path, $phpEx;
-		$href = append_sid($phpbb_root_path. "grouplist.".$phpEx, 'mode=searchgroup&amp;separator='.GROUP_SEPARATOR.'&amp;exclude_groups=BOTS,REGISTERED_COPPA,NEWLY_REGISTERED&amp;form=acp_activity_new&amp;field='.$key);
+
+		$href = append_sid($phpbb_root_path. "grouplist.".$phpEx, 'mode=searchgroup&amp;separator='.GROUP_SEPARATOR.'&amp;exclude_groups='.implode(',',$excude).'&amp;form=acp_activity_new&amp;field='.$key);
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_GROUP'].'</a> ]</dd>';
 		return $string;	

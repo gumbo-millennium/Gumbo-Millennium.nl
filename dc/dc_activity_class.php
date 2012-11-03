@@ -15,7 +15,6 @@
 /**
 * @ignore
 *
-
  * 
  Function summary:
  
@@ -216,7 +215,6 @@ class activity {
 		$this->enable_magic_url = $row['enable_magic_url'];
 		$this->enable_bbcode = $row['enable_bbcode'];
 		$this->enable_smilies = $row['enable_smilies'];
-		
 		
 		$db->sql_freeresult($result); 							// remove query
 		return true;

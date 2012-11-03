@@ -144,7 +144,7 @@ if ($sql_where)
 {
 	$sql = 'SELECT COUNT(g.group_id) AS total_groups
 		FROM ' . GROUPS_TABLE . " g$sql_from
-		WHERE ".$db->sql_in_set('g.group_name', $exclude_groups, true, true)."
+		WHERE ".$db->sql_in_set('g.group_id', $exclude_groups, true, true)."
 		$sql_where";
 	$result = $db->sql_query($sql);
 	$total_groups = (int) $db->sql_fetchfield('total_groups');
@@ -249,7 +249,7 @@ if ($mode == 'searchgroup' && ($config['load_search'] || $auth->acl_get('a_')))
 $sql = "SELECT g.group_id
 	FROM " . GROUPS_TABLE . " g
 		$sql_from
-	WHERE ".$db->sql_in_set('g.group_name', $exclude_groups, true, true)."
+	WHERE ".$db->sql_in_set('g.group_id', $exclude_groups, true, true)."
 		$sql_where
 	ORDER BY $order_by";
 $result = $db->sql_query_limit($sql, $config['topics_per_page'], $start);
