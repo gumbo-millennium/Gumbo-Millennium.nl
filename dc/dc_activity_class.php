@@ -43,10 +43,8 @@
 		// check of a user is a gumbo member 
 		// returns a boolean
 		
-	get_user_manage_list($status)
-		// get a list of all the user who can manage this acitvity how has $status : "enable"/"disable"/"all"
 		
-	set_user_manager($user_id_list, $new_status, $full_list = 0)	
+	set_group_manager($user_id_list, $new_status, $full_list = 0)	
 	// description:
 		// 	set users as managers for this activity (for users that are not in the Activity Commission)
 	//inputs: 	
@@ -69,7 +67,7 @@
 	get_group_acces_list($status)
 		// get a list of all the groups that can see this activity $status = "enable"/"disable"/"all"
 		
-	set_group_acces($group_id_list, $new_status, $full_list = 0) 
+	// set_group_acces($group_id_list, $new_status, $full_list = 0) 
 		// description:
 		// 		Set groups to see this activity
 		//inputs: 	
@@ -144,6 +142,7 @@
  define("AC_GROUP_ID", 14); // set the id of the Gumbo activity groep
  define("DC_GROUP_ID", 15); // set the id of the Gumbo digitale commisie groep
  define("BESTUUR_GROUP_ID", 13); // set the id of the Gumbo bestuur groep
+ define("ADM_GROUP_ID", 5); // set the id of the Gumbo bestuur groep
  
  include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
  
@@ -226,6 +225,14 @@ class activity {
 	// functions
 	
 	// get list of all enrolled users or return null if nothing found
+	/* $list['user_id'] = array(
+			'username' 	=> username, 
+			'comments' 	=> comments, 
+			'datetime' 	=> datetime of enrolled time, 
+			'status'	=>  current status (0 of 1) 1 is enrolled
+			'price_paid' =>	Price the user already paid
+		)
+	*/
 	function get_all_status($status){
 		global $db;												// get connection to the database		
 		$user_list = null;
@@ -245,7 +252,7 @@ class activity {
 			default:											// wrong status
 				$this->set_error_log("Function: get_all_status; Wrong status: " . $status);
 				global $user;
-				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
 
@@ -275,13 +282,29 @@ class activity {
 		//	false: user already this status, 
 		//	false: user didn´t change because of a sql error  
 	function set_user_status($user_id, $user_ip, $comment, $new_status){
-		global $db;											// get connection to db
-		if(($this->enroll_datetime < new DateTime("now")) || ($this->start_datetime < new DateTime("now") )){
-			$this->set_error_log("Function: set_user_status; Activity is in the past");
-			global $user;
-			trigger_error($user->lang['DC_ACT_IN_PAST']);
-			return null;
+		global $db, $user;											// get connection to db
+		
+		switch($new_status){
+			case 'yes':
+				if(($this->enroll_datetime < new DateTime("now")) || ($this->start_datetime < new DateTime("now") )){
+					$this->set_error_log("Function: set_user_status; Event is past the enroll date time or is in the past");
+					trigger_error($user->lang['DC_ACT_IN_PAST']);
+					return null;
+				}
+				break;
+			case 'no':
+				if(($this->unsubscribe_max_datetime < new DateTime("now")) || ($this->start_datetime < new DateTime("now") )){
+					$this->set_error_log("Function: set_user_status; Event is past the unsubscribe max datetime or is in the past");
+					trigger_error($user->lang['DC_ACT_IN_PAST']);
+					return null;
+				}
+				break;
+			default:
+				$this->set_error_log("Function: set_user_status; Invalid user status:". $new_status);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
+				return null; 
 		}
+		
 		$user_status = $this->get_user_status($user_id);			// get the current status of the user
 
 		if( $user_status == $new_status){							// check if the currnet status equals the new status
@@ -395,7 +418,7 @@ class activity {
 			default:											// wrong status
 				$this->set_error_log("Function: get_group_manage_list; Wrong status: " . $status);
 				global $user;
-				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
 		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
@@ -413,7 +436,7 @@ class activity {
 		return $acces_list;
 	}
 	
-	// set_user_managerset 
+	// set_group_manager 
 		// description:
 		// 	set users as managers for this activity (for users that are not in the Activity Commission)
 		//inputs: 	
@@ -443,7 +466,7 @@ class activity {
 				break;
 			default:												// wrong new_status
 				$this->set_error_log("Function: set_group_manager; Wrong status: " . $new_status);
-				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
 		
@@ -596,7 +619,7 @@ class activity {
 			default:											// wrong status
 				$this->set_error_log("Function: get_group_acces_list; Wrong status: " . $status);
 				global $user;
-				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
 		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_groupacces` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
@@ -648,7 +671,7 @@ class activity {
 			default:												// wrong new_status
 				$this->set_error_log("Function: set_group_acces; Wrong status: " . $new_status);
 				global $user;
-				trigger_error($user->lang['DC_ACT_WRONG_STATUS']);
+				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
 		
@@ -742,7 +765,7 @@ class activity {
 		// check for default acces groups as AC, Bestuur and DC
 		$user_groups = all_user_groups($user_id);								// get all groups of a users
 		$managers_list = $this->get_group_manage_list("enable");				// get all managers groups
-		$default_acces = array(AC_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID);		// get all default groeps: AC Bestuur DC
+		$default_acces = array(ADM_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID);	// get all default groeps: AC Bestuur DC
 		foreach($user_groups AS $key => $groep_id){						// loop true all the groep ID's 
 			if(in_array($groep_id, $default_acces))							// 
 				return true;													// the groups id matches 
@@ -879,11 +902,12 @@ class activity {
 	}
 	
 	function pay($user_id, $amount){
-		if( get_user_status($user_id))
+		global $user, $db;
+		if( $this->get_user_status($user_id) != 0)
 			return null;
-		if(gettype($priceMember) != "double")
+		if(gettype($amount) != "double")
 			return null;
-		$sql = "UPDATE `dc_activity_enrol` SET  price_payed = ". $amount ." WHERE user_id = ". $user_id ." AND 	activity_id = ". $this->id;
+		$sql = "UPDATE `dc_activity_enroll` SET  price_payed = ". $amount ." WHERE user_id = ". $user_id ." AND 	activity_id = ". $this->id;
 		$db->sql_query($sql);
 		switch($result = $db->sql_affectedrows()){
 			case 0:

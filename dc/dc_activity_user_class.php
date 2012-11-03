@@ -323,6 +323,14 @@ class activity_user{
 					case 'location':
 						$sql_where[] = "UPPER(location) LIKE UPPER('%".(string)$value ."%')"; 
 						break;	
+					case 'managers':
+						if(is_array($value))
+						$sql_where[] = "id IN (
+										SELECT activity_id 
+										FROM  dc_activity_group_manage
+										WHERE ".  $db->sql_in_set('group_id', $value) .")"; 
+						break;	
+						
 				}
 			}
 			// build input string

@@ -19,9 +19,10 @@ class activity_management extends activity_user {
 
 		$is_manager = false;
 		// check is user is in default managers groups
-		$managers_groups = array(AC_GROUP_ID, DC_GROUP_ID, BESTUUR_GROUP_ID);
+		$managers_groups = array(DC_GROUP_ID, BESTUUR_GROUP_ID, ADM_GROUP_ID);
+		$user_groups = all_user_groups($user_id);
 		foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
-			if(in_array($groep_id_acces, all_user_groups($user_id))){			// get all the joind groeps id of the user and compare with the default groep id
+			if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
 				$is_manager = true;											// the groups id matches
 				break;
 			}
@@ -32,11 +33,13 @@ class activity_management extends activity_user {
 					'SELECT'    => 'activity_id',
 
 					'FROM'      => array(
-						'dc_activity_user_manage' => 'a',
+						'dc_activity_group_manage' => 'a',
 					),
 
-					'WHERE'     =>  'user_id = ' . (int)$user_id .' AND disabled =  0'
+					'WHERE'     =>  $db->sql_in_set('group_id', $user_groups ) .' AND disabled =  0'
 				);
+				
+				
 
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 

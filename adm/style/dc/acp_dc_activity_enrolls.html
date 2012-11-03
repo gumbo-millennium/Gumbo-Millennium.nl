@@ -5,6 +5,10 @@
 <h1>{L_TITLE} {L_ACT_NAME}</h1>
 
 <p>{L_TITLE_EXPLAIN}</p>
+<p>
+{L_PRICE}:{PRICE}</br>
+{L_MEMBER_PRICE}:{MEMBER_PRICE}
+</p>
 <!-- IF L_ACT_ENROLLS -->
 <table cellspacing="1">
 <thead>
@@ -12,6 +16,7 @@
 	<th>{L_USER_NAME}</th>
 	<th>{L_COMMENT}</th>
 	<th>{L_STATUS}</th>
+	<th>{L_PAYMENT_DONE}</th>
 	<th>{L_PRICE_PAID}</th>
 </tr>
 </thead>
@@ -21,15 +26,54 @@
 	<td style="text-align: left;"><a href="{users.USER_LINK}">{users.USER_NAME}</a></td>
 	<td style="text-align: center;">{users.COMMENT}</td>
 	<td style="text-align: center;">{users.STATUS}</td>
+	<td style="text-align: center;">{users.PAYMENT_DONE}</td>
 	<td style="text-align: center;">{users.PRICE_PAID}</td>
 </tr>
 <!-- END users -->
 </tbody>
 </table>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="acp_activity_new" method="post" action="{U_ACTION}">
+
+<!-- BEGIN options -->
+	<!-- IF options.S_LEGEND -->
+		<!-- IF not options.S_FIRST_ROW -->
+			</fieldset>
+		<!-- ENDIF -->
+		<fieldset>
+			<legend>{options.LEGEND}</legend>
+	<!-- ELSE -->
+
+		<dl>
+			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+			<dd>{options.CONTENT}</dd>
+		</dl>
+
+	<!-- ENDIF -->
+<!-- END options -->
+
+<!-- IF S_AUTH -->
+	<!-- BEGIN auth_tpl -->
+		{auth_tpl.TPL}
+	<!-- END auth_tpl -->
+<!-- ENDIF -->
+
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
 <!-- ELSE -->
 {L_ACT_NO_ENROLLS}
 <!-- ENDIF -->
-
-
 
 <!-- INCLUDE overall_footer.html -->

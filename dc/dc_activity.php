@@ -225,6 +225,11 @@ if($manager){
 	$template->assign_var('EDIT_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_EDIT'])));
 	$template->assign_var('EDIT_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=edit_activity&id=".$activity->getId() ));
 	
+	$template->assign_var('SUBSCRIBE_NAME', ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])));
+	$template->assign_var('SUBSCRIBE_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=enrolls&id=".$activity->getId() ));
+	
+	
+	
 	$template->assign_var('IS_PAST', $in_the_past);
 	$template->assign_var('RECYLCLE_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_RECYCLE'])));
 	$template->assign_var('RECYCLE_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=recycle_activity&id=".$activity->getId() ));

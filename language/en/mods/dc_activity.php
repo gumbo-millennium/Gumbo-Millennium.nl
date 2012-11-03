@@ -44,7 +44,7 @@ $lang = array_merge($lang, array(
     'SAVED'    							=> 'Saved',
     'TO'    							=> 'To',
     'DC_ACT_ALREADY_STATUS'    			=> 'The user already has this status.',
-    'DC_ACT_WRONG_STATUS'    			=> 'Wrong status',
+    'DC_ACT_INVALID_STATUS'    			=> 'Invalid user status',
     'DC_ACT_IN_PAST'    				=> 'This event is in the past. Something in the past can not chance.',
     'DC_ACT_NOT_ENROLLED'    			=> 'User is not subscripted',
     'DC_ACT_ERROR_NO_ROWS_ADDED'    	=> 'No new rows added',
@@ -149,9 +149,25 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_ENROLL_EXPLAIN'  		=> 'The list of all users who subscribed this activity.',
     'ACP_DC_ACT_COMMENT'  				=> 'Comment',
     'ACP_DC_ACT_STATUS'  				=> 'Status',
+    'ACP_DC_SELECT_USER'  				=> 'Select a user',
+    'ACP_DC_SELECT_USER_EXPLAIN'  		=> 'Select a user you whant to chance the payment',
+    'ACP_DC_ACT_PAID'  					=> 'The amount the user paid',
+    'DC_ACT_USER_NOT_ENROLLED'    		=> 'is not subscripted',
+    'DC_ACT_PAYMENT_DONE'    			=> 'Payment done',
 	
 ));
 
+$lang = array_merge($lang, array(
+    'FIND_GROUP'  						=> 'Find a group',
+    'NO_GROUPS'  						=> 'No groups found for this search criterion.',
+    'GROUPLIST'  						=> 'Group list',
+    'FIND_GROUPNAME_EXPLAIN'	=> 'Use this form to search for specific groups. You do not need to fill out all fields. To match partial data use * as a wildcard. Use the mark checkboxes to select one or more usernames (several usernames may be accepted depending on the form itself) and click the Select Marked button to return to the previous form.',
+    'GROUPNAME'  						=> 'Group name',
+    'SORT_GROUPNAME'  					=> 'Group name',
+	'L_FIND_GROUP'						=> 'Find a group',
+	'LIST_GROUP'						=> '1 Group',
+	'LIST_GROUPS'						=> '%d Groups',
+));
 
 
 // For group list

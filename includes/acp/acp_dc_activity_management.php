@@ -267,6 +267,7 @@ class acp_dc_activity_management
 				// get all past activities
 				$search = array(
 					'start_datetime' => array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000")),
+					'managers' => all_user_groups($user->data['user_id']),
 				);
 				$events_past = $activity_management->search($search, 10);
 				
@@ -374,6 +375,8 @@ class acp_dc_activity_management
 				$activity = new activity();								// make a new activity
 				$activity->fill($activity_id);							// fill the new activity from the db
 				
+				
+				
 				// get authorisation 
 				if (!$activity->is_manager($user->data['user_id']))
 				{
@@ -387,28 +390,48 @@ class acp_dc_activity_management
 					'L_COMMENT'				=> $user->lang['ACP_DC_ACT_COMMENT'],
 					'L_STATUS'				=> $user->lang['ACP_DC_ACT_STATUS'],
 					'L_PRICE_PAID'			=> $user->lang['PAID'],
+					'L_PAYMENT_DONE'		=> $user->lang['DC_ACT_PAYMENT_DONE'],
+					'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
+					'PRICE'					=> "&euro;".$activity->getPrice(),
+					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
+					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),
 				));
+				
+				/* get al list of all users who enrolled
+				$enroll_list['user_id'] = array(
+					'username' 	=> username, 
+					'comments' 	=> comments, 
+					'datetime' 	=> datetime of enrolled time, 
+					'status'	=>  current status (0 of 1) 1 is enrolled
+					'price_paid' =>	Price the user already paid
+				)
+				*/
 				if($enroll_list = $activity->get_all_status('all')){
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> true,
 					));
-					foreach($enroll_list AS $user_id => $info ){
-						$template->assign_block_vars('users', array(
-							'USER_NAME'			=> $info['username'],
-							'USER_LINK'			=> append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $user_id),
-							'COMMENT'			=> $info['comments'],
-							'STATUS'			=> $user->lang[strtoupper($info['status'])],
-							'PRICE_PAID'		=> "&euro;".$info['price_paid'],
-						));
-					}
+										
+					$form_key = 'acp_enroll_events';
+					add_form_key($form_key);
+					
+					$display_vars = array(
+						'title'	=> 'ACP_DC_ACT_ENROLL',
+						'vars'	=> array(				
+							'legend1'				=> 'GENERAL_SETTINGS',		
+							
+							'select_user'			=> array('lang' => 'ACP_DC_SELECT_USER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_user_selection', 'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list), 'explain' => true),
+							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),
+													
+						
+						)
+					);	
 				}else{
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> false,
 						'L_ACT_NO_ENROLLS'	=> $user->lang['DC_ACT_ENROLL_NOBODY'],
 					));
 				}
-				
-				
+					
 				$this->page_title = 'ACP_DC_ACT_ENROLL';
 				$this->tpl_name = 'dc/acp_dc_activity_enrolls';
 				break;
@@ -710,6 +733,18 @@ class acp_dc_activity_management
 						}
 					}
 					break;
+				case 'enrolls':
+					if(!isset($enroll_list[$cfg_array['select_user']])){
+						$username = array();
+						$user_id = array($cfg_array['select_user']);
+						user_get_id_name($user_id,$username);
+						if(isset($username[$cfg_array['select_user']])){
+							$error[] = $username[$cfg_array['select_user']].' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
+						}else{
+							$error[] = $user->lang['NO_USER'];
+						}
+					}
+					break;
 			}
 		}
 		/// end mode = new_activity ///
@@ -740,44 +775,47 @@ class acp_dc_activity_management
 		if ($submit)
 		{
 			switch($mode){
-			case 'edit_activity': 
-			case 'new_activity':
-				
-				$activity = new activity();
-				if(isset($activity_id)){
-					$activity->fill((int)$activity_id);
-				}
-				$activity->setName($cfg_array['name']);
-				$activity->setDescription($cfg_array['description']);
-				$activity->setStartDatetime($start_date_time);
-				$activity->setEndDatetime($end_date_time);
-				$activity->setEnroll($enroll);
-				$activity->setEnrollDateTime($enroll_date_time);
-				$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
-				$activity->setEnrollMax($cfg_array['enroll_max']);
-				$activity->setPrice($cfg_array['price']);
-				$activity->setPriceMember($cfg_array['price_member']);
-				$activity->setLocation($cfg_array['location']);
-				$activity->setPayOption($cfg_array['pay_option']);
-				$activity->setCommission($cfg_array['commission']);
-				if($activity->save()){				// save new activity and check if saving is done
-					// set managers
-					if(isset($groups_managers_id_valid)  && count($groups_managers_id_valid) > 0){
-							$activity->set_group_manager($groups_managers_id_valid,"enable", true);
-						
-					}
+				case 'edit_activity': 
+				case 'new_activity':
 					
-					// set group acces
-					if(isset($groups_id_valid)  && count($groups_id_valid) > 0){
-							$activity->set_group_acces($groups_id_valid,"enable", true);
-						
+					$activity = new activity();
+					if(isset($activity_id)){
+						$activity->fill((int)$activity_id);
 					}
-				}else{
-					trigger_error("Error while saving");
-				}
-				add_log('admin', 'LOG_CONFIG_' . strtoupper($mode));
-				trigger_error($user->lang['CONFIG_UPDATED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" )));
-				break;
+					$activity->setName($cfg_array['name']);
+					$activity->setDescription($cfg_array['description']);
+					$activity->setStartDatetime($start_date_time);
+					$activity->setEndDatetime($end_date_time);
+					$activity->setEnroll($enroll);
+					$activity->setEnrollDateTime($enroll_date_time);
+					$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
+					$activity->setEnrollMax((int)$cfg_array['enroll_max']);
+					$activity->setPrice((double)$cfg_array['price']);
+					$activity->setPriceMember((double)$cfg_array['price_member']);
+					$activity->setLocation($cfg_array['location']);
+					$activity->setPayOption($cfg_array['pay_option']);
+					$activity->setCommission($cfg_array['commission']);
+					if($activity->save()){				// save new activity and check if saving is done
+						// set managers
+						if(isset($groups_managers_id_valid)  && count($groups_managers_id_valid) > 0){
+								$activity->set_group_manager($groups_managers_id_valid,"enable", true);
+							
+						}
+						
+						// set group acces
+						if(isset($groups_id_valid)  && count($groups_id_valid) > 0){
+								$activity->set_group_acces($groups_id_valid,"enable", true);
+							
+						}
+					}else{
+						trigger_error("Error while saving");
+					}
+					add_log('admin', 'LOG_CONFIG_' . strtoupper($mode));
+					trigger_error($user->lang['CONFIG_UPDATED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" )));
+					break;
+				case 'enrolls':
+					$activity->pay((int)$cfg_array['select_user'], (double)$cfg_array['amount_paid']);
+					break;
 			}
 		}
 		////////////////////////////
@@ -795,7 +833,7 @@ class acp_dc_activity_management
 			$this->page_title = $display_vars['title'];
 
 			$template->assign_vars(array(
-							'S_ERROR'			=> (sizeof($error)) ? true : false,
+				'S_ERROR'			=> (sizeof($error)) ? true : false,
 				'ERROR_MSG'			=> implode('<br />', $error),
 
 				'S_MODE'			=> $mode,
@@ -882,8 +920,10 @@ class acp_dc_activity_management
 				}
 				// set default search
 				if(!isset($search['start_datetime'])){
-					$search['start_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"));
+					$search['start_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),
+					);
 				}
+				$search['managers'] = all_user_groups($user->data['user_id']);
 				$events_past = $activity_management->search($search, 100);
 				
 				foreach($events_past AS $index => $activity){
@@ -897,8 +937,22 @@ class acp_dc_activity_management
 						'U_RECYCLE'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=recycle_activity&amp;id=' . $activity->getId())
 					));
 				}
-			
-			break;
+				break;
+			case 'enrolls':
+				// send the list if all subscribed users to the template
+				if( $enroll_list = $activity->get_all_status('all') ){	// are there subscribed users
+					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
+						$template->assign_block_vars('users', array(		// set template array
+							'USER_NAME'			=> $info['username'],
+							'USER_LINK'			=> append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $user_id),
+							'COMMENT'			=> $info['comments'],
+							'STATUS'			=> $user->lang[strtoupper($info['status'])],
+							'PRICE_PAID'		=> "&euro;".$info['price_paid'],
+							'PAYMENT_DONE'		=> ($info['price_paid'] >= $activity->calculate_price($user_id) ? $user->lang['YES'] : $user->lang['NO'] ) ,
+						));
+						
+					}
+				}
 		}
    }
   function apc_enroll($value, $key)
@@ -946,6 +1000,38 @@ class acp_dc_activity_management
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
 		return $string;	
 		return "";
+   }
+   
+	function select_single_user($value, $key){
+		
+		global $user, $phpbb_root_path, $phpEx;
+		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;&select_single=trueform=acp_activity_new&amp;field='.$key);
+		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
+		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
+		return $string;	
+   }
+   
+   /* select_user_selection:
+		Creates a dropdown list of of all user that are in the $user_array 
+		input: 
+			$value: current value of the dropdown list
+			$key: the name of the used input field
+			$user_array['user_id'] = array(
+				'username' 	=> username, 
+				'comments' 	=> comments, 
+				'datetime' 	=> datetime of enrolled time, 
+				'status'	=>  current status (0 of 1) 1 is enrolled
+				'price_paid' =>	Price the user already paid
+			)
+	*/
+   function select_user_selection($value, $key,$user_array){
+		global $user, $phpbb_root_path, $phpEx;
+		$output = '<select name="config['.$key.']"> <option></option>';
+		foreach($user_array AS $user_id => $info){
+			$output .= '<option value="'.$user_id.'">'.$info['username'].'</option>';
+		}
+		$output .= '</select>';
+		return $output;
    }
    
    function select_group($value, $key){

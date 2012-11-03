@@ -17,10 +17,19 @@ if (empty($lang) || !is_array($lang))
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
+// Adding new category
 
+// Adding new category
+
+// Adding the permissions
 $lang = array_merge($lang, array(
-    'ACP_FOO_INDEX_TITLE'                        => 'Foo Index',
-    'ACP_FOO_TITLE_BAR'                        => 'Title bar',
-    'ACP_FOO_OHTER_TITLE'                        => 'An other title',
+    'acl_a_edit_activity'    => array('lang' => 'Can edit an event', 'cat' => 'activity'),
+    'acl_a_new_activity'    => array('lang' => 'Can create a new event', 'cat' => 'activity'),
+    'acl_a_overview_activity'    => array('lang' => 'Can get an overview of all events', 'cat' => 'activity'),
+    'acl_a_recyle_activity'    => array('lang' => 'Can reclycle a event', 'cat' => 'activity'),
+    'acl_u_view_activity'    => array('lang' => 'Can view events', 'cat' => 'activity'),
+    'acl_u_list_activities'    => array('lang' => 'Can overiew comming events', 'cat' => 'activity'),
 ));
+
+
 ?>

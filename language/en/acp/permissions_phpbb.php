@@ -81,6 +81,7 @@ $lang = array_merge($lang, array(
 		'settings'		=> 'Settings',
 		'topic_actions'	=> 'Topic actions',
 		'user_group'	=> 'Users &amp; Groups',
+		'activity'		=> 'Activity management',
 	),
 
 	// With defining 'global' here we are able to specify what is printed out if the permission is within the global scope.
@@ -94,6 +95,7 @@ $lang = array_merge($lang, array(
 		),
 	),
 ));
+
 
 // User Permissions
 $lang = array_merge($lang, array(
