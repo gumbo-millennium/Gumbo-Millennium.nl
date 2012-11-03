@@ -43,7 +43,7 @@ if (!in_array($mode, array('', 'group','searchgroup')))
 
 // is user allowed to get here
 
-if (!$auth->acl_gets('u_viewprofile', 'a_user', 'a_useradd', 'a_userdel'))
+if (!$auth->acl_gets('u_view_grouplist'))
 {
 	if ($user->data['group_id'] != ANONYMOUS)
 	{

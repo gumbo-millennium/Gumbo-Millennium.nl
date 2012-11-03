@@ -33,14 +33,14 @@ $auth_admin = new auth_admin();
 // (you could instead make them global permissions by making the obvious changes below)
 $auth_admin->acl_add_option(array(
     'local'        => array(),
-    'global'    => array('a_edit_activity', 'a_new_activity', 'a_overview_activity', 'a_recyle_activity', 'u_view_activity', 'u_list_activities')
+    'global'    => array('u_view_grouplist')
 ));
-
+*/
 
 $message = $user->lang['ADDED_PERMISSIONS'] . '<br /><br />';
 $message .= $user->lang['REMOVE_INSTALL'];
 trigger_error($message);
-*/
+
 
 
 ?>
