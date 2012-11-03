@@ -8,6 +8,8 @@
 #RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 #</IfModule>
 
+DirectoryIndex portal.php index.php index.html index.htm
+
 <Files "config.php">
 Order Allow,Deny
 Deny from All
