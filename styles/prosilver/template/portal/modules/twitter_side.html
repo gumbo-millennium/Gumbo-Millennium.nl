@@ -1,0 +1,47 @@
+{$LR_BLOCK_H_L}<!-- IF $S_BLOCK_ICON --><img src="{$IMAGE_SRC}" width="{$IMAGE_WIDTH}" height="{$IMAGE_HEIGHT}" alt="" />&nbsp;<!-- ENDIF -->{$TITLE}{$LR_BLOCK_H_R}
+    <div style="text-align: center;">
+        <!-- Twitter Start -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+		<script>
+		$("document").ready(function() {
+			load_tweets();
+			setInterval(load_tweets, 20000);
+		});
+
+		function load_tweets() {
+			var last_ID = $(".tweet_result:first").attr("ID");
+
+			if (last_ID) {
+				last_ID = last_ID.replace("tweet", "");
+				var url = "http://search.twitter.com/search.json?q=windesheim&since_id=" + last_ID + "&callback=?";
+			} else {
+				var url = "http://search.twitter.com/search.json?q=windesheim&rpp=5&callback=?"; 
+			}
+
+			$.getJSON(url, function(json) { 
+				var results = '';
+				$(json.results).each(function() {
+					if (this.id == undefined) return;
+					results += "<p class='tweet_result' id='tweet" + this.id + "'><a href='http://twitter.com/" + this.from_user + "' class='tweet_user'><img width='32' height='32' align='left' title='" + this.from_user + " on Twitter' src='" + this.profile_image_url + "' /></a>" + linkify(this.text) + "</p>";
+				});
+				$("#twitter_results").prepend(results);
+			});
+
+			$(".tweet_result:gt(20)").remove();
+		}
+
+		function linkify(text) {
+			// modified from TwitterGitter by David Walsh (davidwalsh.name)
+			// courtesy of Jeremy Parrish (rrish.org)
+			return text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi, '<a target="_blank" href="$1">$1</a>')
+			.replace(/(^|\W)@(\w+)/g, '$1<a target="_blank" href="http://twitter.com/$2">@$2</a>')
+			.replace(/(^|\W)#(\w+)/g, '$1#<a target="_blank" href="http://search.twitter.com/search?q=%23$2">$2</a>');
+		}
+		</script>
+		
+		<div id='twitter_results'></div> <!-- Results will be loaded by JSON -->
+		
+        <!-- Twitter End -->
+    </div>
+    <br />
+{$LR_BLOCK_F_L}{$LR_BLOCK_F_R}
