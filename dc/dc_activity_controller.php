@@ -78,7 +78,7 @@ if(isset($_GET['disroll'])){
 }
 
 // de ingescheven mensen een activiteit
-if(($activity_enrolled = $activity->get_all_status("yes")) != 0 ){
+if(($activity_enrolled = $activity->get_all_status("enrolled")) != 0 ){
 	foreach ($activity_enrolled as $id => $value)
 	{
 		$template->assign_block_vars('enrolled', array(

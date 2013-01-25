@@ -129,7 +129,7 @@ if(($user_current_status = $activity->get_user_status($user->data['user_id'])) !
 }
 
 
-$enroll_list = $activity->get_all_status("yes");				// get enroll_list
+$enroll_list = $activity->get_all_status("enrolled");				// get enroll_list
 //check for enroll
 if( $activity->getEnroll() == 1 ){										//need enroll
 	$template->assign_var('ENROLL', true);								// set enroll

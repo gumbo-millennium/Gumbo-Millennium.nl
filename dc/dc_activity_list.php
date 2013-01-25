@@ -21,7 +21,7 @@ if(($full_list = $activity_controller->get_comming_active_activities($user->data
 	$template->assign_var('LIST_AVAILABLE', true);
 	$row_count = 1;
 	foreach($full_list AS $index => $activity){
-		$enrolled = count($activity->get_all_status("yes"));  
+		$enrolled = count($activity->get_all_status("enrolled"));  
 		$template->assign_block_vars('activity', array(
 			'NAME'    			=> $activity->getName(),
 			'ACT_LINK'   		=>  append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),

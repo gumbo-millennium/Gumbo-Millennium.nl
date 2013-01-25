@@ -255,7 +255,7 @@ class acp_dc_activity_management
 				foreach($comming_activities AS $index => $activity){
 					$template->assign_block_vars('events', array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('yes')),
+						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
 
 						'EVENT_ACTIVE'		=> (($activity->getActive() == 1) ? true : false) ,
 						'EVENT_ACTIVATE'	=> $this->u_action.'&activate='.$activity->getId(),
@@ -280,7 +280,7 @@ class acp_dc_activity_management
 				foreach($events_past AS $index => $activity){
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('yes')),
+						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
 
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
@@ -934,7 +934,7 @@ class acp_dc_activity_management
 				foreach($events_past AS $index => $activity){
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('yes')),
+						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
 
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
