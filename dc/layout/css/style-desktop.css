@@ -99,9 +99,9 @@
 
 #wrapper {
 	overflow: hidden;
-	margin-bottom: 5em;
-	padding: 6em 0em 3em 0em;
-	background: #FFFFFF;
+	margin-bottom: 1em;
+	padding: 1em 0em 1em 0em;
+	background: #006B00;
 }
 
 /* Page Wrapper */
@@ -114,7 +114,7 @@
 
 #banner {
 	overflow: hidden;
-	margin: 3em 0em;
+	margin: 2em 0em 0em ;
 }
 
 #banner .container {
@@ -124,7 +124,7 @@
 
 #banner a img {
 	display: block;
-	width: 50%;
+	width: 100%;
 }
 
 /* Content */
@@ -212,7 +212,7 @@
 
 #footer-content {
 	overflow: hidden;
-	padding: 2em 0em 3.12em 0em;
+	padding: 1em 0em 3.12em 0em;
 	color: #777777;
 }
 
@@ -244,20 +244,17 @@
 }
 
 #marketing .divider {
-	margin-bottom: 3em;
-	padding-bottom: 3em;
 	border-bottom: 0.063em solid #D4D6D8;
 }
 
 #marketing .title {
-	padding-bottom: .75em;
 	font-size: 2em;
-	color: #272727;
+	color: rgb(179, 179, 179);
 }
 
 #marketing .subtitle {
 	font-family: Georgia, "Times New Roman", Times, serif;
-	padding-bottom: 1.75em;
+	padding-bottom: 1em;
 	font-style: italic;
 	color: #464646;
 	color: #7D7D7D;
@@ -274,8 +271,7 @@
 }
 
 #featured-area .divider {
-	margin-bottom: 3em;
-	padding-bottom: 3em;
+	padding-bottom: 1em;
 	border-bottom: 1px solid #303030;
 }
 
