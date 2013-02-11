@@ -40,6 +40,8 @@ a {
 	color: #43A4D3;
 }
 
+
+
 strong {
 	font-weight: 700;
 	color: #2A2A2A;
@@ -111,7 +113,7 @@ ul.style1 {
 }
 
 ul.style1 li {
-	padding: 0.94em 0em;
+	padding: 0.94em 0em 0em;
 	border-top: 1px solid #E6E6E6;
 }
 

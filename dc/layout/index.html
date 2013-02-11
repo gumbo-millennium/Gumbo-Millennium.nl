@@ -33,8 +33,7 @@
 		}
 		.fluid_container {
 			margin: 0 auto;
-			max-width: 1000px;
-			width: 90%;
+		
 		}
 
 </style>
@@ -51,20 +50,28 @@
     
 <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
    <script>
+
+   
 		jQuery(function(){
 			
+			/*
+			var img = new Image(1920,1080); // width, height values are optional params 
+			img.src = 'http://www.gumbo-millennium.nl/fotos/fotos/20120913%20-%20SoosAvond/IMGP1343.JPG';
+			document.getElementById('imageid').setAttribute('data-src', img.src);
+			document.getElementById('imageid2').setAttribute('src', img.src);
+			*/
 			jQuery('#camera_wrap_1').camera({
 				height: '30%',
 				pagination: true,
 				thumbnails: false,
 				imagePath: 'images/slides',
-				transPeriod: 1000
+				transPeriod: 1000,
+				portrait: false,
 				
 			});
 
 		});
 	</script>
-
 
 <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
 </head><body class="homepage">
@@ -80,6 +87,7 @@
 					<nav class="mobileUI-site-nav">
 						<ul>
 							<li class="current_page_item"><a href="index.html">Homepage</a></li>
+							<li><a href="threecolumn.html">Commissies</a></li>
 							<li><a href="threecolumn.html">Forum</a></li>
 							<li><a href="twocolumn1.html">Gumbo Shop</a></li>
 							<li><a href="twocolumn2.html">Ledenlijst</a></li>
@@ -97,14 +105,16 @@
 		
 			<div class="fluid_container">
 				<div class="camera_wrap camera_emboss" id="camera_wrap_1">
-					<div data-thumb="images/slides/thumbs/gumbo_frontpage.png" data-src="images/slides/gumbo_frontpage.png">
+					<div data-thumb="images/slides/thumbs/Gumbo.jpg" id="imageid" data-src="images/slides/Gumbo.jpg">
 						<div class="camera_caption fadeFromBottom">
 							Welkom op de website van studentenvereniging Gumbo Millennium! Dubbel L Dubbel N, Dubbel genieten! Veel surfplezier gewenst!
 						</div>
 					</div>
-					<div class="slider_content" data-thumb="http://www.gumbo-millennium.nl/fotos/fotos/20120913%20-%20SoosAvond/IMGP1343.JPG" data-src="http://www.gumbo-millennium.nl/fotos/fotos/20120913%20-%20SoosAvond/IMGP1343.JPG">
+					<div id=" class="slider_content" data-thumb="images/slides/IMGP1343.png" data-src="images/slides/IMGP1343.png">
 						<div class="camera_caption fadeFromBottom">
-							Camera is a responsive/adaptive slideshow. <br><br><br><br><br><br><br><br><br><br><br><br><br> <em>Try to resize the browser window</em>
+							<h2>ALV 25-01-2013 Afgelast (ongelezen)</h2>
+							<p>Recentelijk hebben alle leden een brief thuis gehad met een uitnodiging voor een ALV op 25 januari 2013.</p>
+							
 						</div>
 					</div>
 					<div class="slider_content" data-thumb="http://www.gumbo-millennium.nl/fotos/fotos/20120913%20-%20SoosAvond/IMGP1382.JPG" data-src="http://www.gumbo-millennium.nl/fotos/fotos/20120913%20-%20SoosAvond/IMGP1382.JPG">
@@ -140,59 +150,76 @@
 	</div>
 </div>
 <div id="wrapper">
-	<div id="marketing">
+	<div id="page">
 		<div class="5grid-layout">
-			<div class="row divider">
-				<div class="3u">
-					<section> 
-						<h2 class="title">Activiteiten</h2>
-						<p class="subtitle">
-							<ul>
-								<li class="subtitle"><a>Rondje Hooghoudt</a> </li>
-								<li class="subtitle"><a>Poolkampionschap </a> </li>
-								<li class="subtitle"><a>Opendag Windesheim </a></li>
-								<li class="subtitle"><a>MudRunFun </a></li>
-								<li class="subtitle"><a>LHW 2013 </a></li>
-							</ul>
-						</p>
-						<p class="button-style2"><a href="#">Meer activiteiten	</a></p>
+			<div class="row">
+				<div class="6u">
+					<div class="mobileUI-main-content" id="content">
+						<section>
+							<div class="post">
+								<h2>ALV 25-01-2013 Afgelast (ongelezen)</h2>
+								<p class="subtitle">Augue praesent a lacus at urna congue rutrum</p>
+								<p><a href="#"><img src="images/pics03.jpg" alt="" id="imageid2"></a>
+									Recentelijk hebben alle leden een brief thuis gehad met een uitnodiging voor een ALV op 25 januari 2013. 
+									Tijdens deze ALV zou er gesproken en gestemd worden over de financiele boeken van het jaar 2011-2012. 
+
+									Echter heeft door een gebrek aan tijd de KasCie niet naar de boeken kunnen kijken en er dus geen oordeel over kunnen vellen. 
+									Dit betekend dat de op 25 januari geplande ALV niet door gaat. 
+
+									Er zal zo spoedig mogelijk een nieuwe datum geprikt worden om het alsnog over de boeken te hebben. Hier zullen jullie natuurlijk weer een uitnodiging per brief voor krijgen. 
+
+									Met vriendelijke groet, 
+									Het Bestuur 
+									</p>
+								<p class="button-style2"><a href="#">Lees meer</a></p>
+							</div>
+						</section>
+					</div>
+				</div>
+				<div class="3u" id="sidebar1">
+					<section>
+						<h2>Links</h2>
+						<ul class="style2">
+							<li class="first">
+								<p><a href="#"><img src="images/pics07.jpg" alt="">Hier het laaste forum bericht</a></p>
+							</li>
+							<li>
+								<p><a href="#"><img src="images/pics08.jpg" alt="">Hier nog een twitter bericht ofzo</a></p>
+							</li>
+							<li>
+								<h2>PlazaCAM</h2>
+								<a href="#"><img src="http://www.gumbocam.nl/capture1.jpg" class="gumbo_cam_img" alt="">
+							</li>
+						</ul>
 					</section>
 				</div>
 				<div class="3u">
-					<section>
-						<h2 class="title">Nieuws</h2>
-						<p class="subtitle">
-							<ul>
-								<li class="subtitle"><a>ALV 25-01-2013 Afgelast</a> </li>
-								<li class="subtitle"><a>Fotoverslag 20121123 - Magic The </a> </li>
-								<li class="subtitle"><a>Fotoverslag 20120913 - SoosAvond</a></li>
-								<li class="subtitle"><a>Notulen online tussentijdse ALV #</a></li>
-							</ul>
-						</p>
-						<p class="button-style2"><a href="#">Meer nieuws</a></p>
-					</section>
-				</div>
-				<div class="3u">
-					<section>
-						<h2 class="title">Een wat langer titel</h2>
-						<p class="subtitle">
-							<ul>
-								<li class="subtitle"><a>Over Gumbo</a> </li>
-								<li class="subtitle"><a>Lid worden</a> </li>
-								<li class="subtitle"><a>Fotoverslagen</a></li>
-								<li class="subtitle"><a>Sponsoren</a></li>
-							</ul>
-						</p>
-						<p class="button-style2"><a href="#">More Details</a></p>
-					</section>
-				</div>
-				<div class="3u">
-					<section>
-						<h2 class="title">PlazaCAM</h2>
-						<p><br></p>
-						<p><a href="http://www.gumbo-millennium.nl/webcam/"><img src="http://www.gumbocam.nl/capture1.jpg?%3C?=time()?%3E" alt=""></a></p>
-						<p class="button-style2"><a href="http://www.gumbo-millennium.nl/webcam/">Meer PlazaCAM</a></p>
-					</section>
+					<div id="sidebar2">
+						<section>
+							<div class="sbox1">
+								<a href="#"><h2>Activiteiten</h2></a>
+								<ul class="style1">
+									<li class="first"><a href="#">Poolkampionschap </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Falentijnsparty </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Opendag Windesheim <div class="date">Sat 03 Nov 2012, 20:40</a></div></li>
+									<li><a href="#">Dit is echt een veel te langen titel voor een activiteit maar het is omdat het kan </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">LHW 2013 </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+								</ul>
+							</div>
+						</section>
+						<section>
+							<div class="sbox2">
+								<a href="#"><h2>Nieuws</h2></a>
+								<ul class="style1">
+									<li class="first"><a href="#">ALV 25-01-2013 Afgelast </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Fotoverslag 20121123 - Magic The  </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Fotoverslag 20120913 - SoosAvond</a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Notulen online tussentijdse ALV </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+									<li><a href="#">Net als een activiteit is voor dit nieuws een veel te lange titel bedacht maar toch vind ik het leuk </a><div class="date">Sat 03 Nov 2012, 20:40</div></li>
+								</ul>
+							</div>
+						</section>
+					</div>
 				</div>
 			</div>
 		</div>

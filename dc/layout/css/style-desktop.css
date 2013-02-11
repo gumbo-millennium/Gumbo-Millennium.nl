@@ -24,6 +24,10 @@
 	height: 5.2em;
 }
 
+.u3 div {
+background-color: #006B00;
+}
+
 /* Logo */
 
 #logo {
@@ -98,10 +102,9 @@
 /* Wrapper */
 
 #wrapper {
-	overflow: hidden;
-	margin-bottom: 1em;
+	overflow: hidden;	
 	padding: 1em 0em 1em 0em;
-	background: #006B00;
+	background: #FFFFFF;
 }
 
 /* Page Wrapper */
@@ -171,11 +174,21 @@
 #sidebar1 {
 }
 
+#sidebar1 img{
+	width: 4em;
+	height:4em;
+}
+
 #sidebar1 h2 {
 	padding: 0em 0em 1em 0em;
 	text-transform: none;
 	font-size: 2em;
 	color: #2A2A2A;
+}
+
+#sidebar1 .gumbo_cam_img{
+	width: 	21em;
+	height: 12em;
 }
 
 /* Sidebar2 */
@@ -204,10 +217,21 @@
 #sidebar2 .sbox3 {
 }
 
+#sidebar2 .date{
+	text-align: right;
+	font-size: 0.75em;
+	font-style:italic
+}
+
+#sidebar2 a {
+	margin-bottom: 0.5em
+}
+
+
 /** Footer Column Content */
 
 #footer-wrapper {
-	background: url(images/img0s4.png) repeat;
+	background: url(images/img14.jpg) repeat;
 }
 
 #footer-content {
@@ -268,6 +292,8 @@
 /* Featured */
 #featured-area {
 	overflow: hidden;
+	background: url(images/img14.jpg) repeat;
+	padding-top: 1em;
 }
 
 #featured-area .divider {
