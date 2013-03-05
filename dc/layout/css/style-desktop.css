@@ -102,9 +102,11 @@ background-color: #006B00;
 /* Wrapper */
 
 #wrapper {
-	overflow: hidden;	
+	display: table;
 	padding: 1em 0em 1em 0em;
 	background: #FFFFFF;
+	width:100%;
+	
 }
 
 /* Page Wrapper */
