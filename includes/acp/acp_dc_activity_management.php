@@ -252,8 +252,10 @@ class acp_dc_activity_management
 					}
 				}
 				// get all comming activities
+				
 				foreach($comming_activities AS $index => $activity){
-					$template->assign_block_vars('events', array(
+					$event_active = (($activity->getActive() == 1) ? "_active" : "_deactive");
+					$template->assign_block_vars('events'.$event_active, array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
 
@@ -492,38 +494,40 @@ class acp_dc_activity_management
 		if($submit && isset($display_vars)){
 			foreach($display_vars['vars'] as $config_name => $vars){
 				// check all vars that are not allowd to be empty
-				if((empty($cfg_array[$config_name]) && !$vars['empty'])){
-					$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_EMPTY"])));
-				}else{
-					// check for forbidden chars
-					if(is_array($vars) && isset($vars['preg'])){ 				// isset formidden chars
-						if(preg_match("/".$vars['preg']."/", $cfg_array[$config_name]) && !(empty($cfg_array[$config_name]) && $vars['empty'])) // check input or input is empty (and allowed to be emty)
-							$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_PREG"])));		// set error
+				if(is_array($vars)){  // filter only the input fields. (so legend1, legen2, ... are skipt )
+					if((empty($cfg_array[$config_name]) && !$vars['empty'])){
+						$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_EMPTY"])));
 					}else{
-						// check for paterns
-						// available paterns: date, time
-						if(is_array($vars) && isset($vars['patern']) ){				// is set a patern
-							if(!(empty($cfg_array[$config_name]) && $vars['empty'])){	// check if input is emty and allowed to be empty 
-								$set_error = false;									// set no error
-								switch($vars['patern']['type']){
-									case 'date':									// if patern is a date
-										if(!valid_date($cfg_array[$config_name], $vars['patern']['format'])) // check input
-											$set_error = true;						// set error
-										break;
-									case 'time':									// if patern is a time
-										if(!valid_time($cfg_array[$config_name]))	// check input
-											$set_error = true;						// set error
-										break;
-									case 'money':									// if patern is money
-										if(!preg_match("/\d+(,\d{2}$)?$/",$cfg_array[$config_name])){ // check input
-											$set_error = true;						// set error
-										}
-										$cfg_array[$config_name] = floatval( preg_replace('/,/', '.', $cfg_array[$config_name]));	// convert input to proper double
-										break;
+						// check for forbidden chars
+						if(is_array($vars) && isset($vars['preg'])){ 				// isset formidden chars
+							if(preg_match("/".$vars['preg']."/", $cfg_array[$config_name]) && !(empty($cfg_array[$config_name]) && $vars['empty'])) // check input or input is empty (and allowed to be emty)
+								$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_PREG"])));		// set error
+						}else{
+							// check for paterns
+							// available paterns: date, time
+							if(is_array($vars) && isset($vars['patern']) ){				// is set a patern
+								if(!(empty($cfg_array[$config_name]) && $vars['empty'])){	// check if input is emty and allowed to be empty 
+									$set_error = false;									// set no error
+									switch($vars['patern']['type']){
+										case 'date':									// if patern is a date
+											if(!valid_date($cfg_array[$config_name], $vars['patern']['format'])) // check input
+												$set_error = true;						// set error
+											break;
+										case 'time':									// if patern is a time
+											if(!valid_time($cfg_array[$config_name]))	// check input
+												$set_error = true;						// set error
+											break;
+										case 'money':									// if patern is money
+											if(!preg_match("/\d+(,\d{2}$)?$/",$cfg_array[$config_name])){ // check input
+												$set_error = true;						// set error
+											}
+											$cfg_array[$config_name] = floatval( preg_replace('/,/', '.', $cfg_array[$config_name]));	// convert input to proper double
+											break;
+									}
+									
+									if($set_error)										// error found
+										$error[] = ucfirst(strtolower($user->lang[$vars['lang']] .' '. $user->lang['WRONG_FORMAT'])); // set output error
 								}
-								
-								if($set_error)										// error found
-									$error[] = ucfirst(strtolower($user->lang[$vars['lang']] .' '. $user->lang['WRONG_FORMAT'])); // set output error
 							}
 						}
 					}

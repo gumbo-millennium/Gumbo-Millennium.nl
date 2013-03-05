@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * Description of ical.php
 	 *
@@ -22,99 +23,90 @@
 	include ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 	include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 	include_once($phpbb_root_path . 'includes/functions_content.' . $phpEx);
-
+	require_once( "iCalcreator.class.php" );
+	
 	// Start session management
 	$user->session_begin();
 	$auth->acl($user->data);
 	$user->setup('mods/dc_activity');
 	
 	$user_id = $_GET['id'];
-	$Filename = "Gumbo_Activiteit.ics"; //naam activiteit http://www.phpbuilder.com/columns/chow20021007.php
-	header("Content-Type: text/x-vCalendar");
-	header("Content-Disposition: inline; filename=$Filename");
-?>
-BEGIN:VCALENDAR
-PRODID:-//SV Gumbo Millennium//Gumbo Millennium Events//NL
-VERSION:2.0
-CALSCALE:GREGORIAN
-METHOD:PUBLISH
-X-WR-CALNAME:Gumbo Millennium Activiteiten
-X-WR-TIMEZONE:Europe/Amsterdam
-BEGIN:VTIMEZONE
-TZID:Europe/Berlin
-X-LIC-LOCATION:Europe/Berlin
-BEGIN:DAYLIGHT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-TZNAME:CEST
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-TZNAME:CET
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
-BEGIN:VTIMEZONE
-TZID:Europe/Amsterdam
-X-LIC-LOCATION:Europe/Amsterdam
-BEGIN:DAYLIGHT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-TZNAME:CEST
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-TZNAME:CET
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
-BEGIN:VTIMEZONE
-TZID:Europe/Rome
-X-LIC-LOCATION:Europe/Rome
-BEGIN:DAYLIGHT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-TZNAME:CEST
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-TZNAME:CET
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
-<?php 
-// Build main objecs
-$activity_controller = new activity_user();
+	$activity_controller = new activity_user();
+	$username = array();
+	$user_id_array = array($user_id);
+	user_get_id_name($user_id_array,$username);
+	$username = $username[$user_id];
 if(($full_list = $activity_controller->get_comming_active_activities($user_id)) != null){
-	foreach($full_list AS $index => $activity){	
-echo('BEGIN:VEVENT
-DTSTART:'.$activity->getStartDatetime()->format("Ymd\THis\Z").'
-DTEND:'.$activity->getEndDatetime()->format("Ymd\THis\Z").'
-DTSTAMP:'. date("Ymd\THis\Z").'
-UID:'.$activity->getID().'.'.$user_id.'@gumbomillennium.nl
-CREATED:'.$activity->getDatetimeCreated()->format("Ymd\THis\Z").'
-DESCRIPTION:'. strip_bbcode($activity->getDescription(), $activity->getUID()).'
-LAST-MODIFIED:'.$activity->getDatetimeUpdated()->format("Ymd\THis\Z").'
-LOCATION: ' .$activity->getLocation(). '
-SEQUENCE:1
-SUMMARY:' .$activity->getName(). ' - Gumbo Millennium
-TRANSP:OPAQUE
-END:VEVENT
-');
+	$tz     = "Europe/Amsterdam";                   // define time zone
+	$config = array( "unique_id" => "gumbo-millennium.nl" // set a (site) unique id
+				   , "TZID"      => $tz,
+	"filename" => "Gumbo_Millennium_persoonlijk_$username.ics");          // opt. "calendar" timezone
+	$v      = new vcalendar( $config );
+	  // create a new calendar instance
 
+	$v->setProperty( "method", "PUBLISH" );
+	  // required of some calendar software
+	$v->setProperty( "x-wr-calname", "Gumbo Millennium agenda van $username" );
+	  // required of some calendar software
+	$v->setProperty( "X-WR-CALDESC", "Deze agenda is een overzicht van alle activiteiten van [Naam]" );
+	  // required of some calendar software
+	$v->setProperty( "X-WR-TIMEZONE", $tz );
+	  // required of some calendar software
+
+	$xprops = array( "X-LIC-LOCATION" => $tz );
+	  // required of some calendar software
+	iCalUtilityFunctions::createTimezone( $v, $tz, $xprops );
+	  // create timezone component(-s) opt. 1
+	  // based on present date
+
+	foreach($full_list AS $index => $activity){	
+		$vevent = & $v->newComponent( "vevent" );
+		  // create an event calendar component
+		$start = array(
+						"year"=>$activity->getStartDatetime()->format("Y"),
+						"month"=>$activity->getStartDatetime()->format("m"),
+						"day"=>$activity->getStartDatetime()->format("d"),
+						"hour"=>$activity->getStartDatetime()->format("H"),
+						"min"=>$activity->getStartDatetime()->format("i"), 
+						"sec"=>$activity->getStartDatetime()->format("s")
+					);
+		$vevent->setProperty( "dtstart", $start );
+		$end   = array(
+						"year"=>$activity->getEndDatetime()->format("Y"),
+						"month"=>$activity->getEndDatetime()->format("m"),
+						"day"=>$activity->getEndDatetime()->format("d"),
+						"hour"=>$activity->getEndDatetime()->format("H"),
+						"min"=>$activity->getEndDatetime()->format("i"), 
+						"sec"=>$activity->getEndDatetime()->format("s")
+					);
+		$vevent->setProperty( "dtend",   $end );
+		$vevent->setProperty( "LOCATION", $activity->getLocation());
+		  // property name - case independent
+		$vevent->setProperty( "summary", $activity->getName() );
+		$vevent->setProperty( "description", $activity->getDescription_preview(100,true));
+		$vevent->setProperty( "organizer" , $activity->getCommission() ); 
+		$vevent->setProperty( "attendee", $activity->getCommission() );
+		$last	= array(
+						"year"=>$activity->getDatetimeUpdated()->format("Y"),
+						"month"=>$activity->getDatetimeUpdated()->format("m"),
+						"day"=>$activity->getDatetimeUpdated()->format("d"),
+						"hour"=>$activity->getDatetimeUpdated()->format("H"),
+						"min"=>$activity->getDatetimeUpdated()->format("i"), 
+						"sec"=>$activity->getDatetimeUpdated()->format("s")
+					);
+		$vevent->setProperty( "last-modified", $last );
 	}
+
+
+	  // all calendar components are described in rfc2445
+	  // a complete iCalcreator function list (ex. setProperty) in iCalcreator manual
+
+	iCalUtilityFunctions::createTimezone( $v, $tz, $xprops);
+	  // create timezone component(-s) opt. 2
+	  // based on all start dates in events (i.e. dtstart)
+
+	$v->setConfig( $config );
+	  
+	$v->returnCalendar();
 }
 ?>
-END:VCALENDAR

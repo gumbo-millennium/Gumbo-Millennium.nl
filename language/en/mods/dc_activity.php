@@ -66,6 +66,8 @@ $lang = array_merge($lang, array(
     'DC_ACT_ENROLL_AMOUNT'  			=> 'Users who subscripted',
     'DC_ACT_ENROLL_CLOSED'  			=> 'Subscriptions closed',
     'DC_ACT_UNSUBSCRIBE'  				=> 'The time you are allowed to unsubscribe',
+    'DC_ACT_LANG_ICAL'  				=> 'Download your personal iCal',
+    'DC_ACT_LANG_ICAL_EXPLAIN'  		=> 'This is your personal iCal feed. Build from all the commission where you are a member.',
 ));
 
 // management side

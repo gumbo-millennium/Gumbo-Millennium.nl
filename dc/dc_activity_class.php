@@ -633,7 +633,7 @@ class activity {
 		global $db;
 		$change_list = null;
 		$counter = 0;
-		$sql = "SELECT user_id, datetime, modification FROM dc_activity_changelog WHERE activity_id = '". $this->id ."' ORDER BY datetime ASC";
+		$sql = "SELECT user_id, datetime, modification FROM dc_activity_chancelog WHERE activity_id = '". $this->id ."' ORDER BY datetime ASC";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
@@ -654,7 +654,7 @@ class activity {
 			'modification' 	=> (String)$modification
 		);
 		
-		$sql = "INSERT INTO `dc_activity_changelog` ". $db->sql_build_array('INSERT', $sql_ary);
+		$sql = "INSERT INTO `dc_activity_chancelog` ". $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
 		switch($result = $db->sql_affectedrows()){
 			case 0:
@@ -1049,6 +1049,21 @@ class activity {
 		$description = generate_text_for_edit($description, $this->bbcode_uid, $this->bbcode_bitfield, $options);
 
 		return $description["text"];
+    }
+	
+	public function getDescription_preview($amount_chars, $bbcode = true){
+		if(gettype($amount_chars) != "integer")
+			return null;
+		if(gettype($bbcode) != "boolean")
+			return null;
+		
+		$description = $this->description;
+		if($bbcode){
+			strip_bbcode($description, $this->bbcode_uid);
+		}
+		$description = substr($description, 0, $amount_chars);
+
+		return $description;
     }
 
     public function getStartDatetime(){

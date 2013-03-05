@@ -43,6 +43,9 @@ if(($full_list = $activity_controller->get_comming_active_activities($user->data
 
 // some additional words for transalation
 
+$template->assign_var('URL_ICAL', $phpbb_root_path . 'dc/ical.' . $phpEx .'?id='.$user->data['user_id']);
+$template->assign_var('LANG_ICAL', $user->lang['DC_ACT_LANG_ICAL']);
+$template->assign_var('LANG_ICAL_EXPLAIN', $user->lang['DC_ACT_LANG_ICAL_EXPLAIN']);
 $template->assign_var('LANG_LOCATION', $user->lang['DC_ACT_LANG_LOCATION']);
 $template->assign_var('LANG_ENROLL_NOBODY', $user->lang['DC_ACT_ENROLL_NOBODY']);
 $template->assign_var('LANG_ENROLL_FORCE', $user->lang['DC_ACT_ENROLL_FORCE']);
