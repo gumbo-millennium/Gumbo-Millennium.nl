@@ -366,7 +366,7 @@ h2.title {display: block;letter-spacing: normal;line-height: 1em;margin: 0;}
 #breadcrumbs h3, .leading_separator {display: none;}
 span.breadcrumbs {display: block;font-size: 110%;font-weight: bold;overflow: hidden;}
 span.breadcrumbs img {width: 12px;height: 23px;float: left;}
-span.breadcrumbs a, span.no-link {padding: 0 10px;float: left;display: block;height: 23px;line-height: 20px;}
+span.breadcrumbs a, span.no-link {padding: 0 3px;float: left;display: block;height: 23px;line-height: 20px;}
 .floatleft {float: left;margin-right: 25px;margin-bottom: 25px;}
 .floatright {float: right;margin-left: 25px;margin-bottom: 25px;}
 
