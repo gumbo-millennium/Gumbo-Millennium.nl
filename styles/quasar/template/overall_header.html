@@ -288,53 +288,6 @@ window.addEvent('domready', function() {
 
 <body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION} backgroundlevel-{$QUASAR_BG_LEVEL} bodylevel-{$QUASAR_BODY_LEVEL} cssstyle-{$COLOR_VARIATION} font-family-$QUASAR_FONTFACE font-size-is-default col12">
 
-<div id="rt-top">
-   <div class="rt-container">
-    <div id="rt-top2">
-	    <!-- IF $SHOW_QUASAR_FONT -->
-            <div class="rt-grid-<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->3<!-- ELSE -->6<!-- ENDIF --> rt-omega">
-        		<div class="rt-block">
-			        <div id="rt-accessibility">
-				        <div class="rt-desc">{L_CHANGE_FONT_SIZE}</div>
-				        <div id="rt-buttons">
-                            <a href="#" onclick="fontsizeup(); return false;" onkeypress="return fontsizeup(event);" title="{L_CHANGE_FONT_SIZE}" class="large"><span class="button"></span></a>
-                            <a href="#" onclick="fontsizedown(); return false;" onkeypress="return fontsizedown(event);"  title="{L_CHANGE_FONT_SIZE}" class="small"><span class="button"></span></a>
-				        </div>
-			        </div>
-			        <div class="clear"></div>
-				</div>
-			</div>
-		<!-- ENDIF -->
-		<!-- IF $SHOW_QUASAR_DATE -->
-		    <div class="rt-grid-5 rt-alpha rt-omega">
-    		    <div class="date-block">
-			        <span class="date"><!-- IF S_USER_LOGGED_IN -->{LAST_VISIT_DATE}<!-- ELSE -->{CURRENT_TIME}<!-- ENDIF --></span>
-		        </div>
-			</div>
-		<!-- ENDIF -->
-        <!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
-            <div class="rt-grid-4 rt-omega">
-                <div class="rt-block">
-                    <div class="module-surround">
-                        <div class="module-content">
-                            <form action="{U_SEARCH}" method="post" id="rokajaxsearch" class="light">
-							    <fieldset>
-	                                <div class="search">
-                                        <input name="keywords" id="roksearch_search_str" type="text"  title="{L_SEARCH_KEYWORDS}" class="inputbox" value="<!-- IF SEARCH_WORDS-->{SEARCH_WORDS}<!-- ELSE -->{L_SEARCH_MINI}<!-- ENDIF -->" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';" />
-									    {S_SEARCH_HIDDEN_FIELDS}
-									</div>
-								</fieldset>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		<!-- ENDIF -->
-		<div class="clear"></div>
-    </div>
-	</div>
-</div>
-
 <div id="rt-header">
     <div class="rt-container">
 	    <div id="rt-header2">
@@ -383,6 +336,10 @@ window.addEvent('domready', function() {
 												</li>
 											<!-- ENDIF -->
 										</ul>
+									</div>
+								    <div class="search">
+                                        <input name="keywords" id="roksearch_search_str" type="text"  title="{L_SEARCH_KEYWORDS}" class="inputbox" value="<!-- IF SEARCH_WORDS-->{SEARCH_WORDS}<!-- ELSE -->{L_SEARCH_MINI}<!-- ENDIF -->" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';" />
+									    {S_SEARCH_HIDDEN_FIELDS}
 									</div>
 								</div>
 							</div>
