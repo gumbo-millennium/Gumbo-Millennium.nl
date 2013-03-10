@@ -60,6 +60,7 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+
 	
 class activity_user{
 
@@ -276,8 +277,7 @@ class activity_user{
 										SELECT activity_id 
 										FROM  dc_activity_group_manage
 										WHERE ".  $db->sql_in_set('group_id', $value) .")"; 
-						break;	
-						
+						break;		
 				}
 			}
 			// build input string
@@ -309,6 +309,7 @@ class activity_user{
 		$result = array();
 		$sql= "SELECT id FROM `dc_activity` ". $sql_where_string ."
 		ORDER BY ". $short .' '.$order;
+
 		$sql_result = $db->sql_query_limit($sql, $limit, $offset);
 
 		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows

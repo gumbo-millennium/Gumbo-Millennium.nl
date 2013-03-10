@@ -409,15 +409,6 @@ class acp_dc_activity_management
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),
 				));
 				
-				/* get al list of all users who enrolled
-				$enroll_list['user_id'] = array(
-					'username' 	=> username, 
-					'comments' 	=> comments, 
-					'datetime' 	=> datetime of enrolled time, 
-					'status'	=>  current status (0 of 1) 1 is enrolled
-					'price_paid' =>	Price the user already paid
-				)
-				*/
 				if($enroll_list = $activity->get_all_status('all')){
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> true,
@@ -947,10 +938,14 @@ class acp_dc_activity_management
 				}
 				// set default search
 				if(!isset($search['start_datetime'])){
-					$search['start_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),
+					$search['start_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),	// find all acitivities where the startdate is between 'NOW' and 1-2000
 					);
 				}
-				$search['managers'] = all_user_groups($user->data['user_id']);
+				
+				$all_groups_user = all_user_groups($user->data['user_id']);					// get all the groups of the curent user
+				if(!in_array($all_groups_user ,unserialize(SEE_ALL_ACTIVITIES_GROUP))){		// check if user is NOT in the 'allowed to see all activities' group
+					$search['managers'] = $all_groups_user;									// get only the activities where the current user is manager of
+				}
 				$events_past = $activity_management->search($search, 100);
 				
 				foreach($events_past AS $index => $activity){

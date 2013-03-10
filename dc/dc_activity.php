@@ -16,10 +16,10 @@
 define('IN_PHPBB', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-include($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
+include_once($phpbb_root_path . 'common.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+include_once($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 
@@ -47,7 +47,7 @@ if (!($activity->user_acces($user->data['user_id']) || $manager) )
 // set activity readed
 
 
-if($activity->get_read($user->data['user_id']) == null){
+if($activity->get_read($user->data['user_id'])){
 	print("unread");
 	
 	$activity->set_read( intval($user->data['user_id']));
@@ -57,8 +57,8 @@ if($activity->get_read($user->data['user_id']) == null){
 	print("read");
 }
 
-// chance enroll status
-$template->assign_var('CHANCE', ($chance_status = request_var('chance', false))); 	// open enroll select options (default = false)
+// change enroll status
+$template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
 if($status != 0){															// if a new status
 	switch($status){														// check new status
@@ -193,10 +193,10 @@ if($enroll_list!= 0){		// get a list of all enrolled users
 // links
 $template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" .$activity->getId()));
 $template->assign_var('URL_STATUS', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" .$activity->getId()));
-$template->assign_var('URL_CHANCE_STATUS_YES', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=1" ));
-$template->assign_var('URL_CHANCE_STATUS_NO', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=2" ));
-$template->assign_var('URL_CHANCE_STATUS_MAYBE', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=3" ));
-$template->assign_var('URL_CHANCE_STATUS', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&chance=true" ));
+$template->assign_var('URL_CHANGE_STATUS_YES', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=1" ));
+$template->assign_var('URL_CHANGE_STATUS_NO', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=2" ));
+$template->assign_var('URL_CHANGE_STATUS_MAYBE', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&status=3" ));
+$template->assign_var('URL_CHANGE_STATUS', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=".$activity->getId()."&change=true" ));
 
 // some additional words for transalation
 $template->assign_var('LANG_TILL', strtolower($user->lang['DC_ACT_LANG_TILL']));
@@ -221,6 +221,7 @@ $template->assign_var('LANG_PAID', strtolower($user->lang['PAID']));
 $template->assign_var('LANG_CANCEL', $user->lang['CANCEL']);
 $template->assign_var('LANG_SAVED', $user->lang['SAVED']);
 $template->assign_var('LANG_TO', strtolower($user->lang['TO']));
+$template->assign_var('LANG_CHANGE',  ucfirst(strtolower($user->lang['CHANGE'])));
 
 // if a user is a manager: some exta functions and assignments
 $template->assign_var('IS_MANAGER', $manager);

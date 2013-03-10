@@ -109,7 +109,7 @@
 	</div>
 	<dl class="postprofile" id="profile2">
 	<!-- IF not S_IS_BOT and S_USER_LOGGED_IN -->
-		<!-- IF USER_ENROLLED_CHECK  && CHANCE == FALSE-->
+		<!-- IF USER_ENROLLED_CHECK  && CHANGE == FALSE-->
 					<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
 						<dd>&#8364;{USER_ENROLLED_PAID}</dd>
 					<dt>&nbsp;</dt>
@@ -118,7 +118,7 @@
 						<dd>{USER_ENROLLED_STATUS}</dd>
 						
 						<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-							<dd><a href="{URL_CHANCE_STATUS}">Chance</a></dd>
+							<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
 						<!-- ENDIF -->
 					<dt>&nbsp;</dt>
 					<form action="{URL_STATUS}" method="GET">
@@ -135,9 +135,9 @@
 			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
 					<dt><strong>{LANG_SUBSCRIBE}:</strong></dt>
 						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
-						<dd><a href="{URL_CHANCE_STATUS_YES}">{LANG_YES}</a></dd>
+						<dd><a href="{URL_CHANGE_STATUS_YES}">{LANG_YES}</a></dd>
 						<!-- ENDIF -->
-						<dd><a href="{URL_CHANCE_STATUS_NO}">{LANG_NO}</a></dd>
+						<dd><a href="{URL_CHANGE_STATUS_NO}">{LANG_NO}</a></dd>
 						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
 
 			<!-- ELSE -->

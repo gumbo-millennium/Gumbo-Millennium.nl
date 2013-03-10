@@ -191,15 +191,22 @@
 	getDatetimeUpdated()
 		
  */
- include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
  
- 
- define("MEMBER_GROUP_ID", 9); 		// set the id of the Gumbo member groep
- define("AC_GROUP_ID", 14); 		// set the id of the Gumbo activity groep
- define("DC_GROUP_ID", 15); 		// set the id of the Gumbo digitale commisie groep
- define("BESTUUR_GROUP_ID", 13); 	// set the id of the Gumbo bestuur groep
- define("ADM_GROUP_ID", 5); 		// set the id of the Gumbo bestuur groep
- 
+ if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
+
+if(!defined('DE_ACTIVITY_CLASS')){
+	define("DE_ACTIVITY_CLASS", true); 	// set the id of the Gumbo member group
+	define("MEMBER_GROUP_ID", 9); 		// set the id of the Gumbo member group
+	define("AC_GROUP_ID", 14); 		// set the id of the Gumbo activity group
+	define("DC_GROUP_ID", 15); 		// set the id of the Gumbo digitale commisie group
+	define("BESTUUR_GROUP_ID", 13); 	// set the id of the Gumbo bestuur group
+	define("ADM_GROUP_ID", 5); 		// set the id of the Administrators group
+	define("SEE_ALL_ACTIVITIES_GROUP", serialize( array(ADM_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID))); // the array of the groups who are allowed the see all the activities
+}
  
 class activity {
     // declare varibles 
@@ -419,7 +426,6 @@ class activity {
 			'user_ip'		=> (String)$user_ip,
 			'comments'		=> (String)htmlspecialchars($comment),
 			'price'			=> (float)$this->calculate_price($user_id),
-			'price_payed'	=> (float)'0.00',
 			'status'		=> (String)$new_status
 		);	
 
@@ -884,7 +890,7 @@ class activity {
 		// check for default acces groups as AC, Bestuur and DC
 		$user_groups = all_user_groups($user_id);								// get all groups of a users
 		$managers_list = $this->get_group_manage_list("enable");				// get all managers groups
-		$default_acces = array(ADM_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID);	// get all default groeps: AC Bestuur DC
+		$default_acces = unserialize (SEE_ALL_ACTIVITIES_GROUP);						// get all default groeps
 		foreach($user_groups AS $key => $groep_id){						// loop true all the groep ID's 
 			if(in_array($groep_id, $default_acces))							// 
 				return true;													// the groups id matches 
