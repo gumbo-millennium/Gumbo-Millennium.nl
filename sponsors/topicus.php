@@ -1,6 +1,6 @@
 <?php
 define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
@@ -13,7 +13,7 @@ $user->setup();
 
 page_header('Sponsors');
 
-$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 27';
+$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 30';
 
 $result = $db->sql_query_limit($sql, $config['portal_max_topics']);
 $row = $db->sql_fetchrow($result);
