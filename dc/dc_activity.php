@@ -48,13 +48,13 @@ if (!($activity->user_acces($user->data['user_id']) || $manager) )
 
 
 if($activity->get_read($user->data['user_id'])){
-	print("unread");
+
 	
 	$activity->set_read( intval($user->data['user_id']));
 	
 }else{
 	
-	print("read");
+
 }
 
 // change enroll status
