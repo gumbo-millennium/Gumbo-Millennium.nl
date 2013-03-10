@@ -4742,7 +4742,6 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'L_INDEX'			=> $user->lang['FORUM_INDEX'],
 		'L_PORTAL'			=> $user->lang['PORTAL_INDEX'],
 		'L_ONLINE_EXPLAIN'	=> $l_online_time,
-		'L_SPONSORS'		=> $user->lang['SPONSORS'],
 
 		'U_PRIVATEMSGS'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
 		'U_RETURN_INBOX'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
@@ -4751,7 +4750,6 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'U_MEMBERLIST'			=> append_sid("{$phpbb_root_path}memberlist.$phpEx"),
 		'U_VIEWONLINE'			=> ($auth->acl_gets('u_viewprofile', 'a_user', 'a_useradd', 'a_userdel')) ? append_sid("{$phpbb_root_path}viewonline.$phpEx") : '',
 		'U_LOGIN_LOGOUT'		=> $u_login_logout,
-		'U_SPONSORS'			=> append_sid("{$phpbb_root_path}sponsors.$phpEx"),
 		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),
 		'P_INDEX'				=> append_sid("{$phpbb_root_path}portal.$phpEx"),
 		'U_SEARCH'				=> append_sid("{$phpbb_root_path}search.$phpEx"),
