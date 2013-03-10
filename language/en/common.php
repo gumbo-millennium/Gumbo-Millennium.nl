@@ -41,7 +41,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	// GUMBO BEGIN
-	'SPONSOR'			=> 'Sponsors',
+	'SPONSOR'			=> 'Sponsoren',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '',
