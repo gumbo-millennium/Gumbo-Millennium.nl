@@ -263,7 +263,8 @@ margin-top:10px;
 #rt-header {position: relative;z-index: 2;}
 #rt-header .rt-block {margin-bottom: 0;}
 #rt-header4 {padding: 5px 0;}
-#rt-logo {width: 236px;height: 49px;display: block;}
+/*#rt-logo {width: 236px;height: 49px;display: block;}*/
+#rt-logo {width: 249px; height: 85px; display: block; margin-top: -15px; margin-bottom: -15px;}
 
 /* Top Menu */
 #rt-header ul {margin: 0;padding: 0;float: right;position: relative;z-index: 1000;}
