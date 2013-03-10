@@ -40,10 +40,22 @@ if (!defined('IN_PHPBB'))
 function login_db($username, $password, $ip = '', $browser = '', $forwarded_for = '')
 {
 	global $db, $config;
+	
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	global $user;
+	//-- end : log connections --------------------------------------------------------
 
 	// do not allow empty password
 	if (!$password)
 	{
+		//-- mod : log connections --------------------------------------------------------
+		//-- add
+		if (!$user->data['is_registered'])
+		{
+			add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_NO_PASSWORD', $username);
+		}
+		//-- end : log connections --------------------------------------------------------
 		return array(
 			'status'	=> LOGIN_ERROR_PASSWORD,
 			'error_msg'	=> 'NO_PASSWORD_SUPPLIED',
@@ -53,6 +65,13 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 
 	if (!$username)
 	{
+		//-- mod : log connections --------------------------------------------------------
+		//-- add
+		if (!$user->data['is_registered'])
+		{
+			add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_UNKNOWN', $username);
+		}
+		//-- end : log connections --------------------------------------------------------
 		return array(
 			'status'	=> LOGIN_ERROR_USERNAME,
 			'error_msg'	=> 'LOGIN_ERROR_USERNAME',
@@ -107,6 +126,13 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 
 	if (!$row)
 	{
+		//-- mod : log connections --------------------------------------------------------
+		//-- add
+		if (!$user->data['is_registered'])
+		{
+			add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_UNKNOWN', $username);
+		}
+		//-- end : log connections --------------------------------------------------------
 		if ($config['ip_login_limit_max'] && $attempts >= $config['ip_login_limit_max'])
 		{
 			return array(
@@ -142,6 +168,13 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 		$vc_response = $captcha->validate($row);
 		if ($vc_response)
 		{
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if (!$user->data['is_registered'])
+			{
+				add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL');
+			}
+			//-- end : log connections --------------------------------------------------------
 			return array(
 				'status'		=> LOGIN_ERROR_ATTEMPTS,
 				'error_msg'		=> 'LOGIN_ERROR_ATTEMPTS',
@@ -200,6 +233,13 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 						AND user_login_attempts < ' . LOGIN_ATTEMPTS_MAX;
 				$db->sql_query($sql);
 
+				//-- mod : log connections --------------------------------------------------------
+				//-- add
+				if (!$user->data['is_registered'])
+				{
+					add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL_CONVERT');
+				}
+				//-- end : log connections --------------------------------------------------------
 				return array(
 					'status'		=> LOGIN_ERROR_PASSWORD_CONVERT,
 					'error_msg'		=> 'LOGIN_ERROR_PASSWORD_CONVERT',
@@ -243,6 +283,10 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 		// User inactive...
 		if ($row['user_type'] == USER_INACTIVE || $row['user_type'] == USER_IGNORE)
 		{
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL_INACTIVE');
+			//-- end : log connections --------------------------------------------------------
 			return array(
 				'status'		=> LOGIN_ERROR_ACTIVE,
 				'error_msg'		=> 'ACTIVE_ERROR',
@@ -259,6 +303,13 @@ function login_db($username, $password, $ip = '', $browser = '', $forwarded_for 
 	}
 
 	// Password incorrect - increase login attempts
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	if (!$user->data['is_registered'])
+	{
+		add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL');
+	}
+	//-- end : log connections --------------------------------------------------------
 	$sql = 'UPDATE ' . USERS_TABLE . '
 		SET user_login_attempts = user_login_attempts + 1
 		WHERE user_id = ' . (int) $row['user_id'] . '

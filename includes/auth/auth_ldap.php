@@ -105,6 +105,13 @@ function login_ldap(&$username, &$password)
 	// do not allow empty password
 	if (!$password)
 	{
+		//-- mod : log connections --------------------------------------------------------
+		//-- add
+		if (!$user->data['is_registered'])
+		{
+			add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_NO_PASSWORD', $username);
+		}
+		//-- end : log connections --------------------------------------------------------
 		return array(
 			'status'	=> LOGIN_ERROR_PASSWORD,
 			'error_msg'	=> 'NO_PASSWORD_SUPPLIED',
@@ -114,6 +121,13 @@ function login_ldap(&$username, &$password)
 
 	if (!$username)
 	{
+		//-- mod : log connections --------------------------------------------------------
+		//-- add
+		if (!$user->data['is_registered'])
+		{
+			add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_UNKNOWN', $username);
+		}
+		//-- end : log connections --------------------------------------------------------
 		return array(
 			'status'	=> LOGIN_ERROR_USERNAME,
 			'error_msg'	=> 'LOGIN_ERROR_USERNAME',
@@ -197,6 +211,10 @@ function login_ldap(&$username, &$password)
 				// User inactive...
 				if ($row['user_type'] == USER_INACTIVE || $row['user_type'] == USER_IGNORE)
 				{
+					//-- mod : log connections --------------------------------------------------------
+					//-- add
+					add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL_INACTIVE');
+					//-- end : log connections --------------------------------------------------------
 					return array(
 						'status'		=> LOGIN_ERROR_ACTIVE,
 						'error_msg'		=> 'ACTIVE_ERROR',
@@ -253,7 +271,29 @@ function login_ldap(&$username, &$password)
 			unset($ldap_result);
 			@ldap_close($ldap);
 
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if (!$user->data['is_registered'])
+			{
+				$sql ='SELECT user_id
+					FROM ' . USERS_TABLE . "
+					WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'";
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$db->sql_freeresult($result);
+				
+				add_log('connections', $row['user_id'], 'LOG_AUTH_FAIL');
+			}
+			//-- end : log connections --------------------------------------------------------
 			// Give status about wrong password...
+			
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if (!$user->data['is_registered'])
+			{
+				add_log('connections', ANONYMOUS, 'LOG_AUTH_FAIL_UNKNOWN', $username);
+			}
+			//-- end : log connections --------------------------------------------------------
 			return array(
 				'status'		=> LOGIN_ERROR_PASSWORD,
 				'error_msg'		=> 'LOGIN_ERROR_PASSWORD',

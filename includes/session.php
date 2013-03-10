@@ -806,6 +806,13 @@ class session
 		// Regenerate autologin/persistent login key
 		if ($session_autologin)
 		{
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if (!$set_admin && !$persist_login)
+			{
+				add_log('connections', 'LOG_AUTH_SUCCESS_AUTO', $sql_ary['session_page']);
+			}
+			//-- end : log connections --------------------------------------------------------
 			$this->set_login_key();
 		}
 
@@ -1220,6 +1227,13 @@ class session
 			$message = sprintf($this->lang[$message], $till_date, '<a href="mailto:' . $config['board_contact'] . '">', '</a>');
 			$message .= ($ban_row['ban_give_reason']) ? '<br /><br />' . sprintf($this->lang['BOARD_BAN_REASON'], $ban_row['ban_give_reason']) : '';
 			$message .= '<br /><br /><em>' . $this->lang['BAN_TRIGGERED_BY_' . strtoupper($ban_triggered_by)] . '</em>';
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if ($ban_triggered_by == 'user')
+			{
+				add_log('connections', $user_id, 'LOG_AUTH_FAIL_BAN');
+			}
+			//-- end : log connections --------------------------------------------------------
 
 			// To circumvent session_begin returning a valid value and the check_ban() not called on second page view, we kill the session again
 			$this->session_kill(false);

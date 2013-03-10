@@ -2491,6 +2491,12 @@ function cache_moderators()
 function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id = 0, $topic_id = 0, $user_id = 0, $limit_days = 0, $sort_by = 'l.log_time DESC', $keywords = '')
 {
 	global $db, $user, $auth, $phpEx, $phpbb_root_path, $phpbb_admin_path;
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	global $config, $template;
+	
+	$sql_where = '';
+	//-- end : log connections --------------------------------------------------------
 
 	$topic_id_list = $reportee_id_list = $is_auth = $is_mod = array();
 
@@ -2535,6 +2541,43 @@ function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id 
 			$log_type = LOG_CRITICAL;
 			$sql_forum = '';
 		break;
+		//-- mod : log connections --------------------------------------------------------
+//-- add
+		case 'connections':			
+			if ( $config['lc_prune_day'] > 0 )
+			{
+				$sql = 'DELETE FROM ' . LOG_TABLE . '
+					WHERE log_type = ' . LOG_CONNECTIONS . '
+					AND log_time < ' . (time() - $config['lc_prune_day']*86400);
+				$db->sql_query($sql);
+			}
+			
+			$usearch = utf8_normalize_nfc(request_var('usearch', '', true));
+			$isearch = request_var('isearch', '');
+			$asearch = request_var('asearch', 'ACP_LOGS_ALL');
+			
+			if (!empty($usearch))
+			{
+				$sql_where .= " AND u.username_clean " . $db->sql_like_expression($db->any_char . utf8_clean_string($usearch) . $db->any_char) . ' ';
+				$template->assign_var('USEARCH', $usearch);
+			}
+			
+			if (!empty($isearch))
+			{
+				$sql_where .= " AND l.log_ip " . $db->sql_like_expression($isearch . $db->any_char) . ' ';
+				$template->assign_var('ISEARCH', $isearch);
+			}
+			
+			if ($asearch !== 'ACP_LOGS_ALL')
+			{
+				$sql_where .= " AND l.log_operation " . $db->sql_like_expression($asearch) . ' ';
+				$template->assign_var('ASEARCH', $asearch);
+			}
+			
+			$log_type = LOG_CONNECTIONS;
+			$sql_forum = '';
+		break;
+//-- end : log connections --------------------------------------------------------
 
 		default:
 			return;
@@ -2613,6 +2656,10 @@ function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id 
 			$sql_keywords
 			$sql_forum
 		ORDER BY $sort_by";
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	$sql = str_replace('ORDER BY', $sql_where . ' ORDER BY', $sql);
+	//-- end : log connections --------------------------------------------------------
 	$result = $db->sql_query_limit($sql, $limit, $offset);
 
 	$i = 0;
@@ -2642,6 +2689,10 @@ function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id 
 
 			'ip'				=> $row['log_ip'],
 			'time'				=> $row['log_time'],
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			'number'			=> !empty($row['log_number']) ? $row['log_number'] : '',
+			//-- end : log connections --------------------------------------------------------
 			'forum_id'			=> $row['forum_id'],
 			'topic_id'			=> $row['topic_id'],
 
@@ -2663,7 +2714,10 @@ function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id 
 					$log_data_ary = array_merge($log_data_ary, array_fill(0, substr_count($log[$i]['action'], '%') - sizeof($log_data_ary), ''));
 				}
 
-				$log[$i]['action'] = vsprintf($log[$i]['action'], $log_data_ary);
+				//-- mod : log connections --------------------------------------------------------
+				//-- add	
+				$log_data_ary = ($mode == 'connections' && strpos($row['log_operation'], 'SUCCESS_AUTO') !== FALSE) ? '<a href="' . append_sid($phpbb_root_path . $log_data_ary[0]) . '">'. $log_data_ary[0] . '</a>' : $log_data_ary;
+				//-- end : log connections --------------------------------------------------------
 
 				// If within the admin panel we do not censor text out
 				if (defined('IN_ADMIN'))

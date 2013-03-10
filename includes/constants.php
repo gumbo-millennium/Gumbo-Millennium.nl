@@ -135,6 +135,10 @@ define('LOG_ADMIN', 0);
 define('LOG_MOD', 1);
 define('LOG_CRITICAL', 2);
 define('LOG_USERS', 3);
+//-- mod : log connections --------------------------------------------------------
+//-- add
+define('LOG_CONNECTIONS', 4);
+//-- end : log connections --------------------------------------------------------
 
 // Private messaging - Do NOT change these values
 define('PRIVMSGS_HOLD_BOX', -4);
@@ -236,6 +240,10 @@ define('GROUPS_TABLE',				$table_prefix . 'groups');
 define('ICONS_TABLE',				$table_prefix . 'icons');
 define('LANG_TABLE',				$table_prefix . 'lang');
 define('LOG_TABLE',					$table_prefix . 'log');
+//-- mod : log connections --------------------------------------------------------
+//-- add
+define('LOG_LC_EXCLUDE_IP_TABLE',	$table_prefix . 'log_lc_exclude_ip');
+//-- end : log connections --------------------------------------------------------
 define('LOGIN_ATTEMPT_TABLE',		$table_prefix . 'login_attempts');
 define('MODERATOR_CACHE_TABLE',		$table_prefix . 'moderator_cache');
 define('MODULES_TABLE',				$table_prefix . 'modules');

@@ -2971,7 +2971,14 @@ function login_box($redirect = '', $l_explain = '', $l_success = '', $admin = fa
 		// anonymous/inactive users are never able to go to the ACP even if they have the relevant permissions
 		if ($user->data['is_registered'])
 		{
+		//-- mod : log connections --------------------------------------------------------
+		//-- delete
+		/*-MOD
 			add_log('admin', 'LOG_ADMIN_AUTH_FAIL');
+		MOD-*/
+		//-- add
+			add_log('connections', 'LOG_ADMIN_AUTH_FAIL_NO_ADMIN');
+		//-- end : log connections --------------------------------------------------------
 		}
 		trigger_error('NO_AUTH_ADMIN');
 	}
@@ -2987,7 +2994,14 @@ function login_box($redirect = '', $l_explain = '', $l_success = '', $admin = fa
 			{
 				if ($user->data['is_registered'])
 				{
+				//-- mod : log connections --------------------------------------------------------
+				//-- delete
+				/*-MOD
 					add_log('admin', 'LOG_ADMIN_AUTH_FAIL');
+				MOD-*/
+				//-- add
+					add_log('connections', 'LOG_ADMIN_AUTH_FAIL_NO_ADMIN');
+				//-- end : log connections --------------------------------------------------------
 				}
 				trigger_error('NO_AUTH_ADMIN');
 			}
@@ -3009,7 +3023,14 @@ function login_box($redirect = '', $l_explain = '', $l_success = '', $admin = fa
 		if ($admin && utf8_clean_string($username) != utf8_clean_string($user->data['username']))
 		{
 			// We log the attempt to use a different username...
+			//-- mod : log connections --------------------------------------------------------
+			//-- delete
+			/*-MOD
 			add_log('admin', 'LOG_ADMIN_AUTH_FAIL');
+			MOD-*/
+			//-- add
+			add_log('connections', 'LOG_ADMIN_AUTH_FAIL_DIFFER', utf8_clean_string($username));
+			//-- end : log connections --------------------------------------------------------
 			trigger_error('NO_AUTH_ADMIN_USER_DIFFER');
 		}
 
@@ -3022,15 +3043,32 @@ function login_box($redirect = '', $l_explain = '', $l_success = '', $admin = fa
 		{
 			if ($result['status'] == LOGIN_SUCCESS)
 			{
+				//-- mod : log connections --------------------------------------------------------
+				//-- delete
+				/*-MOD
 				add_log('admin', 'LOG_ADMIN_AUTH_SUCCESS');
+				MOD-*/
+				//-- add
+				if (!$config['lc_acp_disable'])
+				{
+					add_log('connections', 'LOG_ADMIN_AUTH_SUCCESS');
+				}
 			}
+			//-- end : log connections --------------------------------------------------------
 			else
 			{
 				// Only log the failed attempt if a real user tried to.
 				// anonymous/inactive users are never able to go to the ACP even if they have the relevant permissions
 				if ($user->data['is_registered'])
 				{
+				//-- mod : log connections --------------------------------------------------------
+				//-- delete
+				/*-MOD					
 					add_log('admin', 'LOG_ADMIN_AUTH_FAIL');
+				MOD-*/
+				//-- add
+					add_log('connections', 'LOG_ADMIN_AUTH_FAIL');
+				//-- end : log connections --------------------------------------------------------
 				}
 			}
 		}
@@ -3038,6 +3076,13 @@ function login_box($redirect = '', $l_explain = '', $l_success = '', $admin = fa
 		// The result parameter is always an array, holding the relevant information...
 		if ($result['status'] == LOGIN_SUCCESS)
 		{
+			//-- mod : log connections --------------------------------------------------------
+			//-- add
+			if ( !$admin && !defined('IN_CHECK_BAN') )
+			{
+				add_log('connections', 'LOG_AUTH_SUCCESS');
+			}
+			//-- end : log connections --------------------------------------------------------
 			$redirect = request_var('redirect', "{$phpbb_root_path}index.$phpEx");
 			$message = ($l_success) ? $l_success : $user->lang['LOGIN_REDIRECT'];
 			$l_redirect = ($admin) ? $user->lang['PROCEED_TO_ACP'] : (($redirect === "{$phpbb_root_path}index.$phpEx" || $redirect === "index.$phpEx") ? $user->lang['RETURN_INDEX'] : $user->lang['RETURN_PAGE']);
@@ -3340,6 +3385,10 @@ function parse_cfg_file($filename, $lines = false)
 function add_log()
 {
 	global $db, $user;
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	global $config, $phpbb_root_path, $phpEx;
+	//-- end : log connections --------------------------------------------------------
 
 	// In phpBB 3.1.x i want to have logging in a class to be able to control it
 	// For now, we need a quite hakish approach to circumvent logging for some actions
@@ -3355,11 +3404,22 @@ function add_log()
 	$reportee_id	= ($mode == 'user') ? intval(array_shift($args)) : '';
 	$forum_id		= ($mode == 'mod') ? intval(array_shift($args)) : '';
 	$topic_id		= ($mode == 'mod') ? intval(array_shift($args)) : '';
+	//-- mod : log connections --------------------------------------------------------
+	//-- add
+	$user_id		= ($user->data['user_id'] == ANONYMOUS && $mode == 'connections') ? intval(array_shift($args)) : $user->data['user_id'];
+	//-- end : log connections --------------------------------------------------------
 	$action			= array_shift($args);
 	$data			= (!sizeof($args)) ? '' : serialize($args);
 
 	$sql_ary = array(
+		//-- mod : log connections --------------------------------------------------------
+		//-- delete
+		/*-MOD
 		'user_id'		=> (empty($user->data)) ? ANONYMOUS : $user->data['user_id'],
+		MOD-*/
+		//-- add
+		'user_id'		=> (empty($user->data)) ? ANONYMOUS : $user_id,
+		//-- end : log connections --------------------------------------------------------
 		'log_ip'		=> $user->ip,
 		'log_time'		=> time(),
 		'log_operation'	=> $action,
@@ -3390,6 +3450,99 @@ function add_log()
 		case 'critical':
 			$sql_ary['log_type'] = LOG_CRITICAL;
 		break;
+		
+		//-- mod : log connections --------------------------------------------------------
+//-- add
+		case 'connections':
+			// Prevent log connections if installer has not been run
+			if (!class_exists('phpbb_db_tools'))
+			{
+				include("$phpbb_root_path/includes/db/db_tools.$phpEx");
+			}
+			$db_tool = new phpbb_db_tools($db);
+			if (!$db_tool->sql_table_exists(LOG_LC_EXCLUDE_IP_TABLE))
+			{
+				break;
+			}
+
+			$current_time = time();
+			$cache_ttl = 3600;
+			$lc_interval = $config['lc_interval'];
+			if (!$config['lc_disable'])
+			{
+				// Check for excluded IPs
+				$sql = 'SELECT exclude_ip FROM ' . LOG_LC_EXCLUDE_IP_TABLE;
+				$result = $db->sql_query($sql, $cache_ttl);
+				while ($row = $db->sql_fetchrow($result))
+				{
+					if (preg_match('#^' . str_replace('\*', '.*?', preg_quote($row['exclude_ip'], '#')) . '$#i', $sql_ary['log_ip']))
+					{
+						return false;
+					}
+				}
+				$db->sql_freeresult($result);
+				
+				//Check intervall for log failed
+				if ( strpos($action, 'FAIL') !== FALSE && $lc_interval > 0 )
+				{
+					$sql = 'SELECT log_id
+						FROM ' . LOG_TABLE . '
+						WHERE log_type = ' . LOG_CONNECTIONS . "
+						AND log_operation = '" . $db->sql_escape($action) . "'
+						AND log_data = '" . $data . "'
+						AND log_ip = '" . $db->sql_escape($user->ip) . "'
+						AND user_id = $user_id
+						AND log_time > ($current_time - $lc_interval) 
+						ORDER BY log_id DESC";
+					$result = $db->sql_query($sql);
+					
+					if ($row = $db->sql_fetchrow($result))
+					{
+						$sql = 'UPDATE ' . LOG_TABLE . "
+							SET log_number	= log_number + 1,
+							log_time = $current_time
+							WHERE log_id = " . $row['log_id'];
+						$db->sql_query($sql);
+						return false;
+					}
+				}				
+				//Check for founder user
+				if ( $config['lc_founder_disable'] && $user->data['user_type'] == USER_FOUNDER && strpos($action, 'SUCCESS') !== FALSE )
+				{				
+					return false;
+				}
+				//Check for admin user
+				if ( $config['lc_admin_disable'] && $user->data['user_type'] == USER_NORMAL && strpos($action, 'SUCCESS') !== FALSE )
+				{
+					if( $user_id == $user->data['user_id'] )
+					{
+						$data = $user->data;
+					}
+					else
+					{
+						$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id =" . $user_id;
+						$result = $db->sql_query($sql);
+						$data = $db->sql_fetchrow($result);
+					}
+					$auth_temp = new auth();
+					$auth_temp->acl($data);
+					$droit_admin = $auth_temp->acl_get('a_');
+					if ($droit_admin)
+					{
+						return false;
+					}
+				}
+				else
+				{				
+					$sql_ary['log_type'] = LOG_CONNECTIONS;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		break;
+	//-- end : log connections --------------------------------------------------------
 
 		default:
 			return false;

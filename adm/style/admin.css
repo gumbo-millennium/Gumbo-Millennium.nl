@@ -1647,3 +1647,18 @@ fieldset.permissions .padding {
 .phpinfo td, .phpinfo th, .phpinfo h2, .phpinfo h1 {
 	text-align: left;
 }
+/* Classes for log connections
+---------------------------------------- */
+.log-success {
+	color: #009900;
+	font-size: 100%;
+}
+
+.log-fail {
+	color: #FF0000;
+	font-size: 100%;
+}
+
+.inputboxlog {
+	width: 90%;
+}
