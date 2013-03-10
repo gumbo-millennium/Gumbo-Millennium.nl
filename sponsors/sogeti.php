@@ -13,7 +13,7 @@ $user->setup();
 
 page_header('Sponsors');
 
-$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = '29'];
+$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 29';
 
 $result = $db->sql_query_limit($sql, $config['portal_max_topics']);
 $row = $db->sql_fetchrow($result);
@@ -33,7 +33,6 @@ $message = smiley_text($message);
 
 $db->sql_freeresult($result);
 
-$template->assign_var('MESSAGE_TITLE', 'Trials Guide');
 $template->assign_var('MESSAGE_TEXT', $message);
 
 $template->set_filenames(array(
