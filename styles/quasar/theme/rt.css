@@ -229,7 +229,7 @@ li.header dl { background: transparent url("{T_THEME_PATH}/images/system/light/h
 
 ul.forums li, ul.topics li {
     border-bottom: 1px solid #EDEDED;
-    margin-left:-11px;
+	margin-left:0px;/*margin-left:-11px;*/
     padding-top: 3px;
     padding-bottom: 3px;
 }
