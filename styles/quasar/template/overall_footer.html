@@ -28,10 +28,10 @@
 	forums may be affected.
 
 	The phpBB Group : 2006
-//-->
 
-	<div class="copyright">Powered by <a href="http://www.phpbb.com/">phpBB</a> &copy; 2000, 2002, 2005, 2007 phpBB Group
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->
+
+	<div class="copyright">Powered by <a href="http://www.phpbb.com/">phpBB</a> &copy; 2000, 2002, 2005, 2007 phpBB Group //-->
+		<!-- IF TRANSLATION_INFO -->{TRANSLATION_INFO}<!-- ENDIF -->
 		<!-- IF DEBUG_OUTPUT --><br />{DEBUG_OUTPUT}<!-- ENDIF -->
 		<!-- IF U_ACP --><br /><strong><a href="{U_ACP}">{L_ACP}</a></strong><!-- ENDIF -->
 	</div>
@@ -167,20 +167,22 @@
 					</div>
 				</div>
 			<!-- ENDIF -->
+			<!--
 			<div class="rt-grid-4">
 			    <div class="rt-block">
 				    <div class="module-content">
 					    <div class="module-title"><div class="module-title2"><h2 class="title">{L_BIRTHDAYS}</h2></div></div>
-						<div class="module-inner"><div class="module-inner2"><!-- IF BIRTHDAY_LIST -->{L_CONGRATULATIONS}: <strong>{BIRTHDAY_LIST}</strong><!-- ELSE -->{L_NO_BIRTHDAYS}<!-- ENDIF --></div></div>
+						<div class="module-inner"><div class="module-inner2"><! -- IF BIRTHDAY_LIST -- >{L_CONGRATULATIONS}: <strong>{BIRTHDAY_LIST}</strong><! -- ELSE -- >{L_NO_BIRTHDAYS}<! -- ENDIF -- ></div></div>
 					</div>
 				</div>
 			</div>
+			-->
 			<!-- IF NEWEST_USER -->
 			    <div class="rt-grid-4">
 				    <div class="rt-block">
 					    <div class="module-content">
-						    <div class="module-title"><div class="module-title2"><h2 class="title">{L_STATISTICS}</h2></div></div>
-							<div class="module-inner"><div class="module-inner2">{TOTAL_POSTS} &bull; {TOTAL_TOPICS} &bull; {TOTAL_USERS} &bull; {NEWEST_USER}</div></div>
+						   <!-- <div class="module-title"><div class="module-title2"><h2 class="title">{L_STATISTICS}</h2></div></div>
+							<div class="module-inner"><div class="module-inner2">{TOTAL_POSTS} &bull; {TOTAL_TOPICS} &bull; {TOTAL_USERS} &bull; {NEWEST_USER}</div></div> -->
 						</div>
 					</div>
 				</div>

@@ -4755,6 +4755,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'U_SEARCH'				=> append_sid("{$phpbb_root_path}search.$phpEx"),
 		'U_REGISTER'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=register'),
 		'U_PROFILE'				=> append_sid("{$phpbb_root_path}ucp.$phpEx"),
+		'U_GROUPLIST'			=> append_sid("{$phpbb_root_path}grouplist.$phpEx"),
 		'U_MODCP'				=> append_sid("{$phpbb_root_path}mcp.$phpEx", false, true, $user->session_id),
 		'U_FAQ'					=> append_sid("{$phpbb_root_path}faq.$phpEx"),
 		'U_SEARCH_SELF'			=> append_sid("{$phpbb_root_path}search.$phpEx", 'search_id=egosearch'),
