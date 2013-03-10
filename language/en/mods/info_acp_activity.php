@@ -28,7 +28,7 @@ $lang = array_merge($lang, array(
     'acl_a_overview_activity'    => array('lang' => 'Can get an overview of all events', 'cat' => 'activity'),
     'acl_a_recyle_activity'    => array('lang' => 'Can reclycle a event', 'cat' => 'activity'),
     'acl_u_view_activity'    => array('lang' => 'Can view events', 'cat' => 'activity'),
-    'acl_u_list_activities'    => array('lang' => 'Can overiew comming events', 'cat' => 'activity'),
+    'acl_u_list_activities'    => array('lang' => 'Can overview coming events', 'cat' => 'activity'),
     'acl_u_view_grouplist'    => array('lang' => 'Can view the grouplist', 'cat' => 'misc'),
 ));
 

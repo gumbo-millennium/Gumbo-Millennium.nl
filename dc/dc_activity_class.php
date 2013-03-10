@@ -918,6 +918,11 @@ class activity {
 	function set_error_log($error){
 		global $db, $user;
 		
+		//check if current activity not exists
+		if($this->id == null){
+			return false;
+		}
+		
 		$error = utf8_normalize_nfc(htmlspecialchars($error));
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
 		$enable_bbcode = $enable_magic_url = $enable_smilies = false;
@@ -1056,13 +1061,27 @@ class activity {
 		$invalided_varibles_found .= (isset($this->location)) ? null : "location,";				
 		$invalided_varibles_found .= (isset($this->pay_option)) ? null : "pay_option,";			
 		$invalided_varibles_found .= (isset($this->commission)) ? null : "commission,";			
-		$invalided_varibles_found .= (isset($this->user_id)) ? null : "commission,";				
-		$invalided_varibles_found .= (isset($this->user_ip)) ? null : "user_ip,";	
 
+
+		//if this activity exists
+		if($this->id != null){
+			$invalided_varibles_found .= (isset($this->user_id)) ? null : "user_id,";				
+			$invalided_varibles_found .= (isset($this->user_ip)) ? null : "user_ip,";
+			$invalided_varibles_found .= (isset($this->enroll_datetime)) ? null : "enroll_datetime,";
+			$invalided_varibles_found .= (isset($this->enroll_max)) ? null : "enroll_max,";
+			$invalided_varibles_found .= (isset($this->price)) ? null : "price,";
+			$invalided_varibles_found .= (isset($this->price_member)) ? null : "price_member,";
+			$invalided_varibles_found .= (isset($this->active)) ? null : "active,";
+			$invalided_varibles_found .= (isset($this->category)) ? null : "category,";
+			$invalided_varibles_found .= (isset($this->datetime_created)) ? null : "datetime_created,";
+			$invalided_varibles_found .= (isset($this->datetime_updated)) ? null : "datetime_updated,";
+			$invalided_varibles_found .= (isset($this->unsubscribe_max)) ? null : "unsubscribe_max,";
+		}
+		
 		// check if there are unseted varibles
 		if($invalided_varibles_found != null){
 			// errors found
-			$this->set_error_log("Function: is_activity_valided;Values not valid " . $invalided_varibles_found);
+			$this->set_error_log("Function: is_activity_valided;Values not valid: " . $invalided_varibles_found);
 			return false;
 		}
 		return true;
@@ -1124,11 +1143,6 @@ class activity {
 
 		// Run the built query statement
 		$result = $db->sql_query($sql);
-		/*
-		
-		$sql = 'SELECT COUNT(*) count FROM `dc_users` WHERE user_id = \'2\'';  // check if the user id exist
-		print $sql;
-		$result = $db->sql_query($sql);							// send query */
 		$output = $db->sql_fetchrow($result);
 		
 		if( $output['user_count'] != 1  )								// if not found or there are more id's
@@ -1493,18 +1507,18 @@ class activity {
     }
 
     public function setPayOption($payOption){
+		global $user;
 		//check if the activity is allowed to change
 		if(!$this->check_allowed_to_change()){
 			// This activity is not allowed to change
-			global $user;
 			$this->set_error_log("Function: setPayOption; Event is not allowed to change");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null; 					// not allowed to change	
 		}
 		if(gettype($payOption) != "string")
 			return null;
-		if($payOption != "ideal" || $payOption != "contant")
-			return null;
+		if($payOption != "ideal")
+			$payOption = "contant";
 		if($this->pay_option != $payOption)
 			$this->change_log["payOption"] = $this->pay_option . "->". $payOption . ";";
 		$this->pay_option = $payOption;
@@ -1515,6 +1529,7 @@ class activity {
     }
 
     public function setCommission($commission){
+		global $db;
 		//check if the activity is allowed to change
 		if(!$this->check_allowed_to_change()){
 			// This activity is not allowed to change
@@ -1523,7 +1538,6 @@ class activity {
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null; 					// not allowed to change	
 		}
-		global $db;
 		if(gettype($commission) != "integer")
 				return null;
 		$sql ="SELECT COUNT(*) count FROM `dc_groups` WHERE group_id ='" . $commission . "'";  // check if the group id exist
