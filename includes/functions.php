@@ -4750,6 +4750,9 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'U_MEMBERLIST'			=> append_sid("{$phpbb_root_path}memberlist.$phpEx"),
 		'U_VIEWONLINE'			=> ($auth->acl_gets('u_viewprofile', 'a_user', 'a_useradd', 'a_userdel')) ? append_sid("{$phpbb_root_path}viewonline.$phpEx") : '',
 		'U_LOGIN_LOGOUT'		=> $u_login_logout,
+		// GUMBO ADDED BEGIN
+		'U_SPONSORS'			=> append_sid("{$phpbb_root_path}sponsors.$phpEx"),
+		// GUMBO ADDED END
 		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),
 		'P_INDEX'				=> append_sid("{$phpbb_root_path}portal.$phpEx"),
 		'U_SEARCH'				=> append_sid("{$phpbb_root_path}search.$phpEx"),
