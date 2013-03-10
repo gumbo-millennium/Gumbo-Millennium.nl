@@ -1075,7 +1075,6 @@ class activity {
 			$invalided_varibles_found .= (isset($this->category)) ? null : "category,";
 			$invalided_varibles_found .= (isset($this->datetime_created)) ? null : "datetime_created,";
 			$invalided_varibles_found .= (isset($this->datetime_updated)) ? null : "datetime_updated,";
-			$invalided_varibles_found .= (isset($this->unsubscribe_max)) ? null : "unsubscribe_max,";
 		}
 		
 		// check if there are unseted varibles
