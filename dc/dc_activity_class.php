@@ -191,13 +191,15 @@
 	getDatetimeUpdated()
 		
  */
+ include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
+ 
+ 
  define("MEMBER_GROUP_ID", 9); 		// set the id of the Gumbo member groep
  define("AC_GROUP_ID", 14); 		// set the id of the Gumbo activity groep
  define("DC_GROUP_ID", 15); 		// set the id of the Gumbo digitale commisie groep
  define("BESTUUR_GROUP_ID", 13); 	// set the id of the Gumbo bestuur groep
  define("ADM_GROUP_ID", 5); 		// set the id of the Gumbo bestuur groep
  
- include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
  
 class activity {
     // declare varibles 
@@ -229,6 +231,21 @@ class activity {
 	private $enable_magic_url;
 	private $enable_bbcode;
 	private $enable_smilies;
+	
+	// check_allowed_to_change 
+	/*
+	* $this->check_allowed_to_change()
+	* The functon $this->check_allowed_to_change() checks if this activity is allowed to be changed. It looks if the this activity is not in the past.
+	* @return boolean
+	*/
+	public function check_allowed_to_change($start_datetime_must_set = false){
+		if(isset($this->start_datetime)){
+			if($this->start_datetime < new datetime("now")){ // check if the activiy is started
+				return false; 								// not allowed to change
+			}
+		}
+		return true;										// allowed to change
+	}
 	
 	// fill the activiy from the database
 	/*
@@ -356,17 +373,24 @@ class activity {
 	function set_user_status($user_id, $user_ip, $comment, $new_status){
 		global $db, $user;											// get connection to db
 		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			$this->set_error_log("Function: set_user_status; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		switch($new_status){
 			case 'yes':
-				if(($this->enroll_datetime < new DateTime("now")) || ($this->start_datetime < new DateTime("now") )){
-					$this->set_error_log("Function: set_user_status; Event is past the enroll date time or is in the past");
+				if($this->enroll_datetime < new DateTime("now")){
+					$this->set_error_log("Function: set_user_status; Enroll date is in de past");
 					trigger_error($user->lang['DC_ACT_IN_PAST']);
 					return null;
 				}
 				break;
 			case 'no':
-				if(($this->unsubscribe_max_datetime < new DateTime("now")) || ($this->start_datetime < new DateTime("now") )){
-					$this->set_error_log("Function: set_user_status; Event is past the unsubscribe max datetime or is in the past");
+				if(($this->unsubscribe_max_datetime < new DateTime("now"))){
+					$this->set_error_log("Function: set_user_status; Event is past the unsubscribe max datetimeis in the past");
 					trigger_error($user->lang['DC_ACT_IN_PAST']);
 					return null;
 				}
@@ -449,6 +473,16 @@ class activity {
 	
 	function set_user_comment($user_id, $new_comment){
 		global $db;
+		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: set_user_comment; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if($this->get_user_status($user_id) != null){
 			$sql_ary = array(
 				"comments" => htmlspecialchars($new_comment)
@@ -493,7 +527,7 @@ class activity {
 				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
-		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
+		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' . (int)$this->id . '\''. $status; // get a list from user_manage to this activity
 		$result = $db->sql_query($sql);							// send query
 		$group_managers = array();
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
@@ -504,6 +538,7 @@ class activity {
 				$group_managers[$row['group_id']] = new DateTime($row['created']);   	// makes an array: accesList[user_id][created] 
 			}
 		}
+		//var_dump($this->id);
 		$db->sql_freeresult($result);							// remove query
 		return $group_managers;
 	}
@@ -522,11 +557,13 @@ class activity {
 		//		no rows added: false (check error log)
 	function set_group_manager($group_id_list, $new_status, $full_list = 0){
 		global $db, $user;
-		// check if activity is allowed to changed
-		if($this->start_datetime < new DateTime("now") ){
-			$this->set_error_log("Function: set_group_manager; Activity is in the past");
+		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			$this->set_error_log("Function: set_groep_manager; Event is not allowed to change");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
-			return null;
+			return null; 					// not allowed to change	
 		}
 		// check if $new status is valid and convert new_status to 'disabled'(as in the db)
 		switch(trim($new_status)){									// remove spaces
@@ -633,7 +670,7 @@ class activity {
 		global $db;
 		$change_list = null;
 		$counter = 0;
-		$sql = "SELECT user_id, datetime, modification FROM dc_activity_chancelog WHERE activity_id = '". $this->id ."' ORDER BY datetime ASC";
+		$sql = "SELECT user_id, datetime, modification FROM dc_activity_chancelog WHERE activity_id = '". (int)$this->id ."' ORDER BY datetime ASC";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
@@ -725,10 +762,19 @@ class activity {
 	function set_group_acces($group_id_list, $new_status, $full_list = 0){
 		global $db;
 		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: set_group_acces; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		// check if the activity is allowed to be added
 		if($this->start_datetime < new DateTime("now") ){
 				$this->set_error_log("Function: set_group_acces; Activity is in the past");
-				global $user;
+				
 				trigger_error($user->lang['DC_ACT_IN_PAST']);
 				return null;
 		}
@@ -865,8 +911,7 @@ class activity {
 	// add error
 	function set_error_log($error){
 		global $db, $user;
-		$user->data['user_id'];
-			
+		
 		$error = utf8_normalize_nfc(htmlspecialchars($error));
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
 		$enable_bbcode = $enable_magic_url = $enable_smilies = false;
@@ -897,7 +942,7 @@ class activity {
 		global $db;
 		$error_list = null;
 		$counter = 0;
-		$sql = "SELECT user_id, user_ip, datetime, error FROM dc_activity_errorlog WHERE activity_id = '". $this->id ."' ORDER BY datetime ASC";
+		$sql = "SELECT user_id, user_ip, datetime, error FROM dc_activity_errorlog WHERE activity_id = '". (int)$this->id ."' ORDER BY datetime ASC";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
@@ -915,53 +960,64 @@ class activity {
 	function save(){
 		// check if this activity is in de db
 		global $user, $db;
-		if($this->start_datetime < new DateTime("now") ){
-			$this->set_error_log("Function: save; Activity is in the past");
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			$this->set_error_log("Function: save; Event is not allowed to change");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
+		// check if this activity is valid to send to the database
+		if(!$this->is_activity_valided()){
+			//in invalid
+			$this->set_error_log("Function: Save; Tried to send invalid varibles to the database");			
 			return null;
 		}
+		
 		$sql= '';
 		$sql_array = array(
-			 'name'				=> (String)$this->name,
-			 'description'		=> (String)$this->description,
-			 'start_datetime'	=> (String)$this->start_datetime->format('Y-m-d H:i:s'),
-			 'stop_datetime'	=> (String)$this->end_datetime->format('Y-m-d H:i:s'),
-			 'enroll'			=> (bool)$this->enroll,
-			 'enroll_datetime'	=> (String)$this->enroll_datetime->format('Y-m-d H:i:s'),
-			 'unsubscribe_max'	=> (String)$this->unsubscribe_max_datetime->format('Y-m-d H:i:s'),
-			 'enroll_max'		=> (int)$this->enroll_max,
-			 'price'			=> (float)$this->price,
-			 'price_member'		=> (float)$this->price_member,
-			 'location'			=> (String)$this->location,
-			 'active'			=> (bool)$this->active,
-			 'category'			=> (int)$this->category,
-			 'pay_options'		=> (String)$this->pay_option,
-			 'bbcode_bitfield'	=> (String)$this->bbcode_bitfield,
+			'name'				=> (String)$this->name,
+			'description'		=> (String)$this->description,
+			'start_datetime'	=> (String)$this->start_datetime->format('Y-m-d H:i:s'),			// format datetime class to the datetime format of the database			
+			'stop_datetime'	=> (String)$this->end_datetime->format('Y-m-d H:i:s'),				// format datetime class to the datetime format of the database
+			'enroll'			=> (bool)$this->enroll,
+			'enroll_datetime'	=> (String)$this->enroll_datetime->format('Y-m-d H:i:s'),			// format datetime class to the datetime format of the database
+			'unsubscribe_max'	=> (String)$this->unsubscribe_max_datetime->format('Y-m-d H:i:s'), 	// format datetime class to the datetime format of the database
+			'enroll_max'		=> (int)$this->enroll_max,
+			'price'				=> (float)$this->price,
+			'price_member'		=> (float)$this->price_member,
+			'location'			=> (String)$this->location,
+			'active'			=> (bool)$this->active,
+			'category'			=> (int)$this->category,
+			'pay_options'		=> (String)$this->pay_option,
+			'bbcode_bitfield'	=> (String)$this->bbcode_bitfield,
 			'bbcode_uid'		=> (String)$this->bbcode_uid,
 			'enable_magic_url'	=> (bool)$this->enable_magic_url,
 			'enable_bbcode'		=> (bool)$this->enable_bbcode,
 			'enable_smilies'	=> (bool)$this->enable_smilies,
 		);
-		if($this->id == null){		// check if this is a new activity 
-			$now = new DateTime("now"); 
+		if($this->id == null){		// check if this is a new activity. If this is a new activity the id is set by the database (AUTO_INCREMENT)
+			$now = new DateTime("now"); 			// get time for 'datetime_created'
 			$sql_array['commission'] 				= $this->commission;
 			$sql_array['user_id']					= (int)$user->data['user_id'];
 			$sql_array['user_ip']					= (String)$user->ip;
-			$sql_array['datetime_created']			= (String)$now->format('Y-m-d H:i:s');
+			$sql_array['datetime_created']			= (String)$now->format('Y-m-d H:i:s'); // format datetime class to the datetime format of the database
 
-			$sql = "INSERT INTO dc_activity ". $db->sql_build_array('INSERT', $sql_array);
+			$sql = "INSERT INTO dc_activity ". $db->sql_build_array('INSERT', $sql_array);	// create insert query for a new activity
 		}else{
-			$sql = "UPDATE dc_activity SET ". $db->sql_build_array('UPDATE', $sql_array) . " WHERE id = ". (int)$this->id;
+			$sql = "UPDATE dc_activity SET ". $db->sql_build_array('UPDATE', $sql_array) . " WHERE id = ". (int)$this->id; // create qeury to update the activity in the database
+			// Send changelog to the database
 			$modification = null;
-			foreach($this->change_log AS $row => $value){
-				$modification .= $row . ":".$value;
+			foreach($this->change_log AS $row => $value){		// go through all the changes
+				$modification .= $row . ":".$value;				// make string to send to the databse
 			}
-			$this->set_change_log($user->data['user_id'], $user->ip, $modification);
-			
+			$this->set_change_log($user->data['user_id'], $user->ip, $modification); // set the string to the database
 		}
-		$result = $db->sql_query($sql);
-		if($this->id == null){
-			$this->id = $db->sql_nextid();
+		$result = $db->sql_query($sql);		// send the query to the database (update or insert)
+		if($this->id == null){				// check if this is a new activity
+			// this is a new activity
+			$this->id = $db->sql_nextid();	// get new activity id
 		}
 		return true;
 		/* DOENST WORK ???
@@ -972,6 +1028,39 @@ class activity {
 			return false;
 		}
 		*/
+	}
+	
+	//is_activity_valided()
+	/*
+	* This function checks if all the varibels of this activity are set.
+	* If all the varibels are set it return true
+	* Else it return false
+	* see error log for unset varibles
+	*/
+	function is_activity_valided(){
+		$invalided_varibles_found = null;
+			
+		//search for unset varibles. If found unseted varibles save in $invalided_varibles_found
+		$invalided_varibles_found .= (isset($this->name)) ? null :"name,";		
+		$invalided_varibles_found .= (isset($this->description)) ? null : "description,";			 
+		$invalided_varibles_found .= (isset($this->start_datetime)) ? null : "start_datetime,";		
+		$invalided_varibles_found .= (isset($this->end_datetime)) ? null : "end_datetime,";			
+		$invalided_varibles_found .= (isset($this->enroll)) ? null : "enroll,";				
+		$invalided_varibles_found .= (isset($this->unsubscribe_max_datetime)) ? null : "unsubscribe_max_datetime,";
+		$invalided_varibles_found .= (isset($this->location)) ? null : "location,";				
+		$invalided_varibles_found .= (isset($this->pay_option)) ? null : "pay_option,";			
+		$invalided_varibles_found .= (isset($this->commission)) ? null : "commission,";			
+		$invalided_varibles_found .= (isset($this->user_id)) ? null : "commission,";				
+		$invalided_varibles_found .= (isset($this->user_ip)) ? null : "user_ip,";	
+
+		// check if there are unseted varibles
+		if($invalided_varibles_found != null){
+			// errors found
+			$this->set_error_log("Function: is_activity_valided;Values not valid " . $invalided_varibles_found);
+			return false;
+		}
+		return true;
+		
 	}
 	
 	function pay($user_id, $amount){
@@ -994,7 +1083,59 @@ class activity {
 		}	
 		
 	}
-    
+	
+	// user get read
+
+	function get_read($user_id){
+		global $db;							// get database connection
+		if(gettype($user_id) != "integer")
+			return null;		
+		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\' AND activity_id = \''. $this->id . '\'';							// get if user readed 
+		$result = $db->sql_query($sql);							// send query
+		$row = $db->sql_fetchrow($result);
+		if($row['count'] !=  1)
+			return null;
+		$db->sql_freeresult($result);							// remove query
+		return true;	
+	}
+	
+	// user set read
+	function set_read($user_id){
+		global $db;												// get database connection
+		if(gettype($user_id) != "integer")
+			return null;
+		$sql_array = array(
+			'SELECT'    => 'COUNT(*) as user_count',
+
+			'FROM'      => array(
+				USERS_TABLE => 'u',
+			),
+
+			'WHERE'     =>  'u.user_id = ' . $user_id,
+		);
+
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+
+		// Run the built query statement
+		$result = $db->sql_query($sql);
+		/*
+		
+		$sql = 'SELECT COUNT(*) count FROM `dc_users` WHERE user_id = \'2\'';  // check if the user id exist
+		print $sql;
+		$result = $db->sql_query($sql);							// send query */
+		$output = $db->sql_fetchrow($result);
+		
+		if( $output['user_count'] != 1  )								// if not found or there are more id's
+			return null;
+		$db->sql_freeresult($result);							// remove query
+		$sql = 'INSERT INTO `dc_activity_read`(`activity_id`, `user_id`) VALUES ('. $this->id . ','.$user_id.')';	// get if user readed 
+		$result = $db->sql_query($sql);							// send query
+		$db->sql_freeresult($result);							// remove query
+		
+		return true;
+	}
+	
+	
 	// Getters and setters
     public function getId(){
 		return $this->id;
@@ -1005,6 +1146,16 @@ class activity {
     }
 
     public function setName($name){
+	
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setName; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		$name = preg_replace( "/[^a-zA-Z0-9 ]/","",$name);
 		if($this->name != $name)
 			$this->change_log["name"] = $this->name . "->". $name . ";";
@@ -1012,6 +1163,16 @@ class activity {
     }
 
     public function setDescription($description){
+	
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setName; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		$description = utf8_normalize_nfc($description);
 			
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
@@ -1023,11 +1184,10 @@ class activity {
 		$this->enable_bbcode = $enable_bbcode ;
 		$this->enable_smilies = $enable_smilies;
 
-		$this->description=$description;
-		
-	
+		$this->description=$description;	
     }
 	
+
 	public function getDescription(){
 		$description = $this->description;
 		
@@ -1071,13 +1231,22 @@ class activity {
     }
 
     public function setStartDatetime($startDatetime){
-			if(!($startDatetime instanceof DateTime)) 
-				return null;
-			if($startDatetime < new DateTime("now"))
-				return null;
-			if(($this->start_datetime != $startDatetime) && ($this->id != 0) )
-				$this->change_log["startDatetime"] = $this->start_datetime->format('Y-m-d H:i:s') . "->". $startDatetime->format('Y-m-d H:i:s') . ";";
-            $this->start_datetime = $startDatetime;
+	//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setStartDatetime; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
+		if(!($startDatetime instanceof DateTime)) 
+			return null;
+		if($startDatetime < new DateTime("now"))
+			return null;
+		if(($this->start_datetime != $startDatetime) && ($this->id != 0) )
+			$this->change_log["startDatetime"] = $this->start_datetime->format('Y-m-d H:i:s') . "->". $startDatetime->format('Y-m-d H:i:s') . ";";
+		$this->start_datetime = $startDatetime;
     }
 
     public function getEndDatetime(){
@@ -1085,6 +1254,15 @@ class activity {
     }
 
     public function setEndDatetime($endDatetime){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setEndDatetime; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if(!($endDatetime instanceof DateTime)) 
 			return null;
 		if($endDatetime < new DateTime("now"))
@@ -1101,6 +1279,16 @@ class activity {
     }
 
     public function setEnroll($enroll){
+		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setEnroll; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if(gettype($enroll) != "boolean")
 			return null;
 		if($this->enroll != $enroll)
@@ -1111,6 +1299,16 @@ class activity {
 
 	
 	public function setEnrollDateTime($enrollDateTime){
+	
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setEnrolldateTime; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if(!($enrollDateTime instanceof DateTime )) 
 			return null;
 		if($enrollDateTime < new DateTime("now"))
@@ -1127,6 +1325,16 @@ class activity {
     }
 	
     public function setUnsubscribeMaxDatetime($unsubscribe_max_datetime){
+	
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setUnsubscribeMaxDatetime; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if(!($unsubscribe_max_datetime instanceof DateTime )) 
 			return null;
 		if($unsubscribe_max_datetime < new DateTime("now"))
@@ -1149,6 +1357,14 @@ class activity {
     }
 
     public function setEnrollMax($enrollMax){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setEnrollMax; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		if(gettype($enrollMax) != "integer")
 			return null;
 		if($enrollMax < 0)
@@ -1163,6 +1379,14 @@ class activity {
     }
 
     public function setPrice($price){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setPrice; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		if(gettype($price) != "double")
 			return null;
 		if($price < 0)
@@ -1177,6 +1401,15 @@ class activity {
     }
 
     public function setPriceMember($priceMember){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setPriceMember; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+		
 		if(gettype($priceMember) != "double")
 			return null;
 		if($priceMember < 0)
@@ -1191,6 +1424,14 @@ class activity {
     }
 
     public function setLocation($location){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setLocation; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		$location = preg_replace( "/[^a-zA-Z0-9, ]/","",$location);
 		if($this->location != $location)
 			$this->change_log["location"] = $this->location . "->". $location . ";";
@@ -1202,6 +1443,16 @@ class activity {
 	}
 	
 	public function setActive($active){
+		
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setActive; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
+	
 		if(gettype($active) != "integer")
 			return null;
 		if(!(($active == 0) || ($active == 1)))
@@ -1216,6 +1467,14 @@ class activity {
     }
 
     public function setCategory($category){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setCategory; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		if(gettype($category) != "integer")
 			return null;
 		if($this->category != $category)
@@ -1228,6 +1487,14 @@ class activity {
     }
 
     public function setPayOption($payOption){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setPayOption; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		if(gettype($payOption) != "string")
 			return null;
 		if($payOption != "ideal" || $payOption != "contant")
@@ -1242,6 +1509,14 @@ class activity {
     }
 
     public function setCommission($commission){
+		//check if the activity is allowed to change
+		if(!$this->check_allowed_to_change()){
+			// This activity is not allowed to change
+			global $user;
+			$this->set_error_log("Function: setCommission; Event is not allowed to change");
+			trigger_error($user->lang['DC_ACT_IN_PAST']);
+			return null; 					// not allowed to change	
+		}
 		global $db;
 		if(gettype($commission) != "integer")
 				return null;

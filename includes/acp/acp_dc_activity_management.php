@@ -92,7 +92,7 @@ class acp_dc_activity_management
 				if($mode == 'edit_activity'){
 					$this->page_title = 'ACP_DC_ACT_EDIT';
 				}
-				
+				// no break!
 			case 'recycle_activity':
 					if($mode == 'recycle_activity'){
 						if(!$activity_id){											// if activity id is emty
@@ -126,10 +126,11 @@ class acp_dc_activity_management
 					$managers = $activity->get_group_manage_list('enable');				// get all groups that are managers			
 					$group_array = array();													// define group array
 					foreach($managers AS $group_id => $value){							// convert index (group_id) to a array
-						$group_array[] = get_group_name($group_id); 
+						$group_array[] = get_group_name($group_id); 					// get groep name from id
 					}
 					$this->new_config['add_group_manager'] = implode(GROUP_SEPARATOR ."\n",$group_array);	// convert the user id's array to a string with a new line in between
 					// unset the managers variables 
+					
 					unset($managers);
 					unset($group_array);
 					
@@ -143,6 +144,8 @@ class acp_dc_activity_management
 					// unset the group variables 
 					unset($groups);
 					unset($group_array);
+					unset($activity);
+					// no break!
 			case 'new_activity':
 				// set form key
 				$form_key = 'acp_dc_act_new';
@@ -196,7 +199,7 @@ class acp_dc_activity_management
 						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7)), 'preg'=> '[<>]'),
 						
 						'legend4'				=> 'ACP_DC_ACT_DESCRIPTION',
-						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'acp_description', 'explain' => true),
+						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'text',	'type' => 'custom', 'empty' => false, 'method' => 'acp_description', 'explain' => true),
 												
 					)
 				);
@@ -356,6 +359,7 @@ class acp_dc_activity_management
 					
 					'L_EVENT_ACTIVE'		=> ucfirst(strtolower($user->lang['ACTIVE'])),
 					'L_EVENT_ACTIVATE'		=> ucfirst(strtolower($user->lang['ACTIVATE'])),
+					'L_EVENT_DEACTIVE'		=> ucfirst(strtolower($user->lang['DEACTIVE'])),
 					'L_EVENT_DEACTIVATE'	=> ucfirst(strtolower($user->lang['DEACTIVATE'])),
 					
 					'L_EVENT_STARTDATETIME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_START_DATE'])),
@@ -476,7 +480,8 @@ class acp_dc_activity_management
 		if(isset($display_vars['vars'])){
 			validate_config_vars($display_vars['vars'], $cfg_array, $error);
 		}
-			
+		
+		//fix the default setting for enroll
 		if(!isset($cfg_array['enroll'])){
 			$cfg_array['enroll'] = null;
 		}
@@ -503,8 +508,20 @@ class acp_dc_activity_management
 							if(preg_match("/".$vars['preg']."/", $cfg_array[$config_name]) && !(empty($cfg_array[$config_name]) && $vars['empty'])) // check input or input is empty (and allowed to be emty)
 								$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_PREG"])));		// set error
 						}else{
+							
+							//check for custom validates
+							//avaiable custom validates: text
+							switch($vars['validate']){
+								case 'text':
+									if(utf8_strlen($cfg_array[$config_name]) >= 65535 ){  // count characters max is 65535 (max chars in a MySQL text/blob)
+										$error[] = sprintf($user->lang['SETTING_TOO_LONG'], $user->lang[$vars['lang']], 65535);
+									}
+									break;
+							}
+							
+							 
 							// check for paterns
-							// available paterns: date, time
+							// available paterns: date, time, money
 							if(is_array($vars) && isset($vars['patern']) ){				// is set a patern
 								if(!(empty($cfg_array[$config_name]) && $vars['empty'])){	// check if input is emty and allowed to be empty 
 									$set_error = false;									// set no error
@@ -785,6 +802,7 @@ class acp_dc_activity_management
 		{
 			switch($mode){
 				case 'edit_activity': 
+				case 'recycle_activity': 
 				case 'new_activity':
 					
 					$activity = new activity();

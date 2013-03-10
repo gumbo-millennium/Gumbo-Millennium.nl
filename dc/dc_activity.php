@@ -31,7 +31,7 @@ $user->setup('mods/dc_activity');
 if(!isset($_GET["act"])){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);
 }
-
+ 
 // Build main objecs
 $activity_controller = new activity_user();									// build user controller
 $activity =  $activity_controller->get_activity(request_var('act', 0));		// build activity by id (default = 0)
@@ -45,11 +45,17 @@ if (!($activity->user_acces($user->data['user_id']) || $manager) )
      trigger_error('NOT_AUTHORISED');
 }
 // set activity readed
-/*
-DOES NOT WORK
-if($activity_controller->get_read($user->data['user_id'], $activity->getId()) == null)
-	$activity_controller->set_read($user->data['user_id'], $activity->getId());
-*/
+
+
+if($activity->get_read($user->data['user_id']) == null){
+	print("unread");
+	
+	$activity->set_read( intval($user->data['user_id']));
+	
+}else{
+	
+	print("read");
+}
 
 // chance enroll status
 $template->assign_var('CHANCE', ($chance_status = request_var('chance', false))); 	// open enroll select options (default = false)

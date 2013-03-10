@@ -132,7 +132,6 @@ $lang = array_merge($lang, array(
 	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br>If left empty the max subscribe date will equal with the start date',
 	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE'  			=> 'End time to unsubscribe',
 	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE_EXPLAIN'  	=> 'The time the user has to unsubscribe from this event. <br>If left empty the max subscribe time will equal with the start time',
-
 	
 ));
 

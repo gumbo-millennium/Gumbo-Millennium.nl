@@ -151,60 +151,7 @@ class activity_user{
 		return $activity_OBJ;									// send the new activity object
 	}
 
-// user get read
-	// $activity: id of the activity 
-	//				or null: all the activitys
-	function get_read($user_id, $activity){
-		global $db;												// get database connection
-		switch ($activity){
-			case "all":
-				$activity_sql = "";
-				break;
-			default:
-				if(gettype($activity) != "integer")
-					return null;
-				$activity_sql = "AND activity_id = ". $activity;
-		}
-		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\''. $activity_sql;							// get if user readed 
-		$result = $db->sql_query($sql);							// send query
-		
-		if($activity == "all"){
-			while ($row = $db->sql_fetchrow($result))				// walk through all the rows
-			{
-				$activity_list[$counter]= $row["activity_id"];
-				$counter++;
-			}
-			return $activity_list;
-		}
-		if($row['count'] != 1)
-			return null;
-		$db->sql_freeresult($result);							// remove query
-		return true;	
-	}
-	
-	// user set read
-	function set_read($user_id, $activity_id = "all"){
-		global $db;												// get database connection
-		if(gettype($user_id) != "integer")
-			return null;
-		if(gettype($activity_id) != "activity_id")
-			return null;
-		$sql = "SELECT COUNT(*) count FROM `dc_users` WHERE user_id ='" . $user_id . "'";  // check if the user id exist
-		$result = $db->sql_query($sql);							// send query
-		$result = $db->sql_fetchrow($result);
-		if( $result['count'] != 1 )								// if not found or there are more id's
-			return null;
-		$sql = "SELECT COUNT(*) count FROM `dc_activity` WHERE id ='" . $activity_id . "'";  // check if the user id exist
-		$result = $db->sql_query($sql);							// send query
-		$result = $db->sql_fetchrow($result);
-		if( $result['count'] != 1 )								// if not found or there are more id's
-			return null;
-		$db->sql_freeresult($result);							// remove query
-		$sql = 'INSERT INTO `dc_activity_read`(`activity_id`, `user_id`) VALUES ('. $activity_id . ','.$user_id.')';	// get if user readed 
-		$result = $db->sql_query($sql);							// send query
-		$db->sql_freeresult($result);							// remove query
-		return true;
-	}
+
 	
 	function get_paid($user_id, $activity_id, $status){
 		global $db, $user;												// get database connection
