@@ -5,7 +5,7 @@
 		<!-- BEGIN poll -->
 			<!-- IF poll.S_CAN_VOTE --><form method="post" action="{poll.S_POLL_ACTION}"><!-- ENDIF -->
 				<div class="content">
-					<h2>{poll.POLL_QUESTION}</h2>
+					<h5 style="margin: 0px;">{poll.POLL_QUESTION}</h5>
 					<p class="author">{poll.L_POLL_LENGTH}<!-- IF poll.S_CAN_VOTE and poll.L_POLL_LENGTH --><br /><!-- ENDIF --><!-- IF poll.S_CAN_VOTE -->{poll.L_MAX_VOTES}<!-- ENDIF --></p>
 		
 					<fieldset class="polls">
