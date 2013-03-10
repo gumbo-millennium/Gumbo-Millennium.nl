@@ -415,6 +415,7 @@ $lang = array_merge($lang, array(
 	'SORT_REG_DATE'		=> 'Registration date',
 	'SORT_LAST_REMINDER'=> 'Last reminded',
 	'SORT_REMINDER'		=> 'Reminder sent',
+	'SORT_EMAIL'		=> 'Email',
 
 	'USER_IS_INACTIVE'		=> 'User is inactive',
 ));

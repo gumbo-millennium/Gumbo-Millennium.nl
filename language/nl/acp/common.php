@@ -404,6 +404,7 @@ $lang = array_merge($lang, array(
 	'SORT_REG_DATE'		=> 'Registratiedatum',
 	'SORT_LAST_REMINDER'=> 'Laatst herinnerd',
 	'SORT_REMINDER'		=> 'Herinnering verzonden',
+	'SORT_EMAIL'		=> 'Email',
 
 	'USER_IS_INACTIVE'		=> 'De gebruiker is inactief',
 ));
