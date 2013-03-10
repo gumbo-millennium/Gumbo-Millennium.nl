@@ -337,10 +337,24 @@ window.addEvent('domready', function() {
 											<!-- ENDIF -->
 										</ul>
 									</div>
-								    <div class="search">
+        <!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+            <div class="rt-grid-4 rt-omega">
+                <div class="rt-block">
+                    <div class="module-surround">
+                        <div class="module-content">
+                            <form action="{U_SEARCH}" method="post" id="rokajaxsearch" class="light">
+							    <fieldset>
+	                                <div class="search">
                                         <input name="keywords" id="roksearch_search_str" type="text"  title="{L_SEARCH_KEYWORDS}" class="inputbox" value="<!-- IF SEARCH_WORDS-->{SEARCH_WORDS}<!-- ELSE -->{L_SEARCH_MINI}<!-- ENDIF -->" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';" />
 									    {S_SEARCH_HIDDEN_FIELDS}
 									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- ENDIF -->
 								</div>
 							</div>
 						</div>
