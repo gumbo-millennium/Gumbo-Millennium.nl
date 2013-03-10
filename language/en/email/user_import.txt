@@ -1,0 +1,20 @@
+Subject: Welcome to "{SITENAME}"
+
+{WELCOME_MSG}
+
+Please keep this e-mail for your records. Your account information is as follows:
+
+----------------------------
+Username: {USERNAME}
+Password: {PASSWORD}
+
+Board URL: {U_BOARD}
+----------------------------
+
+We have moved to a new board and your account has been imported to the new board.
+If a password is not given, you can use the same password that you had on the old board.
+Please do not forget your password as it has been encrypted in our database and we cannot retrieve it for you. However, should you forget your password you can request a new one which will be activated in the same way as this account.
+
+Thank you for your participation in our forums.
+
+{EMAIL_SIG}

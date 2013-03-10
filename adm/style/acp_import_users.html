@@ -1,0 +1,124 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<p>{L_ACP_IMPORT_EXPLAIN}</p>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF S_PREVIEW -->
+<fieldset>
+	<legend>{L_PREVIEW}</legend>
+<!-- BEGIN normal -->
+<dl>
+	<dt><label for="{normal.NAME}">{normal.NAME}:</label></dt>
+	<dd>{normal.VALUE}</dd>
+</dl>
+<!-- END normal -->
+<!-- BEGIN custom -->
+<dl>
+	<dt><label for="{custom.NAME}">{custom.NAME}:</label></dt>
+	<dd>{custom.VALUE}</dd>
+</dl>
+<!-- END custom -->
+</fieldset>
+<!-- ENDIF -->
+
+<form id="acp_import" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<legend>{L_TITLE}</legend>
+<dl>
+	<dt><label for="filename">{L_FILENAME}*:</label></dt>
+	<dd><input name="filename" type="text" class="text medium" maxlength="255" id="filename" value="{FILENAME}"/></dd>
+</dl>
+<dl>
+	<dt><label for="delim">{L_DELIM}*:</label></dt>
+	<dd><input name="delim" type="text" class="text medium" maxlength="5" id="delim" value="{DELIM}"/></dd>
+</dl>
+<dl>
+	<dt><label for="enclosure">{L_ENCLOSURE}*:</label></dt>
+	<dd><input name="enclosure" type="text" class="text medium" maxlength="5" id="enclosure" value="{ENCLOSURE}"/></dd>
+</dl>
+<!--
+<dl>
+	<dt><label for="escape">{L_ESCAPE}:</label></dt>
+	<dd><input name="escape" type="text" class="text medium" maxlength="5" id="escape" value="{ESCAPE}"/></dd>
+</dl>
+-->
+<dl>
+	<dt><label for="dateformat">{L_REG_DATEFORMAT}:</label><br /><span>{L_REG_DATEFORMAT_EXPLAIN}</span></dt>
+	<dd><input name="dateformat" type="text" class="text medium" maxlength="100" id="dateformat" value="{REG_DATEFORMAT}"/></dd>
+</dl>
+<dl>
+	<dt><label for="birthdateformat">{L_BIRTHDATEFORMAT}:</label><br /><span>{L_BIRTHDATEFORMAT_EXPLAIN}</span></dt>
+	<dd><input name="birthdateformat" type="text" class="text medium" maxlength="100" id="dateformat" value="{BIRTHDATEFORMAT}"/></dd>
+</dl>
+<dl>
+	<dt><label for="email_users">{L_SEND_EMAIL}:</label><br /><span>{L_SEND_EMAIL_EXPLAIN}</span></dt>
+	<dd><label><input type="radio" name="email_users" value="1" class="radio"<!-- IF S_EMAIL_USERS --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+		<label><input type="radio" name="email_users" id="email_users" value="0" class="radio"<!-- IF not S_EMAIL_USERS --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+	</dd>
+</dl>
+<dl>
+	<dt><label for="pass_fmt">{L_PASSWORD_FORMAT}:</label><br /></dt>
+	<dd><label><input type="radio" class="radio" id="pass_fmt" name="pass_fmt" value="1"<!-- IF S_PASS_FMT --> checked="checked"<!-- ENDIF --> /> {L_PASS_PLAIN}</label>
+		<label><input type="radio" class="radio" name="pass_fmt" value="0"<!-- IF not S_PASS_FMT --> checked="checked"<!-- ENDIF --> /> {L_PASS_HASHED}</label></dd>
+</dl>
+<dl>
+	<dt><label for="preview_mode">{L_PREVIEW_MODE}:</label><br /></dt>
+	<dd><label><input type="radio" class="radio" id="preview_mode" name="preview_mode" value="0"<!-- IF not S_PREVIEW_MODE --> checked="checked"<!-- ENDIF --> /> {L_PREVIEW_FIRST}</label>
+		<label><input type="radio" class="radio" name="preview_mode" value="1"<!-- IF S_PREVIEW_MODE --> checked="checked"<!-- ENDIF --> /> {L_PREVIEW_LAST}</label></dd>
+</dl>
+</fieldset>
+
+
+<fieldset>
+	<legend>{L_REQUIRED_MAP}</legend>
+<!-- BEGIN required -->
+<dl>
+	<dt><label for="{required.NAME}">{required.NAME}*:</label></dt>
+	<dd><input name="required_mapping[{required.NAME}]" type="text" class="text medium" maxlength="5" id="{required.NAME}" value="{required.TO}"/></dd>
+</dl>
+<!-- END required -->
+</fieldset>
+<fieldset>
+	<legend>{L_OPTIONAL_MAP}</legend>
+<!-- BEGIN optional -->
+<dl>
+	<dt><label for="{optional.NAME}">{optional.NAME}:</label></dt>
+	<dd><input name="optional_mapping[{optional.NAME}]" type="text" class="text medium" maxlength="5" id="{optional.NAME}" value="{optional.TO}"/></dd>
+</dl>
+<!-- END optional -->
+</fieldset>
+<fieldset>
+	<legend>{L_CUSTOM_MAP}</legend>
+<!-- BEGIN cpf -->
+<dl>
+	<dt><label for="{cpf.NAME}">{cpf.NAME}:</label></dt>
+	<dd><input name="custom_mapping[{cpf.NAME}]" type="text" class="text medium" maxlength="5" id="{cpf.NAME}" value="{cpf.TO}"/></dd>
+</dl>
+<!-- END cpf -->
+</fieldset>
+
+
+<p class="submit-buttons">
+	<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+	<input class="button2" type="submit" id="preview" name="preview" value="{L_PREVIEW}" />
+</p>
+{S_FORM_TOKEN}
+
+</form>
+
+
+<!-- INCLUDE overall_footer.html -->
