@@ -431,10 +431,10 @@ class activity {
 
 		switch( $user_status ){								// is the user already in the db
 			case null:											// user not in de db
-				$sql= "INSERT INTO `gumbo_millennium`.`dc_activity_enroll` 	".$db->sql_build_array('INSERT', $sql_ary); // constructs a query to set the status of the user with this activity and calculats the price
+				$sql= "INSERT INTO dc_activity_enroll 	".$db->sql_build_array('INSERT', $sql_ary); // constructs a query to set the status of the user with this activity and calculats the price
 				break;
 			default:
-			$sql= 'UPDATE `gumbo_millennium`.`dc_activity_enroll` 
+			$sql= 'UPDATE dc_activity_enroll 
 				SET '.$db->sql_build_array('UPDATE', $sql_ary) . ', datetime = CURRENT_TIMESTAMP
 				WHERE activity_id = '. intval($this->id) .' AND user_id = '. intval($user_id); // constructs a query that changes the status of user and this activity
 		}
@@ -493,7 +493,7 @@ class activity {
 			$sql_ary = array(
 				"comments" => htmlspecialchars($new_comment)
 			);
-			$sql= 'UPDATE `gumbo_millennium`.`dc_activity_enroll` 
+			$sql= 'UPDATE dc_activity_enroll
 				SET '.$db->sql_build_array('UPDATE', $sql_ary) . '
 				WHERE activity_id = '. intval($this->id) .' AND user_id = '. intval($user_id);
 			$db->sql_query($sql);	
@@ -991,7 +991,7 @@ class activity {
 			'name'				=> (String)$this->name,
 			'description'		=> (String)$this->description,
 			'start_datetime'	=> (String)$this->start_datetime->format('Y-m-d H:i:s'),			// format datetime class to the datetime format of the database			
-			'stop_datetime'	=> (String)$this->end_datetime->format('Y-m-d H:i:s'),				// format datetime class to the datetime format of the database
+			'stop_datetime'		=> (String)$this->end_datetime->format('Y-m-d H:i:s'),				// format datetime class to the datetime format of the database
 			'enroll'			=> (bool)$this->enroll,
 			'enroll_datetime'	=> (String)$this->enroll_datetime->format('Y-m-d H:i:s'),			// format datetime class to the datetime format of the database
 			'unsubscribe_max'	=> (String)$this->unsubscribe_max_datetime->format('Y-m-d H:i:s'), 	// format datetime class to the datetime format of the database
