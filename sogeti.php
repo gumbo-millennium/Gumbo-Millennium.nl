@@ -33,7 +33,7 @@ $message = smiley_text($message);
 
 $db->sql_freeresult($result);
 
-$template->assign_var('MESSAGE_TITLE', 'Sponsor Sogeti');
+$template->assign_var('MESSAGE_TITLE', 'Trials Guide');
 $template->assign_var('MESSAGE_TEXT', $message);
 
 $template->set_filenames(array(
