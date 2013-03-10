@@ -73,6 +73,7 @@ $lang = array_merge($lang, array(
 	'MODULE_RESET_EXP'			=> 'Dies wird alle Einstellungen des Moduls auf die Standardeinstellungen zurücksetzen!',
 	'MODULE_STATUS'				=> 'Aktiviere Modul',
 	'MODULE_ADD_ONCE'			=> 'Diese Modul kann nur ein Mal hinzugefügt werden.',
+	'MODULE_IMAGE_ERROR'		=> 'Während dem Prüfen des Modul Bildes sind ein oder mehrere Fehler aufgetreten:',
 	
 	// general
 	'ACP_PORTAL'							=> 'Portal',
@@ -101,6 +102,7 @@ $lang = array_merge($lang, array(
 	'LINK_UPDATED'							=> 'Der Link wurde erfolgreich geändert',
 	'LOG_PORTAL_LINK_ADDED'					=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Link hinzu gefügt: %s ',
 	'LOG_PORTAL_LINK_UPDATED'				=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Link geändert: %s ',
+	'LOG_PORTAL_LINK_REMOVED'				=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Link gelöscht: %s ',
 	'LOG_PORTAL_EVENT_ADDED'				=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Termin eingetragen: %s ',
 	'LOG_PORTAL_EVENT_UPDATED'				=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Termin geändert: %s ',
 	'LOG_PORTAL_EVENT_REMOVED'				=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; Termin gelöscht: %s ',
@@ -111,6 +113,7 @@ $lang = array_merge($lang, array(
 	'MODULE_UPLOAD_EXP'				=> 'Wähle die ZIP-Datei des Moduls das du hochladen willst:',
 	'MODULE_UPLOAD_GO'				=> 'Hochladen',
 	'NO_MODULE_UPLOAD'				=> 'Deine Server-Konfiguration erlaubt das Hochladen von Dateien nicht.',
+	'NO_FILE_B3P'					=> 'Es wurde keine Zip-Datei ausgewählt.',
 	'MODULE_UPLOADED'				=> 'Modul erfolgreich hochgeladen.',
 	'MODULE_UPLOAD_MKDIR_FAILURE'	=> 'Es konnte kein Ordner erstellt werden.',
 	'MODULE_COPY_FAILURE'			=> 'Die folgende Datei konnte nicht kopiert werden: %1$s',
@@ -125,7 +128,6 @@ $lang = array_merge($lang, array(
 	// Install
 	'PORTAL_BASIC_INSTALL'			=> 'Füge Basismodule hinzu',
 	'PORTAL_BASIC_UNINSTALL'		=> 'Entferne Module von Datenbank',
-	'PORTAL_CONVERT_SUCCESS'		=> 'Konvertiere von Board3 Portal 1.0.6 & füge Basismodule hinzu',
 	
 	// Logs
 	'LOG_PORTAL_CONFIG'			=> '<strong>Portal-Einstellungen geändert</strong><br />&raquo; %s',

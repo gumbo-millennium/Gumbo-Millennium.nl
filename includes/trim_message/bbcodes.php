@@ -367,6 +367,16 @@ class phpbb_trim_message_bbcodes
 		while (($last_html_opening = utf8_strpos($content, '<', $last_html_closing)) !== false)
 		{
 			$last_html_closing = utf8_strpos($content, '>', $last_html_opening);
+			/**
+			* Abort while loop if there are no more ">" or we'll end up in an
+			* endless loop. The abort needs to be done here or the following
+			* code will produce incorrect data.
+			*/
+			if (!$last_html_closing)
+			{
+				break;
+			}
+			
 			if (($smiley_code = utf8_substr($content, $last_html_opening + 7, ($last_html_closing - $last_html_opening - 11))) != '--')
 			{
 				if ($last_smiley == $smiley_code)
@@ -414,6 +424,15 @@ class phpbb_trim_message_bbcodes
 		{
 			// foreach markup we find in the string, we enlarge our text-size.
 			$last_html_closing = utf8_strpos($content, '>', $last_html_opening);
+			/**
+			* Abort while loop if there are no more ">" or the following code
+			* will produce incorrect data and additionally produce a PHP Notice.
+			*/
+			if (!$last_html_closing)
+			{
+				break;
+			}
+
 			$content_length += ($last_html_closing - $last_html_opening) + 1;
 
 			$smiley_code = utf8_substr($content, $last_html_opening + 7, ($last_html_closing - $last_html_opening - 11));

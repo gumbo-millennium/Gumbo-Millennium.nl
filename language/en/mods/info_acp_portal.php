@@ -72,6 +72,7 @@ $lang = array_merge($lang, array(
 	'MODULE_RESET_EXP'			=> 'This will reset all settings to the default!',
 	'MODULE_STATUS'				=> 'Enable module',
 	'MODULE_ADD_ONCE'			=> 'This module can only be added once.',
+	'MODULE_IMAGE_ERROR'		=> 'There was an error while checking for the module image:',
 
 	// general
 	'ACP_PORTAL'							=> 'Portal',
@@ -100,6 +101,7 @@ $lang = array_merge($lang, array(
 	'LINK_UPDATED'							=> 'The link has been successfully updated',
 	'LOG_PORTAL_LINK_ADDED'					=> '<strong>Altered Portal settings</strong><br />&raquo; Link added: %s ',
 	'LOG_PORTAL_LINK_UPDATED'				=> '<strong>Altered Portal settings</strong><br />&raquo; Link updated: %s ',
+	'LOG_PORTAL_LINK_REMOVED'				=> '<strong>Altered Portal settings</strong><br />&raquo; Link removed: %s ',
 	'LOG_PORTAL_EVENT_ADDED'				=> '<strong>Altered Portal settings</strong><br />&raquo; Event added: %s ',
 	'LOG_PORTAL_EVENT_UPDATED'				=> '<strong>Altered Portal settings</strong><br />&raquo; Event updated: %s ',
 	'LOG_PORTAL_EVENT_REMOVED'				=> '<strong>Altered Portal settings</strong><br />&raquo; Event removed: %s ',
@@ -110,6 +112,7 @@ $lang = array_merge($lang, array(
 	'MODULE_UPLOAD_EXP'				=> 'Choose the zip file of the module you want to upload:',
 	'MODULE_UPLOAD_GO'				=> 'Upload',
 	'NO_MODULE_UPLOAD'				=> 'Your server configuration does not allow file uploads.',
+	'NO_FILE_B3P'					=> 'No zip file specified.',
 	'MODULE_UPLOADED'				=> 'Module uploaded successfully.',
 	'MODULE_UPLOAD_MKDIR_FAILURE'	=> 'Unable to create a folder.',
 	'MODULE_COPY_FAILURE'			=> 'Unable to copy the following file: %1$s',
@@ -124,7 +127,6 @@ $lang = array_merge($lang, array(
 	// Install
 	'PORTAL_BASIC_INSTALL'			=> 'Adding basic set of modules',
 	'PORTAL_BASIC_UNINSTALL'		=> 'Removing modules from database',
-	'PORTAL_CONVERT_SUCCESS'		=> 'Converting from Board3 Portal 1.0.6 & adding basic set of modules',
 	
 	// Logs
 	'LOG_PORTAL_CONFIG'			=> '<strong>Altered Portal settings</strong><br />&raquo; %s',
