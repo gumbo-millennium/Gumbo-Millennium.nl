@@ -218,7 +218,9 @@ class ucp_register
 					$error[] = $user->lang['TOO_MANY_REGISTERS'];
 				}
 			}
-
+			// DC BEGIN
+			include('prophpbb_antispam.php');
+			// DC END
 			// DNSBL check
 			if ($config['check_dnsbl'])
 			{

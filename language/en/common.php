@@ -896,4 +896,6 @@ $lang = array_merge($lang, array(
 
 ));
 
+$lang['PROPHPBB_ANTISPAM'] = '<strong>Spam registration stopped</strong><br />&raquo; %1$s';
+
 ?>
