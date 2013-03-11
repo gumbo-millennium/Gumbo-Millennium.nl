@@ -24,4 +24,4 @@ Thumbs.db
 
 # API Key Files #
 #################
-includes\ucp\prophpbb_antispam.php
+includes/ucp/prophpbb_antispam.php
