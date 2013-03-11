@@ -18,6 +18,11 @@ if (!defined('IN_PHPBB'))
 /**
 * @package Calendar
 */
+
+include_once ('dc/dc_activity_user_class.php');
+include_once ('dc/dc_activity_class.php');
+
+
 class portal_calendar_module
 {
 	/**
@@ -165,11 +170,58 @@ class portal_calendar_module
 				$mini_cal_count++;
 			}
 		}
+		
+		$user->setup('mods/dc_activity');
+		$template->assign_var('URL_ICAL', $phpbb_root_path . 'dc/ical.' . $phpEx .'?id='.$user->data['user_id']);
+		$template->assign_var('LANG_ICAL', $user->lang['DC_ACT_LANG_ICAL']);
+		$template->assign_var('LANG_ICAL_EXPLAIN', $user->lang['DC_ACT_LANG_ICAL_EXPLAIN']);
+
+		// Build main objecs
+		$activity_controller = new activity_user();
+
+		if(($full_list = $activity_controller->get_comming_active_activities($user->data['user_id'])) != null){
+			$row_count = 1;
+			foreach($full_list AS $index => $activity){
+				
+					if($activity->getStartDatetime() < new Datetime('now') && $activity->getEndDatetime() > new Datetime('now'))
+					{
+						$template->assign_block_vars('minical.cur_events', array(
+							'EVENT_URL'		=> append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
+							'EVENT_TITLE'	=> $activity->getName(),
+							'START_TIME'	=> $user->format_date($activity->getStartDatetime()->getTimestamp(), 'j. M Y, H:i'),
+							'END_TIME'		=> $user->format_date($activity->getEndDatetime()->getTimestamp(), 'j. M Y, H:i'),
+							'EVENT_DESC'	=> $activity->getDescription_preview(20),
+							'ALL_DAY'		=> false,
+							'MODULE_ID'		=> $module_id,
+							'EVENT_URL_NEW_WINDOW'	=> false,
+						));
+					}
+					else
+					{
+						$template->assign_block_vars('minical.upcoming_events', array(
+							'EVENT_URL'		=> append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
+							'EVENT_TITLE'	=> $activity->getName(),
+							'START_TIME'	=> $user->format_date($activity->getStartDatetime()->getTimestamp(), 'j. M Y, H:i'),
+							'END_TIME'		=> $user->format_date($activity->getEndDatetime()->getTimestamp(), 'j. M Y, H:i'),
+							'EVENT_DESC'	=> $activity->getDescription_preview(20) . " ...",
+							'ALL_DAY'		=> false,
+							'MODULE_ID'		=> $module_id,
+							'EVENT_URL_NEW_WINDOW'	=> false,
+						));
+					}
+				
+			}
+		}
+		
+	
 
 		/* 
 		* Let's start displaying the events
 		* make sure we only display events in the future
 		*/
+		/*
+		
+		
 		$events = $this->utf_unserialize($portal_config['board3_calendar_events_' . $module_id]);
 
 		if(!empty($events) && $config['board3_display_events_' . $module_id])
@@ -221,6 +273,7 @@ class portal_calendar_module
 						* - We have an all day event and the start of that event is less than 1 day (86400 seconds) away
 						* - We have a normal event with a start that is less then 1 day away and that hasn't ended yet
 						*/
+						/*
 						if((($cur_event['start_time'] + $user->timezone + $user->dst - $today_timestamp) <= self::TIME_DAY && $cur_event['all_day']) || 
 						(($cur_event['start_time'] + $user->timezone + $user->dst - $today_timestamp) <= self::TIME_DAY && ($cur_event['end_time'] + $user->timezone + $user->dst) >= $today_timestamp))
 						{
@@ -251,7 +304,7 @@ class portal_calendar_module
 					}
 				}
 			}
-		}
+		}*/
 
 		return 'calendar_side.html';
 	}

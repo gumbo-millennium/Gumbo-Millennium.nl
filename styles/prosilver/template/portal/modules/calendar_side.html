@@ -83,6 +83,14 @@
 	</ul>
 	<br />
 	<!-- ENDIF -->
-{$LR_BLOCK_F_L}{$LR_BLOCK_F_R}
+
+<!-- ENDIF -->
+
+<!-- IF S_USER_LOGGED_IN -->
+	 <a href="{URL_ICAL}" > <img src="http://kigkonsult.se/iCalcreator/images/icalCalendar.png" alt="ical"> <br> {LANG_ICAL} </a>
+
+<!-- ELSE -->
+ <a href="{URL_ICAL}" > <img src="http://kigkonsult.se/iCalcreator/images/icalCalendar.png" alt="ical"> </a>
+
 <!-- ENDIF -->
 <!-- END minical -->
