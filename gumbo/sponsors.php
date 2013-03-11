@@ -11,7 +11,7 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
 
-page_header('Sponsors');
+page_header($user->lang['SPONSOR']);
 
 $sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 27';
 
