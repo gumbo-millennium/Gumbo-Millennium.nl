@@ -50,7 +50,7 @@ $(document).on("dom:loaded", function(){
 		webcam2.start();
 	} catch(e) {}
 
-	updater = new Ajax.PeriodicalUpdater($('webcam-messages'), '/lichtkrant/messages.php', {method: 'get', frequency: 5, decay: 1.5});
+	//updater = new Ajax.PeriodicalUpdater($('webcam-messages'), '/lichtkrant/messages.php', {method: 'get', frequency: 5, decay: 1.5});
 });
 
 </script>
