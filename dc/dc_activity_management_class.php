@@ -16,19 +16,20 @@ class activity_management extends activity_user {
 
 	function get_comming($user_id, $short, $order){
 		global $db;
-
-		$is_manager = false;
-		// check is user is in default managers groups
-		$managers_groups = array(DC_GROUP_ID, BESTUUR_GROUP_ID, ADM_GROUP_ID);
+		
+		$acitivity_ids = array();
+		$global_manager = false;								
+		// check is user is in see all activity group
+		$managers_groups = unserialize(SEE_ALL_ACTIVITIES_GROUP);
 		$user_groups = all_user_groups($user_id);
 		foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
 			if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
-				$is_manager = true;											// the groups id matches
+				$global_manager = true;											// the groups id matches
 				break;
 			}
 		}
-		// if user is not a default manager, get all the activitys that the user is a special manager
-		if(!$is_manager){
+		// if user is not in the 'see all activity group' , get all the activitys that the user is a normal manager
+		if(!$global_manager){
 			$sql_array = array(
 					'SELECT'    => 'activity_id',
 
@@ -45,7 +46,7 @@ class activity_management extends activity_user {
 
 				// Run the built query statement
 				$result = $db->sql_query($sql);
-				$acitivity_ids = array();
+				
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$acitivity_ids[] = $row['activity_id'];
@@ -66,22 +67,23 @@ class activity_management extends activity_user {
 			$order = 'DESC';
 		}
 
-		// build sql
-		$sql = 'SELECT id
-				FROM dc_activity
-				WHERE start_datetime >= NOW() '. (!$is_manager ? ' AND ' . $db->sql_in_set('id', $acitivity_ids ): '' ) .'
-				ORDER BY '. $short .' '.$order;
-		$result = $db->sql_query($sql);				// send sql
 		$activity_list = array();
-		
-		// build return list
-		while ($row = $db->sql_fetchrow($result)){
-			$activity = new activity();
-			$activity->fill((int)$row['id']);
-			$activity_list[$activity->getId()] = $activity; 
+		if(count($acitivity_ids) || $global_manager){		// check if there are activity's found for a normal manager. OR the user is a global manager
+			// build sql
+			$sql = 'SELECT id
+					FROM dc_activity
+					WHERE start_datetime >= NOW() '. (!$global_manager ? ' AND ' . $db->sql_in_set('id', $acitivity_ids ): '' ) .'	
+					ORDER BY '. $short .' '.$order;
+			$result = $db->sql_query($sql);				// send sql
+			
+			// build return list
+			while ($row = $db->sql_fetchrow($result)){
+				$activity = new activity();
+				$activity->fill((int)$row['id']);
+				$activity_list[$activity->getId()] = $activity; 
+			}
+			$db->sql_freeresult($result);
 		}
-		$db->sql_freeresult($result);
-		
 		return $activity_list;
 	}
 

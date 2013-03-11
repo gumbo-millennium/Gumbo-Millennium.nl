@@ -281,7 +281,7 @@ class activity_user{
 				}
 			}
 			// build input string
-			$sql_where_string =" WHERE " . $sql_where[0];
+		$sql_where_string =" WHERE " . $sql_where[0];
 			for($i  = 1; $i < (count($sql_where)); $i++){
 				$sql_where_string .= " AND " . $sql_where[$i];
 			}
@@ -304,7 +304,6 @@ class activity_user{
 		if(!in_array($order, $order_array)){
 			$order = 'DESC';
 		}
-		
 		
 		$result = array();
 		$sql= "SELECT id FROM `dc_activity` ". $sql_where_string ."
