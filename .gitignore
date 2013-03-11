@@ -4,6 +4,7 @@
 #########################
 cache/*.*
 config.php
+web.config
 
 # Logs and databases #
 ######################
