@@ -1,6 +1,7 @@
 .idea
 
 # Temp files and config #
+#########################
 cache/*.*
 config.php
 
@@ -20,3 +21,7 @@ config.php
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# API Key Files #
+#################
+includes\ucp\prophpbb_antispam.php
