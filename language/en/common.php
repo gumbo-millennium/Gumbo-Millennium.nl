@@ -43,6 +43,9 @@ $lang = array_merge($lang, array(
 	// GUMBO BEGIN
 	'SPONSOR'			=> 'Sponsoren',
 	'PLAZACAM'			=> 'Plaza CAM',	
+	'OVER_ONS'			=> 'About Gumbo',
+	'SOCIETEIT'			=> 'Sociëteit',
+	'CONTACT'			=> 'Contact',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '',

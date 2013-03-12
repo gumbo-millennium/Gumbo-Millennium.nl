@@ -4747,6 +4747,12 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'L_SPONSORS'			=> $user->lang['SPONSOR'],
 		'U_PLAZACAM'			=> append_sid("{$phpbb_root_path}gumbo/plazacam.$phpEx"),
 		'L_PLAZACAM'			=> $user->lang['PLAZACAM'],
+		'U_CONTACT'				=> append_sid("{$phpbb_root_path}gumbo/contact.$phpEx"),
+		'L_CONTACT'				=> $user->lang['CONTACT'],
+		'U_OVER_ONS'			=> append_sid("{$phpbb_root_path}gumbo/over_ons.$phpEx"),
+		'L_OVER_ONS'			=> $user->lang['OVER_ONS'],
+		'U_SOCIETEIT'			=> append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx"),
+		'L_SOCIETEIT'			=> $user->lang['SOCIETEIT'],
 		// GUMBO ADDED END
 		'U_PRIVATEMSGS'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
 		'U_RETURN_INBOX'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),

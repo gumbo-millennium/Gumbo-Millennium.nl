@@ -43,7 +43,11 @@ $lang = array_merge($lang, array(
 	// GUMBO BEGIN
 	'SPONSOR'			=> 'Sponsoren',
 	'PLAZACAM'			=> 'Plaza CAM',
+	'OVER_ONS'			=> 'Over Gumbo',
+	'SOCIETEIT'			=> 'Sociëteit',
+	'CONTACT'			=> 'Contact',
 	//GUMBO END
+	
 	'TRANSLATION_INFO'	=> '<a href="http://www.phpbb.nl">phpBB.nl Vertaling</a>', // Copyright mag verwijderd worden
 	'DIRECTION'			=> 'ltr',
 	'DATE_FORMAT'		=> '|d M Y|',	// 01 Jan 2007 (with Relative days enabled)
