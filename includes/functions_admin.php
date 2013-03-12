@@ -2714,6 +2714,7 @@ function view_log($mode, &$log, &$log_count, $limit = 0, $offset = 0, $forum_id 
 					$log_data_ary = array_merge($log_data_ary, array_fill(0, substr_count($log[$i]['action'], '%') - sizeof($log_data_ary), ''));
 				}
 
+				$log[$i]['action'] = vsprintf($log[$i]['action'], $log_data_ary);
 				//-- mod : log connections --------------------------------------------------------
 				//-- add	
 				$log_data_ary = ($mode == 'connections' && strpos($row['log_operation'], 'SUCCESS_AUTO') !== FALSE) ? '<a href="' . append_sid($phpbb_root_path . $log_data_ary[0]) . '">'. $log_data_ary[0] . '</a>' : $log_data_ary;
