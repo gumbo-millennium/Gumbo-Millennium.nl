@@ -177,7 +177,7 @@ dd.lastpost {
 }
 
 fieldset dd {
-margin-bottom:8px;
+ /* margin-bottom:8px; uit ivm poll frontpage */
 }
 
 fieldset.display-options {

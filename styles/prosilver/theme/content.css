@@ -649,7 +649,7 @@ fieldset.polls {
 }
 
 fieldset.polls dl {
-	margin-top: 5px;
+	margin-top: 0px; /* 0 ipv van 5 ivm poll frontpag */
 	border-top: 1px solid #e2e2e2;
 	padding: 5px 0 0 0;
 	line-height: 120%;
@@ -665,7 +665,7 @@ fieldset.polls dt {
 	text-align: left;
 	float: left;
 	display: block;
-	width: 30%;
+	width: 70%;
 	border-right: none;
 	padding: 0;
 	margin: 0;
