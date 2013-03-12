@@ -18,10 +18,7 @@ if (!defined('IN_PHPBB'))
 /**
 * @package Calendar
 */
-
-include_once ('dc/dc_activity_user_class.php');
-include_once ('dc/dc_activity_class.php');
-
+$phpEx = substr(strrchr(__FILE__, '.'), 1);
 
 class portal_calendar_module
 {
@@ -73,7 +70,9 @@ class portal_calendar_module
 	public function get_template_side($module_id)
 	{
 		global $config, $template, $user, $phpbb_root_path, $phpEx, $db;
-		
+		include_once($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
+		include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);	
+
 		$portal_config = obtain_portal_config();
 
 		// 0 = Sunday first - 1 = Monday first. ;-)
