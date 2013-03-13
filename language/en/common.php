@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'OVER_ONS'			=> 'About Gumbo',
 	'SOCIETEIT'			=> 'Sociëteit',
 	'CONTACT'			=> 'Contact',
+	'BESTUUR'			=> 'Het Bestuur',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '',
