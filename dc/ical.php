@@ -48,7 +48,7 @@ if(($full_list = $activity_controller->get_comming_active_activities($user_id)) 
 	  // required of some calendar software
 	$v->setProperty( "x-wr-calname", "Gumbo Millennium agenda van $username" );
 	  // required of some calendar software
-	$v->setProperty( "X-WR-CALDESC", "Deze agenda is een overzicht van alle activiteiten van [Naam]" );
+	$v->setProperty( "X-WR-CALDESC", "Deze agenda is een overzicht van alle activiteiten van ". $username );
 	  // required of some calendar software
 	$v->setProperty( "X-WR-TIMEZONE", $tz );
 	  // required of some calendar software
