@@ -1,5 +1,65 @@
 <!-- INCLUDE overall_header.html -->
-<script type="text/JavaScript" src="plazacam.js"></script>
+
+<script type="text/javascript">
+
+var Webcam;
+
+Webcam = {};
+Webcam.Image = function (img) {
+	var running = false, timeout = null, preload, delay;
+	var url = (img.src.indexOf("?") > 0) ? img.src.substr(0, img.src.indexOf("?")) : img.src;
+
+	this.start = function () {
+		running = true;
+		delay = 5000;
+		run();
+	};
+
+	this.stop = function () {
+		running = false;
+		clearTimeout(timeout);
+		timeout = null;
+	};
+
+	this.reset = function () {
+		delay = 5000;
+	};
+
+	var load = function() {
+		timeout = null;
+		preload.src = url + "?" + (new Date()).getTime();
+	}.bind(this);
+
+	var run = function() {
+		if (running && timeout === null) {
+			timeout = setTimeout(load, delay);
+			delay = (delay < 600000) ? Math.floor(delay * 1.008) : delay;
+		}
+	}.bind(this);
+
+	preload = new Image();
+
+	preload.onload = function () { if (running) { img.src = preload.src; } run(); }.bind(this);
+	preload.onerror = function () { run(); }.bind(this);
+};
+
+Webcam.instances = [];
+
+jQuery(document).ready(function($) {
+    jQuery('#page-body table.forumline img').each(function(ingore, elm) {
+        try {
+       		var webcam;
+
+            webcam = new Webcam.Image(elm);
+       		webcam.start();
+
+            Webcam.instances.push(webcam);
+       	} catch(e) {}
+    });
+});
+
+</script>
+
 <table width="100%"  border="0" cellspacing="0" cellpadding="4">
 	<tr>
 		<td>
@@ -13,4 +73,5 @@
 		</td>
 	</tr>
 </table>
+
 <!-- INCLUDE overall_footer.html -->
