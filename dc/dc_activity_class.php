@@ -1007,10 +1007,10 @@ class activity {
 			'enable_magic_url'	=> (bool)$this->enable_magic_url,
 			'enable_bbcode'		=> (bool)$this->enable_bbcode,
 			'enable_smilies'	=> (bool)$this->enable_smilies,
+			'commission'		=> (int) $this->commission,
 		);
 		if($this->id == null){		// check if this is a new activity. If this is a new activity the id is set by the database (AUTO_INCREMENT)
 			$now = new DateTime("now"); 			// get time for 'datetime_created'
-			$sql_array['commission'] 				= $this->commission;
 			$sql_array['user_id']					= (int)$user->data['user_id'];
 			$sql_array['user_ip']					= (String)$user->ip;
 			$sql_array['datetime_created']			= (String)$now->format('Y-m-d H:i:s'); // format datetime class to the datetime format of the database
@@ -1548,6 +1548,7 @@ class activity {
 		if($this->commission != $commission)
 			$this->change_log["commission"] = $this->commission . "->". $commission . ";";
         $this->commission = $commission;
+		
     }
 
     public function getUserId(){

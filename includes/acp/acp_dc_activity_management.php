@@ -856,7 +856,7 @@ class acp_dc_activity_management
 						$activity->setEnrollDateTime($enroll_date_time);
 						$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
 					}					
-					print($cfg_array['commission']);
+					
 					$activity->setName($cfg_array['name']);
 					$activity->setDescription($cfg_array['description']);
 					$activity->setEndDatetime($end_date_time);
