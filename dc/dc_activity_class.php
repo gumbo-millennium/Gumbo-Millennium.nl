@@ -245,8 +245,16 @@ class activity {
 	* The functon $this->check_allowed_to_change() checks if this activity is allowed to be changed. It looks if the this activity is not in the past.
 	* @return boolean
 	*/
-	public function check_allowed_to_change($start_datetime_must_set = false){
+	public function check_allowed_to_change($allowed_edit_current = true){
 		if(isset($this->start_datetime)){
+			// check if an activity is "current"
+			// current is when the start date is past but the end date is in the future (The activity is on this moment)
+			$activity_is_current = (($this->start_datetime < new datetime("now")) && ($this->end_datetime > new datetime("now"))) ? true : false;
+			
+			// checks if this activity is "current" and checks allowed to be edited.
+			if($allowed_edit_current && $activity_is_current){
+				return true;
+			}
 			if($this->start_datetime < new datetime("now")){ // check if the activiy is started
 				return false; 								// not allowed to change
 			}
@@ -771,18 +779,10 @@ class activity {
 		//check if the activity is allowed to change
 		if(!$this->check_allowed_to_change()){
 			// This activity is not allowed to change
-			global $user;
+			
 			$this->set_error_log("Function: set_group_acces; Event is not allowed to change");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null; 					// not allowed to change	
-		}
-		
-		// check if the activity is allowed to be added
-		if($this->start_datetime < new DateTime("now") ){
-				$this->set_error_log("Function: set_group_acces; Activity is in the past");
-				
-				trigger_error($user->lang['DC_ACT_IN_PAST']);
-				return null;
 		}
 		
 		// check if the new status is valid and convert new_status to 'disabled'(as in the db)
@@ -1250,8 +1250,8 @@ class activity {
     }
 
     public function setStartDatetime($startDatetime){
-	//check if the activity is allowed to change
-		if(!$this->check_allowed_to_change()){
+		//check if the activity is allowed to change, parameter 1 is set so it is not allowed the edit StartDatetime if an activity is "current" (@see  check_allowed_to_change()  for current)
+		if(!$this->check_allowed_to_change(false)){
 			// This activity is not allowed to change
 			global $user;
 			$this->set_error_log("Function: setStartDatetime; Event is not allowed to change");
@@ -1320,7 +1320,7 @@ class activity {
 	public function setEnrollDateTime($enrollDateTime){
 	
 		//check if the activity is allowed to change
-		if(!$this->check_allowed_to_change()){
+		if(!$this->check_allowed_to_change(false)){
 			// This activity is not allowed to change
 			global $user;
 			$this->set_error_log("Function: setEnrolldateTime; Event is not allowed to change");
@@ -1346,7 +1346,7 @@ class activity {
     public function setUnsubscribeMaxDatetime($unsubscribe_max_datetime){
 	
 		//check if the activity is allowed to change
-		if(!$this->check_allowed_to_change()){
+		if(!$this->check_allowed_to_change(false)){
 			// This activity is not allowed to change
 			global $user;
 			$this->set_error_log("Function: setUnsubscribeMaxDatetime; Event is not allowed to change");

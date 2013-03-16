@@ -87,7 +87,7 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_NAME'  					=> 'Name of the event',
     'ACP_DC_ACT_NAME_EXPLAIN'  			=> 'Give the new event a name',
     'ACP_DC_ACT_ENROL'  				=> 'Subscribe',
-    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Force the users to subscribe for this event',
+    'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Let people subscribe for this event',
     'ACP_DC_ACT_LOCATION'  				=> 'Location',
     'ACP_DC_ACT_LOCATION_EXPLAIN'  		=> 'Enter the location from where the event starts',
     'ACP_DC_ACT_PAY_OPTION'  			=> 'Payment',
@@ -132,6 +132,9 @@ $lang = array_merge($lang, array(
 	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br>If left empty the max subscribe date will equal with the start date',
 	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE'  			=> 'End time to unsubscribe',
 	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE_EXPLAIN'  	=> 'The time the user has to unsubscribe from this event. <br>If left empty the max subscribe time will equal with the start time',
+	'ACP_DC_ACT_CURRENT'  				=> 'Current events',
+	'ACP_DC_ACT_ACTIVE'  				=> 'Active events',
+	'ACP_DC_ACT_DEACTIVE'  				=> 'Deactive events',
 	
 ));
 

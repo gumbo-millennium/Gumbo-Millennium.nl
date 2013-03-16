@@ -42,6 +42,10 @@ class acp_dc_activity_management
 		$submit = (isset($_POST['submit'])) ? true : false;
 		$activitys_controller = new activity_user();
 		
+		// if mode is edit_activity this varible can change to false if the activity is 'current'
+			// current means startdatetime <= now and endDateTime >= now 
+		$activity_allowed_to_change = true;
+		
 		// in some cases we need the current activity id
 		switch($mode){
 			case "recycle_activity":
@@ -89,6 +93,10 @@ class acp_dc_activity_management
 				$this->new_config['end_date_unsubscribe'] = date_format($activity->getUnsubscribeMaxDatetime(), 'd-m-Y');
 				$this->new_config['end_time_unsubscribe'] = date_format($activity->getUnsubscribeMaxDatetime(), 'H:i:s');
 				
+				// check if activity is current and allowed to change
+				$activity_allowed_to_change = $activity->check_allowed_to_change(false);
+						
+				
 				if($mode == 'edit_activity'){
 					$this->page_title = 'ACP_DC_ACT_EDIT';
 				}
@@ -107,7 +115,8 @@ class acp_dc_activity_management
 						{
 							 trigger_error('NOT_AUTHORISED');
 						}
-
+						
+						unset($activity_id);									// unset activity_id to make a new activity at save!
 						$this->page_title = 'ACP_DC_ACT_RECYCLE';
 					}
 			
@@ -258,6 +267,9 @@ class acp_dc_activity_management
 				
 				foreach($comming_activities AS $index => $activity){
 					$event_active = (($activity->getActive() == 1) ? "_active" : "_deactive");
+					$event_active = ((($activity->getStartDatetime() <= new Datetime("now")) && ($activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active );
+
+					// creates 3 block_vars: event_active, event_deactive and event_now
 					$template->assign_block_vars('events'.$event_active, array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
@@ -305,6 +317,10 @@ class acp_dc_activity_management
 					'L_EVENT_DEACTIVE'		=> ucfirst(strtolower($user->lang['DEACTIVE'])),
 					'L_EVENT_ACTIVATE'		=> ucfirst(strtolower($user->lang['ACTIVATE'])),
 					'L_EVENT_DEACTIVATE'	=> ucfirst(strtolower($user->lang['DEACTIVATE'])),
+					
+					'L_EVENT_CURRENT'		=> ucfirst(strtolower($user->lang['ACP_DC_ACT_CURRENT'])),
+					'L_EVENT_ACTIVE_NAME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_ACTIVE'])),
+					'L_EVENT_DEACTIVE_NAME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_DEACTIVE'])),
 					
 					'L_EVENT_STARTDATETIME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_START_DATE'])),
 					'L_EVENT_EDIT'			=> ucfirst(strtolower($user->lang['EDIT'])),
@@ -685,12 +701,18 @@ class acp_dc_activity_management
 						$timezone = new DateTimeZone(date_default_timezone_get());			// get current timezone
 						$start_date_time = new DateTime($cfg_array['start_date'] ." ".  $cfg_array['start_time'], $timezone);		// set start date + time
 						$end_date_time = new DateTime($cfg_array['end_date'] ." ".  $cfg_array['end_time'], $timezone);				// set end date + time
-						// check if start date+time  > now
-						if(new DateTime("now") > $start_date_time)
-							$error[] = ucfirst(strtolower(
-								$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
-								." ". $user->lang["CANT_PAST"]
-							));
+						
+						//Check if activity is current 
+						if($activity_allowed_to_change){
+							// check if start date+time  > now
+							if(new DateTime("now") > $start_date_time){
+								$error[] = ucfirst(strtolower(
+									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
+									." ". $user->lang["CANT_PAST"]
+								));
+							}
+						}
+						
 						// check if end date+time is later than start date+time
 						if( $end_date_time < $start_date_time ){
 							$error[] = ucfirst(strtolower(
@@ -712,20 +734,21 @@ class acp_dc_activity_management
 									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
 								)); // set error
 							}
-							// check if enroll date time is in the past
-							if($enroll_date_time < new DateTime('now')){
-								$error[] = ucfirst(strtolower(
-									$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']]
-									 ." ".$user->lang["CANT_PAST"] 
-								)); // set error
+							//Check if activity is current 
+							if($activity_allowed_to_change){
+								// check if enroll date time is in the past
+								if($enroll_date_time < new DateTime('now')){
+									$error[] = ucfirst(strtolower(
+										$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']]
+										 ." ".$user->lang["CANT_PAST"] 
+									)); // set error
+								}
 							}
 								
 						}else{
 							$enroll_date_time = $start_date_time;
 						}
-						
-						//$this->new_config['end_date_unsubscribe']
-						//$this->new_config['end_time_unsubscribe']
+	
 						if(!empty($cfg_array['end_date_unsubscribe'])){
 							$end_datetime_unsubscribe = $cfg_array['end_date_unsubscribe'];	// get input
 							$end_datetime_unsubscribe .= (!empty($cfg_array['end_time_unsubscribe'])) ? " ". $cfg_array['end_time_unsubscribe'] : " 23:59:59"; // if time is empty
@@ -737,12 +760,24 @@ class acp_dc_activity_management
 									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
 								)); // set error	
 							}
+							
+							//check if end_datetime_unsubscribe < enroll_date_time
 							if($end_datetime_unsubscribe < $enroll_date_time){
 								$error[] = ucfirst(strtolower(
 									$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
 									 ." ".$user->lang["CANT_LATER"]." ".
 									$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']] 
 								)); // set error	
+							}
+							//Check if activity is current 
+							if($activity_allowed_to_change){
+								// check if enroll date time is in the past
+								if($end_datetime_unsubscribe < new DateTime('now')){
+									$error[] = ucfirst(strtolower(
+										$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
+										 ." ".$user->lang["CANT_PAST"] 
+									)); // set error
+								}
 							}
 							
 						} else{
@@ -800,13 +835,16 @@ class acp_dc_activity_management
 					if(isset($activity_id)){
 						$activity->fill((int)$activity_id);
 					}
+					if($activity->check_allowed_to_change(false)){
+						$activity->setStartDatetime($start_date_time);
+						$activity->setEnrollDateTime($enroll_date_time);
+						$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
+					}					
+					
 					$activity->setName($cfg_array['name']);
 					$activity->setDescription($cfg_array['description']);
-					$activity->setStartDatetime($start_date_time);
 					$activity->setEndDatetime($end_date_time);
 					$activity->setEnroll($enroll);
-					$activity->setEnrollDateTime($enroll_date_time);
-					$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
 					$activity->setEnrollMax((int)$cfg_array['enroll_max']);
 					$activity->setPrice((double)$cfg_array['price']);
 					$activity->setPriceMember((double)$cfg_array['price_member']);

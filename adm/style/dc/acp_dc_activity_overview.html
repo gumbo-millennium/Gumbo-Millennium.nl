@@ -7,9 +7,49 @@
 <p>{L_TITLE_EXPLAIN}</p>
 {CURRENT_MODE}
 
+<fieldset class="tabulated">
+<h3>{L_EVENT_CURRENT}</h3>
+<table cellspacing="1">
+<thead>
+<tr>
+	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_STARTDATETIME}</th>
+	<th>{L_EVENT_ENROLLED}</th>
+	<th>{L_EVENT_STATE}</th>
+	<th>{L_ACTION}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN events_now-->
+	<!-- IF events_now.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+	<td style="text-align: left;"><a href="{events_now.EVENT_PREVIEW}">{events_now.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_now.START_DATE_TIME}</td>
+	<td style="text-align: center;">{events_now.EVENT_ENTERED}</td>
+	<!-- IF events_now.EVENT_ACTIVE -->
+		<td style="text-align: center;">{L_EVENT_ACTIVE}</td>
+	<!-- ELSE -->
+		<td style="text-align: center;">{L_EVENT_DEACTIVE}</td>        
+	<!-- ENDIF -->
+	<td style="text-align: center;">
+		<a href="{events_now.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
+		<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+		<!-- IF events_now.EVENT_ACTIVE -->
+			<a href="{events_now.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
+		<!-- ELSE -->
+			<a href="{events_now.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
+		<!-- ENDIF -->
+	</td>
+</tr>
+<!-- END events_now -->
+</tbody>
+</table>
+
+
+</fieldset>
+
 
 <fieldset class="tabulated">
-<h3>{L_EVENT_ACTIVE}</h3>
+<h3>{L_EVENT_ACTIVE_NAME}</h3>
 <table cellspacing="1">
 <thead>
 <tr>
@@ -49,7 +89,7 @@
 </fieldset>
 
 <fieldset class="tabulated">
-<h3>{L_EVENT_DEACTIVE}</h3>
+<h3>{L_EVENT_DEACTIVE_NAME}</h3>
 <table cellspacing="1">
 <thead>
 <tr>
@@ -87,6 +127,7 @@
 
 
 </fieldset>
+
 <br><br>
 <h1>{L_TITLE_PAST}</h1>
 

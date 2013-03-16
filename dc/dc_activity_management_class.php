@@ -70,9 +70,17 @@ class activity_management extends activity_user {
 		$activity_list = array();
 		if(count($acitivity_ids) || $global_manager){		// check if there are activity's found for a normal manager. OR the user is a global manager
 			// build sql
-			$sql = 'SELECT id
-					FROM dc_activity
-					WHERE start_datetime >= NOW() '. (!$global_manager ? ' AND ' . $db->sql_in_set('id', $acitivity_ids ): '' ) .'	
+			$sql = 'SELECT * 
+				FROM dc_activity
+				WHERE (
+					start_datetime >= NOW( ) 
+					OR (
+						start_datetime <= NOW( ) 
+						AND 
+						stop_datetime >= NOW( )
+					)
+				)'
+				.(!$global_manager ? ' AND ' . $db->sql_in_set('id', $acitivity_ids ): '' ) .'	
 					ORDER BY '. $short .' '.$order;
 			$result = $db->sql_query($sql);				// send sql
 			
