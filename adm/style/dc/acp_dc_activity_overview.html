@@ -13,6 +13,7 @@
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
@@ -23,6 +24,7 @@
 <!-- BEGIN events_now-->
 	<!-- IF events_now.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{events_now.EVENT_PREVIEW}">{events_now.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_now.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_now.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_now.EVENT_ENTERED}</td>
 	<!-- IF events_now.EVENT_ACTIVE -->
@@ -54,6 +56,7 @@
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
@@ -64,6 +67,7 @@
 <!-- BEGIN events_active -->
 	<!-- IF events_active.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{events_active.EVENT_PREVIEW}">{events_active.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_active.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_active.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_active.EVENT_ENTERED}</td>
 	<!-- IF events_active.EVENT_ACTIVE -->
@@ -94,6 +98,7 @@
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
@@ -104,6 +109,7 @@
 <!-- BEGIN events_deactive -->
 	<!-- IF events_deactive.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{events_deactive.EVENT_PREVIEW}">{events_deactive.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_deactive.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_deactive.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_deactive.EVENT_ENTERED}</td>
 	<!-- IF events_deactive.EVENT_ACTIVE -->
@@ -137,6 +143,7 @@
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_ACTION}</th>
@@ -146,9 +153,11 @@
 <!-- BEGIN events_past -->
 	<!-- IF events_past.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{events_past.EVENT_PREVIEW}">{events_past.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_past.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_past.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_past.EVENT_ENTERED}</td>
-	<td style="text-align: center;"><a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
+	<td style="text-align: center;"><a href="{events_past.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+	<a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
 </tr>
 <!-- END events_past -->
 </tbody>

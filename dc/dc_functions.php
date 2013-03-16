@@ -70,7 +70,7 @@ function all_user_groups($user_id){
 	$group_list = array();
 	while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 	{
-		$group_list[]= $row["group_id"];
+		$group_list[]= intval($row["group_id"]);			// convert from String to int
 	}
 	return $group_list;
 }

@@ -273,6 +273,7 @@ class acp_dc_activity_management
 					$template->assign_block_vars('events'.$event_active, array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
+						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
 
 						'EVENT_ACTIVE'		=> (($activity->getActive() == 1) ? true : false) ,
 						'EVENT_ACTIVATE'	=> $this->u_action.'&activate='.$activity->getId(),
@@ -285,23 +286,37 @@ class acp_dc_activity_management
 						'U_EDIT'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=edit_activity&amp;id=' . $activity->getId()),
 					));
 				}
-				
-										
+									
 				// get all past activities
 				$search = array(
-					'start_datetime' => array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000")),
-					'managers' => all_user_groups($user->data['user_id']),
+					'end_datetime' => array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"))
 				);
+				
+				$managers_groups = unserialize(SEE_ALL_ACTIVITIES_GROUP);
+				$user_groups = all_user_groups($user->data['user_id']); 
+				$global_manager = false;
+				foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
+					if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
+						$global_manager = true;																
+						break;
+					}
+				}
+				if(!$global_manager){
+					$search['managers'] = $user_groups;
+				}
+				
 				$events_past = $activity_management->search($search, 10);
 				
 				foreach($events_past AS $index => $activity){
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
+						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
 
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						
+						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
 						
 						'U_RECYCLE'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=recycle_activity&amp;id=' . $activity->getId())
 					));
@@ -323,6 +338,7 @@ class acp_dc_activity_management
 					'L_EVENT_DEACTIVE_NAME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_DEACTIVE'])),
 					
 					'L_EVENT_STARTDATETIME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_START_DATE'])),
+					'L_EVENT_COMMISSION'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_COMMISSION'])),
 					'L_EVENT_EDIT'			=> ucfirst(strtolower($user->lang['EDIT'])),
 					'L_EVENT_RECYCLE'		=> ucfirst(strtolower($user->lang['ACP_DC_ACT_RECYCLE'])),
 					
@@ -840,7 +856,7 @@ class acp_dc_activity_management
 						$activity->setEnrollDateTime($enroll_date_time);
 						$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
 					}					
-					
+					print($cfg_array['commission']);
 					$activity->setName($cfg_array['name']);
 					$activity->setDescription($cfg_array['description']);
 					$activity->setEndDatetime($end_date_time);
@@ -976,14 +992,23 @@ class acp_dc_activity_management
 				}
 				// set default search
 				if(!isset($search['start_datetime'])){
-					$search['start_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),	// find all acitivities where the startdate is between 'NOW' and 1-2000
+					$search['end_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),	// find all acitivities where the startdate is between 'NOW' and 1-2000
 					);
 				}
 				
-				$all_groups_user = all_user_groups($user->data['user_id']);					// get all the groups of the curent user
-				if(!in_array($all_groups_user ,unserialize(SEE_ALL_ACTIVITIES_GROUP))){		// check if user is NOT in the 'allowed to see all activities' group
-					$search['managers'] = $all_groups_user;									// get only the activities where the current user is manager of
+				$managers_groups = unserialize(SEE_ALL_ACTIVITIES_GROUP);
+				$user_groups = all_user_groups($user->data['user_id']); 
+				$global_manager = false;
+				foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
+					if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
+						$global_manager = true;																
+						break;
+					}
 				}
+				if(!$global_manager){
+					$search['managers'] = $user_groups;
+				}
+				
 				$events_past = $activity_management->search($search, 100);
 				
 				foreach($events_past AS $index => $activity){
