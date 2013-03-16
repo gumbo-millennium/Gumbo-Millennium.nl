@@ -1161,7 +1161,10 @@ class activity {
     }
 
     public function getName(){
-		return  htmlspecialchars_decode($this->name);
+		$name = htmlspecialchars_decode($this->name);
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$name = generate_text_for_edit($name,$uid , $bitfield, $options);
+		return  $name['text'];
     }
 
     public function setName($name){
@@ -1175,7 +1178,10 @@ class activity {
 			return null; 					// not allowed to change	
 		}
 		
-		$name = preg_replace( "/[^a-zA-Z0-9 ]/","",$name);
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$enable_bbcode = $enable_magic_url = $enable_smilies = false;
+		generate_text_for_storage($name, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
+		
 		if($this->name != $name)
 			$this->change_log["name"] = $this->name . "->". $name . ";";
 		$this->name = htmlspecialchars($name);

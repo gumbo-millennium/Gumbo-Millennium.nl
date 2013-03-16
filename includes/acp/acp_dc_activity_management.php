@@ -175,7 +175,7 @@ class acp_dc_activity_management
 					'vars'	=> array(				
 						'legend1'				=> 'GENERAL_SETTINGS',		
 						
-						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => false, 'explain' => true, 'preg'=> '[^a-zA-Z0-9 ]'),
+						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => false, 'explain' => true ),
 						'start_date'			=> array('lang' => 'ACP_DC_ACT_START_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => false, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
 						'start_time'			=> array('lang' => 'ACP_DC_ACT_START_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>(HH:MM:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')),
 						
