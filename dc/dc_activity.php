@@ -61,14 +61,9 @@ if($activity->get_read($user->data['user_id'])){
 $template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
 if($status != 0){															// if a new status
-	switch($status){														// check new status
-		case 1:																// new status = yes
-			user_new_status("yes",$activity);								// set new status to yes
-			/*
-			SEND MAIL TO USER, NOT WORKING BECAUSE I HAVE NO MAIL SERVER
-				BUILD THIS IN THE LIVE STAGE!
-			$messenger = new messenger();
-			$messenger->subject($activity->getName);
+	// test sends messagers
+			$messenger = new messenger(false);
+			$messenger->subject($activity->getName());
 			$messenger->template('dc_activity_notify_user',$user->data['user_lang']);
 			$messenger->to($user->data['user_email'], $user->data['username']);
 			$messenger->im($user->data['user_jabber'], $user->data['username']);
@@ -78,7 +73,13 @@ if($status != 0){															// if a new status
 			));
 			$messenger->send($user->data['user_notify_type']);
 			$messenger->save_queue();
-			*/
+	switch($status){														// check new status
+		
+		case 1:																// new status = yes
+			user_new_status("yes",$activity);								// set new status to yes
+			
+			
+			
 			break;
 		case 2:																// new status = no					
 			user_new_status("no", $activity);								// set new status to no

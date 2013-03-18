@@ -158,6 +158,7 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_PAID'  					=> 'The amount the user paid',
     'DC_ACT_USER_NOT_ENROLLED'    		=> 'is not subscripted',
     'DC_ACT_PAYMENT_DONE'    			=> 'Payment done',
+    'DC_ACT_REALNAME'    				=> 'Real name',
 	
 ));
 

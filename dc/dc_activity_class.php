@@ -360,20 +360,23 @@ class activity {
 				return null;									
 		}
 
-		$sql = "SELECT enroll.user_id user_id, users.username username, enroll.comments comments, enroll.datetime datetime, enroll.price_payed price_payed, enroll.status status 
-		FROM dc_activity_enroll as enroll 
-			LEFT JOIN `dc_users` AS users 
-			ON enroll.user_id=users.user_id  
-		WHERE enroll.activity_id = ". $this->id . $status . " ORDER BY users.username" ; // contstucts a query that select all the users that are enrolled for this activity
+		$sql = "SELECT enroll.user_id user_id, users.username username, enroll.comments comments, enroll.datetime datetime, enroll.price_payed price_payed, enroll.status status, custom.pf_gumbo_realname realname
+			FROM dc_activity_enroll as enroll 
+			LEFT JOIN `dc_users` AS users ON enroll.user_id=users.user_id  
+			LEFT JOIN  `dc_profile_fields_data` AS custom ON custom.user_id = enroll.user_id
+		WHERE enroll.activity_id = ". $this->id . $status . " 
+		ORDER BY LOWER(custom.pf_gumbo_realname)" ; // contstucts a query that select all the users that are enrolled for this activity
 		$result = $db->sql_query($sql);							// send query
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
+			$real_name = ($row['realname'] == 'nieuwbouw') ? $row['username'] :$row['realname'];
 			$user_list[$row['user_id']] = array(
 			'username' 			=> $row['username'],
 			'comments' 			=> htmlspecialchars_decode($row['comments']),
 			'datetime' 			=> new DateTime($row['datetime']),
 			'status' 			=> $row['status'],
-			'price_paid' 		=> $row['price_payed'])	;  	
+			'price_paid' 		=> $row['price_payed'],
+			'real_name'			=> $real_name);  	
 		}
 		$db->sql_freeresult($result);							// remove query
 		return $user_list;										// send array

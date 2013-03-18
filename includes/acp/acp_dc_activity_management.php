@@ -438,6 +438,7 @@ class acp_dc_activity_management
 					'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
 					'PRICE'					=> "&euro;".$activity->getPrice(),
 					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
+					'L_REAL_NAME'			=> $user->lang['DC_ACT_REALNAME'],
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),
 				));
 				
@@ -1029,6 +1030,7 @@ class acp_dc_activity_management
 					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
 						$template->assign_block_vars('users', array(		// set template array
 							'USER_NAME'			=> $info['username'],
+							'REAL_NAME'			=> $info['real_name'],
 							'USER_LINK'			=> append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $user_id),
 							'COMMENT'			=> $info['comments'],
 							'STATUS'			=> $user->lang[strtoupper($info['status'])],
@@ -1113,7 +1115,7 @@ class acp_dc_activity_management
 		global $user, $phpbb_root_path, $phpEx;
 		$output = '<select name="config['.$key.']"> <option></option>';
 		foreach($user_array AS $user_id => $info){
-			$output .= '<option value="'.$user_id.'">'.$info['username'].'</option>';
+			$output .= '<option value="'.$user_id.'">'.$info['real_name']. ' --> ' .$info['username'].'</option>';
 		}
 		$output .= '</select>';
 		return $output;
