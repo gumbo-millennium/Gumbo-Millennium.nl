@@ -42,10 +42,20 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	// GUMBO BEGIN
 	'SPONSOR'			=> 'Sponsoren',
-	'PLAZACAM'			=> 'Plaza CAM',
-	'OVER_ONS'			=> 'Over Gumbo',
+	'PLAZACAM'			=> 'Plaza CAM',	
+	'OVER_ONS'			=> 'About Gumbo',
 	'SOCIETEIT'			=> 'Sociëteit',
 	'CONTACT'			=> 'Contact',
+	'BESTUUR'			=> 'Het Bestuur',
+	'AC'				=> 'De Activiteiten Commissie',
+	'BC'				=> 'De Bras Commissie',
+	'DC'				=> 'De Digitale Commissie',
+	'KC'				=> 'De Kas Commissie',
+	'SC'				=> 'De Soos Commissie',
+	'NICKNAME'			=> 'Nicknaam',
+	'IRLNAME'			=> 'Echte naam',
+	'STORY'				=> 'Het verhaal',
+	'ONDERSCHRIFT'		=> 'Onderschrift',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '<a href="http://www.phpbb.nl">phpBB.nl Vertaling</a>', // Copyright mag verwijderd worden

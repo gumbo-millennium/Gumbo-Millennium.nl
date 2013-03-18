@@ -1,0 +1,30 @@
+<!-- INCLUDE overall_header.html -->
+<!-- BEGIN taal -->
+<center><H1>{taal.L_GUMBO_GROUP_NAME}</H1></center>
+<table width="100%"  border="0" cellspacing="0" cellpadding="4">
+	<tr>
+		<td>
+			<table class="forumline" width="100%" cellspacing="0" cellpadding="4" border="0">
+				<tr>					
+					<td class="row2" colspan="2" align="left" style="padding-left: 10px; padding-right: 10px;"><br clear="all" />
+						<!-- END taal -->
+						<!-- BEGIN groep -->
+						<div>
+							<!-- IF groep.AVATAR_IMG -->{groep.AVATAR_IMG}<!-- ELSE --><img src="{T_THEME_PATH}/images/no_avatar.gif" alt="" /><!-- ENDIF --></a>
+						</div>
+						<div>
+							{groep.L_GUMBO_NICK}: {groep.A_USERNAME}<br/>
+							{groep.L_GUMBO_IRL}: {groep.GUMBO_REALNAME}<br/>
+							{groep.L_GUMBO_ONDERSCHRIFT}: {groep.SIGNATURE}<br/>
+							{groep.L_GUMBO_STORY}: {groep.GUMBO_VERHAAL}<br/>
+						</div>
+						<!-- END groep -->
+						<!-- BEGIN taal -->
+					</td>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<!-- END taal -->
+<!-- INCLUDE overall_footer.html -->
