@@ -4747,6 +4747,8 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'L_SPONSORS'			=> $user->lang['SPONSOR'],
 		'U_PLAZACAM'			=> append_sid("{$phpbb_root_path}gumbo/plazacam.$phpEx"),
 		'L_PLAZACAM'			=> $user->lang['PLAZACAM'],
+		'U_EVENTS'				=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx"),
+		'L_EVENTS'				=> $user->lang['EVENTS'],
 		'U_CONTACT'				=> append_sid("{$phpbb_root_path}gumbo/contact.$phpEx"),
 		'L_CONTACT'				=> $user->lang['CONTACT'],
 		'U_OVER_ONS'			=> append_sid("{$phpbb_root_path}gumbo/over_ons.$phpEx"),

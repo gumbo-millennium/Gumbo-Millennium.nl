@@ -56,6 +56,7 @@ $lang = array_merge($lang, array(
 	'IRLNAME'			=> 'Echte naam',
 	'STORY'				=> 'Het verhaal',
 	'ONDERSCHRIFT'		=> 'Onderschrift',
+	'EVENTS'			=> 'Activiteiten',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '<a href="http://www.phpbb.nl">phpBB.nl Vertaling</a>', // Copyright mag verwijderd worden

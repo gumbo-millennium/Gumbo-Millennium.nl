@@ -56,6 +56,7 @@ $lang = array_merge($lang, array(
 	'IRLNAME'			=> 'Echte naam',
 	'STORY'				=> 'Het verhaal',
 	'ONDERSCHRIFT'		=> 'Onderschrift',
+	'EVENTS'			=> 'Events',
 	//GUMBO END
 	
 	'TRANSLATION_INFO'	=> '',
