@@ -36,8 +36,6 @@ if(($full_list = $activity_controller->get_comming_active_activities($user->data
 	$template->assign_var('LIST_AVAILABLE', false);
 }	
 
-
-
 // add links
 //$template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity_list'.$phpEx));
 

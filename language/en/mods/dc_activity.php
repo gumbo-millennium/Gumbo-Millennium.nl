@@ -159,6 +159,8 @@ $lang = array_merge($lang, array(
     'DC_ACT_USER_NOT_ENROLLED'    		=> 'is not subscripted',
     'DC_ACT_PAYMENT_DONE'    			=> 'Payment done',
     'DC_ACT_REALNAME'    				=> 'Real name',
+    'ACP_DC_SELECT_MULTI_USER'    		=> 'Select multiple users',
+    'ACP_DC_SELECT_MULTI_USER_EXPLAIN'	=> 'Instert usernames to change the amount paid of multiple users. <br> If you enter a username in the field, the "Select a user" field will not be used.',
 	
 ));
 

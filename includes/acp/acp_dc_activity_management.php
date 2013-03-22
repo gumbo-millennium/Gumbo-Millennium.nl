@@ -158,6 +158,7 @@ class acp_dc_activity_management
 			case 'new_activity':
 				// set form key
 				$form_key = 'acp_dc_act_new';
+				$form_title = 'acp_activity_new';
 				add_form_key($form_key);
 				
 				if (!function_exists('generate_smilies'))
@@ -171,7 +172,7 @@ class acp_dc_activity_management
 				}
 				
 				$display_vars = array(
-					'title'	=> 'ACP_ACTIVITY_NEW',
+					'title'	=> strtoupper($form_title),
 					'vars'	=> array(				
 						'legend1'				=> 'GENERAL_SETTINGS',		
 						
@@ -204,8 +205,8 @@ class acp_dc_activity_management
 							3 = REGISTERED_COPPA
 							7 = NEWLY_REGISTERED
 						*/
-						'add_group_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7)), 'explain' => true),
-						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7)), 'preg'=> '[<>]'),
+						'add_group_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title), 'explain' => true),
+						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title), 'preg'=> '[<>]'),
 						
 						'legend4'				=> 'ACP_DC_ACT_DESCRIPTION',
 						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'text',	'type' => 'custom', 'empty' => false, 'method' => 'acp_description', 'explain' => true),
@@ -427,6 +428,29 @@ class acp_dc_activity_management
 					 trigger_error('NOT_AUTHORISED');
 				}
 				
+			
+				
+				if($enroll_list = $activity->get_all_status('all')){
+					$template->assign_vars(array(
+						'L_ACT_ENROLLS'		=> true,
+					));
+										
+					$form_key = 'acp_enroll_events';
+					$form_title = 'acp_dc_act_enroll';
+					add_form_key($form_key);
+					
+					$display_vars = array(
+						'title'	=> $form_title,
+						'vars'	=> array(				
+							'legend1'				=> 'GENERAL_SETTINGS',		
+							
+							'select_user'			=> array('lang' => 'ACP_DC_SELECT_USER',		'validate' => 'string',	'type' => 'custom', 'empty' => true, 'method' => 'select_user_selection', 'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list), 'explain' => true),
+							'select_user_multiple'				=> array('lang' => 'ACP_DC_SELECT_MULTI_USER',					'validate' => 'string',	'type' => 'custom', 'empty' => true, 'method' => 'select_user', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title), 'explain' => true),
+							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),						
+						
+						)
+					);
+
 				// set text for activities
 				$template->assign_vars(array(
 					'L_ACT_NAME'			=> $activity->getName(),
@@ -440,26 +464,8 @@ class acp_dc_activity_management
 					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
 					'L_REAL_NAME'			=> $user->lang['DC_ACT_REALNAME'],
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),
-				));
-				
-				if($enroll_list = $activity->get_all_status('all')){
-					$template->assign_vars(array(
-						'L_ACT_ENROLLS'		=> true,
-					));
-										
-					$form_key = 'acp_enroll_events';
-					add_form_key($form_key);
-					
-					$display_vars = array(
-						'title'	=> 'ACP_DC_ACT_ENROLL',
-						'vars'	=> array(				
-							'legend1'				=> 'GENERAL_SETTINGS',		
-							
-							'select_user'			=> array('lang' => 'ACP_DC_SELECT_USER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_user_selection', 'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list), 'explain' => true),
-							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),						
-						
-						)
-					);	
+					'FORM_TITLE'			=> $form_title,
+				));					
 				}else{
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> false,
@@ -521,6 +527,7 @@ class acp_dc_activity_management
 		
 		// check default the input for a form
 		if($submit && isset($display_vars)){
+
 			foreach($display_vars['vars'] as $config_name => $vars){
 				// check all vars that are not allowd to be empty
 				if(is_array($vars)){  // filter only the input fields. (so legend1, legen2, ... are skipt )
@@ -803,15 +810,42 @@ class acp_dc_activity_management
 					}
 					break;
 				case 'enrolls':
-					if(!isset($enroll_list[$cfg_array['select_user']])){
-						$username = array();
-						$user_id = array($cfg_array['select_user']);
-						user_get_id_name($user_id,$username);
-						if(isset($username[$cfg_array['select_user']])){
-							$error[] = $username[$cfg_array['select_user']].' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
-						}else{
-							$error[] = $user->lang['NO_USER'];
+					if(!empty($cfg_array['select_user'])){
+						if(!isset($enroll_list[$cfg_array['select_user']])){
+							$username = array();
+							$user_id = array($cfg_array['select_user']);
+							user_get_id_name($user_id,$username);
+							if(isset($username[$cfg_array['select_user']])){
+								$error[] = $username[$cfg_array['select_user']].' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
+							}else{
+								$error[] = $user->lang['NO_USER'];
+							}
 						}
+					}
+					
+					if(!empty($cfg_array['select_user_multiple'])){
+						$username = array_unique(explode("\n", $cfg_array["select_user_multiple"]));
+						$user_id =  array();
+						user_get_id_name($user_id,$username);
+						$user_id_found= array();
+						$user_id_not_found = array();
+						foreach($user_id AS $index => $id){
+							if(!isset($enroll_list[$id])){
+								$user_id_not_found[] = $id;	
+							}else {
+								$user_id_found[] = intval($id);
+							}
+						}
+						unset($id);
+						$username = NULL;
+						$username = array();
+						user_get_id_name($user_id_not_found,$username);
+						foreach($username AS $index => $name){
+							$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
+						}
+						unset($username);
+						unset($user_id);
+						unset($user_id_not_found);
 					}
 					break;
 			}
@@ -887,7 +921,13 @@ class acp_dc_activity_management
 					trigger_error($user->lang['CONFIG_UPDATED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" )));
 					break;
 				case 'enrolls':
-					$activity->pay((int)$cfg_array['select_user'], (double)$cfg_array['amount_paid']);
+					if(isset($user_id_found)){
+						foreach($user_id_found AS $index => $user_id){
+							$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
+						}
+					}else{
+						$activity->pay((int)$cfg_array['select_user'], (double)$cfg_array['amount_paid']);
+					}
 					break;
 			}
 		}
@@ -1079,20 +1119,20 @@ class acp_dc_activity_management
 		return $options;
    }
   
-   function select_user($value, $key){
+   function select_user($value, $key, $form){
 		
 		global $user, $phpbb_root_path, $phpEx;
-		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;form=acp_activity_new&amp;field='.$key);
+		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;form='.$form.'&amp;field='.$key);
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
 		return $string;	
 		return "";
    }
    
-	function select_single_user($value, $key){
+	function select_single_user($value, $key, $form){
 		
 		global $user, $phpbb_root_path, $phpEx;
-		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;&select_single=trueform=acp_activity_new&amp;field='.$key);
+		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;&select_single=true&amp;form='.$form.'&amp;field='.$key);
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
 		return $string;	
@@ -1121,11 +1161,11 @@ class acp_dc_activity_management
 		return $output;
    }
    
-   function select_group($value, $key, $excude){
+   function select_group($value, $key, $excude, $form){
 		
 		global $user, $phpbb_root_path, $phpEx;
 
-		$href = append_sid($phpbb_root_path. "grouplist.".$phpEx, 'mode=searchgroup&amp;separator='.GROUP_SEPARATOR.'&amp;exclude_groups='.implode(',',$excude).'&amp;form=acp_activity_new&amp;field='.$key);
+		$href = append_sid($phpbb_root_path. "grouplist.".$phpEx, 'mode=searchgroup&amp;separator='.GROUP_SEPARATOR.'&amp;exclude_groups='.implode(',',$excude).'&amp;form='.$form.'&amp;field='.$key);
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_GROUP'].'</a> ]</dd>';
 		return $string;	

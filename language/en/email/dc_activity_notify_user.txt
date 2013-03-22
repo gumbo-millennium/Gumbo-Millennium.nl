@@ -1,9 +1,0 @@
-Subject: Reactivate your account
-
-Hello Henk,
-
-Your account on has been deactivated, most likely due to changes made to your profile. In order to reactivate your account you must click on the link below:
-
-{BAR}
-
-{FOO}

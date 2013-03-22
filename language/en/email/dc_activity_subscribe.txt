@@ -1,0 +1,13 @@
+Subject: Subscription of {ACTIVITY_NAME}
+
+Hello {USERNAME},
+
+Thank you of your subscription of {ACTIVITY_NAME}. 
+
+This event starts on {START_DATETIME} and it will end on {END_DATETIME}.
+You can unsubscribe till {UNSUBSCRIBE_DATETIME}.
+
+{DESCRIPTION}
+<a href="{LINK}">Click here for more information</a>
+
+This event is hosted by the {COMMISSION}.
