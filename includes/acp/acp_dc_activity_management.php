@@ -178,10 +178,10 @@ class acp_dc_activity_management
 						
 						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => false, 'explain' => true ),
 						'start_date'			=> array('lang' => 'ACP_DC_ACT_START_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => false, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'start_time'			=> array('lang' => 'ACP_DC_ACT_START_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>(HH:MM:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')),
+						'start_time'			=> array('lang' => 'ACP_DC_ACT_START_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')),
 						
 						'end_date'				=> array('lang' => 'ACP_DC_ACT_END_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => false, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'patern' => array( 'type' => 'date','format' =>'D-M-YYYY')), 
-						'end_time'				=> array('lang' => 'ACP_DC_ACT_END_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>(HH:MM:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
+						'end_time'				=> array('lang' => 'ACP_DC_ACT_END_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
 						'enroll'				=> array('lang' => 'ACP_DC_ACT_ENROL',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'apc_enroll', 'explain' => true , 'preg'=> '[^(yes)||(no)]'),
 						
 						
@@ -191,10 +191,10 @@ class acp_dc_activity_management
 						
 						'legend2'				=> 'OPTIONAL_SETTINGS',
 						'enroll_date'			=> array('lang' => 'ACP_DC_ACT_ENROLL_DATE',	'validate' => 'string',	'type' => 'text:10:10','empty' => true, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'preg'=> '[^0-9-]' , 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'enroll_time'			=> array('lang' => 'ACP_DC_ACT_ENROLL_TIME',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append'  => '<br>(HH:MM:SS)' , 'preg'=> '[^0-9:]' , 'patern' => array( 'type' => 'time')),
+						'enroll_time'			=> array('lang' => 'ACP_DC_ACT_ENROLL_TIME',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append'  => '<br>HH:MM(:SS)' , 'preg'=> '[^0-9:]' , 'patern' => array( 'type' => 'time')),
 						'enroll_max'			=> array('lang' => 'ACP_DC_ACT_ENROLL_MAX',		'validate' => 'int',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'preg'=> '[^0-9]'),
 						'end_date_unsubscribe'	=> array('lang' => 'ACP_DC_ACT_END_DATE_UNSUBSCRIBE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')), 
-						'end_time_unsubscribe'	=> array('lang' => 'ACP_DC_ACT_END_TIME_UNSUBSCRIBE',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => true, 'explain' => true, 'append'  => '<br>(HH:MM:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
+						'end_time_unsubscribe'	=> array('lang' => 'ACP_DC_ACT_END_TIME_UNSUBSCRIBE',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => true, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
 						'price'					=> array('lang' => 'ACP_DC_ACT_PRICE',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money')),
 						'price_member'			=> array('lang' => 'ACP_DC_ACT_PRICE_MEMBER',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money')),
 						
@@ -741,7 +741,7 @@ class acp_dc_activity_management
 						if( $end_date_time < $start_date_time ){
 							$error[] = ucfirst(strtolower(
 									$user->lang[$display_vars['vars']['end_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time']['lang']]
-									 ." ".$user->lang["CANT_LATER"]." ".
+									 ." ".$user->lang["EARLYER"]." ".
 									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
 								)); // set error
 						}

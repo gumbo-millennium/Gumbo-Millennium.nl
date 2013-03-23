@@ -116,6 +116,7 @@ $lang = array_merge($lang, array(
     'DEACTIVE'  						=> 'Deactive',
     'STATE'  							=> 'State',
     'CANT_LATER'  						=> 'can\'t be later than',
+    'EARLYER'  							=> 'can\'t be earlier than',
     'CANT_PAST'  						=> 'can\'t be in the past',
     'NOT_FOUND'  						=> 'not found',
     'UNVALID'  							=> 'is unvalid',
