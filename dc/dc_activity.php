@@ -232,13 +232,13 @@ $template->assign_var('LANG_CHANGE',  ucfirst(strtolower($user->lang['CHANGE']))
 $template->assign_var('IS_MANAGER', $manager);
 if($manager){
 	$template->assign_var('OVERVIEW_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_OVERVIEW'])));
-	$template->assign_var('OVERVIEW_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" ));	
+	$template->assign_var('OVERVIEW_URL', append_sid(generate_board_url()."/adm/index.php", "i=dc_activity_management&mode=overview" ));	
 	
 	$template->assign_var('EDIT_NAME', ucfirst(strtolower($user->lang['ACP_DC_ACT_EDIT'])));
-	$template->assign_var('EDIT_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=edit_activity&id=".$activity->getId() ));
+	$template->assign_var('EDIT_URL', append_sid(generate_board_url()."/adm/index.php", "i=dc_activity_management&mode=edit_activity&id=".$activity->getId() ));
 	
 	$template->assign_var('SUBSCRIBE_NAME', ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])));
-	$template->assign_var('SUBSCRIBE_URL', append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=enrolls&id=".$activity->getId() ));
+	$template->assign_var('SUBSCRIBE_URL', append_sid(generate_board_url()."/adm/index.php", "i=dc_activity_management&mode=enrolls&id=".$activity->getId() ));
 	
 	
 	
