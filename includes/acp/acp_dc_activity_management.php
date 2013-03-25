@@ -102,8 +102,8 @@ class acp_dc_activity_management
 				}
 				// no break!
 			case 'recycle_activity':
-					if($mode == 'recycle_activity'){
-						if(!$activity_id){											// if activity id is emty
+					if($mode == 'recycle_activity' && !$submit){
+						if(!$activity_id){									// if activity id is emty
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
 						}
 						
@@ -116,43 +116,50 @@ class acp_dc_activity_management
 							 trigger_error('NOT_AUTHORISED');
 						}
 						
+						
 						unset($activity_id);									// unset activity_id to make a new activity at save!
+					}
+					// Check if user not submited. That means the user is the first time on this page and some fields are needed to be set.
+					if(!$submit){
+				
+						$this->new_config['name'] = $activity->getName();
+						$this->new_config['enroll'] = (($activity->getEnroll() == 1 )? 'yes' : 'no');
+						$this->new_config['location'] = $activity->getLocation();
+						$this->new_config['pay_option'] = $activity->getPayOption();
+						$this->new_config['commission'] = $activity->getCommission();
+						
+						$this->new_config['enroll_max'] = $activity->getEnrollMax();
+						$this->new_config['price'] = $activity->getPrice();
+						$this->new_config['price_member'] = $activity->getPriceMember();
+						$this->new_config['description'] = $activity->getDescription_edit();
+						
+						// get all managers of an activity 
+						$managers = $activity->get_group_manage_list('enable');				// get all groups that are managers			
+						$group_array = array();													// define group array
+						foreach($managers AS $group_id => $value){							// convert index (group_id) to a array
+							$group_array[] = get_group_name($group_id); 					// get groep name from id
+						}
+						$this->new_config['add_group_manager'] = implode(GROUP_SEPARATOR ."\n",$group_array);	// convert the user id's array to a string with a new line in between
+						// unset the managers variables 
+						
+						unset($managers);
+						unset($group_array);
+						
+						//get all groups that have acces to this activity
+						$groups = $activity->get_group_acces_list('enable');				// get all groups that have acces
+						$group_array = array();													// define group array
+						foreach($groups AS $group_id => $value){							// convert index (group_id) to a array
+							$group_array[] = get_group_name($group_id); 
+						}
+						$this->new_config['add_group'] = implode(GROUP_SEPARATOR ."\n",$group_array);
+						// unset the group variables 
+						unset($groups);
+						unset($group_array);
+					}
+					if($mode == 'recycle_activity'){
 						$this->page_title = 'ACP_DC_ACT_RECYCLE';
+						unset($activity_id);									// unset activity_id to make a new activity at save!
 					}
-			
-					$this->new_config['name'] = $activity->getName();
-					$this->new_config['enroll'] = (($activity->getEnroll() == 1 )? 'yes' : 'no');
-					$this->new_config['location'] = $activity->getLocation();
-					$this->new_config['pay_option'] = $activity->getPayOption();
-					$this->new_config['commission'] = $activity->getCommission();
-					
-					$this->new_config['enroll_max'] = $activity->getEnrollMax();
-					$this->new_config['price'] = $activity->getPrice();
-					$this->new_config['price_member'] = $activity->getPriceMember();
-					$this->new_config['description'] = $activity->getDescription_edit();
-					
-					// get all managers of an activity 
-					$managers = $activity->get_group_manage_list('enable');				// get all groups that are managers			
-					$group_array = array();													// define group array
-					foreach($managers AS $group_id => $value){							// convert index (group_id) to a array
-						$group_array[] = get_group_name($group_id); 					// get groep name from id
-					}
-					$this->new_config['add_group_manager'] = implode(GROUP_SEPARATOR ."\n",$group_array);	// convert the user id's array to a string with a new line in between
-					// unset the managers variables 
-					
-					unset($managers);
-					unset($group_array);
-					
-					//get all groups that have acces to this activity
-					$groups = $activity->get_group_acces_list('enable');				// get all groups that have acces
-					$group_array = array();													// define group array
-					foreach($groups AS $group_id => $value){							// convert index (group_id) to a array
-						$group_array[] = get_group_name($group_id); 
-					}
-					$this->new_config['add_group'] = implode(GROUP_SEPARATOR ."\n",$group_array);
-					// unset the group variables 
-					unset($groups);
-					unset($group_array);
 					unset($activity);
 					// no break!
 			case 'new_activity':
@@ -451,27 +458,30 @@ class acp_dc_activity_management
 						)
 					);
 
-				// set text for activities
-				$template->assign_vars(array(
-					'L_ACT_NAME'			=> $activity->getName(),
-					'L_USER_NAME'			=> $user->lang['USERNAME'],
-					'L_COMMENT'				=> $user->lang['ACP_DC_ACT_COMMENT'],
-					'L_STATUS'				=> $user->lang['ACP_DC_ACT_STATUS'],
-					'L_PRICE_PAID'			=> $user->lang['PAID'],
-					'L_PAYMENT_DONE'		=> $user->lang['DC_ACT_PAYMENT_DONE'],
-					'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
-					'PRICE'					=> "&euro;".$activity->getPrice(),
-					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
-					'L_REAL_NAME'			=> $user->lang['DC_ACT_REALNAME'],
-					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),
-					'FORM_TITLE'			=> $form_title,
-				));					
+					// set text for activities
+					$template->assign_vars(array(
+						'L_USER_NAME'			=> $user->lang['USERNAME'],
+						'L_COMMENT'				=> $user->lang['ACP_DC_ACT_COMMENT'],
+						'L_STATUS'				=> $user->lang['ACP_DC_ACT_STATUS'],
+						'L_PRICE_PAID'			=> $user->lang['PAID'],
+						'L_PAYMENT_DONE'		=> $user->lang['DC_ACT_PAYMENT_DONE'],
+						'L_REAL_NAME'			=> $user->lang['DC_ACT_REALNAME'],
+						'FORM_TITLE'			=> $form_title,
+					));					
 				}else{
 					$template->assign_vars(array(
+						'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
+						'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
 						'L_ACT_ENROLLS'		=> false,
 						'L_ACT_NO_ENROLLS'	=> $user->lang['DC_ACT_ENROLL_NOBODY'],
 					));
 				}
+				// set default lang varibles
+				$template->assign_vars(array(
+					'L_ACT_NAME'			=> $activity->getName(),
+					'PRICE'					=> "&euro;".$activity->getPrice(),
+					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
+				));		
 					
 				$this->page_title = 'ACP_DC_ACT_ENROLL';
 				$this->tpl_name = 'dc/acp_dc_activity_enrolls';
@@ -746,55 +756,56 @@ class acp_dc_activity_management
 								)); // set error
 						}
 						//check if enroll date/time > start date/time 
-						
-						if(!empty($cfg_array['enroll_date'])){					// date empty
-							$end_date_time_input = $cfg_array['enroll_date'];	// get input
-							$end_date_time_input .= (!empty($cfg_array['enroll_time'])) ? " ". $cfg_array['enroll_time'] : " 23:59:59"; // if time is empty
-							$enroll_date_time = new DateTime($end_date_time_input, $timezone);	// make a datetime object
-							if($enroll_date_time > $start_date_time){			// check if enroll date+time > start date+time
-								$error[] = ucfirst(strtolower(
-									$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']]
-									 ." ".$user->lang["CANT_LATER"]." ".
-									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
-								)); // set error
-							}
-							//Check if activity is current 
-							if($activity_allowed_to_change){
-								// check if enroll date time is in the past
-								if($enroll_date_time < new DateTime('now')){
+						if($activity_allowed_to_change){
+							if(!empty($cfg_array['enroll_date'])){					// date empty
+								$end_date_time_input = $cfg_array['enroll_date'];	// get input
+								$end_date_time_input .= (!empty($cfg_array['enroll_time'])) ? " ". $cfg_array['enroll_time'] : " 23:59:59"; // if time is empty
+								$enroll_date_time = new DateTime($end_date_time_input, $timezone);	// make a datetime object
+								if($enroll_date_time > $start_date_time){			// check if enroll date+time > start date+time
 									$error[] = ucfirst(strtolower(
 										$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']]
-										 ." ".$user->lang["CANT_PAST"] 
+										 ." ".$user->lang["CANT_LATER"]." ".
+										$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
 									)); // set error
 								}
-							}
+								//Check if activity is current 
 								
-						}else{
-							$enroll_date_time = $start_date_time;
+									// check if enroll date time is in the past
+									if($enroll_date_time < new DateTime('now')){
+										$error[] = ucfirst(strtolower(
+											$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']]
+											 ." ".$user->lang["CANT_PAST"] 
+										)); // set error
+									}
+								
+									
+							}else{
+								$enroll_date_time = $start_date_time;
+							}
 						}
-	
-						if(!empty($cfg_array['end_date_unsubscribe'])){
-							$end_datetime_unsubscribe = $cfg_array['end_date_unsubscribe'];	// get input
-							$end_datetime_unsubscribe .= (!empty($cfg_array['end_time_unsubscribe'])) ? " ". $cfg_array['end_time_unsubscribe'] : " 23:59:59"; // if time is empty
-							$end_datetime_unsubscribe = new DateTime($end_datetime_unsubscribe, $timezone);	// make a datetime object
-							if($end_datetime_unsubscribe > $start_date_time){
-								$error[] = ucfirst(strtolower(
-									$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
-									 ." ".$user->lang["CANT_LATER"]." ".
-									$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
-								)); // set error	
-							}
-							
-							//check if end_datetime_unsubscribe < enroll_date_time
-							if($end_datetime_unsubscribe < $enroll_date_time){
-								$error[] = ucfirst(strtolower(
-									$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
-									 ." ".$user->lang["CANT_LATER"]." ".
-									$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']] 
-								)); // set error	
-							}
-							//Check if activity is current 
-							if($activity_allowed_to_change){
+						//Check if activity is current 
+						if($activity_allowed_to_change){
+							if(!empty($cfg_array['end_date_unsubscribe'])){
+								$end_datetime_unsubscribe = $cfg_array['end_date_unsubscribe'];	// get input
+								$end_datetime_unsubscribe .= (!empty($cfg_array['end_time_unsubscribe'])) ? " ". $cfg_array['end_time_unsubscribe'] : " 23:59:59"; // if time is empty
+								$end_datetime_unsubscribe = new DateTime($end_datetime_unsubscribe, $timezone);	// make a datetime object
+								if($end_datetime_unsubscribe > $start_date_time){
+									$error[] = ucfirst(strtolower(
+										$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
+										 ." ".$user->lang["CANT_LATER"]." ".
+										$user->lang[$display_vars['vars']['start_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['start_time']['lang']] 
+									)); // set error	
+								}
+								
+								//check if end_datetime_unsubscribe < enroll_date_time
+								if($end_datetime_unsubscribe < $enroll_date_time){
+									$error[] = ucfirst(strtolower(
+										$user->lang[$display_vars['vars']['end_date_unsubscribe']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['end_time_unsubscribe']['lang']]
+										 ." ".$user->lang["CANT_LATER"]." ".
+										$user->lang[$display_vars['vars']['enroll_date']['lang']] ." ". $user->lang['AND'] ." ". $user->lang[$display_vars['vars']['enroll_time']['lang']] 
+									)); // set error	
+								}
+								
 								// check if enroll date time is in the past
 								if($end_datetime_unsubscribe < new DateTime('now')){
 									$error[] = ucfirst(strtolower(
@@ -802,10 +813,9 @@ class acp_dc_activity_management
 										 ." ".$user->lang["CANT_PAST"] 
 									)); // set error
 								}
+							} else{
+								$end_datetime_unsubscribe=$start_date_time;
 							}
-							
-						} else{
-							$end_datetime_unsubscribe=$start_date_time;
 						}
 					}
 					break;
@@ -881,11 +891,11 @@ class acp_dc_activity_management
 				case 'edit_activity': 
 				case 'recycle_activity': 
 				case 'new_activity':
-					
 					$activity = new activity();
 					if(isset($activity_id)){
 						$activity->fill((int)$activity_id);
 					}
+						
 					if($activity->check_allowed_to_change(false)){
 						$activity->setStartDatetime($start_date_time);
 						$activity->setEnrollDateTime($enroll_date_time);

@@ -68,6 +68,7 @@ $lang = array_merge($lang, array(
     'DC_ACT_UNSUBSCRIBE'  				=> 'The time you are allowed to unsubscribe',
     'DC_ACT_LANG_ICAL'  				=> 'Download your personal iCal',
     'DC_ACT_LANG_ICAL_EXPLAIN'  		=> 'This is your personal iCal feed. Build from all the commission where you are a member.',
+    'DC_ACT_NO_LOGIN_NEEDED'  			=> 'This activity is open for everybody.<br>So you dont need to subscribe.',
 ));
 
 // management side

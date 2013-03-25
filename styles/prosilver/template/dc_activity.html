@@ -57,13 +57,15 @@
 					<dt>&nbsp;</dt>
 				<dt><strong>{LANG_ENROLL_TIME}:</strong></dt>
 						<dd>{ENROLL_DATE}</dd>
+				<dt>&nbsp;</dt>
+				<dt><strong>{LANG_UNSUBSCRIBE}:</strong></dt>
+					<dd>{UNSUBSCRIBE_MAX_DATETIME}</dd>	
 			<!-- ELSE -->
 				<dd>{LANG_NO}</dd>
 			<!-- ENDIF -->
 			<dt>&nbsp;</dt>
 			
-			<dt><strong>{LANG_UNSUBSCRIBE}:</strong></dt>
-				<dd>{UNSUBSCRIBE_MAX_DATETIME}</dd>	
+			
 				
 			
 		</dl>
@@ -140,12 +142,16 @@
 						<dd><a href="{URL_CHANGE_STATUS_NO}">{LANG_NO}</a></dd>
 						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
 
-			<!-- ELSE -->
+			<!-- ELSEIF ENROLL -->
 					<dt>{LANG_ENROLL_CLOSED}</dt>
+				<!-- ELSE -->
+				<dt>{LANG_NO_LOGIN_NEEDED}</dt>
 			<!-- ENDIF -->
 		<!-- ENDIF -->
-	<!-- ELSE -->
+	<!-- ELSEIF ENROLL -->
 		<dt><a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a></dt>
+	<!-- ELSE -->
+		<dt>{LANG_NO_LOGIN_NEEDED}</dt>
 	<!-- ENDIF -->
 	</dl>
 	<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>

@@ -227,6 +227,7 @@ $template->assign_var('LANG_CANCEL', $user->lang['CANCEL']);
 $template->assign_var('LANG_SAVED', $user->lang['SAVED']);
 $template->assign_var('LANG_TO', strtolower($user->lang['TO']));
 $template->assign_var('LANG_CHANGE',  ucfirst(strtolower($user->lang['CHANGE'])));
+$template->assign_var('LANG_NO_LOGIN_NEEDED',  $user->lang['DC_ACT_NO_LOGIN_NEEDED']);
 
 // if a user is a manager: some exta functions and assignments
 $template->assign_var('IS_MANAGER', $manager);
