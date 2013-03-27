@@ -24,9 +24,12 @@
 					<dt style="background-image: url({T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}); background-repeat: no-repeat;" title="No unread posts">
 					
 					
-					
-					<a href="{activity.ACT_LINK}" class="topictitle">{activity.NAME}</a>
-						<br>Door: <div class="username-coloured" style="color: #AA0000;">{activity.COMMISSION} </div>
+					<!-- IF activity.READED -->
+						<a href="{activity.ACT_LINK}" class="topictitle">{activity.NAME}</a>
+					<!-- ELSE --> 
+						<a href="{activity.ACT_LINK}" class="topictitle"><h5>{activity.NAME}</h5></a>
+					<!-- ENDIF -->
+					<br>Door: <div class="username-coloured" style="color: #AA0000;">{activity.COMMISSION}</div>
 
 					</dt>
 					<dd class="posts"> </dd>

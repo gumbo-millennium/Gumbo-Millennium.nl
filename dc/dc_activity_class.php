@@ -1036,7 +1036,6 @@ class activity {
 		return true;
 		/* DOENST WORK ???
 		if($db->sql_affectedrows($result)){	
-			print'henk';
 		}else{
 			$this->set_error_log("Function: save(); Save the activity: No new or changed rows");
 			return false;
@@ -1116,14 +1115,14 @@ class activity {
 	function get_read($user_id){
 		global $db;							// get database connection
 		if(gettype($user_id) != "integer")
-			return null;		
+			return null;	
 		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\' AND activity_id = \''. $this->id . '\'';							// get if user readed 
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);
-		if($row['count'] !=  1)
-			return null;
+		if(intval($row['count']) ==  1)
+			return true;
 		$db->sql_freeresult($result);							// remove query
-		return true;	
+		return false;	
 	}
 	
 	// user set read

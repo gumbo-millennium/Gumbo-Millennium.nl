@@ -28,6 +28,7 @@ if(($full_list = $activity_controller->get_comming_active_activities($user->data
 			'COMMISSION'    	=>  get_group_name($activity->getCommission()),
 			'START_DATE_TIME'   =>  $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 			'ENROLLED'  		=>  $enrolled,
+			'READED'			=> 	((intval($user->data['user_id']) == 1 ) ? true : $activity->get_read(intval($user->data['user_id']))), 	
 			'S_ROW_COUNT'    	=>  $row_count,
 		));
 		$row_count++;

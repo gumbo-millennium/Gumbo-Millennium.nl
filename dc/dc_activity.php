@@ -44,19 +44,11 @@ if (!($activity->user_acces($user->data['user_id']) || $manager) )
 {
      trigger_error('NOT_AUTHORISED');
 }
+
 // set activity readed
-
-
-if($activity->get_read($user->data['user_id'])){
-
-	
+if(!$activity->get_read(intval($user->data['user_id']))){
 	$activity->set_read( intval($user->data['user_id']));
-	
-}else{
-	
-
 }
-
 // change enroll status
 $template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
