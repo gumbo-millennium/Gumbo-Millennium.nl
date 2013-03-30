@@ -443,7 +443,7 @@ class acp_dc_activity_management
 					));
 										
 					$form_key = 'acp_enroll_events';
-					$form_title = 'acp_dc_act_enroll';
+					$form_title = 'ACP_DC_ACT_ENROLL';
 					add_form_key($form_key);
 					
 					$display_vars = array(
@@ -470,14 +470,14 @@ class acp_dc_activity_management
 					));					
 				}else{
 					$template->assign_vars(array(
-						'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
-						'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
 						'L_ACT_ENROLLS'		=> false,
 						'L_ACT_NO_ENROLLS'	=> $user->lang['DC_ACT_ENROLL_NOBODY'],
 					));
 				}
 				// set default lang varibles
 				$template->assign_vars(array(
+					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
+					'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
 					'L_ACT_NAME'			=> $activity->getName(),
 					'PRICE'					=> "&euro;".$activity->getPrice(),
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
