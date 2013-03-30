@@ -351,7 +351,7 @@ class acp_dc_activity_management
 					'L_EVENT_RECYCLE'		=> ucfirst(strtolower($user->lang['ACP_DC_ACT_RECYCLE'])),
 					
 					'L_TITLE_PAST'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_PAST'])),
-					'L_TITLE_PAST_EXPLAIN'	=> $user->lang['ACP_DC_ACT_PAST_EXPLAIN'],
+					'L_TITLE_PAST_EXPLAIN'	=> $user->lang['ACP_DC_ACT_PAST_OVERVIEW_EXPLAIN'],
 					
 					'S_MODE'				=> $mode,
 					'L_ENROLLS'				=> ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])),
@@ -397,21 +397,17 @@ class acp_dc_activity_management
 					'L_EVENT_TITLE'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_NAME'])),
 					'L_EVENT_ENROLLED'		=> ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])),
 					
-					'L_EVENT_ACTIVE'		=> ucfirst(strtolower($user->lang['ACTIVE'])),
-					'L_EVENT_ACTIVATE'		=> ucfirst(strtolower($user->lang['ACTIVATE'])),
-					'L_EVENT_DEACTIVE'		=> ucfirst(strtolower($user->lang['DEACTIVE'])),
-					'L_EVENT_DEACTIVATE'	=> ucfirst(strtolower($user->lang['DEACTIVATE'])),
-					
 					'L_EVENT_STARTDATETIME'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_START_DATE'])),
-					'L_EVENT_EDIT'			=> ucfirst(strtolower($user->lang['EDIT'])),
 					'L_EVENT_RECYCLE'		=> ucfirst(strtolower($user->lang['ACP_DC_ACT_RECYCLE'])),
 					
 					'L_TITLE_PAST'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_PAST'])),
 					'L_TITLE_PAST_EXPLAIN'	=> $user->lang['ACP_DC_ACT_PAST_EXPLAIN'],
 					
+					'L_EVENT_COMMISSION'	=> ucfirst(strtolower($user->lang['ACP_DC_ACT_COMMISSION'])),
 					'L_ADVANCED_SEARCH'		=> $user->lang['ADVANCED_SEARCH'],
 					
 					'S_MODE'				=> $mode,
+					'L_ENROLLS'				=> ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])),
 					'K_ACTION'				=> ((isset($_POST['advanced']) || isset($_GET['advanced']))? $this->u_action . "&advanced=advanced" : $this->u_action),
 					'L_SUBMIT'				=> $user->lang['SEARCH'])
 						
@@ -428,6 +424,7 @@ class acp_dc_activity_management
 				$activity->fill($activity_id);							// fill the new activity from the db
 				
 				
+						
 				
 				// get authorisation 
 				if (!$activity->is_manager($user->data['user_id']))
@@ -1066,10 +1063,10 @@ class acp_dc_activity_management
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
-
+						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
-						
+						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
 						'U_RECYCLE'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=recycle_activity&amp;id=' . $activity->getId())
 					));
 				}

@@ -44,6 +44,7 @@
 <thead>
 <tr>
 	<th>{L_EVENT_TITLE}</th>
+	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_ACTION}</th>
@@ -53,9 +54,11 @@
 <!-- BEGIN events_past -->
 	<!-- IF events_past.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{events_past.EVENT_PREVIEW}">{events_past.EVENT_TITLE}</a></td>
+	<td style="text-align: center;">{events_past.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_past.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_past.EVENT_ENTERED}</td>
-	<td style="text-align: center;"><a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
+	<td style="text-align: center;"><a href="{events_past.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+	<a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
 </tr>
 <!-- END events_past -->
 </tbody>

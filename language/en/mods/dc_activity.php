@@ -129,6 +129,7 @@ $lang = array_merge($lang, array(
 	'ACP_DC_ACT_RECYCLE_EXPLAIN'  		=> 'Making a new event from a old event without the old data like start date and time',
 	'ACP_DC_ACT_PAST'  					=> 'Past events',
 	'ACP_DC_ACT_PAST_EXPLAIN'  			=> 'The list of events that are past. You can recycle or preview the event. <br>Use the input fields to find all other events.',
+	'ACP_DC_ACT_PAST_OVERVIEW_EXPLAIN'  => 'The list of  the 10 last events that are past. You can recycle, review and see all subscriptions the event',
 	'ADVANCED_SEARCH'  					=> 'Advanced search',
 	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE'  			=> 'End date to unsubscribe',
 	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br>If left empty the max subscribe date will equal with the start date',
