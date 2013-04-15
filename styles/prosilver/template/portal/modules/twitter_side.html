@@ -12,9 +12,9 @@
 
 			if (last_ID) {
 				last_ID = last_ID.replace("tweet", "");
-				var url = "http://search.twitter.com/search.json?q=%23windesheim&since_id=" + last_ID + "&callback=?";
+				var url = "http://search.twitter.com/search.json?q=GumboMillennium&since_id=" + last_ID + "&callback=?";
 			} else {
-				var url = "http://search.twitter.com/search.json?q=%23windesheim&rpp=5&callback=?"; 
+				var url = "http://search.twitter.com/search.json?q=GumboMillennium&rpp=5&callback=?"; 
 			}
 
 			$.getJSON(url, function(json) { 
@@ -34,7 +34,7 @@
 			// courtesy of Jeremy Parrish (rrish.org)
 			return text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi, '<a target="_blank" href="$1">$1</a>')
 			.replace(/(^|\W)@(\w+)/g, '$1<a target="_blank" href="http://twitter.com/$2">@$2</a>')
-			.replace(/(^|\W)#(\w+)/g, '$1#<a target="_blank" href="http://search.twitter.com/search?q=%23$2">$2</a>');
+			.replace(/(^|\W)#(\w+)/g, '$1#<a target="_blank" href="https://twitter.com/search?q=$2">$2</a>');
 		}
 		</script>
 		<style>
