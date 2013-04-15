@@ -2,68 +2,8 @@
 
 
 <h2> All activitys </h2>
-<table>
-	<!-- BEGIN block1 -->
-	<tr> <td> het id: {block1.CATEGORY} </td> </tr>
-		<!-- BEGIN block2 -->
-		<tr><td> {block.block2.ITEM_NUM}: {block.block2.ITEM}  </td> </tr>
-		<!-- END block2 -->
-	<!-- END block1 -->
- </table>
- <br />
- <h2>Een activiteit: {NAME} <h2>
- 
-<h3> All enroled users</h3>
- <!-- BEGIN enrolled -->
-	<a href="{enrolled.USER_LINK}">id:{enrolled.USER_ID} name: {enrolled.USER_NAME} </a><br />
-<!-- END enrolled -->
-<br />
-User is ingescheven: {USER_ENROLLED}
-<br />
-inschrijven: <a href="{URL_ENROLL}"> Enroll </a>
-<br / >
-Resultaat van inschrijving: {ENROLL}
-<br />
-uitschrijven: <a href="{URL_DISROLL}"> Disroll </a>
-<br />
-Resultaat van uitschrijven: {DISROLL}
-
-<h3> User managers </h3>
-<!-- IF USER_MANAGE_ERROR -->
-	<br/>
-	De error: {USER_MANAGE_ERROR} 
-<!-- ELSE -->
-	<table>
-		<tr> <td> user id </td> <td> datem verkregen </td> </tr>
-		<!-- BEGIN acces -->
-		<tr> <td> {acces.USER_ID} </td><td> {acces.CREATED}</td> </tr>
-		<!-- END acces -->
-	</table>
-<!-- ENDIF -->
-<br />
-Beheerder instellen: <a href="{URL_ENABLE_ACCES}"> Enable </a><br>
-Beheerder uitschakelen: <a href="{URL_DISABLE_ACCES}"> Disable </a><br>
-Beheerder uitschakelen resultaat: {USER_MANAGE}<br>
-<h3> Chance log </h3>
-<!-- IF CHANCE_LIST_ERROR -->
-	<br/>
-	De error: {CHANCE_LIST_ERROR} 
-<!-- ELSE -->
-	<table>
-		<tr> <td> user id </td> <td> datem</td> <td>modi</td> </tr>
-		<!-- BEGIN chance_list -->
-		<tr> <td> {chance_list.USER_ID} </td><td> {chance_list.CREATED}</td> <td> {chance_list.MOD}</td></tr>
-		<!-- END chance_list -->
-	</table>
-<!-- ENDIF -->
-Groep 5 toegang toevoegen: <a href="{URL_ENABLE_GROUP_ACCES}"> Enable </a><br>
-Groep 5 toegang uitschakelen: <a href="{URL_DISABLE_GROUP_ACCES}"> Disable </a><br>
-Groep 5 toegang resultaat: {GROUP_ACCES}<br>
-<br />
-<h2>Clean refresh: <a href="{URL_CLEAN}"> refresh </a><h2>
-
-
-
-
+<ul class="linklist">
+    <li class="rightside pagination">{TOTAL_USERS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+</ul>
 
 <!-- INCLUDE overall_footer.html -->

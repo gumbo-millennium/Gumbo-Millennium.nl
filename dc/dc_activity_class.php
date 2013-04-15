@@ -327,8 +327,7 @@ class activity {
 	/* 
 		* get_all_status($status)
 		* This funtions get all the users who are enrolled, disenrolled or maybe for this activity.
-		* @params
-		* $status String The status of users it returs: 
+		* @params	$status String The status of users it returs: 
 		*					"enrolled" for all the users who are enrolled/subscriped, 
 		* 				 	"disenrolled" for all the users who disenrolled/unsubscriped
 		*					"maybe" for all the users who has the status maybe THIS IS NOT USED IN THE FRONTEND
@@ -337,7 +336,7 @@ class activity {
 		*@returns:
 		*The user_list array
 	*/
-	function get_all_status($status){
+	function get_all_status($status, $order = null, $short = null, $sort_paid = null, $limit = 0, $offset = null){
 		global $db;												// get connection to the database		
 		$user_list = null;
 		switch(trim($status)){										// check status
@@ -351,7 +350,7 @@ class activity {
 				$status = " AND enroll.status = 'maybe'";					// set SQL WHERE statment 
 				break;
 			case "all":											// all the users
-				$status = "";									// set SQL WHERE statment
+				$status = null;									// set SQL WHERE statment
 				break;
 			default:											// wrong status
 				$this->set_error_log("Function: get_all_status; Wrong status: " . $status);
@@ -359,24 +358,79 @@ class activity {
 				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
+		
+		// set shorting
+		$short_array = array('username', 'comments', 'datetime', 'status', 'price_paid', 'real_name');
+		$order_array = array('ASC', 'DESC');
 
-		$sql = "SELECT enroll.user_id user_id, users.username username, enroll.comments comments, enroll.datetime datetime, enroll.price_payed price_payed, enroll.status status, custom.pf_gumbo_realname realname
+		switch($short){
+			case 'username':
+				$short = "LOWER(users.username)";
+				break;
+			case 'datetime':
+				$short = "enroll.datetime";
+				break;
+			case 'comments':
+				$short = "LOWER(enroll.comments)";
+				break;
+			case 'status':
+				$short = "enroll.status";
+				break;
+			case 'price_paid':
+				$short = "enroll.price_payed";
+				break;
+			case 'real_name':
+				$short = "LOWER(custom.pf_gumbo_realname)";
+				break;
+			default:
+				$short = "LOWER(custom.pf_gumbo_realname)";
+		}
+
+		// check if the order is valid
+		if(!in_array($order, $order_array)){
+			$order = 'ASC';
+		}
+		
+
+		
+		$sql = "SELECT enroll.user_id user_id, users.username username, enroll.comments comments, enroll.datetime datetime, enroll.price_payed price_paid, enroll.status status, custom.pf_gumbo_realname realname
 			FROM dc_activity_enroll as enroll 
 			LEFT JOIN `dc_users` AS users ON enroll.user_id=users.user_id  
 			LEFT JOIN  `dc_profile_fields_data` AS custom ON custom.user_id = enroll.user_id
 		WHERE enroll.activity_id = ". $this->id . $status . " 
-		ORDER BY LOWER(custom.pf_gumbo_realname)" ; // contstucts a query that select all the users that are enrolled for this activity
-		$result = $db->sql_query($sql);							// send query
+		ORDER BY ". $short .' '.$order;		
+		if($limit == 0){
+			$result = $db->sql_query($sql); // send query
+		}else{
+			$result = $db->sql_query_limit($sql, (int)$limit, (int)$offset);							// send query
+		}
+		
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
-		{
-			$real_name = ($row['realname'] == 'nieuwbouw') ? $row['username'] :$row['realname'];
-			$user_list[$row['user_id']] = array(
-			'username' 			=> $row['username'],
-			'comments' 			=> htmlspecialchars_decode($row['comments']),
-			'datetime' 			=> new DateTime($row['datetime']),
-			'status' 			=> $row['status'],
-			'price_paid' 		=> $row['price_payed'],
-			'real_name'			=> $real_name);  	
+		{	
+			// check for short on paid/not paid/ignore
+			$use_row = true;		// default ignore
+			switch($sort_paid){
+				case 'paid':
+					if(intval($row['price_paid']) < $this->calculate_price(intval($row['user_id']))){		// check if payment is lower than price to pay(depents on if the user is a member)
+						$use_row = false;
+					}
+					break;
+				case 'not_paid':
+					if(intval($row['price_paid']) >= $this->calculate_price(intval($row['user_id']))){		// check if payment is higher than price to pay(depents on if the user is a member)
+						$use_row = false;
+					}
+			}
+			
+			if($use_row){
+				$real_name = ($row['realname'] == 'nieuwbouw' || $row['realname'] == '') ? $row['username'] :$row['realname'];
+				$user_list[$row['user_id']] = array(
+				'username' 			=> $row['username'],
+				'comments' 			=> htmlspecialchars_decode($row['comments']),
+				'datetime' 			=> new DateTime($row['datetime']),
+				'status' 			=> $row['status'],
+				'price_paid' 		=> $row['price_paid'],
+				'real_name'			=> $real_name);  
+			}			
 		}
 		$db->sql_freeresult($result);							// remove query
 		return $user_list;										// send array

@@ -83,10 +83,39 @@ class activity_user{
 		return $full_list;										// send the array
 	}
 	
-	function get_comming_active_activities($user_id){
+	function get_comming_active_activities($user_id, $limit = 0, $offset = null, $order = 'ASC', $short = 'start_datetime'){
 		global $db;												// get database connection
-		$sql = 'SELECT * FROM dc_activity_comming_active';	// select all the activity's that are active (db view)
-		$sql_result = $db->sql_query($sql);
+		
+		// set short options
+		switch($short){	
+			case 'name':
+				$short = "LOWER(name)";			// order by name (lower name for case insensativty)
+				break;
+			case 'start_datetime':				// order by start date time
+				$short = "start_datetime";
+				break;
+			case 'end_dateime':					// order by end date time
+				$short = "stop_datetime";
+				break;
+			default:							// set defaut sort: start date time
+				$short = "start_dateime";
+		}
+
+		// set order options
+		$order_array = array('ASC', 'DESC');
+		
+		// check if the order is valid
+		if(!in_array($order, $order_array)){
+			$order = 'ASC';
+		}
+	
+		$sql = "SELECT * FROM `dc_activity_comming_active` ORDER BY ". $short .' '.$order;	// select alle the activity's that where startdate => than now and are active (db view)
+		if($limit == 0){				// check if limit is used
+			$sql_result = $db->sql_query($sql); // send query
+		}else{
+			$sql_result = $db->sql_query_limit($sql, (int)$limit, (int)$offset);							// send query
+		}
+		
 		$index = 0;
 		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
@@ -124,10 +153,38 @@ class activity_user{
 	}
 	
 	// get a list of all the comming activity's 
-	function get_comming(){
+	function get_comming($limit = 0, $offset = null, $order = 'ASC', $short = 'start_datetime'){
 		global $db;												// get database connection
-		$sql = 'SELECT * FROM `dc_activity_comming_active`';	// select alle the activity's that where startdate => than now and are active (db view)
-		$sql_result = $db->sql_query($sql);
+	
+
+		// set short options
+		switch($short){	
+			case 'name':
+				$short = "LOWER(name)";			// order by name (lower name for case insensativty)
+				break;
+			case 'start_datetime':				// order by start date time
+				$short = "start_datetime";
+				break;
+			case 'end_dateime':					// order by end date time
+				$short = "stop_datetime";
+				break;
+			default:							// set defaut sort: start date time
+				$short = "start_dateime";
+		}
+
+		// set order options
+		$order_array = array('ASC', 'DESC');
+		// check if the order is valid
+		if(!in_array($order, $order_array)){
+			$order = 'ASC';
+		}
+	
+		$sql = "SELECT * FROM `dc_activity_comming_active` ORDER BY ". $short .' '.$order;	// select alle the activity's that where startdate => than now and are active (db view)
+		if($limit == 0){				// check if limit is used
+			$result = $db->sql_query($sql); // send query
+		}else{
+			$result = $db->sql_query_limit($sql, (int)$limit, (int)$offset);							// send query
+		}
 		$index = 0;
 		while ($row = $db->sql_fetchrow($sql_result))				// walk through all the rows
 		{
@@ -281,7 +338,7 @@ class activity_user{
 				}
 			}
 			// build input string
-		$sql_where_string =" WHERE " . $sql_where[0];
+			$sql_where_string =" WHERE " . $sql_where[0];
 			for($i  = 1; $i < (count($sql_where)); $i++){
 				$sql_where_string .= " AND " . $sql_where[$i];
 			}
@@ -318,8 +375,24 @@ class activity_user{
 			$result[$activity->getId()] = $activity;
 		}
 		return $result;
+	}
+	
+	
+	function generate_table_options($table_layout){
+	$table_layout = array(
+					'title'	=> 'title for the table',
+					'vars'	=> array(				
+						'legend1'				=> 'GENERAL_SETTINGS',		
+						
+						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => true, 'explain' => true, 'preg'=> '[^a-zA-Z0-9 ]')
+																		
+					
+					)
+				);
+		
 		
 	}
+	
 
 }
 

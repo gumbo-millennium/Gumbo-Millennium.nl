@@ -41,6 +41,7 @@ $lang = array_merge($lang, array(
     'MAYBE'    							=> 'Maybe',
     'AMOUNT'    						=> 'Amount',
     'PAID'    							=> 'Paid',
+    'NOT_PAID'    						=> 'Not paid',
     'SAVED'    							=> 'Saved',
     'TO'    							=> 'To',
     'DC_ACT_ALREADY_STATUS'    			=> 'The user already has this status.',
@@ -162,9 +163,12 @@ $lang = array_merge($lang, array(
     'DC_ACT_USER_NOT_ENROLLED'    		=> 'is not subscripted',
     'DC_ACT_PAYMENT_DONE'    			=> 'Payment done',
     'DC_ACT_REALNAME'    				=> 'Real name',
+	'LIST_USERS'    					=> '%s Users',
+	'LIST_USER'    						=> '1 User',
     'ACP_DC_SELECT_MULTI_USER'    		=> 'Select multiple users',
     'ACP_DC_SELECT_MULTI_USER_EXPLAIN'	=> 'Instert usernames to change the amount paid of multiple users. <br> If you enter a username in the field, the "Select a user" field will not be used.',
-	
+    'ACP_DC_ACT_DISPLAY_LIMIT'    		=> 'Display entries',
+
 ));
 
 $lang = array_merge($lang, array(

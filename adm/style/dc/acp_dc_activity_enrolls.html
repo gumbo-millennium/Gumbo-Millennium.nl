@@ -10,6 +10,8 @@
 {L_MEMBER_PRICE}:{MEMBER_PRICE}
 </p>
 <!-- IF L_ACT_ENROLLS -->
+
+<form id="{FORM_TITLE}" method="post" action="{U_ACTION}">
 <table cellspacing="1">
 <thead>
 <tr>
@@ -34,6 +36,17 @@
 <!-- END users -->
 </tbody>
 </table>
+<div class="rightside pagination">{TOTAL_USERS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></div>
+
+<fieldset class="display-options">
+	{L_DISPLAY_LIMIT}: &nbsp;{S_LIMIT_RECORDS}&nbsp;{L_SORT_BY}: {S_SORT_KEY} {S_SORT_DIR} {S_SORT_SHOW}
+	<input class="button2" type="submit" value="{L_GO}" name="sort" />
+	{S_FORM_TOKEN}
+</fieldset>
+
+
+
+
 
 <!-- IF S_ERROR -->
 	<div class="errorbox">
@@ -41,8 +54,6 @@
 		<p>{ERROR_MSG}</p>
 	</div>
 <!-- ENDIF -->
-
-<form id="{FORM_TITLE}" method="post" action="{U_ACTION}">
 
 <!-- BEGIN options -->
 	<!-- IF options.S_LEGEND -->
@@ -75,7 +86,13 @@
 </form>
 
 <!-- ELSE -->
-{L_ACT_NO_ENROLLS}
+<div class="errorbox">
+	<p>{L_ACT_NO_ENROLLS}</p>
+</div>
 <!-- ENDIF -->
+
+
+
+
 
 <!-- INCLUDE overall_footer.html -->

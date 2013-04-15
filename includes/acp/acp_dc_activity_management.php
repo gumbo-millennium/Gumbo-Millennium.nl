@@ -25,6 +25,7 @@ include_once($phpbb_root_path . '/includes/functions_posting.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 class acp_dc_activity_management
 {
    var $u_action;
@@ -478,6 +479,8 @@ class acp_dc_activity_management
 					'L_ACT_NAME'			=> $activity->getName(),
 					'PRICE'					=> "&euro;".$activity->getPrice(),
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
+					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
+					'L_DISPLAY_LIMIT'		=> $user->lang['ACP_DC_ACT_DISPLAY_LIMIT'],
 				));		
 					
 				$this->page_title = 'ACP_DC_ACT_ENROLL';
@@ -1034,7 +1037,6 @@ class acp_dc_activity_management
 							case 'end_datetime_from':
 								$search['end_datetime'] = array('begin' => new DateTime($cfg_array['end_date_from']) ,'end' => new DateTime($cfg_array['end_date_to']));
 								break;
-							
 						}
 					}
 				}
@@ -1072,8 +1074,48 @@ class acp_dc_activity_management
 				}
 				break;
 			case 'enrolls':
+			
+				// Set up general vars
+				$user->add_lang('mcp');
+				$user->add_lang('acp/email');
+				$user->add_lang('mods/dc_activity');
+				$action		= request_var('action', '');
+				$forum_id	= request_var('f', 0);
+				$topic_id	= request_var('t', 0);
+				$start		= request_var('start', 0);
+
+				// Sort keys
+				$limit	= request_var('st', 25);
+				$sort_key	= request_var('sk', 'r');
+				$sort_dir	= request_var('sd', 'd');
+				$sort_show	= request_var('ss', 'a');
+
+				// Sorting
+				$limit_records = array(0 => $user->lang['ALL_USERS'], 5 => sprintf($user->lang['LIST_USERS'], 5), 10 => sprintf($user->lang['LIST_USERS'], 10), 25 => sprintf($user->lang['LIST_USERS'], 25), 50 => sprintf($user->lang['LIST_USERS'], 50), 100 => sprintf($user->lang['LIST_USERS'], 100));
+				
+				$sort_by_text = array('r' => $user->lang['DC_ACT_REALNAME'],'u' => $user->lang['USERNAME'], 'c' => $user->lang['ACP_DC_ACT_COMMENT'], 's' => $user->lang['ACP_DC_ACT_STATUS'], 'p' => $user->lang['PAID']);
+				$sort_by_sql = array('r' => 'real_name', 'u' => 'username', 'c' => 'comments', 's' => 'status', 'p' => 'price_paid');
+				
+				switch($sort_show){
+					case 'a':
+						$s_sort_show = "all";
+						$sort_pay  = null;
+						break;
+					case 'p':
+						$s_sort_show = "enrolled";
+						$sort_pay  = 'paid';
+						break;
+					case 'np':
+						$s_sort_show = "enrolled";
+						$sort_pay  = 'not_paid';
+						break;
+				}
+
+				$s_limit_records = $s_sort_key = $s_sort_dir = $u_sort_param = '';
+				gen_sort_selects($limit_records, $sort_by_text, $limit, $sort_key, $sort_dir, $s_limit_records, $s_sort_key, $s_sort_dir, $u_sort_param);
+				$sql_sort =($sort_dir == 'd') ? 'DESC' : 'ASC';
 				// send the list if all subscribed users to the template
-				if( $enroll_list = $activity->get_all_status('all') ){	// are there subscribed users
+				if( $enroll_list = $activity->get_all_status($s_sort_show, $sql_sort, $sort_by_sql[$sort_key], $sort_pay , $limit, $start) ){	// are there subscribed users
 					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
 						$template->assign_block_vars('users', array(		// set template array
 							'USER_NAME'			=> $info['username'],
@@ -1083,12 +1125,28 @@ class acp_dc_activity_management
 							'STATUS'			=> $user->lang[strtoupper($info['status'])],
 							'PRICE_PAID'		=> "&euro;".$info['price_paid'],
 							'PAYMENT_DONE'		=> ($info['price_paid'] >= $activity->calculate_price($user_id) ? $user->lang['YES'] : $user->lang['NO'] ) ,
-						));
-						
+						));	
 					}
+					
 				}
+				$total_users = count($activity->get_all_status($s_sort_show, 'real_name', 'ASC', $sort_pay, 0));
+					$pagination_url = $this->u_action. "&amp;id=".$activity_id. "&amp;$u_sort_param&amp;start=$start";
+					$template->assign_vars(array(
+						'U_ACTION'		=> $pagination_url,
+
+						'PAGINATION'        => generate_pagination($pagination_url, $total_users, $limit, $start,true),
+						'PAGE_NUMBER'       => on_page($total_users, $limit, $start),
+						'TOTAL_USERS'       => ($total_users == 1) ? $user->lang['LIST_USER'] : sprintf($user->lang['LIST_USERS'], $total_users),
+
+						'S_LIMIT_RECORDS'	=> $s_limit_records,
+						'S_SORT_KEY'	=> $s_sort_key,
+						'S_SORT_DIR'	=> $s_sort_dir,
+						'S_SORT_SHOW'	=> $this->apc_dc_subscibe_create_show($sort_show, 'ss')
+						)
+					);
+			break;
 		}
-   }
+	}
   function apc_enroll($value, $key)
 	{	
 		$radio_ary = array('yes' => 'YES', 'no' => 'NO');
@@ -1182,5 +1240,16 @@ class acp_dc_activity_management
    function acp_description($value, $key){
 		return '<textarea id="'.$key.'" cols="6" rows="20" name="config['.$key.']"  onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" >'.$value.'</textarea>';
    }
+   
+function apc_dc_subscibe_create_show($value, $name){
+		global $user;
+		$options = "<select name=$name id=$name>";
+		$options .= '<option value="a"' . (($value == "a") ? ' selected="selected"' : '') . '>' . $user->lang['ALL'] . '</option>';
+		$options .= '<option value="p"' . (($value == "p") ? ' selected="selected"' : '') . '>' . $user->lang['PAID'] . '</option>';
+		$options .= '<option value="np"' . (($value == "np") ? ' selected="selected"' : '') . '>' . $user->lang['NOT_PAID'] . '</option>';
+		$options .= '</select>';
+		
+		return $options;
+   }  
 }
 ?>

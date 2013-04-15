@@ -32,3 +32,15 @@ includes/ucp/prophpbb_antispam.php
 images/avatars/upload/*.jpg
 images/avatars/upload/*.gif
 images/avatars/upload/*.png
+
+# AC system tests and debug #
+#############################
+dc/dc_activity_controller.php
+dc/dc_singlepost.php
+dc/dc_mail_test.php
+dc/old_functions.txt
+dc/dc_singlepost_body.html
+styles/prosilver/templatedc_activity_user.html
+
+
+
