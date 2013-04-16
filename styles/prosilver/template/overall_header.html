@@ -89,14 +89,16 @@
 <!-- IF S_CONTENT_DIRECTION eq 'rtl' -->
 	<link href="{T_THEME_PATH}/bidi.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <!-- ENDIF -->
+<!-- INCLUDE ads/ads.js -->
 
 </head>
-
 <body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION}">
 
 <div id="wrap">
 	<a id="top" name="top" accesskey="t"></a>
+	
 	<div id="page-header">
+			{ADS_1}
 		<div class="headerbar">
 			<div class="inner"><span class="corners-top"><span></span></span>
 
@@ -165,6 +167,24 @@
 
 	</div>
 
+	<!-- IF ADS_2 -->
+	<br />
+	<div class="forabg">
+		<div class="inner"><span class="corners-top"><span></span></span>
+			<ul class="topiclist">
+				<li class="header">
+					<dl class="icon">
+						<dt>{L_ADVERTISEMENT}</dt>
+					</dl>
+				</li>
+			</ul>
+			<div style="padding: 5px 5px 2px 5px; font-size: 1.1em; background-color: #ECF1F3; margin: 0px auto; text-align: center;">
+				{ADS_2}
+			</div>
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+	<!-- ENDIF -->
+	
 	<a name="start_here"></a>
 	<div id="page-body">
 		<!-- IF S_BOARD_DISABLED and S_USER_LOGGED_IN and (U_MCP or U_ACP) -->

@@ -217,6 +217,21 @@
 	</div>
 
 	<hr class="divider" />
+	
+	<!-- IF (ADS_5 and postrow.S_FIRST_ROW) or (ADS_6 and not postrow.S_FIRST_ROW) -->
+	<div class="post bg3">
+		<div class="inner"><span class="corners-top"><span></span></span>
+			<div class="postbody" style="width: 100%;">
+				<h3>{L_ADVERTISEMENT}</h3>
+
+				<div style="font-size: 1.1em; margin: 0px auto; text-align: center;">
+					<!-- IF postrow.S_FIRST_ROW -->{ADS_5}<!-- ELSE -->{ADS_6}<!-- ENDIF -->
+				</div>
+			</div>
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+	<!-- ENDIF -->
+	
 <!-- END postrow -->
 <!-- IF S_QUICK_REPLY -->
 	<!-- INCLUDE quickreply_editor.html -->
@@ -237,6 +252,24 @@
 	<hr />
 <!-- ENDIF -->
 
+<!-- IF ADS_3 -->
+<div class="forabg">
+	<div class="inner"><span class="corners-top"><span></span></span>
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt>{L_ADVERTISEMENT}</dt>
+				</dl>
+			</li>
+		</ul>
+		<div style="padding: 5px 5px 2px 5px; font-size: 1.1em; background-color: #ECF1F3; margin: 0px auto; text-align: center;">
+			{ADS_3}
+		</div>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<br />
+<!-- ENDIF -->
+
 <div class="topic-actions">
 	<div class="buttons">
 	<!-- IF not S_IS_BOT and S_DISPLAY_REPLY_INFO -->
@@ -251,6 +284,25 @@
 		</div>
 	<!-- ENDIF -->
 </div>
+
+<!-- IF ADS_4 -->
+<br />
+<div class="forabg">
+	<div class="inner"><span class="corners-top"><span></span></span>
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt>{L_ADVERTISEMENT}</dt>
+				</dl>
+			</li>
+		</ul>
+		<div style="padding: 5px 5px 2px 5px; font-size: 1.1em; background-color: #ECF1F3; margin: 0px auto; text-align: center;">
+			{ADS_4}
+		</div>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<br />
+<!-- ENDIF -->
 
 <!-- INCLUDE jumpbox.html -->
 

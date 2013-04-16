@@ -253,6 +253,8 @@ window.addEvent('domready', function() {
 </style>
 <!-- ENDIF -->
 
+
+
 <!-- IF $ROK_IMAGESET_SWITCHER -->
 <!-- IF $COLOR_VARIATION eq 'style5' or $COLOR_VARIATION eq 'style6'-->
 <script type="text/javascript">
@@ -291,10 +293,42 @@ window.addEvent('domready', function() {
 </script>
 <!-- ENDIF -->
 <!-- ENDIF -->
+
+<!-- INCLUDE ads/ads.js -->
+
+<style type="text/css">
+#sidebarLeft 
+{
+position:absolute; z-index:99; top:40%; left:1%;
+ width:5%;
+
+}
+
+#sidebarRight 
+{
+position:absolute; z-index:99; top:40%; right:1%;
+ width:5%;
+
+}
+
+
+</style>
+
 </head>
 
 <body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION} backgroundlevel-{$QUASAR_BG_LEVEL} bodylevel-{$QUASAR_BODY_LEVEL} cssstyle-{$COLOR_VARIATION} font-family-$QUASAR_FONTFACE font-size-is-default col12">
 
+<!-- IF ADS_9 -->
+<div id="sidebarLeft">
+{ADS_9}
+</div>
+<!-- ENDIF -->
+
+<!-- IF ADS_10 -->
+<div id="sidebarRight">
+{ADS_10}
+</div>
+<!-- ENDIF -->
 <div id="rt-header">
     <div class="rt-container">
 	    <div id="rt-header2">
@@ -426,6 +460,7 @@ window.addEvent('domready', function() {
 								<div id="wrap">
 								    <a id="top" name="top" accesskey="t"></a>
 									    <div id="page-header">
+											{ADS_1}
 										    <!-- IF $QUASAR_MENUPOSITION eq 'full' or $QUASAR_MENUPOSITION eq 'fluid' -->
 											    <div class="navbar">
 												    <div class="inner">
@@ -456,6 +491,23 @@ window.addEvent('domready', function() {
 											<!-- ENDIF -->
 										</div>
 									</div>
+										<!-- IF ADS_2 -->
+										<br />
+										<div class="forabg">
+											<div class="inner"><span class="corners-top"><span></span></span>
+												<ul class="topiclist">
+													<li class="header">
+														<dl class="icon">
+															<dt>{L_ADVERTISEMENT}</dt>
+														</dl>
+													</li>
+												</ul>
+												<div style="padding: 5px 5px 2px 5px; font-size: 1.1em; background-color: #ECF1F3; margin: 0px auto; text-align: center;">
+													{ADS_2}
+												</div>
+											<span class="corners-bottom"><span></span></span></div>
+										</div>
+										<!-- ENDIF -->
 									<a name="start_here"></a>
 									<div id="page-body">
 									    <!-- IF S_BOARD_DISABLED and S_USER_LOGGED_IN and (U_MCP or U_ACP) -->

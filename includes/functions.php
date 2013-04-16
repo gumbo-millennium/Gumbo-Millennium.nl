@@ -4690,6 +4690,10 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 
 	// Which timezone?
 	$tz = ($user->data['user_id'] != ANONYMOUS) ? strval(doubleval($user->data['user_timezone'])) : strval(doubleval($config['board_timezone']));
+	
+	// Advertisement Management
+	require($phpbb_root_path . 'ads/functions.' . $phpEx);
+	setup_ads();
 
 	// Send a proper content-language to the output
 	$user_lang = $user->lang['USER_LANG'];
