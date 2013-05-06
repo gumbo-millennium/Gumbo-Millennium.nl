@@ -664,7 +664,7 @@ class activity {
 		// check if the group is in the db //
 		$current_managers = $this->get_group_manage_list("all");		// get a list of all the groups with acces
 		$current_managers_status_change = array();						// the list of all managers who status changes 
-		// check for exisiting managers with no status change
+		// check for exisiting managers with a status change
 		foreach($group_id_list AS $key => $current_group_id){				// loop through all group id (current_group_id) from the group_id_list
 			if(isset($current_managers[$current_group_id])){				// check if group id is in the current manager list
 				if( $current_managers[$current_group_id]['disabled'] != $new_status){ 	// check if current_group_id status is thesame as new status

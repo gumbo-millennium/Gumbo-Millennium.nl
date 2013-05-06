@@ -53,37 +53,41 @@ if(!$activity->get_read(intval($user->data['user_id']))){
 $template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
 if($status != 0){															// if a new status
-	switch($status){														// check new status
-		
-		case 1:																// new status = yes
-			user_new_status("yes",$activity);								// set new status to yes
-			// test sends messagers
-			$url = generate_board_url() . '/' . $user->page['page'];		// get current page
-			$messenger = new messenger(false);
-			$messenger->subject($activity->getName());
-			$messenger->template('dc_activity_subscribe',$user->data['user_lang']);
-			$messenger->to($user->data['user_email'], $user->data['username']);
-			$messenger->im($user->data['user_jabber'], $user->data['username']);
-			$messenger->assign_vars(array(
-				'ACTIVITY_NAME'    		=> $activity->getName(),
-				'USERNAME'    			=> $user->data['username'],
-				'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
-				'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
-				'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),
-				'DESCRIPTION'    		=> $activity->getDescription_preview(200,true),
-				'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
-				'COMMISSION'    		=> get_group_name($activity->getCommission())
-			));
-			$messenger->send($user->data['user_notify_type']);
-			$messenger->save_queue();
+	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){
+		trigger_error($user->lang['LOGIN_VIEWFORUM']);				// send error to the user
+	}else {
+		switch($status){														// check new status
+			case 1:																// new status = yes
+				user_new_status("yes",$activity);								// set new status to yes
+				// test sends messagers
+				$url = generate_board_url() . '/' . $user->page['page'];		// get current page
+				$messenger = new messenger(false);
+				$messenger->subject($activity->getName());
+				$messenger->template('dc_activity_subscribe',$user->data['user_lang']);
+				$messenger->to($user->data['user_email'], $user->data['username']);
+				$messenger->im($user->data['user_jabber'], $user->data['username']);
+				$messenger->assign_vars(array(
+					'ACTIVITY_NAME'    		=> $activity->getName(),
+					'USERNAME'    			=> $user->data['username'],
+					'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
+					'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
+					'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),
+					'DESCRIPTION'    		=> $activity->getDescription_preview(200,true),
+					'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
+					'COMMISSION'    		=> get_group_name($activity->getCommission())
+				));
+				$messenger->send($user->data['user_notify_type']);
+				$messenger->save_queue();
 
-			break;
-		case 2:																// new status = no					
-			user_new_status("no", $activity);								// set new status to no
-			break;
-		case 3:																// new status = maybe
-			user_new_status("maybe", $activity);							// set new status to maybe
-			break;
+				break;
+			case 2:																// new status = no					
+				user_new_status("no", $activity);								// set new status to no
+				break;
+			case 3:																// new status = maybe
+				// 6-5-2013: status maybe is not used annymore!
+				//user_new_status("maybe", $activity);							// set new status to maybe
+				break;
+		}
 	}
 }
 // get comment
