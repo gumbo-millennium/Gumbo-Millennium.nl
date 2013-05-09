@@ -53,7 +53,7 @@ if(!$activity->get_read(intval($user->data['user_id']))){
 $template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
 if($status != 0){															// if a new status
-	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){
+	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){	// check if user is guest or if user is inactive
 		trigger_error($user->lang['LOGIN_VIEWFORUM']);				// send error to the user
 	}else {
 		switch($status){														// check new status

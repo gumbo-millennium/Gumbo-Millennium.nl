@@ -276,7 +276,7 @@ class activity {
 			$this->set_error_log("Function: Fill; param $id is not a integer"); // set error log
 			return null;
 		}
-		$sql = 'SELECT *, count(*) amount FROM `dc_activity` WHERE id = ' . (int)$id; // build query
+		$sql = 'SELECT *, count(*) amount FROM `dc_activity` WHERE id = ' .  $db->sql_escape((int)$id); // build query
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);						// get row from the database
 		if($row['amount'] < 1){									// check if the the activity exist 
@@ -397,7 +397,7 @@ class activity {
 			FROM dc_activity_enroll as enroll 
 			LEFT JOIN `dc_users` AS users ON enroll.user_id=users.user_id  
 			LEFT JOIN  `dc_profile_fields_data` AS custom ON custom.user_id = enroll.user_id
-		WHERE enroll.activity_id = ". $this->id . $status . " 
+		WHERE enroll.activity_id = ".  $db->sql_escape($this->id) . $status . " 
 		ORDER BY ". $short .' '.$order;		
 		if($limit == 0){
 			$result = $db->sql_query($sql); // send query
@@ -501,7 +501,7 @@ class activity {
 			default:
 			$sql= 'UPDATE dc_activity_enroll 
 				SET '.$db->sql_build_array('UPDATE', $sql_ary) . ', datetime = CURRENT_TIMESTAMP
-				WHERE activity_id = '. intval($this->id) .' AND user_id = '. intval($user_id); // constructs a query that changes the status of user and this activity
+				WHERE activity_id = '.  $db->sql_escape(intval($this->id)) .' AND user_id = '.  $db->sql_escape(intval($user_id)); // constructs a query that changes the status of user and this activity
 		}
 		$result = $db->sql_query($sql);								// send query
 		if($db->sql_affectedrows()){						// check if something changed
@@ -533,7 +533,7 @@ class activity {
 	// checks if the user is enrolled, returns: 0: user is not enrolled, else: the status
 	function get_user_status($user){
 		global $db;												// get connection to the database
-		$sql = 'SELECT status, COUNT(*) AS amount FROM `dc_activity_enroll` WHERE user_id = ' .$user. ' AND activity_id = ' . $this->id . ' '; // constuct a query to get the status of a user with this activity 
+		$sql = 'SELECT status, COUNT(*) AS amount FROM `dc_activity_enroll` WHERE user_id = ' . $db->sql_escape($user). ' AND activity_id = ' .  $db->sql_escape($this->id) . ' '; // constuct a query to get the status of a user with this activity 
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);						// get the result
 		$db->sql_freeresult($result);							// remove query
@@ -560,7 +560,7 @@ class activity {
 			);
 			$sql= 'UPDATE dc_activity_enroll
 				SET '.$db->sql_build_array('UPDATE', $sql_ary) . '
-				WHERE activity_id = '. intval($this->id) .' AND user_id = '. intval($user_id);
+				WHERE activity_id = '.  $db->sql_escape(intval($this->id)) .' AND user_id = '.  $db->sql_escape(intval($user_id));
 			$db->sql_query($sql);	
 		}else{
 			$this->set_error_log("Function: set_user_comment; User not enrolled");
@@ -598,7 +598,7 @@ class activity {
 				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
-		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' . (int)$this->id . '\''. $status; // get a list from user_manage to this activity
+		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_group_manage` WHERE activity_id = \'' .  $db->sql_escape((int)$this->id) . '\''. $status; // get a list from user_manage to this activity
 		$result = $db->sql_query($sql);							// send query
 		$group_managers = array();
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
@@ -741,7 +741,7 @@ class activity {
 		global $db;
 		$change_list = null;
 		$counter = 0;
-		$sql = "SELECT user_id, datetime, modification FROM dc_activity_chancelog WHERE activity_id = '". (int)$this->id ."' ORDER BY datetime ASC";
+		$sql = "SELECT user_id, datetime, modification FROM dc_activity_chancelog WHERE activity_id = '".  $db->sql_escape((int)$this->id) ."' ORDER BY datetime ASC";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
@@ -803,7 +803,7 @@ class activity {
 				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null;									
 		}
-		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_groupacces` WHERE activity_id = \'' . $this->id . '\''. $status; // get a list from user_manage to this activity
+		$sql = 'SELECT group_id, created, disabled FROM `dc_activity_groupacces` WHERE activity_id = \'' .  $db->sql_escape($this->id) . '\''. $status; // get a list from user_manage to this activity
 		$result = $db->sql_query($sql);							// send query
 		$group_acces = array();
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
@@ -1010,7 +1010,7 @@ class activity {
 		global $db;
 		$error_list = null;
 		$counter = 0;
-		$sql = "SELECT user_id, user_ip, datetime, error FROM dc_activity_errorlog WHERE activity_id = '". (int)$this->id ."' ORDER BY datetime ASC";
+		$sql = "SELECT user_id, user_ip, datetime, error FROM dc_activity_errorlog WHERE activity_id = '".  $db->sql_escape((int)$this->id) ."' ORDER BY datetime ASC";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 		{
@@ -1149,7 +1149,7 @@ class activity {
 			return null;
 		if(gettype($amount) != "double")
 			return null;
-		$sql = "UPDATE `dc_activity_enroll` SET  price_payed = ". $amount ." WHERE user_id = ". $user_id ." AND 	activity_id = ". $this->id;
+		$sql = "UPDATE `dc_activity_enroll` SET  price_payed = ".  $db->sql_escape($amount) ." WHERE user_id = ".  $db->sql_escape($user_id) ." AND 	activity_id = ".  $db->sql_escape($this->id);
 		$db->sql_query($sql);
 		switch($result = $db->sql_affectedrows()){
 			case 0:
@@ -1170,7 +1170,7 @@ class activity {
 		global $db;							// get database connection
 		if(gettype($user_id) != "integer")
 			return null;	
-		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''.$user_id.'\' AND activity_id = \''. $this->id . '\'';							// get if user readed 
+		$sql = 'SELECT COUNT(*) count, activity_id FROM `dc_activity_read` WHERE user_id = \''. $db->sql_escape($user_id).'\' AND activity_id = \''.  $db->sql_escape($this->id) . '\'';							// get if user readed 
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);
 		if(intval($row['count']) ==  1)
@@ -1191,7 +1191,7 @@ class activity {
 				USERS_TABLE => 'u',
 			),
 
-			'WHERE'     =>  'u.user_id = ' . $user_id,
+			'WHERE'     =>  'u.user_id = ' .  $db->sql_escape($user_id),
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -1601,7 +1601,7 @@ class activity {
 		}
 		if(gettype($commission) != "integer")
 				return null;
-		$sql ="SELECT COUNT(*) count FROM `dc_groups` WHERE group_id ='" . $commission . "'";  // check if the group id exist
+		$sql ="SELECT COUNT(*) count FROM `dc_groups` WHERE group_id ='" .  $db->sql_escape($commission) . "'";  // check if the group id exist
 		$result = $db->sql_query($sql);							// send query
 		$row = $db->sql_fetchrow($result);
 		if( $row["count"] != 1 )								// if not found or there are more id's

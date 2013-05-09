@@ -25,6 +25,7 @@ include_once($phpbb_root_path . '/includes/functions_posting.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 class acp_dc_activity_management
 {
@@ -537,67 +538,12 @@ class acp_dc_activity_management
 		
 		// check default the input for a form
 		if($submit && isset($display_vars)){
-
-			foreach($display_vars['vars'] as $config_name => $vars){
-				// check all vars that are not allowd to be empty
-				if(is_array($vars)){  // filter only the input fields. (so legend1, legen2, ... are skipt )
-					if((empty($cfg_array[$config_name]) && !$vars['empty'])){
-						$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_EMPTY"])));
-					}else{
-						// check for forbidden chars
-						if(is_array($vars) && isset($vars['preg'])){ 				// isset formidden chars
-							if(preg_match("/".$vars['preg']."/", $cfg_array[$config_name]) && !(empty($cfg_array[$config_name]) && $vars['empty'])) // check input or input is empty (and allowed to be emty)
-								$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_PREG"])));		// set error
-						}else{
-							
-							//check for custom validates
-							//avaiable custom validates: text
-							switch($vars['validate']){
-								case 'text':
-									if(utf8_strlen($cfg_array[$config_name]) >= 65535 ){  // count characters max is 65535 (max chars in a MySQL text/blob)
-										$error[] = sprintf($user->lang['SETTING_TOO_LONG'], $user->lang[$vars['lang']], 65535);
-									}
-									break;
-							}
-							
-							 
-							// check for paterns
-							// available paterns: date, time, money
-							if(is_array($vars) && isset($vars['patern']) ){				// is set a patern
-								if(!(empty($cfg_array[$config_name]) && $vars['empty'])){	// check if input is emty and allowed to be empty 
-									$set_error = false;									// set no error
-									switch($vars['patern']['type']){
-										case 'date':									// if patern is a date
-											if(!valid_date($cfg_array[$config_name], $vars['patern']['format'])) // check input
-												$set_error = true;						// set error
-											break;
-										case 'time':									// if patern is a time
-											if(!valid_time($cfg_array[$config_name]))	// check input
-												$set_error = true;						// set error
-											break;
-										case 'money':									// if patern is money
-											if(!preg_match("/\d+(,\d{2}$)?$/",$cfg_array[$config_name])){ // check input
-												$set_error = true;						// set error
-											}
-											$cfg_array[$config_name] = floatval( preg_replace('/,/', '.', $cfg_array[$config_name]));	// convert input to proper double
-											break;
-									}
-									
-									if($set_error)										// error found
-										$error[] = ucfirst(strtolower($user->lang[$vars['lang']] .' '. $user->lang['WRONG_FORMAT'])); // set output error
-								}
-							}
-						}
-					}
-				}
-			}
+			$error= array_merge($error, check_form($display_vars, $cfg_array));
 		}
 		
 		//////////////////////////////////////
 		////// MODE SPECIFIC INPUT CHECK /////
 		//////////////////////////////////////
-		
-		
 		
 		//// mode  = new_activity  ////
 		if($submit && !count($error)){

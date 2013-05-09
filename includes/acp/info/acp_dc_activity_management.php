@@ -6,7 +6,7 @@ class acp_dc_activity_management_info
         return array(
             'filename'		=> 'acp_dc_activity_management',
             'title'			=> 'Activity management',
-            'version'		=> '1.0',
+            'version'		=> '1.3.1',
             'modes'			=> array(
                 'new_activity'     		=> array('title' => 'New event', 	'auth' => 'acl_a_new_activity', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
                 'recycle_activity'  	=> array('title' => 'Recycle event','auth' => 'acl_a_recyle_activity', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
