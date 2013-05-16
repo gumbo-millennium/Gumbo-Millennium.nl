@@ -183,42 +183,184 @@ class acp_dc_activity_management
 				$display_vars = array(
 					'title'	=> strtoupper($form_title),
 					'vars'	=> array(				
-						'legend1'				=> 'GENERAL_SETTINGS',		
-						
-						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => false, 'explain' => true ),
-						'start_date'			=> array('lang' => 'ACP_DC_ACT_START_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => false, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'start_time'			=> array('lang' => 'ACP_DC_ACT_START_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')),
-						
-						'end_date'				=> array('lang' => 'ACP_DC_ACT_END_DATE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => false, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'patern' => array( 'type' => 'date','format' =>'D-M-YYYY')), 
-						'end_time'				=> array('lang' => 'ACP_DC_ACT_END_TIME',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => false, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
-						'enroll'				=> array('lang' => 'ACP_DC_ACT_ENROL',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'apc_enroll', 'explain' => true , 'preg'=> '[^(yes)||(no)]'),
-						
-						
-						'location'				=> array('lang' => 'ACP_DC_ACT_LOCATION',		'validate' => 'string',	'type' => 'textarea:2:2', 'empty' => false, 'explain' => true, 'preg'=> '[^a-zA-Z0-9, ]'),
-						'pay_option'			=> array('lang' => 'ACP_DC_ACT_PAY_OPTION',		'validate' => 'string',	'type' => 'select', 'empty' => false,'method' => 'apc_pay_options', 'explain' => false, 'preg'=> '[^(cash)|(iDeal)]'),
-						'commission'			=> array('lang' => 'ACP_DC_ACT_COMMISSION',		'validate' => 'int',	'type' => 'select', 'empty' => false, 'method' => 'apc_commission', 'explain' => true, 'preg'=> '[^0-9]'),
-						
-						'legend2'				=> 'OPTIONAL_SETTINGS',
-						'enroll_date'			=> array('lang' => 'ACP_DC_ACT_ENROLL_DATE',	'validate' => 'string',	'type' => 'text:10:10','empty' => true, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'preg'=> '[^0-9-]' , 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'enroll_time'			=> array('lang' => 'ACP_DC_ACT_ENROLL_TIME',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append'  => '<br>HH:MM(:SS)' , 'preg'=> '[^0-9:]' , 'patern' => array( 'type' => 'time')),
-						'enroll_max'			=> array('lang' => 'ACP_DC_ACT_ENROLL_MAX',		'validate' => 'int',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'preg'=> '[^0-9]'),
-						'end_date_unsubscribe'	=> array('lang' => 'ACP_DC_ACT_END_DATE_UNSUBSCRIBE',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => true, 'append'  => '<br>(DD-MM-YYYY)', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')), 
-						'end_time_unsubscribe'	=> array('lang' => 'ACP_DC_ACT_END_TIME_UNSUBSCRIBE',		'validate' => 'string',	'type' => 'text:10:8',  'empty' => true, 'explain' => true, 'append'  => '<br>HH:MM(:SS)', 'preg'=> '[^0-9:]', 'patern' => array( 'type' => 'time')), 
-						'price'					=> array('lang' => 'ACP_DC_ACT_PRICE',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money')),
-						'price_member'			=> array('lang' => 'ACP_DC_ACT_PRICE_MEMBER',	'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money')),
-						
+						'legend1'	=> 'GENERAL_SETTINGS',	
+							'name' => array(
+								'lang' => 'ACP_DC_ACT_NAME',
+								'validate' => 'string',
+								'type' => 'text:20:100', 
+								'empty' => false,
+								'explain' => true 
+							),
+							'start_date' => array(
+								'lang' => 'ACP_DC_ACT_START_DATE',		
+								'validate' => 'string',	
+								'type' => 'text:10:10', 
+								'empty' => false, 'explain' => true, 
+								'append'  => '<br>(DD-MM-YYYY)', 
+								'preg'=> '[^0-9-]', 
+								'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+							),
+							'start_time'			=> array(
+								'lang' => 'ACP_DC_ACT_START_TIME',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => false,
+								'explain' => true,
+								'append'  => '<br>HH:MM(:SS)',
+								'preg'=> '[^0-9:]',
+								'patern' => array( 'type' => 'time')
+							),
+							'end_date'=> array(
+								'lang' => 'ACP_DC_ACT_END_DATE',
+								'validate' => 'string',
+								'type' => 'text:10:10',
+								'empty' => false,
+								'explain' => true,
+								'append'  => '<br>(DD-MM-YYYY)',
+								'patern' => array( 'type' => 'date','format' =>'D-M-YYYY')
+							), 
+							'end_time'	=> array(
+								'lang' => 'ACP_DC_ACT_END_TIME',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => false,
+								'explain' => true,
+								'append'  => '<br>HH:MM(:SS)',
+								'preg'=> '[^0-9:]',
+								'patern' => array( 'type' => 'time')
+							), 
+							'enroll'				=> array('lang' => 'ACP_DC_ACT_ENROL',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => false,
+								'method' => 'apc_enroll',
+								'explain' => true ,
+								'preg'=> '[^(yes)||(no)]'
+							),
+							'location'> array('lang' => 'ACP_DC_ACT_LOCATION',
+								'validate' => 'string',
+								'type' => 'textarea:2:2',
+								'empty' => false,
+								'explain' => true,
+								'preg'=> '[^a-zA-Z0-9, ]'
+							),
+							'pay_option' => array('lang' => 'ACP_DC_ACT_PAY_OPTION',
+								'validate' => 'string',
+								'type' => 'select',
+								'empty' => false,'method' => 'apc_pay_options',
+								'explain' => false,
+								'preg'=> '[^(cash)|(iDeal)]'),
+							'commission' => array('lang' => 'ACP_DC_ACT_COMMISSION',
+								'validate' => 'int',
+								'type' => 'select',
+								'empty' => false,
+								'method' => 'apc_commission',
+								'explain' => true,
+								'preg'=> '[^0-9]'
+							),
+							
+						'legend2' => 'OPTIONAL_SETTINGS',
+							'enroll_date' => array(
+								'lang' => 'ACP_DC_ACT_ENROLL_DATE',
+								'validate' => 'string',
+								'type' => 'text:10:10','empty' => true,
+								'explain' => true,
+								'append'  => '<br>(DD-MM-YYYY)',
+								'preg'=> '[^0-9-]' ,
+								'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
+							'enroll_time'=> array(
+								'lang' => 'ACP_DC_ACT_ENROLL_TIME',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'append'  => '<br>HH:MM(:SS)' ,
+								'preg'=> '[^0-9:]' ,
+								'patern' => array( 'type' => 'time')
+							),
+							'enroll_max' => array(
+								'lang' => 'ACP_DC_ACT_ENROLL_MAX',
+								'validate' => 'int',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'preg'=> '[^0-9]'
+							),
+							'end_date_unsubscribe'	=> array(
+								'lang' => 'ACP_DC_ACT_END_DATE_UNSUBSCRIBE',
+								'validate' => 'string',
+								'type' => 'text:10:10',
+								'empty' => true,
+								'explain' => true,
+								'append'  => '<br>(DD-MM-YYYY)',
+								'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+							), 
+							'end_time_unsubscribe'	=> array(
+								'lang' => 'ACP_DC_ACT_END_TIME_UNSUBSCRIBE',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'append'  => '<br>HH:MM(:SS)',
+								'preg'=> '[^0-9:]',
+								'patern' => array( 'type' => 'time')
+							), 
+							'price'	=> array(
+								'lang' => 'ACP_DC_ACT_PRICE',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'append' => ' euro',
+								'preg'=> '[^0-9,.]',  
+								'patern' => array( 'type' => 'money')
+							),
+							'price_member'=> array(
+								'lang' => 'ACP_DC_ACT_PRICE_MEMBER',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'append' => ' euro',
+								'preg'=> '[^0-9,.]',
+								'patern' => array( 'type' => 'money')
+							),
+							
 						'legend3'				=> 'ACP_DC_ACT_ACCES',
-						//add_group_manager: funtion select groups params: {config_value}, {key}, the group id's of excluded groups in the grouplist: 
-						/*
-							6 = BOTS
-							3 = REGISTERED_COPPA
-							7 = NEWLY_REGISTERED
-						*/
-						'add_group_manager'			=> array('lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',		'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title), 'explain' => true),
-						'add_group'				=> array('lang' => 'ACP_DC_ACT_ADD_GROUP',			'validate' => 'string',	'type' => 'custom', 'empty' => false, 'method' => 'select_group', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title), 'preg'=> '[<>]'),
-						
-						'legend4'				=> 'ACP_DC_ACT_DESCRIPTION',
-						'description'			=> array('lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'text',	'type' => 'custom', 'empty' => false, 'method' => 'acp_description', 'explain' => true),
+							//add_group_manager: funtion select groups params: {config_value}, {key}, the group id's of excluded groups in the grouplist: 
+							/*
+								6 = BOTS
+								3 = REGISTERED_COPPA
+								7 = NEWLY_REGISTERED
+							*/
+							'add_group_manager'	=> array(
+								'lang' => 'ACP_DC_ACT_ADD_GROUP_MANAGER',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => false,
+								'method' => 'select_group',
+								'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title),
+								'explain' => true
+							),
+							'add_group' => array(
+								'lang' => 'ACP_DC_ACT_ADD_GROUP',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => false,
+								'method' => 'select_group',
+								'explain' => true,
+								'params' => array('{CONFIG_VALUE}', '{KEY}', array(6,3,7), $form_title),
+								'preg'=> '[<>]'
+							),
+							
+						'legend4' => 'ACP_DC_ACT_DESCRIPTION',
+							'description' => array(
+								'lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'text',
+								'type' => 'custom',
+								'empty' => false,
+								'method' => 'acp_description',
+								'explain' => true
+							),
 												
 					)
 				);
@@ -385,10 +527,46 @@ class acp_dc_activity_management
 				);
 				if(isset($_POST['advanced']) || isset($_GET['advanced'])){
 					$advanced = array(
-						'start_date_from'		=> array('lang' => 'ACP_DC_ACT_START_DATE_FROM',	'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => false, 'append'  => '(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'start_date_to'			=> array('lang' => 'ACP_DC_ACT_START_DATE_TO',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => false, 'append'  => '(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'end_date_from'			=> array('lang' => 'ACP_DC_ACT_END_DATE_FROM',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => false, 'append'  => '(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
-						'end_date_to'			=> array('lang' => 'ACP_DC_ACT_END_DATE_TO',		'validate' => 'string',	'type' => 'text:10:10', 'empty' => true, 'explain' => false, 'append'  => '(DD-MM-YYYY)', 'preg'=> '[^0-9-]', 'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')),
+						'start_date_from' => array(
+							'lang' => 'ACP_DC_ACT_START_DATE_FROM',
+							'validate' => 'string',
+							'type' => 'text:10:10',
+							'empty' => true,
+							'explain' => false,
+							'append'  => '(DD-MM-YYYY)',
+							'preg'=> '[^0-9-]',
+							'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+						),
+						'start_date_to'	=> array(
+							'lang' => 'ACP_DC_ACT_START_DATE_TO',
+							'validate' => 'string',
+							'type' => 'text:10:10',
+							'empty' => true,
+							'explain' => false,
+							'append'  => '(DD-MM-YYYY)',
+							'preg'=> '[^0-9-]',
+							'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+						),
+						'end_date_from'=> array(
+							'lang' => 'ACP_DC_ACT_END_DATE_FROM',
+							'validate' => 'string',
+							'type' => 'text:10:10',
+							'empty' => true,
+							'explain' => false,
+							'append'  => '(DD-MM-YYYY)',
+							'preg'=> '[^0-9-]',
+							'patern' => array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+						),
+						'end_date_to' => array(
+							'lang' 		=> 'ACP_DC_ACT_END_DATE_TO',
+							'validate' 	=> 'string',
+							'type' 		=> 'text:10:10',
+							'empty' 	=> true,
+							'explain' 	=> false,
+							'append' 	=> '(DD-MM-YYYY)',
+							'preg' 		=> '[^0-9-]',
+							'patern' 	=> array( 'type' => 'date' ,'format' =>'D-M-YYYY')
+						),
 						
 					);
 					$display_vars['vars'] += $advanced;
@@ -448,12 +626,37 @@ class acp_dc_activity_management
 					$display_vars = array(
 						'title'	=> $form_title,
 						'vars'	=> array(				
-							'legend1'				=> 'GENERAL_SETTINGS',		
-							
-							'select_user'			=> array('lang' => 'ACP_DC_SELECT_USER',		'validate' => 'string',	'type' => 'custom', 'empty' => true, 'method' => 'select_user_selection', 'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list), 'explain' => true),
-							'select_user_multiple'				=> array('lang' => 'ACP_DC_SELECT_MULTI_USER',					'validate' => 'string',	'type' => 'custom', 'empty' => true, 'method' => 'select_user', 'explain' => true, 'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title), 'explain' => true),
-							'amount_paid'			=> array('lang' => 'ACP_DC_ACT_PAID',			'validate' => 'string',	'type' => 'text:10:8', 'empty' => true, 'explain' => true, 'append' => ' euro', 'preg'=> '[^0-9,.]',  'patern' => array( 'type' => 'money'), 'explain' => false),						
-						
+							'legend1'=> 'GENERAL_SETTINGS',		
+								'select_user' => array(
+									'lang' => 'ACP_DC_SELECT_USER',
+									'validate' => 'string',
+									'type' => 'custom',
+									'empty' => true,
+									'method' => 'select_user_selection',
+									'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list),
+									'explain' => true
+								),
+								'select_user_multiple'	=> array(
+									'lang' => 'ACP_DC_SELECT_MULTI_USER',
+									'validate' => 'string',
+									'type' => 'custom',
+									'empty' => true,
+									'method' => 'select_user',
+									'explain' => true,
+									'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title),
+									'explain' => true
+								),
+								'amount_paid'	=> array(
+									'lang' => 'ACP_DC_ACT_PAID',
+									'validate' => 'string',
+									'type' => 'text:10:8',
+									'empty' => true,
+									'explain' => true,
+									'append' => ' euro',
+									'preg'=> '[^0-9,.]',
+									'patern' => array( 'type' => 'money'),
+									'explain' => false
+								),	
 						)
 					);
 
@@ -1117,7 +1320,7 @@ class acp_dc_activity_management
 		global $user, $db;							
 		$sql = "SELECT g.group_id, g.group_name
 			FROM " . GROUPS_TABLE . " g
-			WHERE ". $db->sql_in_set('g.group_id', all_user_groups($user->data['user_id'], false, false)) ."
+			WHERE ". $db->sql_in_set('g.group_id', all_user_groups($user->data['user_id']), false, false) ."
 			AND ". $db->sql_in_set('g.group_id', unserialize(EXCLUDE_GROUPS_COMMISSION), true, false)."
 			AND ". $db->sql_in_set('g.group_type', unserialize(EXCLUDE_PRE_DEFINED_GROUPS), true, false);
 		$result = $db->sql_query($sql);
@@ -1180,7 +1383,6 @@ class acp_dc_activity_management
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_GROUP'].'</a> ]</dd>';
 		return $string;	
-		return "";
    }
   
    function acp_description($value, $key){
