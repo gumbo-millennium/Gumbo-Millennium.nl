@@ -28,7 +28,7 @@ $user->setup('mods/dc_activity');
 // Setup $auth_admin class so we can add tabulated survey permission options
 include($phpbb_root_path . 'includes/acp/auth.' . $phpEx);
 $auth_admin = new auth_admin();
-
+/*
 // Add foo permissions as local permissions
 // (you could instead make them global permissions by making the obvious changes below)
 $auth_admin->acl_add_option(array(
@@ -36,7 +36,7 @@ $auth_admin->acl_add_option(array(
     'global'    => array('a_view_tasks', 'a_add_tasks')
 ));
 
-
+*/
 $message = $user->lang['ADDED_PERMISSIONS'] . '<br /><br />';
 $message .= $user->lang['REMOVE_INSTALL'];
 trigger_error($message);
