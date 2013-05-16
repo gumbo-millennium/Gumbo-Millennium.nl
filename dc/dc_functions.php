@@ -52,9 +52,9 @@ function valid_date($date, $format = 'D-M-YYYY'){
 
 //validate a string to check if it is a valid time
 //only valid time input: hh:mm:ss hh:(0-23) mm:(0-60) ss:(0-60) 
-function valid_time($time_input){
+function valid_datetime($datetime_input){
 	
-	if(strtotime($time_input)) {
+	if(strtotime($datetime_input)) {
 		return true;			// valid time
 	} 
 	return false;				// unvalid time
@@ -111,9 +111,9 @@ function check_form($display_vars, $cfg_array){
 								if(!valid_date($cfg_array[$config_name], $vars['patern']['format'])) // check input
 									$set_error = true;						// set error
 								break;
+							case 'datetime':								// if patern is a datetime
 							case 'time':									// if patern is a time
-								if(!valid_time($cfg_array[$config_name]))	// check input
-									
+								if(!valid_datetime($cfg_array[$config_name]))	// check input
 									$set_error = true;						// set error
 								break;
 							case 'money':									// if patern is money

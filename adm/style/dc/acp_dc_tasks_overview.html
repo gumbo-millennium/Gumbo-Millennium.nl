@@ -1,0 +1,56 @@
+<!-- INCLUDE overall_header.html -->
+
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_TITLE_EXPLAIN}</p>
+{CURRENT_MODE}
+<!-- IF TASKS_FOUND -->
+	<!-- BEGIN task_by_group -->
+	<fieldset class="tabulated">
+	<h3>{task_by_group.GROUP_NAME}</h3>
+	<table cellspacing="1">
+	<thead>
+	<tr>
+		<th>{L_TASK_TITLE}</th>
+		<th>{L_TASK_STATUS}</th>
+		<th>{L_TASK_DEADLINE}</th>
+		<th>{L_TASK_USB_TASKS}</th>
+		<th>{L_TASK_ASSIGNED}</th>
+		<th>{L_ACTION}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- BEGIN task -->
+		<!-- IF task.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+		<td style="text-align: left;">{task_by_group.task.TASK_TITLE}</td>
+		<!-- IF task_by_group.task.TASK_STATUS -->
+			<td style="text-align: left;">{L_TASK_COMPLETE}</td>
+		<!-- ELSE -->
+			<td style="text-align: left;"><font color="red">{L_TASK_UNCOMPLETE}</font></td>
+		<!-- ENDIF -->
+		<td style="text-align: left;">{task_by_group.task.TASK_DEADLINE}</td>
+		<td style="text-align: left;">{task_by_group.task.TASK_SUB_TASK_COUNT}</td>
+		<td style="text-align: left;">{task_by_group.task.TASK_USERS}</td>
+		<td style="text-align: left;">
+			<!-- IF task_by_group.task.TASK_STATUS -->
+			<a href="{task_by_group.task.URL_TASK_UNCOMPLETE}">{L_TASK_UNCOMPLETE}</a>
+		<!-- ELSE -->
+			<a href="{task_by_group.task.URL_TASK_COMPLETE}">{L_TASK_COMPLETE}</a>
+		<!-- ENDIF -->
+		</td>
+
+	</tr>
+	<!-- END task -->
+	</tbody>
+	</table>
+
+
+	</fieldset>
+	<!-- END task_by_group -->
+<!-- ELSE -->
+	<div class="errorbox">
+		<p>{L_TASK_NO_TASKS}</p>
+	</div>
+<!-- ENDIF -->
+<!-- INCLUDE overall_footer.html -->

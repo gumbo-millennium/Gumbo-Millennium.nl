@@ -244,6 +244,11 @@ define('LOG_TABLE',					$table_prefix . 'log');
 //-- add
 define('LOG_LC_EXCLUDE_IP_TABLE',	$table_prefix . 'log_lc_exclude_ip');
 //-- end : log connections --------------------------------------------------------
+// -- mod : tasks system ----------------------------------------------------------
+define('TASKS_TABLE', 				$table_prefix .'tasks');
+define('TASK_USER_TABLE', 			$table_prefix . 'task_user');
+define('TASK_CHILD_TABLE',			$table_prefix .'task_child');
+// -- end : tasks system ----------------------------------------------------------
 define('LOGIN_ATTEMPT_TABLE',		$table_prefix . 'login_attempts');
 define('MODERATOR_CACHE_TABLE',		$table_prefix . 'moderator_cache');
 define('MODULES_TABLE',				$table_prefix . 'modules');
