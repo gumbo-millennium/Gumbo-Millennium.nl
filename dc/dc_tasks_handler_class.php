@@ -69,7 +69,7 @@ class Tasks_handler {
 		}
 		
 		$sql_array = array(
-			'SELECT'    => 'tsk.*, cld.task_id_parent, count(cld.task_id_parent) AS count_childs',
+			'SELECT'    => 'tsk.*, cld_cld.task_id_parent, count(cld_par.task_id_parent) AS count_childs',
 
 			'FROM'      => array(
 				TASKS_TABLE  => 'tsk',
@@ -77,9 +77,14 @@ class Tasks_handler {
 
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'  => array(TASK_CHILD_TABLE => 'cld'),
-					'ON'    => 'tsk.id = cld.task_id_parent'
-				)
+					'FROM'  => array(TASK_CHILD_TABLE => 'cld_cld'),
+					'ON'    => 'tsk.id = cld_cld.task_id_child'
+				),
+				array(
+					'FROM'  => array(TASK_CHILD_TABLE => 'cld_par'),
+					'ON'    => 'tsk.id = cld_par.task_id_parent'
+				),
+				
 			),
 			'GROUP_BY' => 'tsk.id',
 			'ORDER_BY'  => $short .' '.$order,
@@ -106,8 +111,8 @@ class Tasks_handler {
 			case 1:
 			default:
 				$sql_array['WHERE'] = $db->sql_in_set('group_id', all_user_groups($user_id));
-
 		}
+			$sql_array['WHERE'] .= 'AND cld_cld.task_id_parent IS NULL';  
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);							// send query
 		
