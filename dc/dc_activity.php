@@ -52,7 +52,8 @@ if(!$activity->get_read(intval($user->data['user_id']))){
 // change enroll status
 $template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
 $status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
-if($status != 0){															// if a new status
+
+if($status != 0 && check_form_key('chance_the_subscribe_status')){															// if a new status
 	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){	// check if user is guest or if user is inactive
 		trigger_error($user->lang['LOGIN_VIEWFORUM']);				// send error to the user
 	}else {
@@ -96,14 +97,14 @@ if($status != 0){															// if a new status
 // So if the input is the salt there is no new comment. 
 $salt = (String)mt_rand(); 													// create (string) salt for gettting the comment 
 $comment = utf8_normalize_nfc(request_var('comment', $salt)); 									// get new comment (default = $salt: no new comment)
-if($comment != $salt){														// check for a new comment
+if($comment != $salt && check_form_key('chance_the_subscribe_status')){														// check for a new comment
 	if(array_key_exists($user->data['user_id'], $activity->get_all_status("all"))){ 			// check if user has enrolled
 		$activity->set_user_comment($user->data['user_id'],$comment); 		// set new comment
 		$template->assign_var('COMMENT_SAVED', true);						// set template saved	
 	}
 }
 
-
+add_form_key('chance_the_subscribe_status'); // set form key to avoid cross side scripting
 // set default variables
 $template->assign_var('TITLE', $activity->getName());						// set title
 $template->assign_var('DESCRIPTION', $activity->getDescription());			// set description
@@ -202,8 +203,10 @@ $template->assign_var('URL_CHANGE_STATUS', append_sid($phpbb_root_path.'dc/dc_ac
 // some additional words for transalation
 $template->assign_var('LANG_TILL', strtolower($user->lang['DC_ACT_LANG_TILL']));
 $template->assign_var('LANG_ENROLLS', $user->lang['DC_ACT_LANG_ENROLLS']);
-$template->assign_var('LANG_SUBSCRIBE', $user->lang['DC_ACT_LANG_SUBSCRIBE']);
-$template->assign_var('LANG_UNSUBSCRIBE', $user->lang['DC_ACT_UNSUBSCRIBE']);
+$template->assign_var('LANG_SUBSCRIPTIONS', $user->lang['DC_ACT_LANG_SUBSCRIBE']);  
+$template->assign_var('LANG_UNSUBSCRIPTIONS', $user->lang['DC_ACT_UNSUBSCRIBE']);
+$template->assign_var('LANG_SUBSCRIBE', $user->lang['ACP_DC_ACT_ENROL']);  
+$template->assign_var('LANG_UNSUBSCRIBE', $user->lang['ACP_DC_ACT_DEENROL']);  
 $template->assign_var('LANG_DATE', $user->lang['DC_ACT_LANG_DATE']);
 $template->assign_var('LANG_PRICE', $user->lang['DC_ACT_LANG_PRICE']);
 $template->assign_var('LANG_MEMBER', strtolower($user->lang['DC_ACT_LANG_MEMBER']));

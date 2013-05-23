@@ -58,7 +58,7 @@
 				<dt><strong>{LANG_ENROLL_TIME}:</strong></dt>
 						<dd>{ENROLL_DATE}</dd>
 				<dt>&nbsp;</dt>
-				<dt><strong>{LANG_UNSUBSCRIBE}:</strong></dt>
+				<dt><strong>{LANG_UNSUBSCRIPTIONS}:</strong></dt>
 					<dd>{UNSUBSCRIBE_MAX_DATETIME}</dd>	
 			<!-- ELSE -->
 				<dd>{LANG_NO}</dd>
@@ -115,7 +115,7 @@
 					<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
 						<dd>&#8364;{USER_ENROLLED_PAID}</dd>
 					<dt>&nbsp;</dt>
-					<dt><h3><strong>{LANG_SUBSCRIBE}:</strong></h3></dd>
+					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dd>
 						
 						<dd>{USER_ENROLLED_STATUS}</dd>
 						
@@ -123,7 +123,8 @@
 							<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
 						<!-- ENDIF -->
 					<dt>&nbsp;</dt>
-					<form action="{URL_STATUS}" method="GET">
+					<form action="{URL_STATUS}" method="POST">
+						{S_FORM_TOKEN}
 						<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
 						<!-- IF COMMENT_SAVED -->
 						<dd>{LANG_SAVED}</dd>
@@ -135,13 +136,18 @@
 					</form>	
 		<!-- ELSE -->
 			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-					<dt><h3><strong>{LANG_SUBSCRIBE}:</strong></hd></dt>
-						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX -->
-						<dd><a href="{URL_CHANGE_STATUS_YES}">{LANG_YES}</a></dd>
-						<!-- ENDIF -->
-						<dd><a href="{URL_CHANGE_STATUS_NO}">{LANG_NO}</a></dd>
+					<form action="{URL_CLEAN}" method="POST">
+					{S_FORM_TOKEN}
+					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></hd></dt>
+						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX  && USER_ENROLLED_STATUS != 'Yes'-->
+						
+						<dd><button name="status" type="submit" value="1"><h2>{LANG_SUBSCRIBE}<h2></button></dd>
+						<!-- ELSE -->
+						<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
+						
 						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-
+						<!-- ENDIF -->
+					</form>
 			<!-- ELSEIF ENROLL -->
 					<dt>{LANG_ENROLL_CLOSED}</dt>
 				<!-- ELSE -->

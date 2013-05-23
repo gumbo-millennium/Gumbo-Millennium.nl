@@ -237,7 +237,7 @@ class acp_dc_activity_management
 								'explain' => true ,
 								'preg'=> '[^(yes)||(no)]'
 							),
-							'location'> array('lang' => 'ACP_DC_ACT_LOCATION',
+							'location' => array('lang' => 'ACP_DC_ACT_LOCATION',
 								'validate' => 'string',
 								'type' => 'textarea:2:2',
 								'empty' => false,

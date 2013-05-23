@@ -89,6 +89,7 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_NAME'  					=> 'Name of the event',
     'ACP_DC_ACT_NAME_EXPLAIN'  			=> 'Give the new event a name',
     'ACP_DC_ACT_ENROL'  				=> 'Subscribe',
+    'ACP_DC_ACT_DEENROL'  				=> 'Unsubscribe',
     'ACP_DC_ACT_ENROL_EXPLAIN'  		=> 'Let people subscribe for this event',
     'ACP_DC_ACT_LOCATION'  				=> 'Location',
     'ACP_DC_ACT_LOCATION_EXPLAIN'  		=> 'Enter the location from where the event starts',
