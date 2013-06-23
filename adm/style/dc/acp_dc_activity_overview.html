@@ -17,7 +17,9 @@
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
-	<th>{L_ACTION}</th>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<th>{L_ACTION}</th>
+	<!-- ENDIF -->
 </tr>
 </thead>
 <tbody>
@@ -32,15 +34,23 @@
 	<!-- ELSE -->
 		<td style="text-align: center;">{L_EVENT_DEACTIVE}</td>        
 	<!-- ENDIF -->
-	<td style="text-align: center;">
-		<a href="{events_now.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
-		<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
-		<!-- IF events_now.EVENT_ACTIVE -->
-			<a href="{events_now.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
-		<!-- ELSE -->
-			<a href="{events_now.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
-		<!-- ENDIF -->
-	</td>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<td style="text-align: center;">
+			<!-- IF PRMISSN_EDIT -->
+				<a href="{events_now.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_SBSCRB_LST -->
+				<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_STATE -->
+				<!-- IF events_now.EVENT_ACTIVE -->
+					<a href="{events_now.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
+				<!-- ELSE -->
+					<a href="{events_now.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+		</td>
+	<!-- ENDIF -->
 </tr>
 <!-- END events_now -->
 </tbody>
@@ -60,7 +70,9 @@
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
-	<th>{L_ACTION}</th>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<th>{L_ACTION}</th>
+	<!-- ENDIF -->
 </tr>
 </thead>
 <tbody>
@@ -75,15 +87,23 @@
 	<!-- ELSE -->
 		<td style="text-align: center;">{L_EVENT_DEACTIVE}</td>        
 	<!-- ENDIF -->
-	<td style="text-align: center;">
-		<a href="{events_active.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
-		<a href="{events_active.U_ENROLL}">{L_ENROLLS}</a> &#8226;
-		<!-- IF events_active.EVENT_ACTIVE -->
-			<a href="{events_active.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
-		<!-- ELSE -->
-			<a href="{events_active.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
-		<!-- ENDIF -->
-	</td>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<td style="text-align: center;">
+			<!-- IF PRMISSN_EDIT -->
+				<a href="{events_now.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_SBSCRB_LST -->
+				<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_STATE -->
+				<!-- IF events_now.EVENT_ACTIVE -->
+					<a href="{events_now.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
+				<!-- ELSE -->
+					<a href="{events_now.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+		</td>
+	<!-- ENDIF -->
 </tr>
 <!-- END events_active -->
 </tbody>
@@ -102,7 +122,9 @@
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
 	<th>{L_EVENT_STATE}</th>
-	<th>{L_ACTION}</th>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<th>{L_ACTION}</th>
+	<!-- ENDIF -->
 </tr>
 </thead>
 <tbody>
@@ -117,15 +139,23 @@
 	<!-- ELSE -->
 		<td style="text-align: center;">{L_EVENT_DEACTIVE}</td>        
 	<!-- ENDIF -->
-	<td style="text-align: center;">
-		<a href="{events_deactive.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
-		<a href="{events_deactive.U_ENROLL}">{L_ENROLLS}</a> &#8226;
-		<!-- IF events_deactive.EVENT_ACTIVE -->
-			<a href="{events_deactive.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
-		<!-- ELSE -->
-			<a href="{events_deactive.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
-		<!-- ENDIF -->
-	</td>
+	<!-- IF PRMISSN_EDIT || PRMISSN_STATE || PRMISSN_SBSCRB_LST -->
+		<td style="text-align: center;">
+			<!-- IF PRMISSN_EDIT -->
+				<a href="{events_now.U_EDIT}">{L_EVENT_EDIT}</a> &#8226; 
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_SBSCRB_LST -->
+				<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_STATE -->
+				<!-- IF events_now.EVENT_ACTIVE -->
+					<a href="{events_now.EVENT_DEACTIVATE}">{L_EVENT_DEACTIVATE}</a>
+				<!-- ELSE -->
+					<a href="{events_now.EVENT_ACTIVATE}">{L_EVENT_ACTIVATE}</a> 
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+		</td>
+	<!-- ENDIF -->
 </tr>
 <!-- END events_deactive -->
 </tbody>
@@ -146,7 +176,9 @@
 	<th>{L_EVENT_COMMISSION}</th>
 	<th>{L_EVENT_STARTDATETIME}</th>
 	<th>{L_EVENT_ENROLLED}</th>
-	<th>{L_ACTION}</th>
+	<!-- IF  PRMISSN_RECYLE || PRMISSN_SBSCRB_LST -->
+		<th>{L_ACTION}</th>
+	<!-- ENDIF -->
 </tr>
 </thead>
 <tbody>
@@ -156,8 +188,16 @@
 	<td style="text-align: center;">{events_past.EVENT_COMMISSION}</td>
 	<td style="text-align: center;">{events_past.START_DATE_TIME}</td>
 	<td style="text-align: center;">{events_past.EVENT_ENTERED}</td>
-	<td style="text-align: center;"><a href="{events_past.U_ENROLL}">{L_ENROLLS}</a> &#8226;
-	<a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
+	<!-- IF  PRMISSN_RECYLE || PRMISSN_SBSCRB_LST -->
+		<td style="text-align: center;">
+			<!-- IF PRMISSN_SBSCRB_LST -->
+				<a href="{events_now.U_ENROLL}">{L_ENROLLS}</a> &#8226;
+			<!-- ENDIF -->
+			<!-- IF PRMISSN_RECYLE -->
+			<a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a>
+			<!-- ENDIF -->
+		</td>
+	<!-- ENDIF -->
 </tr>
 <!-- END events_past -->
 </tbody>

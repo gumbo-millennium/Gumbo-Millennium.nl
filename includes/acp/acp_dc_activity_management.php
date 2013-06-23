@@ -500,9 +500,16 @@ class acp_dc_activity_management
 					'S_MODE'				=> $mode,
 					'L_ENROLLS'				=> ucfirst(strtolower($user->lang['DC_ACT_LANG_ENROLLS'])),
 					'U_ACTION'				=> $this->u_action,
-					'SUBMIT'				=> $user->lang['ACP_SUBMIT_CHANGES'])
+					'SUBMIT'				=> $user->lang['ACP_SUBMIT_CHANGES'],
 					
-				);
+					'PRMISSN_EDIT'			=> $auth->acl_get('a_edit_activity'),
+					'PRMISSN_RECYLE'		=> $auth->acl_get('a_act_recyle'),
+					'PRMISSN_STATE'			=> $auth->acl_get('a_act_chance_state'),
+					'PRMISSN_SBSCRB_LST'	=> $auth->acl_get('a_act_view_subscribe_list')
+					
+				));
+				
+				//var_dump($auth->acl_get('a_edit_activity'));
 				
 				
 				$this->page_title = 'ACP_DC_ACT_OVERVIEW';
