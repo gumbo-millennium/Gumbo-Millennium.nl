@@ -1,0 +1,113 @@
+<!-- INCLUDE overall_header.html -->
+
+	<script type="text/javascript">
+	// <![CDATA[
+
+		var form_name = '{FORM_TITLE}';
+		var text_name = 'config[description]';
+
+		// Define the bbCode tags
+		var bbcode = new Array();
+		var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]'<!-- BEGIN custom_tags -->, {custom_tags.BBCODE_NAME}<!-- END custom_tags -->);
+		var imageTag = false;
+
+		// Helpline messages
+		var help_line = {
+			b: '{LA_BBCODE_B_HELP}',
+			i: '{LA_BBCODE_I_HELP}',
+			u: '{LA_BBCODE_U_HELP}',
+			q: '{LA_BBCODE_Q_HELP}',
+			c: '{LA_BBCODE_C_HELP}',
+			l: '{LA_BBCODE_L_HELP}',
+			o: '{LA_BBCODE_O_HELP}',
+			p: '{LA_BBCODE_P_HELP}',
+			w: '{LA_BBCODE_W_HELP}',
+			s: '{LA_BBCODE_S_HELP}',
+			f: '{LA_BBCODE_F_HELP}',
+			y: '{LA_BBCODE_Y_HELP}',
+			d: '{LA_BBCODE_D_HELP}',
+			tip: '{L_STYLES_TIP}'
+			<!-- BEGIN custom_tags -->
+				,cb_{custom_tags.BBCODE_ID}: '{custom_tags.A_BBCODE_HELPLINE}'
+			<!-- END custom_tags -->
+		}
+
+	// ]]>
+
+		function move_draft_{donation_pages.S_DONATION_TYPE}()
+		{
+		document.getElementById("{donation_pages.S_DONATION_TYPE}").value = document.getElementById("donation_draft").value;
+		}
+
+	</script>
+	<script type="text/javascript" src="{T_TEMPLATE_PATH}/editor.js"></script>
+	
+
+<a name="maincontent"></a>
+<h1 id="henk">{L_TITLE}: {EVENT_TITLE}</h1>
+
+<p>{L_TITLE_EXPLAIN}</p>
+
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="{FORM_TITLE}" method="post" action="{U_ACTION}">
+<!-- BEGIN options -->
+	<!-- IF options.S_LEGEND -->
+		<!-- IF not options.S_FIRST_ROW -->
+			</fieldset>
+		<!-- ENDIF -->
+		<fieldset>
+			<legend>{options.LEGEND}</legend>
+	<!-- ELSE -->
+
+		<dl>
+			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+			<dd>{options.CONTENT}</dd>
+		</dl>
+
+	<!-- ENDIF -->
+<!-- END options -->
+
+<!-- IF S_AUTH -->
+	<!-- BEGIN auth_tpl -->
+		{auth_tpl.TPL}
+	<!-- END auth_tpl -->
+<!-- ENDIF -->
+</fieldset>
+<!-- IF PREVIEW -->
+<fieldset>
+	<legend>{L_PREVIEW}</legend>
+	<dl>
+		<dt><label>{L_RECIEVERS}</label></dt>
+		<dd>{S_RECIEVERS}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_FROM}</label></dt>
+		<dd>{S_FROM}</dd>
+	</dl>
+	<dl> 
+		<dt><label>{L_SUBJECT}</label></dt>
+		<dd>{S_SUBJECT}</dd>
+	</dl>	
+	<dl>
+		<dt><label>{L_MESSAGE}</label></dt>
+		<dd>{S_MESSAGE}</dd>
+	</dl>	
+</fieldset>	
+<!-- ENDIF -->
+<fieldset>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SEND_EMAIL}" />
+		<input class="button1" type="submit" id="preview" name="preview" value="{L_PREVIEW}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>	
+</form>
+
+<!-- INCLUDE overall_footer.html -->

@@ -18,6 +18,9 @@ define("GROUP_SEPARATOR", ",");											// separator for selecting groups
 define("EXCLUDE_PRE_DEFINED_GROUPS", serialize(array(3)));				// exclude pre definde (like ADMINISTRATORS) groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 define("EXCLUDE_GROUPS_COMMISSION", serialize(array(9, 10, 11)));		// exclude groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 
+define ("CHANCE_PAYMENT", 1);
+define ("SEND_EMAIL", 2);
+
 // include functions
 include ($phpbb_root_path . 'dc/dc_activity_management_class.' . $phpEx);
 include ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
@@ -27,6 +30,7 @@ include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 class acp_dc_activity_management
 {
    var $u_action;
@@ -42,6 +46,7 @@ class acp_dc_activity_management
 
 		$action	= request_var('action', '');
 		$submit = (isset($_POST['submit'])) ? true : false;
+		$preview = (isset($_POST['preview'])) ? true : false;
 		$activitys_controller = new activity_user();
 		
 		// if mode is edit_activity this varible can change to false if the activity is 'current'
@@ -355,7 +360,8 @@ class acp_dc_activity_management
 							
 						'legend4' => 'ACP_DC_ACT_DESCRIPTION',
 							'description' => array(
-								'lang' => 'ACP_DC_ACT_DESCRIPTION','validate' => 'text',
+								'lang' => 'ACP_DC_ACT_DESCRIPTION',
+								'validate' => 'text',
 								'type' => 'custom',
 								'empty' => false,
 								'method' => 'acp_description',
@@ -419,7 +425,7 @@ class acp_dc_activity_management
 				
 				foreach($comming_activities AS $index => $activity){
 					$event_active = (($activity->getActive() == 1) ? "_active" : "_deactive");
-					$event_active = ((($activity->getStartDatetime() <= new Datetime("now")) && ($activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active );
+					$event_active = ((($activity->getStartDatetime() <= new Datetime("now")) && ($activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active ); // check if event is now, if active block: events_now
 
 					// creates 3 block_vars: event_active, event_deactive and event_now
 					$template->assign_block_vars('events'.$event_active, array(
@@ -435,6 +441,7 @@ class acp_dc_activity_management
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						
 						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
+						'ENROLL_LINK'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
 						'U_EDIT'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=edit_activity&amp;id=' . $activity->getId()),
 					));
 				}
@@ -460,6 +467,7 @@ class acp_dc_activity_management
 				$events_past = $activity_management->search($search, 10);
 				
 				foreach($events_past AS $index => $activity){
+					
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
 						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
@@ -469,9 +477,11 @@ class acp_dc_activity_management
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						
 						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
+						'ENROLL_LINK'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
 						
 						'U_RECYCLE'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=recycle_activity&amp;id=' . $activity->getId())
 					));
+
 				}
 				
 				// set text for activities
@@ -630,10 +640,25 @@ class acp_dc_activity_management
 					$form_title = 'ACP_DC_ACT_ENROLL';
 					add_form_key($form_key);
 					
+					$action_options = array(
+						CHANCE_PAYMENT 	=> $user->lang['ACP_DC_ACTION_PAY'],
+						SEND_EMAIL 		=> $user->lang['ACP_DC_ACTION_EMAIL'],
+					);
+					
 					$display_vars = array(
 						'title'	=> $form_title,
 						'vars'	=> array(				
-							'legend1'=> 'GENERAL_SETTINGS',		
+							'legend1'=> 'GENERAL_SETTINGS',
+								'action_options' => array(
+									'lang' => 'ACP_DC_ACTION_OPTIONS',
+									'validate' => 'int',
+									'type' => 'select',
+									'empty' => true,
+									'method' => 'apc_dropdown',
+									'params' => array('{CONFIG_VALUE}', '{KEY}', $action_options, "true"),
+									'explain' => true
+								),
+								
 								'select_user' => array(
 									'lang' => 'ACP_DC_SELECT_USER',
 									'validate' => 'string',
@@ -663,7 +688,7 @@ class acp_dc_activity_management
 									'preg'=> '[^0-9,.]',
 									'patern' => array( 'type' => 'money'),
 									'explain' => false
-								),	
+								),
 						)
 					);
 
@@ -692,10 +717,94 @@ class acp_dc_activity_management
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
 					'L_DISPLAY_LIMIT'		=> $user->lang['ACP_DC_ACT_DISPLAY_LIMIT'],
+					'L_ADD_USER'			=> $user->lang['ADD_USER'],
+					'L_ADD_USERS'			=> $user->lang['ADD_USERS'],
 				));		
 					
 				$this->page_title = 'ACP_DC_ACT_ENROLL';
 				$this->tpl_name = 'dc/acp_dc_activity_enrolls';
+				break;
+			case 'send_mail':
+				
+				$user->add_lang('acp/email');
+				$form_key = 'acp_send_mail';
+				$form_title = 'ACP_DC_AC_SEND_MAIL';
+				add_form_key($form_key);
+				
+				$random_seed = $this->generateRandomString();
+				$email_to_users = utf8_normalize_nfc(request_var('usrid', $random_seed));	// get all the users ids to send to
+				$activity_id = intval(utf8_normalize_nfc(request_var('id', $random_seed)));	// get current event
+				
+				if($activity_id != $random_seed){										// check if event exists
+					$activity = new activity();								// make a new activity
+					$activity->fill(intval($activity_id));							// fill the new activity from the db
+				}else{
+					trigger_error($user->lang['DC_ACT_NO_ACT']);
+				}
+				user_get_id_name(explode(GROUP_SEPARATOR, $email_to_users),$usernames);
+				if($email_to_users != $random_seed){
+					
+					$this->new_config['send_to_users'] =  implode("\n", $usernames);
+					
+				}
+				
+				$template->assign_vars(array(
+					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
+					'L_PRICE'				=> $user->lang['ACP_DC_ACT_PRICE'],
+				));	
+				
+				$display_vars = array(
+					'title'	=> $form_title,
+					
+					'vars'	=> array(				
+						'legend1'=> 'APC_DC_SEND_MAIL_SETTINGS',
+							'send_to_users'	=> array(
+								'lang' => 'SEND_TO_USERS',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => true,
+								'method' => 'select_user',
+								'explain' => true,
+								'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title),
+								'explain' => true
+							),
+							'subject'	=> array(
+								'lang' => 'SUBJECT',
+								'validate' => 'string',
+								'type' => 'text:50:100',
+								'empty' => false,
+								'explain' => false,
+								'append' => " - ". $activity->getName()
+							),
+							'from'	=> array(
+								'lang' => 'DC_ACT_EMAIL_FROM',
+								'validate' => 'emailaddress',
+								'type' => 'text:50:100',
+								'empty' => true,
+								'explain' => true,
+							),
+							
+							'message'	=> array(
+								'lang' => 'MASS_MESSAGE',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => false,
+								'method' => 'acp_description',
+								'explain' => false
+							),	
+					)
+				);
+
+					// set text for activities
+					$template->assign_vars(array(
+						'FORM_TITLE'			=> $form_title,
+						'EVENT_TITLE'			=> $activity->getName(),
+						'L_EVENT_TITLE'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_NAME'])),
+					));					
+				
+			
+				$this->page_title = 'ACP_DC_AC_SEND_MAIL';
+				$this->tpl_name = 'dc/acp_dc_activity_send_mail';
 				break;
 			case 'find_user_events':
 				$this->page_title = 'Find user events';
@@ -721,8 +830,14 @@ class acp_dc_activity_management
 		}
 		$cfg_array = utf8_normalize_nfc(request_var('config', array('' => ''), true));
 		$error = array();
-		if(!isset($cfg_array["commission"]))
-				$cfg_array["commission"] = $this->new_config['commission'];
+		switch($mode){
+			case 'edit_activity': 
+			case 'recycle_activity': 
+			case 'new_activity':
+				if(!isset($cfg_array["commission"]))
+						$cfg_array["commission"] = $this->new_config['commission'];
+			break;
+		}
 		
 		
 		
@@ -739,7 +854,7 @@ class acp_dc_activity_management
 
 		
 		// check if form key is valid
-		if ($submit && !check_form_key($form_key)){
+		if (($submit || $preview) && !check_form_key($form_key)){
 			$error[] = $user->lang['FORM_INVALID'];
 		}
 		/////////////////////////////
@@ -747,7 +862,7 @@ class acp_dc_activity_management
 		/////////////////////////////
 		
 		// check default the input for a form
-		if($submit && isset($display_vars)){
+		if(($submit || $preview) && isset($display_vars)){
 			$error= array_merge($error, check_form($display_vars, $cfg_array));
 		}
 		
@@ -756,7 +871,7 @@ class acp_dc_activity_management
 		//////////////////////////////////////
 		
 		//// mode  = new_activity  ////
-		if($submit && !count($error)){
+		if(($submit || $preview) && !count($error)){
 			switch($mode){
 				case 'edit_activity':
 				case 'recycle_activity':
@@ -986,13 +1101,19 @@ class acp_dc_activity_management
 							}else{
 								$error[] = $user->lang['NO_USER'];
 							}
+						}else{
+							$user_id_found[0] = (int) $cfg_array['select_user'];
 						}
 					}
 					
-					if(!empty($cfg_array['select_user_multiple'])){
+					if(!empty($cfg_array['select_user_multiple']) && !isset($user_id_found)){
 						$username = array_unique(explode("\n", $cfg_array["select_user_multiple"]));
+						$ttl_users = count($username);
 						$user_id =  array();
 						user_get_id_name($user_id,$username);
+						if(count($user_id) != $ttl_users){
+							$error[] = $user->lang['ACP_DC_ACT_INVALED_USERNAME'];
+						}
 						$user_id_found= array();
 						$user_id_not_found = array();
 						foreach($user_id AS $index => $id){
@@ -1013,6 +1134,49 @@ class acp_dc_activity_management
 						unset($user_id);
 						unset($user_id_not_found);
 					}
+					
+					if(!isset($action_options[intval($cfg_array["action_options"])])){
+						$error[] = $user->lang['DC_ACT_INVALID_ACTION'];
+					}
+					
+					if(!isset($user_id_found)){
+						$error[] = $user->lang['ACP_DC_SELECT_USERS'];
+					}
+					
+					break;
+				case 'send_mail':
+					if(!empty($cfg_array['send_to_users'])){
+						$enroll_list = $activity->get_all_status("all");
+						$usernames = array_unique(explode("\n", $cfg_array["send_to_users"]));
+						$action_users = $usernames; //$action_users is later used to print the usernames
+						$ttl_users = count($usernames);
+						$user_id =  array();
+						user_get_id_name($user_id,$usernames);
+						if(count($user_id) != $ttl_users){
+							$error[] = $user->lang['ACP_DC_ACT_INVALED_USERNAME'];
+						}
+						$user_id_found= array();
+						$user_id_not_found = array();
+						foreach($user_id AS $index => $id){
+							if(!isset($enroll_list[$id])){
+								$user_id_not_found[] = $id;	
+							}else {
+								$user_id_found[] = intval($id);
+							}
+						}
+						unset($id);
+						$usernames = NULL;
+						$usernames = array();
+						user_get_id_name($user_id_not_found,$usernames);
+						foreach($usernames AS $index => $name){
+							$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
+						}
+						unset($usernames);
+						unset($user_id);
+						unset($user_id_not_found);
+						
+					}
+					
 					break;
 			}
 		}
@@ -1025,6 +1189,7 @@ class acp_dc_activity_management
 		// Do not write values if there is an error
 		if (sizeof($error)){
 			$submit = false;
+			$preview = false;
 		}
 		
 		// save the vars
@@ -1088,12 +1253,129 @@ class acp_dc_activity_management
 					break;
 				case 'enrolls':
 					if(isset($user_id_found)){
-						foreach($user_id_found AS $index => $user_id){
-							$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
+				
+						switch(intval($cfg_array["action_options"])){
+							case CHANCE_PAYMENT:
+								foreach($user_id_found AS $index => $user_id){
+									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
+								}
+								break;
+							case SEND_EMAIL:
+								redirect(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=send_mail&id=". $activity->getId() ."&usrid=" . implode(GROUP_SEPARATOR, $user_id_found) ));
+								break; 
 						}
-					}else{
-						$activity->pay((int)$cfg_array['select_user'], (double)$cfg_array['amount_paid']);
+						
 					}
+					break;
+				case 'send_mail':
+				
+					$sql = 'SELECT username, user_email, user_jabber, user_notify_type, user_lang
+							FROM ' . USERS_TABLE . '
+							WHERE ' . $db->sql_in_set('user_id', $user_id_found) . '
+							ORDER BY user_lang, user_notify_type'; // , SUBSTRING(user_email FROM INSTR(user_email, '@'))
+					
+					$result = $db->sql_query($sql);
+					$row = $db->sql_fetchrow($result);
+
+					
+
+					$i = $j = 0;
+					
+					// Send with BCC
+					// Maximum number of bcc recipients
+					$max_chunk_size = (int) $config['email_max_chunk_size'];
+					$email_list = array();
+					$old_lang = $row['user_lang'];
+					$old_notify_type = $row['user_notify_type'];
+
+					do
+					{
+						if (($row['user_notify_type'] == NOTIFY_EMAIL && $row['user_email']) ||
+							($row['user_notify_type'] == NOTIFY_IM && $row['user_jabber']) ||
+							($row['user_notify_type'] == NOTIFY_BOTH && ($row['user_email'] || $row['user_jabber'])))
+						{
+							if ($i == $max_chunk_size || $row['user_lang'] != $old_lang || $row['user_notify_type'] != $old_notify_type)
+							{
+								$i = 0;
+
+								if (sizeof($email_list))
+								{
+									$j++;
+								}
+
+								$old_lang = $row['user_lang'];
+								$old_notify_type = $row['user_notify_type'];
+							}
+
+							$email_list[$j][$i]['lang']		= $row['user_lang'];
+							$email_list[$j][$i]['method']	= $row['user_notify_type'];
+							$email_list[$j][$i]['email']	= $row['user_email'];
+							$email_list[$j][$i]['name']		= $row['username'];
+							$email_list[$j][$i]['jabber']	= $row['user_jabber'];
+							$i++;
+						}
+					}
+					while ($row = $db->sql_fetchrow($result));
+					$db->sql_freeresult($result);
+					
+					$errored = false;
+					$url = generate_board_url() . '/dc/dc_activity.php'; 	// activity page
+
+					for ($i = 0, $size = sizeof($email_list); $i < $size; $i++)
+					{
+						$messenger = new messenger(false);
+						$used_lang = $email_list[$i][0]['lang'];
+
+						for ($j = 0, $list_size = sizeof($email_list[$i]); $j < $list_size; $j++)
+						{
+							$email_row = $email_list[$i][$j];
+
+							$messenger->{((sizeof($email_list[$i]) == 1) ? 'to' : 'bcc')}($email_row['email'], $email_row['name']);
+							$messenger->im($email_row['jabber'], $email_row['name']);
+						}
+						$messenger->template('dc_activity_message', $used_lang);
+
+						$messenger->anti_abuse_headers($config, $user);
+
+						$messenger->subject(htmlspecialchars_decode($cfg_array['subject'] ." - ". $activity->getName()));
+
+						$messenger->assign_vars(array(
+							'ACTIVITY_NAME'    		=> $activity->getName(),
+							'USERNAME'    			=> $email_row['name'],
+							'MESSAGE'    			=> htmlspecialchars_decode($cfg_array['message']),
+							'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
+							'COMMISSION'    		=> get_group_name($activity->getCommission())
+						));
+						
+						// chech if other sending/receving email address is used
+						if(!empty($cfg_array['from'])){
+							$messenger->replyto($cfg_array['from']);
+							$messenger->from($cfg_array['from']);
+						}
+
+						if (!($messenger->send()))
+						{
+							
+							$errored = true;
+						}
+					}
+					unset($email_list);
+
+					$messenger->save_queue();
+					
+					if (!$errored)
+					{
+						add_log('admin', 'LOG_MASS_EMAIL', implode(', ', utf8_normalize_nfc($action_users)));
+						
+						$message = $user->lang['EMAIL_SENT'];
+						trigger_error($message . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" )));
+					}
+					else
+					{	
+						$message = sprintf($user->lang['EMAIL_SEND_ERROR'], '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=logs&amp;mode=critical') . '">', '</a>');
+						trigger_error($message . adm_back_link($this->u_action), E_USER_WARNING);
+					}
+					
 					break;
 			}
 		}
@@ -1227,6 +1509,7 @@ class acp_dc_activity_management
 						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
 						'U_RECYCLE'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=recycle_activity&amp;id=' . $activity->getId())
 					));
+					
 				}
 				break;
 			case 'enrolls':
@@ -1273,6 +1556,7 @@ class acp_dc_activity_management
 				// send the list if all subscribed users to the template
 				if( $enroll_list = $activity->get_all_status($s_sort_show, $sql_sort, $sort_by_sql[$sort_key], $sort_pay , $limit, $start) ){	// are there subscribed users
 					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
+
 						$template->assign_block_vars('users', array(		// set template array
 							'USER_NAME'			=> $info['username'],
 							'REAL_NAME'			=> $info['real_name'],
@@ -1301,8 +1585,76 @@ class acp_dc_activity_management
 						)
 					);
 			break;
+			case 'send_mail':
+				if($preview){
+					$url = generate_board_url() . '/dc/dc_activity.php';		// get current page
+					$messenger = new messenger();
+					$messenger->subject(htmlspecialchars_decode($cfg_array['subject'] ." - ". $activity->getName()));
+					$messenger->template('dc_activity_message',$user->data['user_lang']);
+					$messenger->to($user->data['user_email'], $user->data['username']);
+					$messenger->im($user->data['user_jabber'], $user->data['username']);
+					$messenger->assign_vars(array(
+						'ACTIVITY_NAME'    		=> $activity->getName(),
+						'USERNAME'    			=> $action_users[0],
+						'MESSAGE'    			=> htmlspecialchars_decode($cfg_array['message']),
+						'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
+						'COMMISSION'    		=> get_group_name($activity->getCommission())
+					));
+					$messenger->anti_abuse_headers($config, $user);
+						
+					
+					if(!empty($cfg_array['from'])){
+						$messenger->replyto($cfg_array['from']);
+						$messenger->from($cfg_array['from']);
+						$template->assign_vars(array(
+							'S_FROM'				=> $cfg_array['from'],
+						));	
+						
+					}else{
+						$template->assign_vars(array(
+							'S_FROM'				=> "<b>noreply@gumbo-millennium.nl</b>",
+						));	
+					}
+					
+					$messenger->send($user->data['user_notify_type'], true);
+					
+					// set text for activities
+					$template->assign_vars(array(
+						'PREVIEW'				=> true,
+						'L_MESSAGE'				=> $user->lang["MESSAGE"],
+						'S_MESSAGE'				=> nl2br($messenger->msg),
+						'L_SUBJECT'				=> $user->lang["SUBJECT"],
+						'S_SUBJECT'				=> $messenger->subject,
+						'L_RECIEVERS'			=> $user->lang["SEND_TO_USERS"], 
+						'S_RECIEVERS'			=> implode(", ", $action_users),
+						'L_FROM'				=> $user->lang["DC_ACT_EMAIL_FROM"],
+					));	
+				}
+			break;
 		}
 	}
+	
+	function generateRandomString($length = 10) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, strlen($characters) - 1)];
+		}
+		return $randomString;
+	}   
+	
+	function apc_dropdown($value, $key, $dropdown, $first_emty = false){
+		$output = "";
+		if($first_emty == "true"){
+			$output .= "<option></option>" ;
+		}
+		foreach($dropdown AS $index => $array_value){
+			$selected = ($value === $index) ? "selected=selected" : "";
+			$output .= "<option value=".$index." ".$selected."> ".$array_value." </option>";
+		}
+		return $output;
+	}
+	
   function apc_enroll($value, $key)
 	{	
 		$radio_ary = array('yes' => 'YES', 'no' => 'NO');
@@ -1343,11 +1695,13 @@ class acp_dc_activity_management
    function select_user($value, $key, $form){
 		
 		global $user, $phpbb_root_path, $phpEx;
-		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&amp;form='.$form.'&amp;field='.$key);
+		$href = append_sid($phpbb_root_path. "memberlist.".$phpEx, 'mode=searchuser&form='.$form.'&field='.$key);
 		$string =  '<dd><textarea id="'.$key.'" name="config['.$key.']" cols="40" rows="5">'.$value.'</textarea></dd>';
 		$string .= '<dd>[ <a href="'.$href.'" onclick="find_username(this.href); return false;">'.$user->lang['FIND_USERNAME'].'</a> ]</dd>';
 		return $string;	
 		return "";
+		
+		
    }
    
 	function select_single_user($value, $key, $form){
@@ -1396,7 +1750,7 @@ class acp_dc_activity_management
 		return '<textarea id="'.$key.'" cols="6" rows="20" name="config['.$key.']"  onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" >'.$value.'</textarea>';
    }
    
-function apc_dc_subscibe_create_show($value, $name){
+	function apc_dc_subscibe_create_show($value, $name){
 		global $user;
 		$options = "<select name=$name id=$name>";
 		$options .= '<option value="a"' . (($value == "a") ? ' selected="selected"' : '') . '>' . $user->lang['ALL'] . '</option>';
@@ -1405,6 +1759,7 @@ function apc_dc_subscibe_create_show($value, $name){
 		$options .= '</select>';
 		
 		return $options;
-   }  
+   } 
+ 
 }
 ?>

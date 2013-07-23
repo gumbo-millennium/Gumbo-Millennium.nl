@@ -140,6 +140,7 @@ $lang = array_merge($lang, array(
 	'ACP_DC_ACT_CURRENT'  				=> 'Current events',
 	'ACP_DC_ACT_ACTIVE'  				=> 'Active events',
 	'ACP_DC_ACT_DEACTIVE'  				=> 'Deactive events',
+	'UNVALED_EMAIL_ADDRESS'  			=> '\'%s\' is an invalid email addres for \'%s\'.',
 	
 ));
 
@@ -166,11 +167,30 @@ $lang = array_merge($lang, array(
     'DC_ACT_REALNAME'    				=> 'Real name',
 	'LIST_USERS'    					=> '%s Users',
 	'LIST_USER'    						=> '1 User',
+    'ACP_DC_SELECT_USERS'    			=> 'Select user(s)',
     'ACP_DC_SELECT_MULTI_USER'    		=> 'Select multiple users',
     'ACP_DC_SELECT_MULTI_USER_EXPLAIN'	=> 'Instert usernames to change the amount paid of multiple users. <br> If you enter a username in the field, the "Select a user" field will not be used.',
     'ACP_DC_ACT_DISPLAY_LIMIT'    		=> 'Display entries',
-
+    'ACP_DC_ACT_INVALED_USERNAME'    	=> 'Invalid username(s)',
+    'DC_ACT_INVALID_ACTION'    			=> 'Invalid action',
+    'ACP_DC_ACTION_OPTIONS'    			=> 'Select action',
+    'ACP_DC_ACTION_OPTIONS_EXPLAIN'		=> 'Select the action you like to execute',
+    'ACP_DC_ACTION_PAY'					=> 'Chance payment',
+    'ACP_DC_ACTION_EMAIL'				=> 'Send e-mail',
+    'ADD_USER'							=> 'Add user',
+    'ADD_USERS'							=> 'Add all users',
 ));
+
+// For management send mail
+$lang = array_merge($lang, array(
+    'ACP_DC_AC_SEND_MAIL'  				=> 'Mail',
+    'ACP_DC_AC_SEND_MAIL_EXPLAIN'  		=> 'Compose a mail',
+	'APC_DC_SEND_MAIL_SETTINGS'			=> 'Email settings',
+	'DC_ACT_EMAIL_FROM'					=> 'Sending and replaying email address',
+	'DC_ACT_EMAIL_FROM_EXPLAIN'			=> 'If an email address given this will be the sending email adress. Also you recive the replayed emails on this adress. <br> If you leave this emty the sending email address is noreply@gumbo-millennium.nl',
+));
+
+
 
 $lang = array_merge($lang, array(
     'FIND_GROUP'  						=> 'Find a group',

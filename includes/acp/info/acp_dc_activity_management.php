@@ -14,6 +14,7 @@ class acp_dc_activity_management_info
                 'past_activities'   	=> array('title' => 'Past events', 	'auth' => 'acl_a_recyle_activity', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
                 'enrolls'   			=> array('title' => 'Enrolls', 		'auth' => 'acl_a_edit_activity', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
                 'overview'        		=> array('title' => 'Overview', 	'auth' => 'acl_a_overview_activity', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
+                'send_mail'	        	=> array('title' => 'Send mail', 	'auth' => 'acl_a_act_send_mail', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
                 'find_user_events'		=> array('title' => 'Find user events', 	'auth' => 'acl_a_', 'cat' => array('ACP_ACTIVITY_OVERVIEW')),
                 'users_not_paid'		=> array('title' => 'Users not paid', 		'auth' => 'acl_a_', 'cat' => array('ACP_ACTIVITY_FINANCIAL')),
                 'chance_user_payment'	=> array('title' => 'Chance user payment', 	'auth' => 'acl_a_', 'cat' => array('ACP_ACTIVITY_FINANCIAL')),

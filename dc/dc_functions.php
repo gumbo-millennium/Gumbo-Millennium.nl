@@ -17,6 +17,18 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+/**
+* isValidEmail
+*  Valitdate the input string for as a emailaddres
+* $email 	string 	input to check if is a valid emailaddress
+* return	true if valid, false if invalid
+* by bažmegakapa (stackoverflow.com) http://stackoverflow.com/questions/5855811/how-to-validate-an-email-in-php 
+*/
+
+function isValidEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) 
+        && preg_match('/@.+\./', $email);
+}
 
 //validate a string to check if it is a valid date
 //$date: the user input
@@ -81,9 +93,9 @@ function check_form($display_vars, $cfg_array){
 	foreach($display_vars['vars'] as $config_name => $vars){
 		// check all vars that are not allowd to be empty
 		if(is_array($vars)){  // filter only the input fields. (so legend1, legen2, ... are skipt )
-			if((empty($cfg_array[$config_name]) && !$vars['empty'])){
+			if((empty($cfg_array[$config_name]) && !$vars['empty'])){		// check for the not empty
 				$error[] = ucfirst(strtolower(($user->lang[$vars['lang']]." ". $user->lang["NOT_EMPTY"])));
-			}else{
+			}elseif(!empty($cfg_array[$config_name])){		// ignore all empty values
 				// check for forbidden chars
 				if(is_array($vars) && isset($vars['preg'])){ 				// isset formidden chars
 					
@@ -98,6 +110,18 @@ function check_form($display_vars, $cfg_array){
 						if(utf8_strlen($cfg_array[$config_name]) >= 65535 ){  // count characters max is 65535 (max chars in a MySQL text/blob)
 							$error[] = sprintf($user->lang['SETTING_TOO_LONG'], $user->lang[$vars['lang']], 65535);
 						}
+						break;
+					case 'emailaddress':
+						if(!isValidEmail($cfg_array[$config_name])){
+							$error[] = 
+								ucfirst(
+									sprintf(
+										$user->lang['UNVALED_EMAIL_ADDRESS'], 
+										$cfg_array[$config_name], 
+										$user->lang[$vars['lang']] 
+									)
+								); // set output error
+						}	
 						break;
 				}
 				
