@@ -179,6 +179,7 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACTION_EMAIL'				=> 'Send e-mail',
     'ACP_DC_ACTION_SUBSCRIBE'			=> 'Subscribe user(s) (Chance status to yes)',
     'ACP_DC_ACTION_UNSUBSCRIBE'			=> 'Unsubscribe users(s) (Chance status to no)',
+    'ACP_DC_USERS_ADDED'				=> 'User(s) successfully subscribed to the event',
     'ADD_USERS'							=> 'Add user(s)',
     'SELECT_USER'						=> 'Select user',
     'SELECT_USERS'						=> 'Select all users',

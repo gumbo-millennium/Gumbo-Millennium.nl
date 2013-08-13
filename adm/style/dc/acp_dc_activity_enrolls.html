@@ -23,9 +23,8 @@
 {L_PRICE}:{PRICE}</br>
 {L_MEMBER_PRICE}:{MEMBER_PRICE}
 </p>
-<!-- IF L_ACT_ENROLLS -->
-
 <form id="{FORM_TITLE}" method="post" action="{U_ACTION}">
+<!-- IF L_ACT_ENROLLS -->
 <table cellspacing="1">
 <thead>
 <tr>
@@ -59,6 +58,12 @@
 	<input class="button2" type="submit" value="{L_GO}" name="sort" />
 	{S_FORM_TOKEN}
 </fieldset>
+
+<!-- ELSE -->
+<div class="errorbox">
+	<p>{L_ACT_NO_ENROLLS}</p>
+</div>
+<!-- ENDIF -->
 
 <!-- IF S_ERROR -->
 	<div class="errorbox">
@@ -97,10 +102,6 @@
 </fieldset>
 </form>
 
-<!-- ELSE -->
-<div class="errorbox">
-	<p>{L_ACT_NO_ENROLLS}</p>
-</div>
-<!-- ENDIF -->
+
 
 <!-- INCLUDE overall_footer.html -->

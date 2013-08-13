@@ -624,89 +624,23 @@ class acp_dc_activity_management
 				$activity = new activity();								// make a new activity
 				$activity->fill($activity_id);							// fill the new activity from the db
 				
-				// get authorisation 
+				// get authorisation //
 				if (!$activity->is_manager($user->data['user_id']))
 				{
 					 trigger_error('NOT_AUTHORISED');
 				}
 				
-			
+				$form_key = 'acp_enroll_events';
+				$form_title = 'ACP_DC_ACT_ENROLL';
+				add_form_key($form_key);
 				
+			
+				// Get all subsribed users
 				if($enroll_list = $activity->get_all_status('all')){
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> true,
 					));
 										
-					$form_key = 'acp_enroll_events';
-					$form_title = 'ACP_DC_ACT_ENROLL';
-					add_form_key($form_key);
-					
-					
-					
-					$action_options = array(
-						SUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_SUBSCRIBE'],
-						UNSUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_UNSUBSCRIBE']
-						
-					);
-					if(	$auth->acl_get('a_act_pay')){
-						$action_options[CHANCE_PAYMENT] = $user->lang['ACP_DC_ACTION_PAY'];
-					}
-					if(	$auth->acl_get('a_act_send_mail')){
-						$action_options[SEND_EMAIL] = $user->lang['ACP_DC_ACTION_EMAIL'];
-					}
-					if(	$auth->acl_get('a_act_add_user')){
-						$action_options[ADD_USERS] = $user->lang['ADD_USERS'];
-					}
-					
-					
-					
-					$display_vars = array(
-						'title'	=> $form_title,
-						'vars'	=> array(				
-							'legend1'=> 'GENERAL_SETTINGS',
-								'action_options' => array(
-									'lang' => 'ACP_DC_ACTION_OPTIONS',
-									'validate' => 'int',
-									'type' => 'select',
-									'empty' => true,
-									'method' => 'apc_dropdown',
-									'params' => array('{CONFIG_VALUE}', '{KEY}', $action_options, "true"),
-									'explain' => true
-								),
-								
-								'select_user' => array(
-									'lang' => 'ACP_DC_SELECT_USER',
-									'validate' => 'string',
-									'type' => 'custom',
-									'empty' => true,
-									'method' => 'select_user_selection',
-									'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list),
-									'explain' => true
-								),
-								'select_user_multiple'	=> array(
-									'lang' => 'ACP_DC_SELECT_MULTI_USER',
-									'validate' => 'string',
-									'type' => 'custom',
-									'empty' => true,
-									'method' => 'select_user',
-									'explain' => true,
-									'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title),
-									'explain' => true
-								),
-								'amount_paid'	=> array(
-									'lang' => 'ACP_DC_ACT_PAID',
-									'validate' => 'string',
-									'type' => 'text:10:8',
-									'empty' => true,
-									'explain' => true,
-									'append' => ' euro',
-									'preg'=> '[^0-9,.]',
-									'patern' => array( 'type' => 'money'),
-									'explain' => false
-								),
-						)
-					);
-
 					// set text for activities
 					$template->assign_vars(array(
 						'L_USER_NAME'			=> $user->lang['USERNAME'],
@@ -718,11 +652,80 @@ class acp_dc_activity_management
 						'FORM_TITLE'			=> $form_title,
 					));					
 				}else{
+					$enroll_list = array(); // emty array for the select user
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> false,
 						'L_ACT_NO_ENROLLS'	=> $user->lang['DC_ACT_ENROLL_NOBODY'],
 					));
 				}
+				
+				// options box //
+				
+				
+				// get the all options for the action list
+				$action_options = array(
+					SUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_SUBSCRIBE'],
+					UNSUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_UNSUBSCRIBE']
+					
+				);
+				if(	$auth->acl_get('a_act_pay')){
+					$action_options[CHANCE_PAYMENT] = $user->lang['ACP_DC_ACTION_PAY'];
+				}
+				if(	$auth->acl_get('a_act_send_mail')){
+					$action_options[SEND_EMAIL] = $user->lang['ACP_DC_ACTION_EMAIL'];
+				}
+				if(	$auth->acl_get('a_act_add_user')){
+					$action_options[ADD_USERS] = $user->lang['ADD_USERS'];
+				}
+				
+				// create from
+				$display_vars = array(
+					'title'	=> $form_title,
+					'vars'	=> array(				
+						'legend1'=> 'GENERAL_SETTINGS',
+							'action_options' => array(
+								'lang' => 'ACP_DC_ACTION_OPTIONS',
+								'validate' => 'int',
+								'type' => 'select',
+								'empty' => true,
+								'method' => 'apc_dropdown',
+								'params' => array('{CONFIG_VALUE}', '{KEY}', $action_options, "true"),
+								'explain' => true
+							),
+							
+							'select_user' => array(
+								'lang' => 'ACP_DC_SELECT_USER',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => true,
+								'method' => 'select_user_selection',
+								'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list),
+								'explain' => true
+							),
+							'select_user_multiple'	=> array(
+								'lang' => 'ACP_DC_SELECT_MULTI_USER',
+								'validate' => 'string',
+								'type' => 'custom',
+								'empty' => true,
+								'method' => 'select_user',
+								'explain' => true,
+								'params' => array('{CONFIG_VALUE}', '{KEY}', $form_title),
+								'explain' => true
+							),
+							'amount_paid'	=> array(
+								'lang' => 'ACP_DC_ACT_PAID',
+								'validate' => 'string',
+								'type' => 'text:10:8',
+								'empty' => true,
+								'explain' => true,
+								'append' => ' euro',
+								'preg'=> '[^0-9,.]',
+								'patern' => array( 'type' => 'money'),
+								'explain' => false
+							),
+					)
+				);
+				
 				// set default lang varibles
 				$template->assign_vars(array(
 					'L_MEMBER_PRICE'		=> $user->lang['ACP_DC_ACT_PRICE_MEMBER'],
@@ -1238,6 +1241,7 @@ class acp_dc_activity_management
 		// send succesfull update
 		if ($submit)
 		{
+			
 			switch($mode){
 				case 'edit_activity': 
 				case 'recycle_activity': 
@@ -1283,7 +1287,7 @@ class acp_dc_activity_management
 					break;
 				case 'enrolls':
 					if(isset($user_id_found)){
-				
+						
 						switch(intval($cfg_array["action_options"])){
 							case CHANCE_PAYMENT:
 								foreach($user_id_found AS $index => $user_id){
@@ -1296,8 +1300,9 @@ class acp_dc_activity_management
 							case ADD_USERS:
 								foreach($user_id_found AS $index => $user_id){
 									$activity->set_user_status($user_id, $user->ip, '', "yes");
-									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);	
+									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
 								}
+								trigger_error($user->lang['ACP_DC_USERS_ADDED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=enrolls&id=".$activity->getId() )));
 								break;
 							case SUBSCRIBE_USER:
 								foreach($user_id_found AS $index => $user_id){
