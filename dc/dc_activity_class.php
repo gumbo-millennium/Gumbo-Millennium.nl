@@ -442,9 +442,8 @@ class activity {
 		//	false: user didn´t change because of a sql error  
 	function set_user_status($user_id, $user_ip, $comment, $new_status){
 		global $db, $user;											// get connection to db
-		
 		//check if the activity is allowed to change
-		if(!$this->check_allowed_to_change()){
+		if(!$this->check_allowed_to_change()  && !$this->is_manager($user->data['user_id'])){
 			// This activity is not allowed to change
 			$this->set_error_log("Function: set_user_status; Event is not allowed to change");
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
@@ -452,18 +451,7 @@ class activity {
 		}
 		switch($new_status){
 			case 'yes':
-				if($this->enroll_datetime < new DateTime("now")){
-					$this->set_error_log("Function: set_user_status; Enroll date is in de past");
-					trigger_error($user->lang['DC_ACT_IN_PAST']);
-					return null;
-				}
-				break;
 			case 'no':
-				if(($this->unsubscribe_max_datetime < new DateTime("now"))){
-					$this->set_error_log("Function: set_user_status; Event is past the unsubscribe max datetimeis in the past");
-					trigger_error($user->lang['DC_ACT_IN_PAST']);
-					return null;
-				}
 				break;
 			default:
 				$this->set_error_log("Function: set_user_status; Invalid user status:". $new_status);

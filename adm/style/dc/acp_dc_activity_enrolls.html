@@ -2,11 +2,11 @@
 
 
 <script type="text/javascript">
-		function addUser(user) {
+		function selectUser(user) {
 			document.getElementById("select_user_multiple").value += user + "\n";
 			return false;
 		}
-		function addAllUsers(users){
+		function selectAllUsers(users){
 			document.getElementById("select_user_multiple").value = users;
 			return false;
 		}
@@ -42,17 +42,17 @@
 <!-- BEGIN users -->
 	<!-- IF users.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 	<td style="text-align: left;"><a href="{users.USER_LINK}">{users.REAL_NAME}</a></td>
-	<td style="text-align: left;"><a href="#"  onclick="addUser('{users.USER_NAME}')" >{users.USER_NAME}</a></td>
+	<td style="text-align: left;"><a href="#"  onclick="selectUser('{users.USER_NAME}')" >{users.USER_NAME}</a></td>
 	<td style="text-align: center;">{users.COMMENT}</td>
 	<td style="text-align: center;">{users.STATUS}</td>
 	<td style="text-align: center;">{users.PAYMENT_DONE}</td>
 	<td style="text-align: center;">{users.PRICE_PAID}</td>
-	<td style="text-align: center;"><a href="#" onclick="addUser('{users.USER_NAME}')">{L_ADD_USER}</a></td>
+	<td style="text-align: center;"><a href="#" onclick="selectUser('{users.USER_NAME}')">{L_SELECT_USER}</a></td>
 </tr>
 <!-- END users -->
 </tbody>
 </table>
-<div class="rightside pagination"><a href="#" onclick="addUser('<!-- BEGIN users -->{users.USER_NAME}\n<!-- END users -->')">{L_ADD_USERS}</a> &bull; {TOTAL_USERS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></div>
+<div class="rightside pagination"><a href="#" onclick="selectUser('<!-- BEGIN users -->{users.USER_NAME}\n<!-- END users -->')">{L_SELECT_USERS}</a> &bull; {TOTAL_USERS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></div>
 
 <fieldset class="display-options">
 	{L_DISPLAY_LIMIT}: &nbsp;{S_LIMIT_RECORDS}&nbsp;{L_SORT_BY}: {S_SORT_KEY} {S_SORT_DIR} {S_SORT_SHOW}

@@ -177,8 +177,11 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACTION_OPTIONS_EXPLAIN'		=> 'Select the action you like to execute',
     'ACP_DC_ACTION_PAY'					=> 'Chance payment',
     'ACP_DC_ACTION_EMAIL'				=> 'Send e-mail',
-    'ADD_USER'							=> 'Add user',
-    'ADD_USERS'							=> 'Add all users',
+    'ACP_DC_ACTION_SUBSCRIBE'			=> 'Subscribe user(s) (Chance status to yes)',
+    'ACP_DC_ACTION_UNSUBSCRIBE'			=> 'Unsubscribe users(s) (Chance status to no)',
+    'ADD_USERS'							=> 'Add user(s)',
+    'SELECT_USER'						=> 'Select user',
+    'SELECT_USERS'						=> 'Select all users',
 ));
 
 // For management send mail

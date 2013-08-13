@@ -18,8 +18,12 @@ define("GROUP_SEPARATOR", ",");											// separator for selecting groups
 define("EXCLUDE_PRE_DEFINED_GROUPS", serialize(array(3)));				// exclude pre definde (like ADMINISTRATORS) groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 define("EXCLUDE_GROUPS_COMMISSION", serialize(array(9, 10, 11)));		// exclude groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 
+// defines for action list on the subscriptions page
 define ("CHANCE_PAYMENT", 1);
 define ("SEND_EMAIL", 2);
+define ("ADD_USERS", 3);
+define ("SUBSCRIBE_USER", 4);
+define ("UNSUBSCRIBE_USER", 5);
 
 // include functions
 include ($phpbb_root_path . 'dc/dc_activity_management_class.' . $phpEx);
@@ -620,9 +624,6 @@ class acp_dc_activity_management
 				$activity = new activity();								// make a new activity
 				$activity->fill($activity_id);							// fill the new activity from the db
 				
-				
-						
-				
 				// get authorisation 
 				if (!$activity->is_manager($user->data['user_id']))
 				{
@@ -640,10 +641,24 @@ class acp_dc_activity_management
 					$form_title = 'ACP_DC_ACT_ENROLL';
 					add_form_key($form_key);
 					
+					
+					
 					$action_options = array(
-						CHANCE_PAYMENT 	=> $user->lang['ACP_DC_ACTION_PAY'],
-						SEND_EMAIL 		=> $user->lang['ACP_DC_ACTION_EMAIL'],
+						SUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_SUBSCRIBE'],
+						UNSUBSCRIBE_USER => $user->lang['ACP_DC_ACTION_UNSUBSCRIBE']
+						
 					);
+					if(	$auth->acl_get('a_act_pay')){
+						$action_options[CHANCE_PAYMENT] = $user->lang['ACP_DC_ACTION_PAY'];
+					}
+					if(	$auth->acl_get('a_act_send_mail')){
+						$action_options[SEND_EMAIL] = $user->lang['ACP_DC_ACTION_EMAIL'];
+					}
+					if(	$auth->acl_get('a_act_add_user')){
+						$action_options[ADD_USERS] = $user->lang['ADD_USERS'];
+					}
+					
+					
 					
 					$display_vars = array(
 						'title'	=> $form_title,
@@ -717,8 +732,8 @@ class acp_dc_activity_management
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
 					'MEMBER_PRICE'			=> "&euro;".$activity->getPriceMember(),	
 					'L_DISPLAY_LIMIT'		=> $user->lang['ACP_DC_ACT_DISPLAY_LIMIT'],
-					'L_ADD_USER'			=> $user->lang['ADD_USER'],
-					'L_ADD_USERS'			=> $user->lang['ADD_USERS'],
+					'L_SELECT_USER'			=> $user->lang['SELECT_USER'],
+					'L_SELECT_USERS'			=> $user->lang['SELECT_USERS'],
 				));		
 					
 				$this->page_title = 'ACP_DC_ACT_ENROLL';
@@ -1106,29 +1121,44 @@ class acp_dc_activity_management
 						}
 					}
 					
+					// Convert usernames to user id and check if user exist (and sometimes if the users is enrolled)
 					if(!empty($cfg_array['select_user_multiple']) && !isset($user_id_found)){
-						$username = array_unique(explode("\n", $cfg_array["select_user_multiple"]));
-						$ttl_users = count($username);
+						$username = array_unique(explode("\n", $cfg_array["select_user_multiple"]));	// get the (new) user(s)
+						$ttl_users = count($username);	// count to check the user name to id convertion
 						$user_id =  array();
-						user_get_id_name($user_id,$username);
-						if(count($user_id) != $ttl_users){
+						user_get_id_name($user_id,$username);	// convert from username to user id
+						if(count($user_id) != $ttl_users){		// check if there is an invalid username
 							$error[] = $user->lang['ACP_DC_ACT_INVALED_USERNAME'];
 						}
 						$user_id_found= array();
 						$user_id_not_found = array();
-						foreach($user_id AS $index => $id){
-							if(!isset($enroll_list[$id])){
-								$user_id_not_found[] = $id;	
-							}else {
-								$user_id_found[] = intval($id);
-							}
-						}
-						unset($id);
-						$username = NULL;
-						$username = array();
-						user_get_id_name($user_id_not_found,$username);
-						foreach($username AS $index => $name){
-							$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
+						// more checks bases on the action
+						switch(intval($cfg_array["action_options"])){
+							case CHANCE_PAYMENT:
+							case SEND_EMAIL:
+							case SUBSCRIBE_USER:
+							case UNSUBSCRIBE_USER:
+								// check if the users is enrolled
+								foreach($user_id AS $index => $id){
+									if(!isset($enroll_list[$id])){
+										$user_id_not_found[] = $id;		// user(s) who not enrolled
+									}else {
+										$user_id_found[] = intval($id);	// users who are enrolled
+									}
+								}
+								unset($id);
+								$usernames = NULL;
+						
+								$usernames = array();
+								user_get_id_name($user_id_not_found,$usernames);
+								foreach($usernames AS $index => $name){		// if there are unrolled users show the error
+									$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];	// add to error
+								}
+								break;
+							case ADD_USERS:
+								// convert to the correct varible
+								$user_id_found = $user_id;
+								break;
 						}
 						unset($username);
 						unset($user_id);
@@ -1262,7 +1292,24 @@ class acp_dc_activity_management
 								break;
 							case SEND_EMAIL:
 								redirect(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=send_mail&id=". $activity->getId() ."&usrid=" . implode(GROUP_SEPARATOR, $user_id_found) ));
-								break; 
+								break;
+							case ADD_USERS:
+								foreach($user_id_found AS $index => $user_id){
+									$activity->set_user_status($user_id, $user->ip, '', "yes");
+									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);	
+								}
+								break;
+							case SUBSCRIBE_USER:
+								foreach($user_id_found AS $index => $user_id){
+									
+									$activity->set_user_status($user_id, $user->ip, '', "yes");
+								}
+								break;
+							case UNSUBSCRIBE_USER:
+								foreach($user_id_found AS $index => $user_id){
+									$activity->set_user_status($user_id, $user->ip, '', "no");
+								}
+								break;
 						}
 						
 					}
@@ -1564,7 +1611,7 @@ class acp_dc_activity_management
 							'COMMENT'			=> $info['comments'],
 							'STATUS'			=> $user->lang[strtoupper($info['status'])],
 							'PRICE_PAID'		=> "&euro;".$info['price_paid'],
-							'PAYMENT_DONE'		=> ($info['price_paid'] >= $activity->calculate_price($user_id) ? $user->lang['YES'] : $user->lang['NO'] ) ,
+							'PAYMENT_DONE'		=>  ($info['price_paid'] >= $activity->calculate_price($user_id) ? $user->lang['YES'] :"<font color='red'>". $user->lang['NO']. "</font>" ) ,
 						));	
 					}
 					
