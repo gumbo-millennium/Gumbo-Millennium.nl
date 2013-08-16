@@ -502,7 +502,7 @@ class messenger
 
 			if ($config['smtp_delivery'])
 			{
-				$result = smtpmail($this->addresses, mail_encode($this->subject), nl2br(wordwrap(utf8_wordwrap($this->msg)), 997, "\n", true), $err_msg, $headers);
+				$result = smtpmail($this->addresses, mail_encode($this->subject), nl2br(wordwrap(utf8_wordwrap($this->msg), 997, "\n", true)), $err_msg, $headers);
 			}
 			else
 			{
