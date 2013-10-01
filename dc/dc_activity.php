@@ -59,27 +59,31 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 	}else {
 		switch($status){														// check new status
 			case 1:																// new status = yes
-				user_new_status("yes",$activity);								// set new status to yes
-				// test sends messagers
-				$url = generate_board_url() . '/' . $user->page['page'];		// get current page
-				$messenger = new messenger(false);
-				$messenger->subject($activity->getName());
-				$messenger->template('dc_activity_subscribe',$user->data['user_lang']);
-				$messenger->to($user->data['user_email'], $user->data['username']);
-				$messenger->im($user->data['user_jabber'], $user->data['username']);
-				$messenger->assign_vars(array(
-					'ACTIVITY_NAME'    		=> $activity->getName(),
-					'USERNAME'    			=> $user->data['username'],
-					'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
-					'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
-					'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),
-					'DESCRIPTION'    		=> $activity->getDescription_preview(200,true),
-					'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
-					'COMMISSION'    		=> get_group_name($activity->getCommission())
-				));
-				$messenger->send($user->data['user_notify_type']);
-				$messenger->save_queue();
-
+				
+				if($activity->is_max_enrolled()){
+					trigger_error("Maximum subscriptions is reached");
+				}else{
+					user_new_status("yes",$activity);								// set new status to yes
+					// test sends messagers
+					$url = generate_board_url() . '/' . $user->page['page'];		// get current page
+					$messenger = new messenger(false);
+					$messenger->subject($activity->getName());
+					$messenger->template('dc_activity_subscribe',$user->data['user_lang']);
+					$messenger->to($user->data['user_email'], $user->data['username']);
+					$messenger->im($user->data['user_jabber'], $user->data['username']);
+					$messenger->assign_vars(array(
+						'ACTIVITY_NAME'    		=> $activity->getName(),
+						'USERNAME'    			=> $user->data['username'],
+						'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
+						'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
+						'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),
+						'DESCRIPTION'    		=> $activity->getDescription_preview(200,true),
+						'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
+						'COMMISSION'    		=> get_group_name($activity->getCommission())
+					));
+					$messenger->send($user->data['user_notify_type']);
+					$messenger->save_queue();
+				}
 				break;
 			case 2:																// new status = no					
 				user_new_status("no", $activity);								// set new status to no
@@ -138,27 +142,27 @@ if(($user_current_status = $activity->get_user_status($user->data['user_id'])) !
 
 
 $enroll_list = $activity->get_all_status("enrolled");				// get enroll_list
-//check for enroll
-if( $activity->getEnroll() == 1 ){										//need enroll
-	$template->assign_var('ENROLL', true);								// set enroll
-	$template->assign_var('ENROLL_MAX', $enroll_max = ((count($enroll_list) < $activity->getEnrollMax()) || ($activity->getEnrollMax() == 0)) ? true : false); // check the limit of subscriptions is reached
-	$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
-	$unsubscribe_date_time = $activity->getUnsubscribeMaxDatetime();			// get the time the user has to unsubscribe
-	$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
-	$template->assign_var('UNSUBSCRIBE_MAX_DATETIME',$user->format_date( $unsubscribe_date_time->getTimestamp() )); // set end enroll date time
-	if($enroll_date_time > new DateTime("now")){					// check if the enroll date time or  is past
-		$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
-	}else{
-		$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
-	}
-	if($unsubscribe_date_time > new DateTime("now")){				// check if the unsubscrive date time or  is past
-		$template->assign_var('UNSUBSCRIBE_DATE_CHECK', true);		// enroll date time not past
-	}else{
-		$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enroll date time past
+
+
+$template->assign_var('ENROLL', $activity->getEnroll());								// set enroll
+$template->assign_var('ENROLL_MAX', $activity->is_max_enrolled()); // check the limit of subscriptions is reached
+$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
+$unsubscribe_date_time = $activity->getUnsubscribeMaxDatetime();			// get the time the user has to unsubscribe
+$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
+$template->assign_var('UNSUBSCRIBE_MAX_DATETIME',$user->format_date( $unsubscribe_date_time->getTimestamp() )); // set end enroll date time
+if($enroll_date_time > new DateTime("now")){					// check if the enroll date time or  is past
+	$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
+}else{
+	$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
+}
+if($unsubscribe_date_time > new DateTime("now")){				// check if the unsubscrive date time or  is past
+	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', true);		// enroll date time not past
+}else{
+	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enroll date time past
 	}	
 		
 			
-}
+
 
 // some more default variables
 $template->assign_var('PRICE', $activity->getPrice());					// set price
@@ -215,6 +219,8 @@ $template->assign_var('LANG_ENROLL_NOBODY', $user->lang['DC_ACT_ENROLL_NOBODY'])
 $template->assign_var('LANG_ENROLL_FORCE', $user->lang['DC_ACT_ENROLL_FORCE']);
 $template->assign_var('LANG_ENROLL_TIME', $user->lang['DC_ACT_ENROLL_TIME']);
 $template->assign_var('LANG_ENROLL_AMOUNT', $user->lang['DC_ACT_ENROLL_AMOUNT']);
+$template->assign_var('LANG_ENROLL_AMOUNT_MAX', $user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
+$template->assign_var('LANG_ENROLL_DATETIME_OVER', $user->lang['DC_ACT_ENROLL_DATETIME_OVER']);
 $template->assign_var('LANG_ENROLL_CLOSED', $user->lang['DC_ACT_ENROLL_CLOSED']);
 $template->assign_var('LANG_SAVE_COMMENT', $user->lang['DC_ACT_SAVE_COMMENT']);
 $template->assign_var('LANG_YES', $user->lang['YES']);
@@ -256,13 +262,14 @@ $template->assign_var('FORM_HIDDEN_SID', $user->data["session_id"]);
 
 page_header($activity->getName());
 // set template
+
 $template->assign_block_vars('navlinks', array(
-            'FORUM_NAME'         => 'Activity list', //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
+            'FORUM_NAME'         => $user->lang['DC_ACT_LIST'],
             'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 );
 
 $template->assign_block_vars('navlinks', array(
-            'FORUM_NAME'         => 'Activity', //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
+            'FORUM_NAME'         => $activity->getName(), 
             'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity.$phpEx", "act=".$activity->getId())) //The path to the custom file relative to the phpbb root path.            
 );
 $template->set_filenames(array(

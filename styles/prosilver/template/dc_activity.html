@@ -64,10 +64,6 @@
 				<dd>{LANG_NO}</dd>
 			<!-- ENDIF -->
 			<dt>&nbsp;</dt>
-			
-			
-				
-			
 		</dl>
 		<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>
 		<span class="corners-bottom"><span></span></span>
@@ -110,55 +106,54 @@
 		</div>
 	</div>
 	<dl class="postprofile" id="profile2">
-	<!-- IF not S_IS_BOT and S_USER_LOGGED_IN -->
-		<!-- IF USER_ENROLLED_CHECK  && CHANGE == FALSE-->
-					<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
-						<dd>&#8364;{USER_ENROLLED_PAID}</dd>
-					<dt>&nbsp;</dt>
-					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dd>
-						
-						<dd>{USER_ENROLLED_STATUS}</dd>
-						
-						<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-							<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
-						<!-- ENDIF -->
-					<dt>&nbsp;</dt>
-					<form action="{URL_STATUS}" method="POST">
-						{S_FORM_TOKEN}
-						<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
-						<!-- IF COMMENT_SAVED -->
-						<dd>{LANG_SAVED}</dd>
-						<!-- ENDIF -->
-						<dd><input type="submit" value="{LANG_SAVE_COMMENT}"></dd>
-						<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
-						<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
-						
-					</form>	
-		<!-- ELSE -->
+	<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
+	<form action="{URL_CLEAN}" method="POST">
+				{S_FORM_TOKEN}
+	<!-- IF not ENROLL -->
+		<dd>{LANG_NO_LOGIN_NEEDED}</dd>
+	<!-- ELSEIF ENROLL_MAX and not USER_ENROLLED_CHECK -->
+		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
+		<dd><dt>{LANG_ENROLL_AMOUNT_MAX}</dt></dd>
+	<!-- ELSEIF not ENROLL_DATE_CHECK and not USER_ENROLLED_CHECK -->
+		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
+		<dd><dt>{LANG_ENROLL_DATETIME_OVER}</dt></dd>
+	<!-- ELSEIF not S_USER_LOGGED_IN and not USER_ENROLLED_CHECK -->
+		<dt><a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a></dt>
+	<!-- ELSEIF USER_ENROLLED_CHECK -->
+		<!-- IF CHANGE == FALSE -->
+			<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
+				<dd>&#8364;{USER_ENROLLED_PAID}</dd>
+			<dt>&nbsp;</dt>
+			<dd>{USER_ENROLLED_STATUS}</dd>
 			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-					<form action="{URL_CLEAN}" method="POST">
-					{S_FORM_TOKEN}
-					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
-						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX  && USER_ENROLLED_STATUS != 'Yes'-->
-						
-						<dd><button name="status" type="submit" value="1"><h2>{LANG_SUBSCRIBE}</h2></button></dd>
-						<!-- ELSE -->
-						<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
-						
-						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-						<!-- ENDIF -->
-					</form>
-			<!-- ELSEIF ENROLL -->
-					<dt>{LANG_ENROLL_CLOSED}</dt>
-				<!-- ELSE -->
-				<dt>{LANG_NO_LOGIN_NEEDED}</dt>
+				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
+			<!-- ENDIF -->
+			<dt>&nbsp;</dt>
+			<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
+			<!-- IF COMMENT_SAVED -->
+			<dd>{LANG_SAVED}</dd>
+			<!-- ENDIF -->
+			<dd><input type="submit" value="{LANG_SAVE_COMMENT}"></dd>
+			<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
+			<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
+
+		<!-- ELSE -->
+			<!-- IF ENROLL_DATE_CHECK && USER_ENROLLED_STATUS != 'Yes'-->
+				<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
+			<!-- ELSE -->
+				<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
+				<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
 			<!-- ENDIF -->
 		<!-- ENDIF -->
-	<!-- ELSEIF ENROLL -->
-		<dt><a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a></dt>
 	<!-- ELSE -->
-		<dt>{LANG_NO_LOGIN_NEEDED}</dt>
+		<!-- IF ENROLL_DATE_CHECK && USER_ENROLLED_STATUS != 'Yes'-->
+			<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
+		<!-- ELSE -->
+			<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
+			<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+		<!-- ENDIF -->
 	<!-- ENDIF -->
+	</form>
 	</dl>
 	<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>
 	<span class="corners-bottom"><span></span></span></div>

@@ -449,6 +449,7 @@ class activity {
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null; 					// not allowed to change	
 		}
+				
 		switch($new_status){
 			case 'yes':
 			case 'no':
@@ -457,6 +458,12 @@ class activity {
 				$this->set_error_log("Function: set_user_status; Invalid user status:". $new_status);
 				trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 				return null; 
+		}
+		
+		if($this->is_max_enrolled() && $new_status == 'yes'){
+			$this->set_error_log("Function: set_user_status; Max subscriptions is reached");
+			trigger_error("Maximum subscriptions is reached");
+			return FALSE;
 		}
 		
 		$user_status = $this->get_user_status($user_id);			// get the current status of the user
@@ -1196,6 +1203,13 @@ class activity {
 		return true;
 	}
 	
+	
+	public function is_max_enrolled(){
+		if(count($this->get_all_status("enrolled")) < $this->enroll_max || $this->enroll_max == 0){
+			return FALSE;
+		}
+		return TRUE;
+	}
 	
 	// Getters and setters
     public function getId(){
