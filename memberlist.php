@@ -584,7 +584,7 @@ switch ($mode)
 		// If the user has m_approve permission or a_user permission, then list then display unapproved posts
 		if ($auth->acl_getf_global('m_approve') || $auth->acl_get('a_user'))
 		{
-			$sql = 'SELECT COUNT(post_id) as posts_in_queue
+			$sql = '(post_id) as posts_in_queue
 				FROM ' . POSTS_TABLE . '
 				WHERE poster_id = ' . $user_id . '
 					AND post_approved = 0';
@@ -995,6 +995,7 @@ switch ($mode)
 		// Additional sorting options for user search ... if search is enabled, if not
 		// then only admins can make use of this (for ACP functionality)
 		$sql_select = $sql_where_data = $sql_from = $sql_where = $order_by = '';
+		$sql_join = 'JOIN '. PROFILE_FIELDS_DATA_TABLE .' f ON u.user_id =  f.user_id';
 
 
 		$form			= request_var('form', '');
@@ -1002,7 +1003,7 @@ switch ($mode)
 		$select_single 	= request_var('select_single', false);
 
 		// Search URL parameters, if any of these are in the URL we do a search
-		$search_params = array('username', 'email', 'icq', 'aim', 'yahoo', 'msn', 'jabber', 'search_group_id', 'joined_select', 'active_select', 'count_select', 'joined', 'active', 'count', 'ip');
+		$search_params = array('username', 'realname', 'email', 'icq', 'aim', 'yahoo', 'msn', 'jabber', 'search_group_id', 'joined_select', 'active_select', 'count_select', 'joined', 'active', 'count', 'ip');
 
 		// We validate form and field here, only id/class allowed
 		$form = (!preg_match('/^[a-z0-9_-]+$/i', $form)) ? '' : $form;
@@ -1010,6 +1011,7 @@ switch ($mode)
 		if (($mode == 'searchuser' || sizeof(array_intersect(array_keys($_GET), $search_params)) > 0) && ($config['load_search'] || $auth->acl_get('a_')))
 		{
 			$username	= request_var('username', '', true);
+			$realname	= request_var('realname', '');
 			$email		= strtolower(request_var('email', ''));
 			$icq		= request_var('icq', '');
 			$aim		= request_var('aim', '');
@@ -1054,6 +1056,7 @@ switch ($mode)
 			}
 
 			$sql_where .= ($username) ? ' AND u.username_clean ' . $db->sql_like_expression(str_replace('*', $db->any_char, utf8_clean_string($username))) : '';
+			$sql_where .= ($realname) ? ' AND LOWER(f.pf_gumbo_realname) ' . $db->sql_like_expression(str_replace('*', $db->any_char, utf8_clean_string(strtolower($realname)))) . ' AND f.pf_gumbo_realname != \'nieuwbouw\'': '';
 			$sql_where .= ($auth->acl_get('a_user') && $email) ? ' AND u.user_email ' . $db->sql_like_expression(str_replace('*', $db->any_char, $email)) . ' ' : '';
 			$sql_where .= ($icq) ? ' AND u.user_icq ' . $db->sql_like_expression(str_replace('*', $db->any_char, $icq)) . ' ' : '';
 			$sql_where .= ($aim) ? ' AND u.user_aim ' . $db->sql_like_expression(str_replace('*', $db->any_char, $aim)) . ' ' : '';
@@ -1243,7 +1246,7 @@ switch ($mode)
 			);
 
 			$sql_select = ', ug.group_leader';
-			$sql_from = ', ' . USER_GROUP_TABLE . ' ug ';
+			$sql_from = ', ' . USER_GROUP_TABLE . ' ug';
 			$order_by = 'ug.group_leader DESC, ';
 
 			$sql_where .= " AND ug.user_pending = 0 AND u.user_id = ug.user_id AND ug.group_id = $group_id";
@@ -1269,6 +1272,7 @@ switch ($mode)
 		{
 			$sql = 'SELECT COUNT(u.user_id) AS total_users
 				FROM ' . USERS_TABLE . " u$sql_from
+				". $sql_join ."
 				WHERE u.user_type IN (" . USER_NORMAL . ', ' . USER_FOUNDER . ")
 				$sql_where";
 			$result = $db->sql_query($sql);
@@ -1292,6 +1296,7 @@ switch ($mode)
 			'field'			=> array('field', ''),
 			'select_single'	=> array('select_single', $select_single),
 			'username'		=> array('username', '', true),
+			'realname'		=> array('realname', ''),
 			'email'			=> array('email', ''),
 			'icq'			=> array('icq', ''),
 			'aim'			=> array('aim', ''),
@@ -1330,7 +1335,6 @@ switch ($mode)
 				$sort_params[] = $param;
 			}
 		}
-
 		$u_hide_find_member = append_sid("{$phpbb_root_path}memberlist.$phpEx", "start=$start" . (!empty($params) ? '&amp;' . implode('&amp;', $params) : ''));
 
 		if ($mode)
@@ -1424,6 +1428,7 @@ switch ($mode)
 
 			$template->assign_vars(array(
 				'USERNAME'	=> $username,
+				'REALNAME'	=> $realname,
 				'EMAIL'		=> $email,
 				'ICQ'		=> $icq,
 				'AIM'		=> $aim,
@@ -1455,6 +1460,7 @@ switch ($mode)
 		$sql = "SELECT u.user_id
 			FROM " . USERS_TABLE . " u
 				$sql_from
+				$sql_join
 			WHERE u.user_type IN (" . USER_NORMAL . ', ' . USER_FOUNDER . ")
 				$sql_where
 			ORDER BY $order_by";
@@ -1492,14 +1498,17 @@ switch ($mode)
 						$sql_select
 					FROM " . USERS_TABLE . " u
 						$sql_from
+						$sql_join
 					WHERE " . $db->sql_in_set('u.user_id', $user_list) . "
 						$sql_where_data";
 			}
 			else
 			{
 				$sql = 'SELECT *
-					FROM ' . USERS_TABLE . '
-					WHERE ' . $db->sql_in_set('user_id', $user_list);
+					FROM ' . USERS_TABLE . ' u
+					JOIN '. PROFILE_FIELDS_DATA_TABLE .' f 
+						ON u.user_id =  f.user_id
+					WHERE ' . $db->sql_in_set('u.user_id', $user_list);
 			}
 			$result = $db->sql_query($sql);
 
@@ -1548,10 +1557,11 @@ switch ($mode)
 
 					'S_CUSTOM_PROFILE'	=> (isset($cp_row['row']) && sizeof($cp_row['row'])) ? true : false,
 					'S_GROUP_LEADER'	=> $is_leader,
+					'U_REAL_NAME' 		=> ($row['pf_gumbo_realname'] != 'nieuwbouw' && $row['pf_gumbo_realname'] != "") ? $row['pf_gumbo_realname'] :  "-",
 
 					'U_VIEW_PROFILE'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile&amp;u=' . $user_id))
 				);
-
+				
 				if (isset($cp_row['row']) && sizeof($cp_row['row']))
 				{
 					$memberrow = array_merge($memberrow, $cp_row['row']);
@@ -1570,7 +1580,7 @@ switch ($mode)
 				unset($id_cache[$user_id]);
 			}
 		}
-
+		
 		// Generate page
 		$template->assign_vars(array(
 			'PAGINATION'	=> generate_pagination($pagination_url, $total_users, $config['topics_per_page'], $start),
@@ -1591,6 +1601,7 @@ switch ($mode)
 			'U_FIND_MEMBER'			=> ($config['load_search'] || $auth->acl_get('a_')) ? append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser' . (($start) ? "&amp;start=$start" : '') . (!empty($params) ? '&amp;' . implode('&amp;', $params) : '')) : '',
 			'U_HIDE_FIND_MEMBER'	=> ($mode == 'searchuser') ? $u_hide_find_member : '',
 			'U_SORT_USERNAME'		=> $sort_url . '&amp;sk=a&amp;sd=' . (($sort_key == 'a' && $sort_dir == 'a') ? 'd' : 'a'),
+			'U_SORT_REALNAME'		=> $sort_url . '&amp;sk=a&amp;sd=' . (($sort_key == 'a' && $sort_dir == 'a') ? 'd' : 'a'),
 			'U_SORT_FROM'			=> $sort_url . '&amp;sk=b&amp;sd=' . (($sort_key == 'b' && $sort_dir == 'a') ? 'd' : 'a'),
 			'U_SORT_JOINED'			=> $sort_url . '&amp;sk=c&amp;sd=' . (($sort_key == 'c' && $sort_dir == 'a') ? 'd' : 'a'),
 			'U_SORT_POSTS'			=> $sort_url . '&amp;sk=d&amp;sd=' . (($sort_key == 'd' && $sort_dir == 'a') ? 'd' : 'a'),
@@ -1610,7 +1621,11 @@ switch ($mode)
 			'S_LEADERS_SET'		=> $leaders_set,
 			'S_MODE_SELECT'		=> $s_sort_key,
 			'S_ORDER_SELECT'	=> $s_sort_dir,
-			'S_MODE_ACTION'		=> $pagination_url)
+			'S_MODE_ACTION'		=> $pagination_url,
+			
+			'A_REALNAME'		=> ($auth->acl_get('u_view_real_name')) ? true : false,
+			
+			'L_REALNAME'		=> $user->lang['REALNAME'])
 		);
 }
 

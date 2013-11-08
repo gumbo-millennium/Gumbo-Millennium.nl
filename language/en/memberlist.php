@@ -92,6 +92,7 @@ $lang = array_merge($lang, array(
 	'IM_USER'				=> 'Send an instant message',
 
 	'LAST_ACTIVE'				=> 'Last active',
+	'REALNAME'					=> 'Realname',
 	'LESS_THAN'					=> 'Less than',
 	'LIST_USER'					=> '1 user',
 	'LIST_USERS'				=> '%d users',
