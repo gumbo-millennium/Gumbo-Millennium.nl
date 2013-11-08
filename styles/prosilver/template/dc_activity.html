@@ -1,3 +1,4 @@
+
 <!-- INCLUDE overall_header.html -->
 <div class="clear"></div>
 <!-- IF IS_MANAGER -->
@@ -22,7 +23,7 @@
 	<div class="inner">
 		<span class="corners-top"><span></span></span>
 		<div class="postbody">
-			<h2 class="first"><a href="#p2">{TITLE}</a></h3>
+			<h3 class="first"><a href="#p2">{TITLE}</a></h3>
 			<div class="content">
 				{DESCRIPTION}
 			</div>
@@ -108,10 +109,13 @@
 	<dl class="postprofile" id="profile2">
 	<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
 	<form action="{URL_CLEAN}" method="POST">
-				{S_FORM_TOKEN}
+	{S_FORM_TOKEN}
 	<!-- IF not ENROLL -->
 		<dd>{LANG_NO_LOGIN_NEEDED}</dd>
-	<!-- ELSEIF ENROLL_MAX and not USER_ENROLLED_CHECK -->
+	<!-- ELSEIF not IS_ACTIVE -->
+		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
+		<dd><dt>{LANG_NOT_ACTIVE}</dt></dd>
+		<!-- ELSEIF IS_ENROLL_MAX and not USER_ENROLLED_CHECK -->
 		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
 		<dd><dt>{LANG_ENROLL_AMOUNT_MAX}</dt></dd>
 	<!-- ELSEIF not ENROLL_DATE_CHECK and not USER_ENROLLED_CHECK -->
@@ -125,8 +129,9 @@
 				<dd>&#8364;{USER_ENROLLED_PAID}</dd>
 			<dt>&nbsp;</dt>
 			<dd>{USER_ENROLLED_STATUS}</dd>
-			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-<<<<<<< HEAD
+			<!-- IF UNSUBSCRIBE_DATE_CHECK && USER_ENROLLED_STATUS == "Yes" -->
+				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
+			<!-- ELSEIF USER_ENROLLED_STATUS == "No" && ENROLL_DATE_CHECK && not ENROLL_MAX -->
 				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
 			<!-- ENDIF -->
 			<dt>&nbsp;</dt>
@@ -137,39 +142,20 @@
 			<dd><input type="submit" value="{LANG_SAVE_COMMENT}"></dd>
 			<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
 			<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
-
 		<!-- ELSE -->
-			<!-- IF ENROLL_DATE_CHECK && USER_ENROLLED_STATUS != 'Yes'-->
+			<!-- IF USER_ENROLLED_STATUS == 'No' && ENROLL_DATE_CHECK && not ENROLL_MAX -->
 				<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
-			<!-- ELSE -->
+				<!-- IF UNSUBSCRIBE_DATE_CHECK -->
+					<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+				<!-- ENDIF -->
+			<!-- ELSEIF USER_ENROLLED_STATUS == 'Yes' && UNSUBSCRIBE_DATE_CHECK -->
 				<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
 				<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-=======
-					<form action="{URL_CLEAN}" method="POST">
-					{S_FORM_TOKEN}
-					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
-						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX  && USER_ENROLLED_STATUS != 'Yes'-->
-						
-						<dd><button name="status" type="submit" value="1"><h3>{LANG_SUBSCRIBE}</h3></button></dd>
-						<!-- ELSE -->
-						<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
-						
-						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-						<!-- ENDIF -->
-					</form>
-			<!-- ELSEIF ENROLL -->
-					<dt>{LANG_ENROLL_CLOSED}</dt>
-				<!-- ELSE -->
-				<dt>{LANG_NO_LOGIN_NEEDED}</dt>
->>>>>>> 7e01c02f7025f533178e68fa7c35ebb173dd30a1
 			<!-- ENDIF -->
 		<!-- ENDIF -->
 	<!-- ELSE -->
-		<!-- IF ENROLL_DATE_CHECK && USER_ENROLLED_STATUS != 'Yes'-->
+		<!-- IF ENROLL_DATE_CHECK -->
 			<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
-		<!-- ELSE -->
-			<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
-			<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
 		<!-- ENDIF -->
 	<!-- ENDIF -->
 	</form>
