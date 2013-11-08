@@ -126,6 +126,7 @@
 			<dt>&nbsp;</dt>
 			<dd>{USER_ENROLLED_STATUS}</dd>
 			<!-- IF UNSUBSCRIBE_DATE_CHECK -->
+<<<<<<< HEAD
 				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
 			<!-- ENDIF -->
 			<dt>&nbsp;</dt>
@@ -143,6 +144,24 @@
 			<!-- ELSE -->
 				<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
 				<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+=======
+					<form action="{URL_CLEAN}" method="POST">
+					{S_FORM_TOKEN}
+					<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
+						<!-- IF ENROLL_DATE_CHECK && ENROLL_MAX  && USER_ENROLLED_STATUS != 'Yes'-->
+						
+						<dd><button name="status" type="submit" value="1"><h3>{LANG_SUBSCRIBE}</h3></button></dd>
+						<!-- ELSE -->
+						<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
+						
+						<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
+						<!-- ENDIF -->
+					</form>
+			<!-- ELSEIF ENROLL -->
+					<dt>{LANG_ENROLL_CLOSED}</dt>
+				<!-- ELSE -->
+				<dt>{LANG_NO_LOGIN_NEEDED}</dt>
+>>>>>>> 7e01c02f7025f533178e68fa7c35ebb173dd30a1
 			<!-- ENDIF -->
 		<!-- ENDIF -->
 	<!-- ELSE -->
