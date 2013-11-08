@@ -584,7 +584,7 @@ class activity {
 				'user_id' 			=> $current_user_id,
 				'user_ip' 			=> $row['user_ip'],
 				'username' 			=> $row['username'],
-				'comments' 			=> htmlspecialchars_decode($row['comments']),
+				'comments' 			=> generate_text_for_display( htmlspecialchars_decode($row['comments']) , '', '', 0),
 				'datetime' 			=> new DateTime($row['datetime']),
 				'status' 			=> $row['status'],
 				'price_paid' 		=> $row['price_paid'],
@@ -764,24 +764,31 @@ class activity {
 		// check for exisiting managers with a status change
 		$temp_user_enrol_count = 0;
 		foreach($new_user_list AS $key => $user_data){				// loop through all group id (current_user) from the new_users_list
+			$update = false;
 			$user_id = intval($user_data["user_id"]);
-			$status = $user_data["status"];
-			switch($status){
-				case USER_SIGN_IN:
-					$temp_user_enrol_count++;
-					$user_data["status"] = "yes";
-				break;
-				case USER_SIGN_OUT:
-					$temp_user_enrol_count--;
-					$user_data["status"] = "no";
-				break;
-				case USER_SIGN_MAYBE:
-					$user_data["status"] = "maybe";
-				break;
-				default:
-					$this->set_error_log("Function: set_users_status; Invalid user (id: ". $user_data["user_id"] .") status: ". $status);
-					trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
-					return NULL; 
+			if(isset($user_data["status"])){
+				$status = $user_data["status"];
+				switch($status){
+					case USER_SIGN_IN:
+						$temp_user_enrol_count++;
+						$user_data["status"] = "yes";
+					break;
+					case USER_SIGN_OUT:
+						$temp_user_enrol_count--;
+						$user_data["status"] = "no";
+					break;
+					case USER_SIGN_MAYBE:
+						$user_data["status"] = "maybe";
+					break;
+					default:
+						$this->set_error_log("Function: set_users_status; Invalid user (id: ". $user_data["user_id"] .") status: ". $status);
+						trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
+						return NULL; 
+				}
+				if( $users_enrol_ary[$user_data["user_id"]]["status"] != $user_data["status"] ){
+					
+					$update = true;
+				}
 			}
 			
 			if(isset($user_data["price_paid"])){
@@ -790,27 +797,40 @@ class activity {
 					trigger_error('Amount is not valid, please contact the administrator');	
 					return NULL;
 				}
+				
+				if($users_enrol_ary[$user_data["user_id"]]["price_paid"] != $user_data["price_paid"]){
+					$update = true;
+				}
 			}
 			
+			$uid = $bitfield = $options = ''; 
+			$enable_bbcode = $enable_magic_url = $enable_smilies = FALSE;
+			
 			if(isset($users_enrol_ary[$user_data["user_id"]])){				// check if group id is in the current manager list
-				if( $users_enrol_ary[$user_data["user_id"]]["status"] != $user_data["status"]){ 	// check if current_group_id status is the same as new status
-					// the group id exist and has new status
+				
+				if ($update){ 					
+					$comments_stored = (isset($user_data["comments"]))? 	$user_data["comments"] 	: $users_enrol_ary[$user_data["user_id"]]["comments"];
+					generate_text_for_storage($comments_stored, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
+					
 					$users_status_change[$user_data["user_id"]] = array( 
-						"status"		=> (isset($user_data["status"]))? 					$user_data["status"] 			: $users_enrol_ary[$user_data["user_id"]]["status"],
-						"user_ip"		=>  (isset($user_data["user_ip"]))? 				$user_data["user_ip"] 		: $users_enrol_ary[$user_data["user_id"]]["user_ip"],
-						"comments"		=> (isset($user_data["comments"]))? 	$user_data["comments"] 	: $users_enrol_ary[$user_data["user_id"]]["comments"],
+						"status"		=> (isset($user_data["status"]))? $user_data["status"] : $users_enrol_ary[$user_data["user_id"]]["status"],
+						"user_ip"		=>  (isset($user_data["user_ip"]))? $user_data["user_ip"] : $users_enrol_ary[$user_data["user_id"]]["user_ip"],
+						"comments"		=> $comments_stored,
 						"price_payed"	=> (double)(isset($user_data["price_paid"]))? 	$user_data["price_paid"]	: $users_enrol_ary[$user_data["user_id"]]["price_paid"],
 					);
 				}
 			}else{
+			
+				$comments_stored = (!empty($user_data["comments"]))? $user_data["comments"] : "";
+				generate_text_for_storage($comments_stored, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
 				$users_status_new[] = array(
 						"user_id"		=> $user_data["user_id"],
 						"status"		=> $user_data["status"],
 						"activity_id"	=> (int)$this->id,
 						"user_ip"		=> $user_data["user_ip"],
 						"price"			=> (float)$this->calculate_price($user_data["user_id"]),
-						"comments"		=> (!empty($user_data["comments"]))? $user_data["comments"] : NULL,
-						"price_payed"	=> $user_data["price_payed"],
+						"comments"		=> $comments_stored,
+						"price_payed"	=> (double)isset($user_data["price_paid"])? $user_data["price_paid"]: 0,
 				);
 			}
 			unset($users_enrol_ary[$user_id]);				// remove group id from the users_enrol_ary list
@@ -818,7 +838,7 @@ class activity {
 		
 		if($this->is_max_enrolled($temp_user_enrol_count)){
 			$this->set_error_log("Function: set_users_status; Max subscriptions is reached");
-			trigger_error("Maximum subscriptions is reached");
+			trigger_error($user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
 			return FALSE;
 		}
 				
@@ -950,7 +970,7 @@ class activity {
 		return NULL; 
 	}
 	
-	function set_user_comment($user_id, $new_comment){
+	function set_user_comment($user_id, $new_comment, &$model_enroll_list = null){
 		global $db;
 		
 		//check if the activity is allowed to change
@@ -965,10 +985,13 @@ class activity {
 		if(!is_array($this->enrolled_users)){
 			$this->get_enrol_list(ALL_USERS);		// get a list of all the groups with access
 		}
-		
+		$comments_stored = $new_comment;
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$enable_bbcode = $enable_magic_url = $enable_smilies = FALSE;
+		generate_text_for_storage($comments_stored, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
 		if(isset($this->enrolled_users[$user_id])){
 			$sql_ary = array(
-				"enr.comments" => htmlspecialchars($new_comment)
+				"enr.comments" => htmlspecialchars($comments_stored)
 			);
 			
 			$sql_where_ary = array(
@@ -981,6 +1004,9 @@ class activity {
 				WHERE '. $db->sql_build_array('SELECT', $sql_where_ary);
 			$db->sql_query($sql);
 			$this->enrolled_users[$user_id]["comments"] = htmlspecialchars($new_comment);
+			if(isset($model_enroll_list)){
+				$model_enroll_list[$user_id]["comments"] = htmlspecialchars($new_comment);
+			}
 		}else{
 			$this->set_error_log("Function: set_user_comment; User not enrolled");
 			global $user;
@@ -1807,7 +1833,12 @@ class activity {
 	}
 	
 	public function is_max_enrolled($add_users = 0){
-		if( ($this->amount_enrolled_users + $add_users ) < $this->enrol_max && $this->enrol_max > 0){
+		if(gettype($add_users) != "integer"){
+			trigger_error("is_max_enrolled: param add_users is not a integer");
+			return null;
+			
+		}
+		if( ($this->amount_enrolled_users + $add_users ) > $this->enrol_max && $this->enrol_max > 0){
 			return TRUE;
 		}
 		return FALSE;
@@ -1858,22 +1889,12 @@ class activity {
 		}
 		
 		$description = utf8_normalize_nfc($description);
-		/*
-		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-		$enable_bbcode = $enable_magic_url = $enable_smilies = true;
-		*/
+
 		$options = ''; // will be modified by generate_text_for_storage
 		
 		$this->enable_bbcode = $this->enable_magic_url = $this->enable_smilies = true;
 		generate_text_for_storage($description, $this->bbcode_uid, $this->bbcode_bitfield, $options, $this->enable_bbcode, $this->enable_magic_url, $this->enable_smilies);
-		/*
-		generate_text_for_storage($description, $uid, $bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
-		$this->bbcode_uid = $uid;
-		$this->bbcode_bitfield = $bitfield;
-		$this->enable_magic_url = $enable_magic_url;
-		$this->enable_bbcode = $enable_bbcode ;
-		$this->enable_smilies = $enable_smilies;
-		*/
+		
 		if($this->description != $description)
 			$this->change_log["description"] = $this->description . "->". $description . ";";
 		$this->description = $description;	
@@ -2208,12 +2229,6 @@ class activity {
 
     public function getLocation(){
 	
-		$options = 	
-			(($this->enable_bbcode) ? OPTION_FLAG_BBCODE : 0) +
-			(($this->enable_smilies) ? OPTION_FLAG_SMILIES : 0) + 
-			(($this->enable_magic_url) ? OPTION_FLAG_LINKS : 0);
-		
-
 		$location = generate_text_for_display( htmlspecialchars_decode($this->location) , '', '', 0);
 		
 		return $location;

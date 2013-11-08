@@ -71,17 +71,15 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 	}else {
 		switch($status){														// check new status
 			case 1:																// new status = yes
-				
-				if($activity->is_max_enrolled()){
-					trigger_error("Maximum subscriptions is reached");
+				if($activity->is_max_enrolled(1)){
+					trigger_error($user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
 				}else{
-					
 					$activity->set_users_status(
 						array( 
 							array(
 								"user_id"		=> intval($user->data["user_id"]),
 								"user_ip"		=> $user->ip,
-								"status"		=> USER_SIGN_OUT,
+								"status"		=> USER_SIGN_IN,
 							)
 						)
 					);
@@ -130,10 +128,11 @@ $salt = (String)mt_rand(); 													// create (string) salt for gettting the
 $comment = utf8_normalize_nfc(request_var('comment', $salt)); 									// get new comment (default = $salt: no new comment)
 if($comment != $salt && check_form_key('chance_the_subscribe_status')){														// check for a new comment
 	if(array_key_exists($user->data['user_id'], $enrol_list)){ 			// check if user has enrolled
-		$activity->set_user_comment($user->data['user_id'],$comment); 		// set new comment
+		$activity->set_user_comment($user->data['user_id'],$comment, $enrol_list); 		// set new comment
 		$template->assign_var('COMMENT_SAVED', true);						// set template saved	
 	}
 }
+
 
 add_form_key('chance_the_subscribe_status'); // set form key to avoid cross side scripting
 // set default variables
@@ -153,10 +152,11 @@ if( isset($enrol_list[ $user->data['user_id']]) && $enrol_list[$user->data['user
 	$template->assign_var('USER_ENROLLED_CHECK', false); 									// user not enrolled
 }
 
-
-$template->assign_var('ENROLL', $activity->getEnrol());								// set enrol
-$template->assign_var('IS_ACTIVE', $activity->getActive());								// set enrol
-$template->assign_var('IS_ENROLL_MAX', !$activity->is_max_enrolled()); // check the limit of subscriptions is reached
+$sign_up_places = $activity->getEnrolMax() - $activity->getAmountEnrolledUser();
+$template->assign_var('ENROLL', $activity->getEnrol());				// get enrol
+$template->assign_var('U_SIGN_UPS_LEFT', ($activity->getEnrolMax() > 0) ? $sign_up_places : $user->lang['DC_ACT_ENROLL_UNLIMITED']);
+$template->assign_var('IS_ACTIVE', $activity->getActive());			//get active
+$template->assign_var('IS_ENROLL_MAX', $activity->is_max_enrolled(1)); // check the limit of subscriptions is reached
 $enrol_date_time = $activity->getEnrolDateTime();			// get max enrol date and time
 $unsubscribe_date_time = $activity->getUnsubscribeMaxDatetime();			// get the time the user has to unsubscribe
 $template->assign_var('ENROLL_DATE',$user->format_date( $enrol_date_time->getTimestamp() )); // set end enrol date time
@@ -222,6 +222,7 @@ $template->assign_var('URL_CHANGE_STATUS', append_sid($phpbb_root_path.'dc/dc_ac
 // some additional words for transalation
 $template->assign_var('LANG_TILL', strtolower($user->lang['DC_ACT_LANG_TILL']));
 $template->assign_var('LANG_ENROLLS', $user->lang['DC_ACT_LANG_ENROLLS']);
+$template->assign_var('LANG_SIGN_UPS_LEFT', $user->lang['DC_ACT_ENROLL_LEFT']);
 $template->assign_var('LANG_SUBSCRIPTIONS', $user->lang['DC_ACT_LANG_SUBSCRIBE']);  
 $template->assign_var('LANG_UNSUBSCRIPTIONS', $user->lang['DC_ACT_UNSUBSCRIBE']);
 $template->assign_var('LANG_SUBSCRIBE', $user->lang['ACP_DC_ACT_ENROL']);  

@@ -1153,17 +1153,29 @@ class acp_dc_activity_management
 						foreach($user_ids AS $index => $id){
 							switch(intval($cfg_array["action_options"])){
 								case CHANCE_PAYMENT:
-									$update_users[$id]["price_paid"] = (double)$cfg_array['amount_paid'];
+									$update_users[]= array(
+										"user_id"	=> $id,
+										"user_ip"	=> $user->ip,
+										"price_paid"=> (double)$cfg_array['amount_paid']
+									);
 									break;
 								case SEND_EMAIL:
 									$update_users[] = $id;
 									break;
 								case ADD_USERS:
 								case SUBSCRIBE_USER:
-									$update_users[$id]["status"] = USER_SIGN_IN;
+									$update_users[] = array(
+										"user_id"	=> $id,
+										"user_ip"		=> $user->ip,
+										"status" 	=> USER_SIGN_IN
+									);
 									break;
 								case UNSUBSCRIBE_USER:
-									$update_users[$id]["status"] = USER_SIGN_OUT;
+									$update_users[] = array(
+										"user_id"	=> $id,
+										"user_ip"		=> $user->ip,
+										"status"	=> USER_SIGN_OUT
+									);
 									break;
 								default:
 									$not_found_users[] = $id;
