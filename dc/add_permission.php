@@ -24,7 +24,7 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('mods/dc_activity');
 
-
+/*
 // Setup $auth_admin class so we can add tabulated survey permission options
 include($phpbb_root_path . 'includes/acp/auth.' . $phpEx);
 $auth_admin = new auth_admin();
@@ -36,7 +36,7 @@ $auth_admin->acl_add_option(array(
     'global'    => array('u_view_real_name')
 	
 ));
-
+*/
 // old permissions: array('a_act_recyle', 'a_act_send_mail', 'a_act_pay', 'a_act_remove_user', 'a_act_add_user', 'a_act_view_subscribe_list', 'a_act_chance_state', 'u_view_real_name')
 
 $message = $user->lang['ADDED_PERMISSIONS'] . '<br /><br />';
