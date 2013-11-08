@@ -37,7 +37,7 @@
  	</p>
 	{S_FORM_TOKEN}
 </fieldset>
-</form>
+
 
 
 <table cellspacing="1">
@@ -61,9 +61,16 @@
 	<a href="{events_past.U_RECYCLE}">{L_EVENT_RECYCLE}</a></td>
 </tr>
 <!-- END events_past -->
+
 </tbody>
 </table>
 
+<div class="rightside pagination">{TOTAL_ACTIVITIES} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></div>
 
+<fieldset class="display-options">
+	{L_DISPLAY_LIMIT}: &nbsp;{S_LIMIT_RECORDS}&nbsp;{L_SORT_BY}: {S_SORT_KEY} {S_SORT_DIR}
+	<input class="button2" type="submit" value="{L_GO}" name="submit" />
+</fieldset>
+</form>
 
 <!-- INCLUDE overall_footer.html -->

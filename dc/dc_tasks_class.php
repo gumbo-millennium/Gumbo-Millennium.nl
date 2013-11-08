@@ -37,7 +37,7 @@ class Task {
 			create new Task:
 				task_prent_id 		= NULL
 				task_prent_object 	= NULL
-			Task::fill_from_database()/fill_from_database_multiple
+			Task::fill_from_database()/Task::fill_from_database_multiple()
 				task_prent_id 		= set
 				task_prent_object 	= NULL
 			Task::get_parent() or Task::set_parent()
@@ -799,7 +799,6 @@ class Task {
 	}
 	
 	function set_tasks_handler($tasks_handler){
-		//var_dump($tasks_handler);
 		if(!($tasks_handler instanceof Tasks_handler || $tasks_handler == NULL)){
 			return FALSE;
 		}

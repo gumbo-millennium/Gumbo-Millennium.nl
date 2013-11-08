@@ -26,10 +26,9 @@ define ("SUBSCRIBE_USER", 4);
 define ("UNSUBSCRIBE_USER", 5);
 
 // include functions
-include ($phpbb_root_path . 'dc/dc_activity_management_class.' . $phpEx);
-include ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
+include_once ($phpbb_root_path . 'dc/dc_activities_handler.' . $phpEx);
+include_once ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . '/includes/functions_posting.' . $phpEx);
-include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
@@ -51,7 +50,7 @@ class acp_dc_activity_management
 		$action	= request_var('action', '');
 		$submit = (isset($_POST['submit'])) ? true : false;
 		$preview = (isset($_POST['preview'])) ? true : false;
-		$activitys_controller = new activity_user();
+		$activities_handler = new activities_handler();
 		
 		// if mode is edit_activity this varible can change to false if the activity is 'current'
 			// current means startdatetime <= now and endDateTime >= now 
@@ -66,7 +65,7 @@ class acp_dc_activity_management
 			break;	
 		}
 		
-		$activity_management = new activity_management();
+		
 		
 		/**
 		*	Validation types are:
@@ -83,23 +82,25 @@ class acp_dc_activity_management
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
 				
-				$activity = new activity();								// make a new activity
-				$activity->fill($activity_id);							// fill the new activity from the db
+				$activity = Activity::get_activity($activity_id, $activities_handler);								
 				
+				if($activity == NULL){
+					trigger_error($user->lang['DC_ACT_NO_ACT']);
+				}
 				// get authorisation 
 				if (!$activity->is_manager($user->data['user_id']))
 				{
 					 trigger_error('NOT_AUTHORISED');
 				}			
-				// get all the value's
+				// set all the config value's
 				
 				$this->new_config['start_date'] = date_format($activity->getStartDateTime(), 'd-m-Y');
 				$this->new_config['start_time'] = date_format($activity->getStartDateTime(), 'H:i:s');
 				$this->new_config['end_date'] = date_format($activity->getEndDateTime(), 'd-m-Y');
 				$this->new_config['end_time'] = date_format($activity->getEndDateTime(), 'H:i:s');
 				
-				$this->new_config['enroll_date'] = date_format($activity->getEnrollDateTime(), 'd-m-Y');
-				$this->new_config['enroll_time'] = date_format($activity->getEnrollDateTime(), 'H:i:s');
+				$this->new_config['enroll_date'] = date_format($activity->getEnrolDateTime(), 'd-m-Y');
+				$this->new_config['enroll_time'] = date_format($activity->getEnrolDateTime(), 'H:i:s');
 				
 				$this->new_config['end_date_unsubscribe'] = date_format($activity->getUnsubscribeMaxDatetime(), 'd-m-Y');
 				$this->new_config['end_time_unsubscribe'] = date_format($activity->getUnsubscribeMaxDatetime(), 'H:i:s');
@@ -118,8 +119,11 @@ class acp_dc_activity_management
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
 						}
 						
-						$activity = new activity();								// make a new activity
-						$activity->fill($activity_id);							// fill the new activity from the db
+						$activity = Activity::get_activity($activity_id, $activities_handler);
+						
+						if($activity == NULL){
+							trigger_error($user->lang['DC_ACT_NO_ACT']);
+						}
 						
 						// get authorisation 
 						if (!$activity->is_manager($user->data['user_id']))
@@ -133,22 +137,22 @@ class acp_dc_activity_management
 					// Check if user not submited. That means the user is the first time on this page and some fields are needed to be set.
 					if(!$submit){
 				
-						$this->new_config['name'] = $activity->getName();
-						$this->new_config['enroll'] = (($activity->getEnroll() == 1 )? 'yes' : 'no');
+						$this->new_config['activity_name'] = $activity->getName();
+						$this->new_config['enroll'] = (($activity->getEnrol() == 1 )? 'yes' : 'no');
 						$this->new_config['location'] = $activity->getLocation();
 						$this->new_config['pay_option'] = $activity->getPayOption();
 						$this->new_config['commission'] = $activity->getCommission();
 						
-						$this->new_config['enroll_max'] = $activity->getEnrollMax();
+						$this->new_config['enroll_max'] = $activity->getEnrolMax();
 						$this->new_config['price'] = $activity->getPrice();
 						$this->new_config['price_member'] = $activity->getPriceMember();
 						$this->new_config['description'] = $activity->getDescription_edit();
 						
 						// get all managers of an activity 
-						$managers = $activity->get_group_manage_list('enable');				// get all groups that are managers			
+						$managers = $activity->get_groups_manage_list(GROUPS_MANAGES_ENABLED, TRUE);				// get all groups that are managers			
 						$group_array = array();													// define group array
 						foreach($managers AS $group_id => $value){							// convert index (group_id) to a array
-							$group_array[] = get_group_name($group_id); 					// get groep name from id
+							$group_array[] = $managers[$group_id]["group_name"]; 					// get groep name from id
 						}
 						$this->new_config['add_group_manager'] = implode(GROUP_SEPARATOR ."\n",$group_array);	// convert the user id's array to a string with a new line in between
 						// unset the managers variables 
@@ -157,12 +161,12 @@ class acp_dc_activity_management
 						unset($group_array);
 						
 						//get all groups that have acces to this activity
-						$groups = $activity->get_group_acces_list('enable');				// get all groups that have acces
+						$groups = $activity->get_groups_access_list(GROUPS_ACCESS_ENABLED, TRUE);				// get all groups that have acces
 						$group_array = array();													// define group array
-						foreach($groups AS $group_id => $value){							// convert index (group_id) to a array
-							$group_array[] = get_group_name($group_id); 
+						foreach($groups AS $group_id => $value){				// get array of group names
+							$groups_name_array[] = $groups[$group_id]["group_name"]; 
 						}
-						$this->new_config['add_group'] = implode(GROUP_SEPARATOR ."\n",$group_array);
+						$this->new_config['add_group'] = implode(GROUP_SEPARATOR ."\n",$groups_name_array);
 						// unset the group variables 
 						unset($groups);
 						unset($group_array);
@@ -193,7 +197,7 @@ class acp_dc_activity_management
 					'title'	=> strtoupper($form_title),
 					'vars'	=> array(				
 						'legend1'	=> 'GENERAL_SETTINGS',	
-							'name' => array(
+							'activity_name' => array(
 								'lang' => 'ACP_DC_ACT_NAME',
 								'validate' => 'string',
 								'type' => 'text:20:100', 
@@ -250,8 +254,7 @@ class acp_dc_activity_management
 								'validate' => 'string',
 								'type' => 'textarea:2:2',
 								'empty' => false,
-								'explain' => true,
-								'preg'=> '[^a-zA-Z0-9, ]'
+								'explain' => true
 							),
 							'pay_option' => array('lang' => 'ACP_DC_ACT_PAY_OPTION',
 								'validate' => 'string',
@@ -381,7 +384,7 @@ class acp_dc_activity_management
 				// Generate smilies on inline displaying
 				generate_smilies('inline', $form_key);
 
-				// Assigning custom bbcode
+				// Assigning custom bbcode	
 				display_custom_bbcodes();
 				
 				// set title
@@ -393,8 +396,13 @@ class acp_dc_activity_management
 				$this->tpl_name = 'dc/acp_dc_activity_new';
 				break;
 
-			 case 'overview':
-			 	$comming_activities = $activity_management->get_comming($user->data['user_id'],"start_datetime", "DESC");	// get all comming activities
+			 case 'overview':		
+				$search_parameters = array(
+					USER_READED 		=> FALSE,
+					MANAGERS_GROUPS		=> TRUE,
+				);
+				
+			 	$comming_activities = $activities_handler->get_user_activities(intval($user->data['user_id']), MANAGEMENT_ACCESS, FUTURE, $search_parameters);
 				
 				//// 	check if an activity gets activated or deactived	 ////
 				
@@ -427,15 +435,21 @@ class acp_dc_activity_management
 				}
 				// get all comming activities
 				
+				$group_name_ary = array();
 				foreach($comming_activities AS $index => $activity){
+					
+					if(!isset($group_name_ary[$activity->getCommission()])){
+						$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
+					}
+					
 					$event_active = (($activity->getActive() == 1) ? "_active" : "_deactive");
 					$event_active = ((($activity->getStartDatetime() <= new Datetime("now")) && ($activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active ); // check if event is now, if active block: events_now
 
 					// creates 3 block_vars: event_active, event_deactive and event_now
 					$template->assign_block_vars('events'.$event_active, array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
-						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
+						'EVENT_ENTERED'		=> $activity->getAmountEnrolledUser(),
+						'EVENT_COMMISSION'	=> $group_name_ary[$activity->getCommission()],
 
 						'EVENT_ACTIVE'		=> (($activity->getActive() == 1) ? true : false) ,
 						'EVENT_ACTIVATE'	=> $this->u_action.'&activate='.$activity->getId(),
@@ -451,31 +465,28 @@ class acp_dc_activity_management
 				}
 									
 				// get all past activities
-				$search = array(
-					'end_datetime' => array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"))
+				
+				$search_parameters = array(
+					USER_READED 		=> FALSE,
+					MANAGERS_GROUPS		=> TRUE,
+					END_DATETIME		=> array (
+							DATE_BEGIN	=> new DateTime('NOW'),
+							OPERATOR	=> OP_LOWER,
+						),
 				);
 				
-				$managers_groups = unserialize(SEE_ALL_ACTIVITIES_GROUP);
-				$user_groups = all_user_groups($user->data['user_id']); 
-				$global_manager = false;
-				foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
-					if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
-						$global_manager = true;																
-						break;
-					}
-				}
-				if(!$global_manager){
-					$search['managers'] = $user_groups;
-				}
-				
-				$events_past = $activity_management->search($search, 10);
+			 	$events_past = $activities_handler->get_user_activities(intval($user->data['user_id']), MANAGEMENT_ACCESS, ALL, $search_parameters, START_DATETIME, DESC,  10);
 				
 				foreach($events_past AS $index => $activity){
 					
+					if(!isset($group_name_ary[$activity->getCommission()])){
+						$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
+					}
+					
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
-						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
+						'EVENT_ENTERED'		=> $activity->getAmountEnrolledUser(),
+						'EVENT_COMMISSION'	=> $group_name_ary[$activity->getCommission()],
 
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
@@ -519,7 +530,7 @@ class acp_dc_activity_management
 					'PRMISSN_EDIT'			=> $auth->acl_get('a_edit_activity'),
 					'PRMISSN_RECYLE'		=> $auth->acl_get('a_act_recyle'),
 					'PRMISSN_STATE'			=> $auth->acl_get('a_act_chance_state'),
-					'PRMISSN_SBSCRB_LST'	=> $auth->acl_get('a_act_view_subscribe_list')
+					'PRMISSN_SBSCRB_LST'	=> $auth->acl_get('a_act_view_subscribe_list'),
 					
 				));
 				
@@ -541,7 +552,14 @@ class acp_dc_activity_management
 					'vars'	=> array(				
 						'legend1'				=> 'GENERAL_SETTINGS',		
 						
-						'name'					=> array('lang' => 'ACP_DC_ACT_NAME',			'validate' => 'string',	'type' => 'text:20:50', 'empty' => true, 'explain' => true, 'preg'=> '[^a-zA-Z0-9 ]')
+						'activity_name'	=> array(
+							'lang' 		=> 'ACP_DC_ACT_NAME',			
+							'validate' 	=> 'string',	
+							'type' 		=> 'text:20:50', 
+							'empty' 	=> true, 
+							'explain' 	=> true, 
+							'preg'		=> '[^a-zA-Z0-9 ]'
+						)
 																		
 					
 					)
@@ -621,8 +639,11 @@ class acp_dc_activity_management
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
 				
-				$activity = new activity();								// make a new activity
-				$activity->fill($activity_id);							// fill the new activity from the db
+				$activity = Activity::get_activity($activity_id, $activities_handler);								
+				
+				if($activity == NULL){
+					trigger_error($user->lang['DC_ACT_NO_ACT']);
+				}
 				
 				// get authorisation //
 				if (!$activity->is_manager($user->data['user_id']))
@@ -636,7 +657,7 @@ class acp_dc_activity_management
 				
 			
 				// Get all subsribed users
-				if($enroll_list = $activity->get_all_status('all')){
+				if($activity->getAmountEnrolledUser() > 0){
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> true,
 					));
@@ -652,7 +673,6 @@ class acp_dc_activity_management
 						'FORM_TITLE'			=> $form_title,
 					));					
 				}else{
-					$enroll_list = array(); // emty array for the select user
 					$template->assign_vars(array(
 						'L_ACT_ENROLLS'		=> false,
 						'L_ACT_NO_ENROLLS'	=> $user->lang['DC_ACT_ENROLL_NOBODY'],
@@ -691,17 +711,7 @@ class acp_dc_activity_management
 								'method' => 'apc_dropdown',
 								'params' => array('{CONFIG_VALUE}', '{KEY}', $action_options, "true"),
 								'explain' => true
-							),
-							
-							'select_user' => array(
-								'lang' => 'ACP_DC_SELECT_USER',
-								'validate' => 'string',
-								'type' => 'custom',
-								'empty' => true,
-								'method' => 'select_user_selection',
-								'params' => array('{CONFIG_VALUE}', '{KEY}', $enroll_list),
-								'explain' => true
-							),
+							),	
 							'select_user_multiple'	=> array(
 								'lang' => 'ACP_DC_SELECT_MULTI_USER',
 								'validate' => 'string',
@@ -754,8 +764,16 @@ class acp_dc_activity_management
 				$activity_id = intval(utf8_normalize_nfc(request_var('id', $random_seed)));	// get current event
 				
 				if($activity_id != $random_seed){										// check if event exists
-					$activity = new activity();								// make a new activity
-					$activity->fill(intval($activity_id));							// fill the new activity from the db
+					$activity = Activity::get_activity($activity_id, $activities_handler);
+						
+						if($activity == NULL){
+							trigger_error($user->lang['DC_ACT_NO_ACT']);
+						}
+						
+						if (!$activity->is_manager($user->data['user_id']))
+						{
+							 trigger_error('NOT_AUTHORISED');
+						}
 				}else{
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
@@ -881,7 +899,7 @@ class acp_dc_activity_management
 		
 		// check default the input for a form
 		if(($submit || $preview) && isset($display_vars)){
-			$error= array_merge($error, check_form($display_vars, $cfg_array));
+			$error = array_merge($error, check_form($display_vars, $cfg_array));
 		}
 		
 		//////////////////////////////////////
@@ -895,13 +913,13 @@ class acp_dc_activity_management
 				case 'recycle_activity':
 				case 'new_activity':
 					//check enroll
-					$enroll = true;
+					$enrol = true;
 					switch($cfg_array["enroll"]){
 						case 'yes':
-							$enroll = true;
+							$enrol = true;
 							break;
 						case 'no':
-							$enroll = false; 
+							$enrol = false; 
 							break;
 						default:
 							$error[] = ucfirst(strtolower($user->lang[$display_vars['vars']['enroll']['lang']] . $user->lang["UNVALID"]));
@@ -943,7 +961,7 @@ class acp_dc_activity_management
 							$groups_save[trim($group_name_db)] = $groups_managers[$key];						// make an array for later checkes
 							$groups_managers[$key] = trim($group_name_db);									// remove spaces from the input				
 						}
-						$groups_managers_id_valid = array();													// array for all validated groupnames
+						$new_managers_groups = array();													// array for all validated groupnames
 						$sql_array = array(
 							'SELECT'    => 'g.group_id AS group_id, g.group_name as group_name',
 
@@ -959,7 +977,11 @@ class acp_dc_activity_management
 						// Run the built query statement
 						$result = $db->sql_query($sql);
 						while($valid_groups = $db->sql_fetchrow($result)){
-							$groups_managers_id_valid[] = intval($valid_groups['group_id']); 				// convert string to int and save group id
+							$new_managers_groups[ intval($valid_groups['group_id']) ] = array( 
+								'group_id' 		=> intval($valid_groups['group_id']), 
+								'created' 		=> new DateTime("NOW"), 
+								'access' 		=> GROUPS_MANAGES_ENABLED,
+							);
 							unset($groups_save[$valid_groups['group_name']]); 						// remove group from the save list
 						}
 						
@@ -988,7 +1010,7 @@ class acp_dc_activity_management
 							$groups_save[trim($group_name_db)] = $groups[$key];						// make an array for later checkes
 							$groups[$key] = trim($group_name_db);									// remove spaces from the input				
 						}
-						$groups_id_valid = array();													// array for all validated groupnames
+						$new_access_groups = array();													// array for all validated groupnames
 						$sql_array = array(
 							'SELECT'    => 'g.group_id AS group_id, g.group_name as group_name',
 
@@ -1004,11 +1026,15 @@ class acp_dc_activity_management
 						// Run the built query statement
 						$result = $db->sql_query($sql);
 						while($valid_groups = $db->sql_fetchrow($result)){
-							$groups_id_valid[] = intval($valid_groups['group_id']); 				// convert string to int and save group id
+							$new_access_groups[ intval($valid_groups['group_id']) ] = array( 
+								'group_id' 		=> intval($valid_groups['group_id']), 
+								'created' 		=> new DateTime("NOW"), 
+								'access' 		=> GROUPS_ACCESS_ENABLED,
+							); 	
 							unset($groups_save[$valid_groups['group_name']]); 						// remove group from the save list
 						}
 						
-						if(count($groups_save) > 0){												// check if there are unfound groups
+						if(!empty($groups_save)){												// check if there are unfound groups
 							foreach($groups_save as $group_name_db => $group_name_input){			// loop trough all unfound groups
 								$error[] = ucfirst(strtolower($group_name_input ." ". $user->lang['GROUP'] ." ". $user->lang['NOT_FOUND'] ." ". $user->lang['IN'] ." ". $user->lang[$display_vars['vars']['add_group']['lang']])) ;		// set error
 							}
@@ -1109,70 +1135,58 @@ class acp_dc_activity_management
 					}
 					break;
 				case 'enrolls':
-					if(!empty($cfg_array['select_user'])){
-						if(!isset($enroll_list[$cfg_array['select_user']])){
-							$username = array();
-							$user_id = array($cfg_array['select_user']);
-							user_get_id_name($user_id,$username);
-							if(isset($username[$cfg_array['select_user']])){
-								$error[] = $username[$cfg_array['select_user']].' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
-							}else{
-								$error[] = $user->lang['NO_USER'];
-							}
-						}else{
-							$user_id_found[0] = (int) $cfg_array['select_user'];
-						}
-					}
 					
 					// Convert usernames to user id and check if user exist (and sometimes if the users is enrolled)
-					if(!empty($cfg_array['select_user_multiple']) && !isset($user_id_found)){
+					if(!empty($cfg_array['select_user_multiple'])){
 						$username = array_unique(explode("\n", $cfg_array["select_user_multiple"]));	// get the (new) user(s)
 						$ttl_users = count($username);	// count to check the user name to id convertion
-						$user_id =  array();
-						user_get_id_name($user_id,$username);	// convert from username to user id
-						if(count($user_id) != $ttl_users){		// check if there is an invalid username
+						$user_ids =  array();
+						user_get_id_name($user_ids,$username);	// convert from username to user id
+						if(count($user_ids) != $ttl_users){		// check if there is an invalid username
 							$error[] = $user->lang['ACP_DC_ACT_INVALED_USERNAME'];
 						}
-						$user_id_found= array();
-						$user_id_not_found = array();
+						$update_users = array();
+						$not_found_users = array();
 						// more checks bases on the action
-						switch(intval($cfg_array["action_options"])){
-							case CHANCE_PAYMENT:
-							case SEND_EMAIL:
-							case SUBSCRIBE_USER:
-							case UNSUBSCRIBE_USER:
-								// check if the users is enrolled
-								foreach($user_id AS $index => $id){
-									if(!isset($enroll_list[$id])){
-										$user_id_not_found[] = $id;		// user(s) who not enrolled
-									}else {
-										$user_id_found[] = intval($id);	// users who are enrolled
-									}
-								}
-								unset($id);
-								$usernames = NULL;
 						
-								$usernames = array();
-								user_get_id_name($user_id_not_found,$usernames);
-								foreach($usernames AS $index => $name){		// if there are unrolled users show the error
-									$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];	// add to error
-								}
-								break;
-							case ADD_USERS:
-								// convert to the correct varible
-								$user_id_found = $user_id;
-								break;
+						
+						foreach($user_ids AS $index => $id){
+							switch(intval($cfg_array["action_options"])){
+								case CHANCE_PAYMENT:
+									$update_users[$id]["price_paid"] = (double)$cfg_array['amount_paid'];
+									break;
+								case SEND_EMAIL:
+									$update_users[] = $id;
+									break;
+								case ADD_USERS:
+								case SUBSCRIBE_USER:
+									$update_users[$id]["status"] = USER_SIGN_IN;
+									break;
+								case UNSUBSCRIBE_USER:
+									$update_users[$id]["status"] = USER_SIGN_OUT;
+									break;
+								default:
+									$not_found_users[] = $id;
+							}
+						}
+						
+						$usernames = NULL;
+						
+						$usernames = array();
+						user_get_id_name($not_found_users,$usernames);
+						foreach($usernames AS $index => $name){		// if there are unrolled users show the error
+							$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];	// add to error
 						}
 						unset($username);
-						unset($user_id);
-						unset($user_id_not_found);
+						unset($user_ids);
+						unset($not_found_users);
 					}
 					
 					if(!isset($action_options[intval($cfg_array["action_options"])])){
 						$error[] = $user->lang['DC_ACT_INVALID_ACTION'];
 					}
 					
-					if(!isset($user_id_found)){
+					if(!isset($update_users)){
 						$error[] = $user->lang['ACP_DC_SELECT_USERS'];
 					}
 					
@@ -1183,30 +1197,30 @@ class acp_dc_activity_management
 						$usernames = array_unique(explode("\n", $cfg_array["send_to_users"]));
 						$action_users = $usernames; //$action_users is later used to print the usernames
 						$ttl_users = count($usernames);
-						$user_id =  array();
-						user_get_id_name($user_id,$usernames);
-						if(count($user_id) != $ttl_users){
+						$user_ids =  array();
+						user_get_id_name($user_ids,$usernames);
+						if(count($user_ids) != $ttl_users){
 							$error[] = $user->lang['ACP_DC_ACT_INVALED_USERNAME'];
 						}
-						$user_id_found= array();
-						$user_id_not_found = array();
-						foreach($user_id AS $index => $id){
+						$update_users= array();
+						$not_found_users = array();
+						foreach($user_ids AS $index => $id){
 							if(!isset($enroll_list[$id])){
-								$user_id_not_found[] = $id;	
+								$not_found_users[] = $id;	
 							}else {
-								$user_id_found[] = intval($id);
+								$update_users[] = intval($id);
 							}
 						}
 						unset($id);
 						$usernames = NULL;
 						$usernames = array();
-						user_get_id_name($user_id_not_found,$usernames);
+						user_get_id_name($not_found_users,$usernames);
 						foreach($usernames AS $index => $name){
 							$error[] = $name.' '. $user->lang['DC_ACT_USER_NOT_ENROLLED'];
 						}
 						unset($usernames);
-						unset($user_id);
-						unset($user_id_not_found);
+						unset($user_ids);
+						unset($not_found_users);
 						
 					}
 					
@@ -1246,37 +1260,49 @@ class acp_dc_activity_management
 				case 'edit_activity': 
 				case 'recycle_activity': 
 				case 'new_activity':
-					$activity = new activity();
-					if(isset($activity_id)){
-						$activity->fill((int)$activity_id);
+				
+					if( isset($activity_id) ){
+							$activity = Activity::get_activity($activity_id, $activities_handler);
+							
+							if($activity == NULL){
+								trigger_error($user->lang['DC_ACT_NO_ACT']);
+							}
+							
+							// get authorisation 
+							if (!$activity->is_manager($user->data['user_id']))
+							{
+								 trigger_error('NOT_AUTHORISED');
+							}
+					}else{
+						$activity = new Activity();
 					}
 						
 					if($activity->check_allowed_to_change(false)){
 						$activity->setStartDatetime($start_date_time);
-						$activity->setEnrollDateTime($enroll_date_time);
+						$activity->setEnrolDateTime($enroll_date_time);
 						$activity->setUnsubscribeMaxDatetime($end_datetime_unsubscribe);
 					}					
 					
-					$activity->setName($cfg_array['name']);
+					$activity->setName($cfg_array['activity_name']);
 					$activity->setDescription($cfg_array['description']);
 					$activity->setEndDatetime($end_date_time);
-					$activity->setEnroll($enroll);
-					$activity->setEnrollMax((int)$cfg_array['enroll_max']);
+					$activity->setEnrol($enrol);
+					$activity->setEnrolMax((int)$cfg_array['enroll_max']);
 					$activity->setPrice((double)$cfg_array['price']);
 					$activity->setPriceMember((double)$cfg_array['price_member']);
 					$activity->setLocation($cfg_array['location']);
 					$activity->setPayOption($cfg_array['pay_option']);
 					$activity->setCommission($cfg_array['commission']);
 					if($activity->save()){				// save new activity and check if saving is done
-						// set managers
-						if(isset($groups_managers_id_valid)  && count($groups_managers_id_valid) > 0){
-								$activity->set_group_manager($groups_managers_id_valid,"enable", true);
+						// set groups access
+						if(isset($new_access_groups)  && !empty($new_access_groups)){
+								$activity->set_groups_access($new_access_groups, TRUE);
 							
 						}
 						
-						// set group acces
-						if(isset($groups_id_valid)  && count($groups_id_valid) > 0){
-								$activity->set_group_acces($groups_id_valid,"enable", true);
+						// set group access
+						if(isset($new_managers_groups)  && count($new_managers_groups) > 0){
+								$activity->set_groups_managers($new_managers_groups, TRUE);
 							
 						}
 					}else{
@@ -1286,50 +1312,30 @@ class acp_dc_activity_management
 					trigger_error($user->lang['CONFIG_UPDATED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=overview" )));
 					break;
 				case 'enrolls':
-					if(isset($user_id_found)){
+					if(isset($update_users)){
 						
 						switch(intval($cfg_array["action_options"])){
+							case UNSUBSCRIBE_USER:
+							case SUBSCRIBE_USER:
 							case CHANCE_PAYMENT:
-								foreach($user_id_found AS $index => $user_id){
-									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
-								}
+							case ADD_USERS:
+								$activity->set_users_status($update_users);
 								break;
 							case SEND_EMAIL:
-								redirect(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=send_mail&id=". $activity->getId() ."&usrid=" . implode(GROUP_SEPARATOR, $user_id_found) ));
-								break;
-							case ADD_USERS:
-								foreach($user_id_found AS $index => $user_id){
-									$activity->set_user_status($user_id, $user->ip, '', "yes");
-									$activity->pay((int)$user_id, (double)$cfg_array['amount_paid']);
-								}
-								trigger_error($user->lang['ACP_DC_USERS_ADDED'] . adm_back_link(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=enrolls&id=".$activity->getId() )));
-								break;
-							case SUBSCRIBE_USER:
-								foreach($user_id_found AS $index => $user_id){
-									
-									$activity->set_user_status($user_id, $user->ip, '', "yes");
-								}
-								break;
-							case UNSUBSCRIBE_USER:
-								foreach($user_id_found AS $index => $user_id){
-									$activity->set_user_status($user_id, $user->ip, '', "no");
-								}
+								redirect(append_sid($phpbb_root_path.'adm/index.'.$phpEx, "i=dc_activity_management&mode=send_mail&id=". $activity->getId() ."&usrid=" . implode(GROUP_SEPARATOR, $update_users) ));
 								break;
 						}
-						
 					}
 					break;
 				case 'send_mail':
 				
 					$sql = 'SELECT username, user_email, user_jabber, user_notify_type, user_lang
 							FROM ' . USERS_TABLE . '
-							WHERE ' . $db->sql_in_set('user_id', $user_id_found) . '
+							WHERE ' . $db->sql_in_set('user_id', $update_users) . '
 							ORDER BY user_lang, user_notify_type'; // , SUBSTRING(user_email FROM INSTR(user_email, '@'))
 					
 					$result = $db->sql_query($sql);
 					$row = $db->sql_fetchrow($result);
-
-					
 
 					$i = $j = 0;
 					
@@ -1407,7 +1413,6 @@ class acp_dc_activity_management
 
 						if (!($messenger->send()))
 						{
-							
 							$errored = true;
 						}
 					}
@@ -1511,51 +1516,100 @@ class acp_dc_activity_management
 		
 		switch($mode){
 			case 'past_activities':
+			
+			// Set up general vars
+				$user->add_lang('mcp');
+				$user->add_lang('acp/email');
+				$user->add_lang('mods/dc_activity');
+				$action		= request_var('action', '');
+				$forum_id	= request_var('f', 0);
+				$topic_id	= request_var('t', 0);
+				$start		= request_var('start', 0);
+
+				// Sort keys
+				$limit	= request_var('st', 25);
+				$sort_key	= request_var('sk', 's');
+				$sort_dir	= request_var('sd', 'd');
+
+
+				// Sorting
+				$limit_records = array(
+					0 	=> $user->lang['ALL_ACTIVITY'],
+					5 	=> sprintf($user->lang['LIST_ACTIVITYS'], 5),
+					10 	=> sprintf($user->lang['LIST_ACTIVITYS'], 10),
+					25 	=> sprintf($user->lang['LIST_ACTIVITYS'], 25),
+					50 	=> sprintf($user->lang['LIST_ACTIVITYS'], 50), 
+					100	=> sprintf($user->lang['LIST_ACTIVITYS'], 100)
+				);
+				
+				$sort_by_text = array(
+					's'	=> $user->lang['ACP_DC_ACT_START_DATE'],
+					'n'	=> $user->lang['ACP_DC_ACT_NAME'], 
+					'a'	=> $user->lang['ACP_DC_ACT_AMOUNT_SIGNED'], 
+					'c'	=> $user->lang['ACP_DC_ACT_COMMISSION']
+				);
+				
+				$sort_by_sql = array(
+					's' => START_DATETIME, 
+					'n' => NAME, 
+					'a' => AMOUNT_SUBSCRIBED, 
+					'c' => COMMISSION, 
+				);
+				
+				$s_limit_records = $s_sort_key = $s_sort_dir = $u_sort_param = '';
+				gen_sort_selects($limit_records, $sort_by_text, $limit, $sort_key, $sort_dir, $s_limit_records, $s_sort_key, $s_sort_dir, $u_sort_param);
+				$sql_sort =($sort_dir == 'd') ? DESC : ASC;
+				
 				
 				// get all past activities
-				$search = array();
+				$search = array(
+					USER_READED 		=> FALSE,
+					MANAGERS_GROUPS		=> TRUE,
+				);
+				
 				if($submit){
 					
 					foreach($cfg_array AS $name => $value){
 						switch($name){
-							case 'name':
-								$search['name'] = $value;
+							case 'activity_name':
+								$search[NAME] = $value;
 								break;
 							case 'start_datetime_from':
-								$search['start_datetime'] = array('begin' => new DateTime($cfg_array['start_date_from']) ,'end' => new DateTime($cfg_array['start_date_to']));
+								$search[START_DATETIME] = array(
+									DATE_BEGIN 	=> new DateTime($cfg_array['start_date_from']) ,
+									DATE_END 	=> new DateTime($cfg_array['start_date_to']),
+									OPERATOR	=> OP_BETWEEN,
+								);
 								break;
 							case 'end_datetime_from':
-								$search['end_datetime'] = array('begin' => new DateTime($cfg_array['end_date_from']) ,'end' => new DateTime($cfg_array['end_date_to']));
+								$search[END_DATETIME] = array(
+									DATE_BEGIN 	=> new DateTime($cfg_array['end_date_from']) ,
+									DATE_END 	=> new DateTime($cfg_array['end_date_to']),
+									OPERATOR	=> OP_BETWEEN,
+								);
 								break;
 						}
 					}
 				}
 				// set default search
-				if(!isset($search['start_datetime'])){
-					$search['end_datetime'] = array('begin' => new DateTime('NOW') ,'end' => new DateTime("1-1-2000"),	// find all acitivities where the startdate is between 'NOW' and 1-2000
+				if(!isset($search[START_DATETIME])){
+					$search[START_DATETIME] = array(
+						DATE_BEGIN 	=> new DateTime('NOW') ,
+						OPERATOR	=> OP_LOWER,
 					);
 				}
+								
+				$events_past = $activities_handler->get_user_activities(intval($user->data['user_id']), MANAGEMENT_ACCESS, ALL, $search, $sort_by_sql[$sort_key], $sql_sort, $limit, $start);
 				
-				$managers_groups = unserialize(SEE_ALL_ACTIVITIES_GROUP);
-				$user_groups = all_user_groups($user->data['user_id']); 
-				$global_manager = false;
-				foreach($managers_groups AS $key => $groep_id_acces){					// loop true all the groep ID's 
-					if(in_array($groep_id_acces, $user_groups)){			// get all the joind groeps id of the user and compare with the default groep id
-						$global_manager = true;																
-						break;
-					}
-				}
-				if(!$global_manager){
-					$search['managers'] = $user_groups;
-				}
-				
-				$events_past = $activity_management->search($search, 100);
-				
+				$group_name_ary = array();
 				foreach($events_past AS $index => $activity){
+					if(!isset($group_name_ary[$activity->getCommission()])){
+						$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
+					}
 					$template->assign_block_vars('events_past', array(
 						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> count($activity->get_all_status('enrolled')),
-						'EVENT_COMMISSION'	=> get_group_name($activity->getCommission()),
+						'EVENT_ENTERED'		=> $activity->getAmountEnrolledUser(),
+						'EVENT_COMMISSION'	=> $group_name_ary[$activity->getCommission()],
 						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
 						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
@@ -1563,6 +1617,27 @@ class acp_dc_activity_management
 					));
 					
 				}
+				$total_activities = $activities_handler->get_last_activities_counter();
+				$pagination_url = $this->u_action. "&amp;$u_sort_param&amp;start=$start";
+				
+				//fix: if show all users, don't pagination
+				if($limit == 0){
+					// limit 0 for database = show all, limit 0 for pagination is every entry one page
+					$limit = $total_activities;
+				}
+				$template->assign_vars(array(
+					'U_ACTION'		=> $pagination_url,
+
+					'PAGINATION'        => generate_pagination($pagination_url, $total_activities, $limit, $start,true),
+					'PAGE_NUMBER'       => on_page($total_activities, $limit, $start),
+					'TOTAL_ACTIVITIES'       => ($total_activities == 1) ? $user->lang['LIST_ACTIVITY'] : sprintf($user->lang['LIST_ACTIVITYS'], $total_activities),
+
+					'S_LIMIT_RECORDS'	=> $s_limit_records,
+					'S_SORT_KEY'	=> $s_sort_key,
+					'S_SORT_DIR'	=> $s_sort_dir,
+					'L_DISPLAY_LIMIT'		=> $user->lang['ACP_DC_ACT_DISPLAY_LIMIT'],
+					)
+				);
 				break;
 			case 'enrolls':
 			
@@ -1582,23 +1657,43 @@ class acp_dc_activity_management
 				$sort_show	= request_var('ss', 'a');
 
 				// Sorting
-				$limit_records = array(0 => $user->lang['ALL_USERS'], 5 => sprintf($user->lang['LIST_USERS'], 5), 10 => sprintf($user->lang['LIST_USERS'], 10), 25 => sprintf($user->lang['LIST_USERS'], 25), 50 => sprintf($user->lang['LIST_USERS'], 50), 100 => sprintf($user->lang['LIST_USERS'], 100));
+				$limit_records = array(
+					0 	=> $user->lang['ALL_USERS'],
+					5 	=> sprintf($user->lang['LIST_USERS'], 5),
+					10 	=> sprintf($user->lang['LIST_USERS'], 10),
+					25 	=> sprintf($user->lang['LIST_USERS'], 25),
+					50 	=> sprintf($user->lang['LIST_USERS'], 50), 
+					100	=> sprintf($user->lang['LIST_USERS'], 100)
+				);
 				
-				$sort_by_text = array('r' => $user->lang['DC_ACT_REALNAME'],'u' => $user->lang['USERNAME'], 'c' => $user->lang['ACP_DC_ACT_COMMENT'], 's' => $user->lang['ACP_DC_ACT_STATUS'], 'p' => $user->lang['PAID']);
-				$sort_by_sql = array('r' => 'real_name', 'u' => 'username', 'c' => 'comments', 's' => 'status', 'p' => 'price_paid');
+				$sort_by_text = array(
+					'r'	=> $user->lang['DC_ACT_REALNAME'],
+					'u'	=> $user->lang['USERNAME'], 
+					'c'	=> $user->lang['ACP_DC_ACT_COMMENT'], 
+					's'	=> $user->lang['ACP_DC_ACT_STATUS'], 
+					'p'	=> $user->lang['PAID']
+				);
+				
+				$sort_by_sql = array(
+					'r' => 'real_name', 
+					'u' => 'username', 
+					'c' => 'comments', 
+					's' => 'status', 
+					'p' => 'price_paid'
+				);
 				
 				switch($sort_show){
 					case 'a':
-						$s_sort_show = "all";
-						$sort_pay  = null;
+						$s_sort_show = ALL_USERS;
+						$sort_pay  = NULL;
 						break;
 					case 'p':
-						$s_sort_show = "enrolled";
-						$sort_pay  = 'paid';
+						$s_sort_show = ENROLLED_USERS;
+						$sort_pay  = PAID_UERS;
 						break;
 					case 'np':
-						$s_sort_show = "enrolled";
-						$sort_pay  = 'not_paid';
+						$s_sort_show = ENROLLED_USERS;
+						$sort_pay  = NOT_PAID_UERS;
 						break;
 				}
 
@@ -1606,7 +1701,7 @@ class acp_dc_activity_management
 				gen_sort_selects($limit_records, $sort_by_text, $limit, $sort_key, $sort_dir, $s_limit_records, $s_sort_key, $s_sort_dir, $u_sort_param);
 				$sql_sort =($sort_dir == 'd') ? 'DESC' : 'ASC';
 				// send the list if all subscribed users to the template
-				if( $enroll_list = $activity->get_all_status($s_sort_show, $sql_sort, $sort_by_sql[$sort_key], $sort_pay , $limit, $start) ){	// are there subscribed users
+				if( $enroll_list = $activity->get_enrol_list($s_sort_show, $sort_by_sql[$sort_key], $sql_sort, $sort_pay , $limit, $start) ){	// are there subscribed users
 					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
 
 						$template->assign_block_vars('users', array(		// set template array
@@ -1621,21 +1716,27 @@ class acp_dc_activity_management
 					}
 					
 				}
-				$total_users = count($activity->get_all_status($s_sort_show, 'real_name', 'ASC', $sort_pay, 0));
-					$pagination_url = $this->u_action. "&amp;id=".$activity_id. "&amp;$u_sort_param&amp;start=$start";
-					$template->assign_vars(array(
-						'U_ACTION'		=> $pagination_url,
+				$total_users = $activity->getLastEnrollListCount();
+				$pagination_url = $this->u_action. "&amp;id=".$activity_id. "&amp;$u_sort_param&amp;";
+				
+				//fix: if show all users, don't pagination
+				if($limit == 0){
+					// limit 0 for database = show all, limit 0 for pagination is every entry one page
+					$limit = $total_users;
+				}
+				$template->assign_vars(array(
+					'U_ACTION'		=> $pagination_url,
 
-						'PAGINATION'        => generate_pagination($pagination_url, $total_users, $limit, $start,true),
-						'PAGE_NUMBER'       => on_page($total_users, $limit, $start),
-						'TOTAL_USERS'       => ($total_users == 1) ? $user->lang['LIST_USER'] : sprintf($user->lang['LIST_USERS'], $total_users),
+					'PAGINATION'        => generate_pagination($pagination_url, $total_users, $limit, $start,true),
+					'PAGE_NUMBER'       => on_page($total_users, $limit, $start),
+					'TOTAL_USERS'       => ($total_users == 1) ? $user->lang['LIST_USER'] : sprintf($user->lang['LIST_USERS'], $total_users),
 
-						'S_LIMIT_RECORDS'	=> $s_limit_records,
-						'S_SORT_KEY'	=> $s_sort_key,
-						'S_SORT_DIR'	=> $s_sort_dir,
-						'S_SORT_SHOW'	=> $this->apc_dc_subscibe_create_show($sort_show, 'ss')
-						)
-					);
+					'S_LIMIT_RECORDS'	=> $s_limit_records,
+					'S_SORT_KEY'	=> $s_sort_key,
+					'S_SORT_DIR'	=> $s_sort_dir,
+					'S_SORT_SHOW'	=> $this->apc_dc_subscibe_create_show($sort_show, 'ss')
+					)
+				);
 			break;
 			case 'send_mail':
 				if($preview){

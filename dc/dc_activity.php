@@ -19,8 +19,8 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include_once($phpbb_root_path . 'common.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-include_once($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
-include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
+include_once ($phpbb_root_path . 'dc/dc_activities_handler.' . $phpEx);
+include_once ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 
 // Start session management
@@ -28,19 +28,31 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('mods/dc_activity');
 
+
 if(!isset($_GET["act"])){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);
 }
  
 // Build main objecs
-$activity_controller = new activity_user();									// build user controller
-$activity =  $activity_controller->get_activity(request_var('act', 0));		// build activity by id (default = 0)
+$act_hndlr = new activities_handler();			// build activity handler
+$activity_id = request_var('act', 0);			// get activity by id (default = 0)	
+
+if($activity_id == 0){
+	trigger_error($user->lang['DC_ACT_NO_ACT']);
+}
+
+$activity = Activity::get_activity($activity_id, $act_hndlr, intval($user->data['user_id']));	
+if($activity == NULL){
+	trigger_error($user->lang['DC_ACT_NO_ACT']);				// send error to the user
+	
+	return null;
+}
 
 $manager = $activity->is_manager($user->data['user_id']);
 $in_the_past = ($activity->getStartDatetime() < new DateTime('now') ? true : false) ;
 
 // get authorisation 
-if (!($activity->user_acces($user->data['user_id']) || $manager) )
+if (!($activity->user_access($user->data['user_id']) || $manager) )
 {
      trigger_error('NOT_AUTHORISED');
 }
@@ -49,9 +61,9 @@ if (!($activity->user_acces($user->data['user_id']) || $manager) )
 if(!$activity->get_read(intval($user->data['user_id']))){
 	$activity->set_read( intval($user->data['user_id']));
 }
-// change enroll status
-$template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enroll select options (default = false)
-$status = request_var('status', 0);											// get new enroll status (default = 0: no new status)
+// change enrol status
+$template->assign_var('CHANGE', ($change_status = request_var('change', false))); 	// open enrol select options (default = false)
+$status = request_var('status', 0);											// get new enrol status (default = 0: no new status)
 
 if($status != 0 && check_form_key('chance_the_subscribe_status')){															// if a new status
 	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){	// check if user is guest or if user is inactive
@@ -63,10 +75,20 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 				if($activity->is_max_enrolled()){
 					trigger_error("Maximum subscriptions is reached");
 				}else{
-					user_new_status("yes",$activity);								// set new status to yes
+					
+					$activity->set_users_status(
+						array( 
+							array(
+								"user_id"		=> intval($user->data["user_id"]),
+								"user_ip"		=> $user->ip,
+								"status"		=> USER_SIGN_OUT,
+							)
+						)
+					);
+					
 					// test sends messagers
 					$url = generate_board_url() . '/' . $user->page['page'];		// get current page
-					$messenger = new messenger(false);
+					$messenger = new messenger(FALSE);
 					$messenger->subject($activity->getName());
 					$messenger->template('dc_activity_subscribe',$user->data['user_lang']);
 					$messenger->to($user->data['user_email'], $user->data['username']);
@@ -77,7 +99,7 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 						'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
 						'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),
-						'DESCRIPTION'    		=> $activity->getDescription_preview(200,true),
+						'DESCRIPTION'    		=> $activity->getDescription_preview(10),
 						'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 						'COMMISSION'    		=> get_group_name($activity->getCommission())
 					));
@@ -86,15 +108,20 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 				}
 				break;
 			case 2:																// new status = no					
-				user_new_status("no", $activity);								// set new status to no
-				break;
-			case 3:																// new status = maybe
-				// 6-5-2013: status maybe is not used annymore!
-				//user_new_status("maybe", $activity);							// set new status to maybe
+				$activity->set_users_status(array(
+						array(
+							"user_id"		=> intval($user->data["user_id"]),
+							"user_ip"		=> $user->ip,
+							"status"		=> USER_SIGN_OUT
+						)
+					));
 				break;
 		}
 	}
 }
+
+$enrol_list = $activity->get_enrol_list(ALL_USERS, 'ASC', "username");				// get enrol_list
+
 // get comment
 // Used the salt because the default must be a string to check if there is a new comment. 
 // I wanted to use a boolean as default but that is impassable because than the input has to be aan boolean. 
@@ -102,7 +129,7 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 $salt = (String)mt_rand(); 													// create (string) salt for gettting the comment 
 $comment = utf8_normalize_nfc(request_var('comment', $salt)); 									// get new comment (default = $salt: no new comment)
 if($comment != $salt && check_form_key('chance_the_subscribe_status')){														// check for a new comment
-	if(array_key_exists($user->data['user_id'], $activity->get_all_status("all"))){ 			// check if user has enrolled
+	if(array_key_exists($user->data['user_id'], $enrol_list)){ 			// check if user has enrolled
 		$activity->set_user_comment($user->data['user_id'],$comment); 		// set new comment
 		$template->assign_var('COMMENT_SAVED', true);						// set template saved	
 	}
@@ -115,51 +142,36 @@ $template->assign_var('DESCRIPTION', $activity->getDescription());			// set desc
 $template->assign_var('START_DATE_TIME',$user->format_date( $activity->getStartDatetime()->getTimestamp()));	// set start date and time
 $template->assign_var('END_DATE_TIME', $user->format_date( $activity->getEndDatetime()->getTimestamp()));		// set end date and time 
 
-// function for chancing status
-function user_new_status($new_status, $activity){
-	global $user;
-	$current_status = $activity->get_all_status("all");
-	if(!isset($current_status[$user->data['user_id']])){						// check for fist enroll
-			$activity->set_user_status($user->data['user_id'], $user->ip, '', $new_status);				// set new status without comment
-	}else{																	// user is already enrolled
-		if( $current_status[$user->data['user_id']]['status'] != $new_status){
-			$activity->set_user_status($user->data['user_id'], $user->ip, $current_status[$user->data['user_id']]['comments'], $new_status);		// set new status with comment
-		}
-	}
-}
-
-// user enrolle status
-if(($user_current_status = $activity->get_user_status($user->data['user_id'])) != null){	// check if user is enrolled
-	$all_users_enroll_list = $activity->get_all_status("all");								// get a list of all enrolled users
+// check is current is singed in
+if( isset($enrol_list[ $user->data['user_id']]) && $enrol_list[$user->data['user_id']]["status"] == "yes"){	// check if user is enrolled
 	$template->assign_var('USER_ENROLLED_CHECK', true);										// set user enrolled
-	$template->assign_var('USER_ENROLLED_PAID',  $all_users_enroll_list[$user->data['user_id']]["price_paid"]);	// set user amount paid
-	$template->assign_var('USER_ENROLLED_STATUS', ucfirst( $all_users_enroll_list[$user->data['user_id']]["status"]) );	// set current user status
-	$template->assign_var('USER_ENROLLED_COMMENT', $all_users_enroll_list[$user->data['user_id']]["comments"]);		// get current comment
+	$template->assign_var('USER_ENROLLED_PAID',  $enrol_list[$user->data['user_id']]["price_paid"]);	// set user amount paid
+	$template->assign_var('USER_ENROLLED_STATUS', ucfirst( $enrol_list[$user->data['user_id']]["status"]) );	// set current user status	
+	$template->assign_var('USER_ENROLLED_COMMENT', $enrol_list[$user->data['user_id']]["comments"]);		// get current comment
 	
 }else{
 	$template->assign_var('USER_ENROLLED_CHECK', false); 									// user not enrolled
 }
 
 
-$enroll_list = $activity->get_all_status("enrolled");				// get enroll_list
-
-
-$template->assign_var('ENROLL', $activity->getEnroll());								// set enroll
-$template->assign_var('ENROLL_MAX', $activity->is_max_enrolled()); // check the limit of subscriptions is reached
-$enroll_date_time = $activity->getEnrollDateTime();			// get max enroll date and time
+$template->assign_var('ENROLL', $activity->getEnrol());								// set enrol
+$template->assign_var('IS_ACTIVE', $activity->getActive());								// set enrol
+$template->assign_var('IS_ENROLL_MAX', !$activity->is_max_enrolled()); // check the limit of subscriptions is reached
+$enrol_date_time = $activity->getEnrolDateTime();			// get max enrol date and time
 $unsubscribe_date_time = $activity->getUnsubscribeMaxDatetime();			// get the time the user has to unsubscribe
-$template->assign_var('ENROLL_DATE',$user->format_date( $enroll_date_time->getTimestamp() )); // set end enroll date time
-$template->assign_var('UNSUBSCRIBE_MAX_DATETIME',$user->format_date( $unsubscribe_date_time->getTimestamp() )); // set end enroll date time
-if($enroll_date_time > new DateTime("now")){					// check if the enroll date time or  is past
-	$template->assign_var('ENROLL_DATE_CHECK', true);		// enroll date time not past
+$template->assign_var('ENROLL_DATE',$user->format_date( $enrol_date_time->getTimestamp() )); // set end enrol date time
+$template->assign_var('UNSUBSCRIBE_MAX_DATETIME',$user->format_date( $unsubscribe_date_time->getTimestamp() )); // set end enrol date time
+
+if($enrol_date_time > new DateTime("now")){					// check if the enrol date time or  is past
+	$template->assign_var('ENROLL_DATE_CHECK', true);		// enrol date time not past
 }else{
-	$template->assign_var('ENROLL_DATE_CHECK', false);		// enroll date time past
+	$template->assign_var('ENROLL_DATE_CHECK', false);		// enrol date time past
 }
 if($unsubscribe_date_time > new DateTime("now")){				// check if the unsubscrive date time or  is past
-	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', true);		// enroll date time not past
+	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', true);		// enrol date time not past
 }else{
-	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enroll date time past
-	}	
+	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enrol date time past
+}	
 		
 			
 
@@ -170,28 +182,31 @@ $template->assign_var('PRICE_MEMBER', $activity->getPriceMember());		// set pric
 $template->assign_var('LOCATION', $activity->getLocation());			// set location
 
 // list of all user that are enrolled in 2 rows
-if($enroll_list!= 0){		// get a list of all enrolled users	
-	$users_enrolled = count($enroll_list);						// count amount enrolled users
+if($enrol_list!= 0){		// get a list of all enrolled users	
+	$users_enrolled = $activity->getAmountEnrolledUser();				// count amount enrolled users
 	$template->assign_var('USERS_ENROLLED_AMOUNT', $users_enrolled);	// set template amount
-	$template->assign_var('USERS_ENROLLED_CHECK', true);				// set force enroll
+	$template->assign_var('USERS_ENROLLED_CHECK', true);				// set force enrol
 	// split the group into two lists
 	$split = $users_enrolled / 2 ;										// caluclate the half of all enrolled users
 	$counter = 0;														// counter for splitting
-	$enroll_block = 1;													// current list with users
-	foreach ($enroll_list as $id => $value)								// split enrolled users in two groups
+	$enrol_block = 1;													// current list with users
+	foreach ($enrol_list as $id => $value)								// split enrolled users in two groups
 	{
-		if($split <= $counter)											// if the half of the group is splitted
-			$enroll_block = 2;											// set next blok
+		if($value['status'] == "yes"){
 		
-		$template->assign_block_vars('users_enrolled'.$enroll_block, array(	// set array of enrolled user groups
-			'USER_ID'    => $id,
-			'USER_LINK'	=>	append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $id),
-			'USER_NAME'    => $value['username'],
-		));
-		$counter++;														// next enrolled user
+			if($split < $counter){											// if the half of the group is splitted
+				$enrol_block = 2;											// set next blok
+			}
+			$template->assign_block_vars('users_enrolled'.$enrol_block, array(	// set array of enrolled user groups
+				'USER_ID'    => $id,
+				'USER_LINK'	=>	append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $id),
+				'USER_NAME'    => $value['username'],
+			));
+			$counter++;														// next enrolled user
+		}
 	}
 }else{
-	$template->assign_var('USERS_ENROLLED_CHECK', false); 				// set no forced enroll
+	$template->assign_var('USERS_ENROLLED_CHECK', false); 				// set no forced enrol
 }
 
 
@@ -214,6 +229,7 @@ $template->assign_var('LANG_UNSUBSCRIBE', $user->lang['ACP_DC_ACT_DEENROL']);
 $template->assign_var('LANG_DATE', $user->lang['DC_ACT_LANG_DATE']);
 $template->assign_var('LANG_PRICE', $user->lang['DC_ACT_LANG_PRICE']);
 $template->assign_var('LANG_MEMBER', strtolower($user->lang['DC_ACT_LANG_MEMBER']));
+$template->assign_var('LANG_NOT_ACTIVE', $user->lang['DC_ACT_NOT_ACTIVE']);
 $template->assign_var('LANG_LOCATION', $user->lang['DC_ACT_LANG_LOCATION']);
 $template->assign_var('LANG_ENROLL_NOBODY', $user->lang['DC_ACT_ENROLL_NOBODY']);
 $template->assign_var('LANG_ENROLL_FORCE', $user->lang['DC_ACT_ENROLL_FORCE']);
@@ -272,6 +288,7 @@ $template->assign_block_vars('navlinks', array(
             'FORUM_NAME'         => $activity->getName(), 
             'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity.$phpEx", "act=".$activity->getId())) //The path to the custom file relative to the phpbb root path.            
 );
+
 $template->set_filenames(array(
     'body' => 'dc_activity.html',
 ));

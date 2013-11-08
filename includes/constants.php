@@ -249,6 +249,18 @@ define('TASKS_TABLE', 				$table_prefix .'tasks');
 define('TASK_USER_TABLE', 			$table_prefix . 'task_user');
 define('TASK_CHILD_TABLE',			$table_prefix .'task_child');
 // -- end : tasks system ----------------------------------------------------------
+// -- mod : activity system -------------------------------------------------------
+define('ACTIVITY_TABLE', 			$table_prefix .'activity');
+define('ACTIVITY_CHANGE_TABLE', 	$table_prefix . 'activity_chancelog');
+define('ACTIVITY_UPCOMMING_ACTIVE_TABLE', $table_prefix .'activity_comming_active');
+define('ACTIVITY_FURTURE_TABLE', $table_prefix .'activity_future');
+define('ACTIVITY_ENROL_TABLE', 	$table_prefix .'activity_enroll');
+define('ACTIVITY_ERROR_LOG_TABLE', 	$table_prefix .'activity_errorlog');
+define('ACTIVITY_ALL_ACTIVE_TABLE', $table_prefix .'activity_full_list_active');
+define('ACTIVITY_GROUP_ACCESS_TABLE',$table_prefix .'activity_groupacces');
+define('ACTIVITY_GROUP_MANAGERS_TABLE',$table_prefix .'activity_group_manage');
+define('ACTIVITY_READED_TABLE',		$table_prefix .'activity_read');
+// -- end : activity system -------------------------------------------------------
 define('LOGIN_ATTEMPT_TABLE',		$table_prefix . 'login_attempts');
 define('MODERATOR_CACHE_TABLE',		$table_prefix . 'moderator_cache');
 define('MODULES_TABLE',				$table_prefix . 'modules');
@@ -259,9 +271,11 @@ define('PRIVMSGS_TABLE',			$table_prefix . 'privmsgs');
 define('PRIVMSGS_FOLDER_TABLE',		$table_prefix . 'privmsgs_folder');
 define('PRIVMSGS_RULES_TABLE',		$table_prefix . 'privmsgs_rules');
 define('PRIVMSGS_TO_TABLE',			$table_prefix . 'privmsgs_to');
+// -- mod: custom profile fields --------------------------------------------------
 define('PROFILE_FIELDS_TABLE',		$table_prefix . 'profile_fields');
 define('PROFILE_FIELDS_DATA_TABLE',	$table_prefix . 'profile_fields_data');
 define('PROFILE_FIELDS_LANG_TABLE',	$table_prefix . 'profile_fields_lang');
+// -- end: custom profile fields --------------------------------------------------
 define('PROFILE_LANG_TABLE',		$table_prefix . 'profile_lang');
 define('RANKS_TABLE',				$table_prefix . 'ranks');
 define('REPORTS_TABLE',				$table_prefix . 'reports');

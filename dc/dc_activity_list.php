@@ -5,7 +5,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include_once($phpbb_root_path . 'common.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-include_once ($phpbb_root_path . 'dc/dc_activity_user_class.' . $phpEx);
+include_once ($phpbb_root_path . 'dc/dc_activities_handler.' . $phpEx);
 include_once ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 
@@ -13,22 +13,38 @@ include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup('mods/dc_activity');
+global $db;
 
-// Build main objecs
-$activity_controller = new activity_user();
+//check if user readed 
+$activity_controller = new activities_handler();
 
-if(($full_list = $activity_controller->get_comming_active_activities($user->data['user_id'])) != null){
+$search_parameters = NULL;
+
+// check if reeded events is needed 
+if(intval($user->data['user_id']) > 1){
+	
+	$search_parameters = array(
+		USER_READED 		=> TRUE,
+		MANAGERS_GROUPS		=> FALSE,
+	);
+}
+if(($full_list = $activity_controller->get_user_activities( intval($user->data['user_id']), USER_ACCESS, FUTURE_ACTIVE, $search_parameters, START_DATETIME)) != NULL){
 	$template->assign_var('LIST_AVAILABLE', true);
 	$row_count = 1;
+	$group_name_ary = array();
 	foreach($full_list AS $index => $activity){
-		$enrolled = count($activity->get_all_status("enrolled"));  
+		
+		if(!isset($group_name_ary[$activity->getCommission()])){
+			$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
+		}
+		
 		$template->assign_block_vars('activity', array(
-			'NAME'    			=> $activity->getName(),
-			'ACT_LINK'   		=>  append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
-			'COMMISSION'    	=>  get_group_name($activity->getCommission()),
-			'START_DATE_TIME'   =>  $user->format_date( $activity->getStartDatetime()->getTimestamp()),
-			'ENROLLED'  		=>  $enrolled,
-			'READED'			=> 	((intval($user->data['user_id']) == 1 ) ? true : $activity->get_read(intval($user->data['user_id']))), 	
+			'NAME'    						=> $activity->getName(),
+			'ACT_LINK'   				=>  append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
+			'COMMISSION'    			=>  $group_name_ary[$activity->getCommission()],
+			'START_DATE_TIME' 	=>  $user->format_date( $activity->getStartDatetime()->getTimestamp()),
+			'ENROLLED'  				=>  $activity->getAmountEnrolledUser(),
+			'READED'						=> 	((intval($user->data['user_id']) == 1 ) ? TRUE : $activity->get_read(intval($user->data['user_id']))), 	
 			'S_ROW_COUNT'    	=>  $row_count,
 		));
 		$row_count++;
@@ -37,10 +53,7 @@ if(($full_list = $activity_controller->get_comming_active_activities($user->data
 	$template->assign_var('LIST_AVAILABLE', false);
 }	
 
-// add links
-//$template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity_list'.$phpEx));
-
-// some additional words for transalation
+// some additional words for translation
 
 $template->assign_var('URL_ICAL', $phpbb_root_path . 'dc/ical.' . $phpEx .'?id='.$user->data['user_id']);
 $template->assign_var('LANG_ICAL', $user->lang['DC_ACT_LANG_ICAL']);
@@ -61,12 +74,12 @@ $template->assign_var('LANG_CANCEL', $user->lang['CANCEL']);
 $template->assign_var('LANG_SAVED', $user->lang['SAVED']);
 $template->assign_var('LANG_TO', strtolower($user->lang['TO']));
 
-page_header("Activity list");
+page_header($user->lang['DC_ACT_LIST']);
 // set template
 
 $template->assign_block_vars('navlinks', array(
-            'FORUM_NAME'         => 'Activity list', //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
-            'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.
+	'FORUM_NAME'         => $user->lang['DC_ACT_LIST'], //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
+	'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.
 );
 
 $template->set_filenames(array(

@@ -158,6 +158,41 @@ function check_form($display_vars, $cfg_array){
 	return $error;
 }
 
+function explode_key($string, $delimiter ,$value){
+	$return_ary = array();
+	if(!empty($string)){
+		foreach(explode($delimiter, $string) AS $key => $ex_string){
+			$return_ary[$ex_string] = $value;
+		}
+	}
+	return $return_ary;
+}
+
+function check_limit_offset($limit, $offset, $counter){
+	if(gettype($limit) != "integer"){ // check if the limit is a int
+		trigger_error("check_limit_offset: param limit is not a integer"); // set error log
+		return NULL;
+	}
+	
+	if(gettype($offset) != "integer"){ // check if the offset is a int
+		trigger_error("check_limit_offset: param offset is not a integer"); // set error log
+		return NULL;
+	}
+	
+	if(gettype($counter) != "integer"){ // check if the offset is a int
+		trigger_error("check_limit_offset: param counter is not a integer"); // set error log
+		return NULL;
+	}
+	
+
+	if(	($counter < ($limit + $offset) || $limit == 0 ) && 
+		($counter >= $offset || $offset == 0)
+	){
+		return TRUE;
+	}
+	return FALSE;
+}
+
 
 
 ?>

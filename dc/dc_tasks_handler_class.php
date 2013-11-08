@@ -150,7 +150,11 @@ class Tasks_handler {
 		$db->sql_freeresult($result);						// remove query
 		return $tasks;	
 	}
-
+	
+	/* add_task add an array of task to this object
+	*	
+	* $add_tasks 	array<task>	the array of tasks that needs to be added to this object
+	*/
 	function add_tasks($add_tasks){
 		if(!is_array($add_tasks)){									// check if user id list is an array
 			trigger_error('Add_tasks: users_id_list is not an array');				// send error to the current task of the system
