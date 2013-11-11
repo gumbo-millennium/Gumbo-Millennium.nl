@@ -879,7 +879,7 @@ class activity {
 		}
 		// update enrol list
 		$this->amount_enrolled_users = (int) (intval($this->amount_enrolled_users) + $temp_user_enrol_count);
-		$cache->destroy('sql', ACTIVITY_ENROL_TABLE, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE); 
+		$cache->destroy('sql', ACTIVITY_ENROL_TABLE, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE); 
 		$this->enrolled_users = NULL;
 		return true;															// return successful
 	}
@@ -971,7 +971,7 @@ class activity {
 	}
 	
 	function set_user_comment($user_id, $new_comment, &$model_enroll_list = null){
-		global $db;
+		global $db, $cache;
 		
 		//check if the activity is allowed to change
 		if(!$this->check_allowed_to_change()){
@@ -1013,6 +1013,7 @@ class activity {
 			trigger_error($user->lang['DC_ACT_NOT_ENROLLED']);
 			return NULL;											// return user already this status
 		}
+		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE, ACTIVITY_ENROL_TABLE);
 	}
 
 	
@@ -1212,7 +1213,7 @@ class activity {
 			}
 		}
 		// update enrol list
-		$cache->destroy('sql',GROUPS_MANAGES_DISABLED, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE); 
+		$cache->destroy('sql',GROUPS_MANAGES_DISABLED, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE); 
 		return true;															// return successful
 	}
 	
@@ -1472,7 +1473,7 @@ class activity {
 			}
 		}
 		// update enrol list
-		$cache->destroy('sql',ACTIVITY_GROUP_ACCESS_TABLE, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE); 
+		$cache->destroy('sql',ACTIVITY_GROUP_ACCESS_TABLE, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE); 
 		return true;															// return successful
 	}
 	
@@ -1665,7 +1666,7 @@ class activity {
 			// this is a new activity
 			$this->id = $db->sql_nextid();	// get new activity id
 		}
-		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE);
+		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE);
 		return true;
 	}
 	
@@ -1755,12 +1756,12 @@ class activity {
 
 	function get_read($user_id){
 		global $db;							// get database connection
-		
 		if(gettype($user_id) != "integer")
 			return null;
 
 		if(isset($this->readed_users[$user_id])){
 			return $this->readed_users[$user_id];
+			print("hier");
 		}
 		$sql_where_ary = array(
 			'rd.activity_id'      => (int)$this->id
@@ -1781,13 +1782,14 @@ class activity {
 		$sql_result = $db->sql_query($sql);							// send query
 		while ($row = $db->sql_fetchrow($sql_result))				// loop all the rows
 		{
-			$readed_users[$row["user_id"]] = TRUE;
+			
+			$this->readed_users[intval($row["user_id"])] = TRUE;
 		}
 		
 		$db->sql_freeresult($sql_result);							// remove query
 		
-		if(isset($readed_users[$user_id])){
-			if($readed_users[$user_id] == TRUE ){
+		if(isset($this->readed_users[$user_id])){
+			if($this->readed_users[$user_id] == TRUE ){
 				return TRUE;
 			}
 		}
@@ -1796,14 +1798,14 @@ class activity {
 	
 	// user set read
 	function set_read($user_id){
-		global $db;												// get database connection
+		global $db, $cache;												// get database connection
 		if(gettype($user_id) != "integer")
 			return null;
 		
-		$readed_users[$user_id] == TRUE;
+		$this->readed_users[$user_id] == TRUE;
 		
 		$sql_where_ary = array(
-			"u.user_id"	=>(int) $user_id
+			"u.user_id"		=>(int) $user_id,
 		);		
 		
 		$sql_array = array(
@@ -1828,7 +1830,7 @@ class activity {
 		$sql = 'INSERT INTO `dc_activity_read`(`activity_id`, `user_id`) VALUES ('. $this->id . ','.$user_id.')';	// get if user readed 
 		$result = $db->sql_query($sql);							// send query
 		$db->sql_freeresult($result);							// remove query
-		
+		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE);
 		return true;
 	}
 	
