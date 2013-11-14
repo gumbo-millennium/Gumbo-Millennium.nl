@@ -437,6 +437,9 @@ function apply_onkeypress_event()
 	}
 }
 
+
+
+
 /**
 * Detect JQuery existance. We currently do not deliver it, but some styles do, so why not benefit from it. ;)
 */
