@@ -5036,6 +5036,10 @@ function page_footer($run_cron = true)
 		{
 			$cron_type = 'tidy_sessions';
 		}
+		else if (isset($config['auto_backup_enable']) && $config['auto_backup_enable'] && (($time_now - $config['auto_backup_gc'] * 86400) > $config['auto_backup_last_gc']))
+		{
+			$cron_type = 'auto_backup';
+		}
 
 		if ($cron_type)
 		{
