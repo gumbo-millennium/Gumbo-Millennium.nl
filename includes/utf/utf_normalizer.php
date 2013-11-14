@@ -119,7 +119,7 @@ class utf_normalizer
 	* @param	string	&$str	Unchecked UTF string
 	* @return	string			The string, validated and in normal form
 	*/
-	function nfc(&$str)
+	static function nfc(&$str) //  <-- PHP 5.4 FIX, This function has to be static! old: function nfc(&$str)
 	{
 		$pos = strspn($str, UTF8_ASCII_RANGE);
 		$len = strlen($str);
@@ -151,7 +151,7 @@ class utf_normalizer
 	* @param	string	&$str	Unchecked UTF string
 	* @return	string			The string, validated and in normal form
 	*/
-	function nfkc(&$str)
+	static function nfkc(&$str) //  <-- PHP 5.4 FIX, This function has to be static! old: function nfkc(&$str)
 	{
 		$pos = strspn($str, UTF8_ASCII_RANGE);
 		$len = strlen($str);
