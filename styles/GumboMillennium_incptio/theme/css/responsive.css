@@ -1,0 +1,376 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/* ---------------------------------------------------------------------- */
+/* Theme Information
+/* ----------------------------------------------------------------------
+Name: Inceptio
+Description: Responsive Multi-Purpose Theme
+Version: 1.6.1
+Author: Ixtendo
+Author URI: http://www.ixtendo.com
+------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------- */
+/* Media Queries
+/* ---------------------------------------------------------------------- */
+
+/* Standard 960 or larger (browsers) */
+@media only screen and (min-width: 960px) {
+	
+}
+/* ---------------------------------------------------------------------- */
+/* Smaller than standard 960 (devices and browsers) */
+@media only screen and (max-width: 959px) {
+
+	  #trigger{
+        display: inline;
+    }
+    
+    #header_mobile_nav{
+        display: block;
+    }
+    #header_mobile_nav h2{
+        margin-bottom: 0px;
+    }
+ 
+    #search-form{
+        display: none;
+    }
+	
+	/* Tiny Nav */
+
+    .js .tinynav { 
+		display: block; 
+	}
+	
+    .js #navlist { 
+		display: none; 
+	}
+	
+	#nav, .tinynav {
+		width: 370px;
+	}
+	
+	/* Header */
+	
+	#header {
+		margin-bottom: 30px;	
+	}
+}
+/* ---------------------------------------------------------------------- */
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+	
+	/* Container */ 
+	
+	.container {
+		width: 748px;	
+	}
+	
+	/* Carousel */
+	
+	.project-carousel > li {
+		margin-right: 44px;
+	}
+	
+	/* Related Posts */
+	
+	.related-posts .post-carousel > li {
+		width: 172px;
+		margin-right: 20px;
+	}
+	
+	/* FlexSlider */
+	
+	.flex-caption {
+		bottom: 91px;	
+	}
+	
+	/* Portfolio Grid */
+	
+	ul.portfolio-grid > li.one-third {
+		width: 236px;
+	}
+	
+	ul.portfolio-grid > li.one-half {
+		width: 364px;
+	}
+	ul.portfolio-grid > li.full-screen {
+		width: 728px;
+	}
+	
+}
+/* ---------------------------------------------------------------------- */
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
+	
+	/* Slider */
+
+    .flex-caption {
+		display: none;	
+	}
+	
+	/* Columns */
+	
+	.one-half, .one-third, .one-fourth, .two-thirds, .three-fourths, .full-screen {
+		float: none;
+		display: block;
+		margin-right: 0;
+		width: 100%;
+		max-width: none;
+	}
+	
+	/* Floats */
+	
+	.alignleft, .alignright {
+		float: none;	
+	}
+	
+	/* Containers */
+	
+	#main, #sidebar {
+		margin-bottom: 40px;	
+	}
+	
+	/* Header */
+	
+	#logo {
+		float: none;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	#logo a, #logo img {
+		display: inline-block;	
+	}
+	
+	/* Footer */
+	
+	#footer-top > .container > div {
+		margin-top: 40px;
+	}
+	
+	#footer-bottom > .container > div {
+		margin-top: 20px;
+	}
+	
+	#footer-featured > .container > div {
+		margin-top: 20px;
+	}
+	
+	#footer-top > .container > div:first-child,
+	#footer-bottom > .container > div:first-child,
+	#footer-featured > .container > div:first-child {
+		margin-top: 0;
+	}
+	
+	#footer .social-links {
+		float: none;
+	}
+
+	/* About Us */
+	
+	.team-member {
+		margin-right: 0;
+	}
+	
+	/* Images */
+	
+	.entry-image.alignleft, .alignleft.caption,
+	.entry-image.alignright, .alignright.caption {
+		margin: 20px 0;	
+	}
+	
+	.entry-image.aligncenter, .aligncenter.caption {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	
+	/* Comment Form and Contact Form */
+	
+	#comment-form input, .content-form input {
+		width: 80%;
+	}
+	
+	#comment-form textarea, .content-form textarea, .content-form select {
+		width: 90%;
+	}
+	
+	/* Page Title */
+	
+	#page-title h1 {
+		float: none;
+	}
+	
+	#breadcrumbs {
+		float: left;
+        text-align: left; 
+	}
+	
+	/* Infobox */
+	
+	.infobox div.with-button {
+		display: block;	
+	}
+	
+	.infobox .button {
+		display: none;
+	}
+
+	.infobox .mobile-button {
+		float: none;
+		display: block;
+		text-align: center;
+		margin-left: 0;
+		margin-top: 20px;
+	}
+	
+	/* Pricing Tables */
+	
+	.pricing-table {
+		margin-left: 0;
+	}
+	
+	.pricing-table.one-fourth, .pricing-table.one-third {
+		max-width: 100%;
+		width: 100%;
+	}
+	
+	/* Carousel */
+	
+	ul.portfolio-grid {
+		margin-right: 0;
+	}
+	
+	/* Portfolio Grid */
+	
+	ul.portfolio-grid > li {
+		float: none;
+		max-width: 100%;
+		margin-right: 0;
+	}
+	
+	/* Blog */
+	
+	.blog-entry-list .share-wrap h4, 
+	.blog-entry-list .share-wrap .social-links  {
+		float: none;	
+	}
+	
+}
+/* ---------------------------------------------------------------------- */
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	
+	/* Container */
+	
+	.container {
+		width: 420px;
+	}
+	
+	/* Carousel */
+	
+	.project-carousel > li {
+		width: 200px;	
+	}
+	
+	/* Portfolio Grid */
+	
+	ul.portfolio-grid > li.one-fourth {
+		width: 220px;
+		margin-left: 100px;
+		margin-right: 100px;
+	}
+	
+	ul.portfolio-grid > li.one-third {
+		width: 300px;
+		margin-left: 60px;
+		margin-right: 60px;
+	}
+	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+	
+	/* Container */
+	
+	.container {
+		width: 300px;	
+	}
+	
+	/* Carousel */
+	
+	.project-carousel > li {
+		margin-left: 40px;
+		margin-right: 40px;
+	}
+	
+	/* Portfolio Grid */
+	
+	ul.portfolio-grid > li.one-fourth {
+		width: 220px;
+		margin-left: 40px;
+		margin-right: 40px;
+	}
+	
+	/* Flexslider */
+	
+	.flex-direction-nav a {
+		height: 87px;
+		margin-top: -43px;	
+	}
+	
+	/* Tiny Nav */
+	
+	#nav, .tinynav {
+		width: 250px;
+	}
+	
+	/* Revolution Slider */
+	
+	.tp-bullets {
+		display: none;	
+	}
+	
+	/* Intro */
+	
+	.intro .buttons-wrap .button,
+	.introbox .buttons-wrap .button {
+		margin-right: 0;
+		margin-top: 10px;	
+		display: block;
+		text-align: center;
+	}
+	
+	.intro .buttons-wrap .button:first-child,
+	.introbox .buttons-wrap .button:first-child {
+		margin-top: 0;	
+	}
+	
+	/* Clients */
+	
+	.clients {
+		margin-right: 0;	
+	}
+	
+	.clients li {
+		float: none;	
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	/* Blog */
+	
+	.blog-entry-list .entry-date,
+	.author-image,
+	ol.comment-list .avatar-wrap {
+		float: none;	
+	}
+	
+}

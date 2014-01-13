@@ -1,0 +1,775 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/* ---------------------------------------------------------------------- */
+/* Theme Information
+/* ----------------------------------------------------------------------
+Name: Inceptio
+Description: Responsive Multi-Purpose Theme
+Version: 1.6.1
+Author: Ixtendo
+Author URI: http://www.ixtendo.com
+------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------- */
+/* Inceptio Shortcode Styles
+/* ----------------------------------------------------------------------
+TABLE OF CONTENTS
+
+-Intros
+-Buttons
+-Blockquotes
+-Lists
+-Notification Boxes
+-Tabs
+-Toggle & Accordion
+-Dropcaps
+-Highlights
+-Preformatted Text & Computer Code
+-Infobox
+-Images
+-White Space
+-Dividers
+------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------- */
+/* Intros
+/* ---------------------------------------------------------------------- */
+
+/* Intro */
+
+.buttons-wrap *:last-child {
+	margin-right: 0;	
+}
+
+/* Simple Intro */
+
+.intro {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.intro strong {
+	font-weight: 600;
+}
+
+.intro .buttons-wrap {
+	margin-top: 23px;
+}
+
+.intro .buttons-wrap .button {
+	margin-bottom: 0;
+}
+
+/* Intro Box */
+
+.introbox {
+	text-align: center;
+	padding: 20px;
+	background-color: #f5f5f5;
+	border: 1px solid #dbdbdb;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.introbox strong {
+	font-weight: 600;
+}
+
+.introbox img {
+	position: absolute;	
+	top: -4px;
+	left: -4px;
+}
+
+.introbox .buttons-wrap {
+	margin-top: 23px;
+}
+
+.introbox .buttons-wrap .button {
+	margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Buttons
+/* ---------------------------------------------------------------------- */
+.button, .content-form input.button, #comment-form #submit {
+	width: auto;
+	display: inline-block;	
+	cursor: pointer;
+	line-height: normal;
+	margin: 0 10px 20px 0;
+	border: none; 
+	border-radius: 3px;
+	color: #fff !important;
+	padding: 6px 15px;
+	text-shadow: 0 -1px rgba(0, 0, 0, 0.2);
+	
+	background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+	background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+	background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+	background-image: linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+	background-repeat: repeat-x;
+}
+
+.button.large {
+	font-size: 1.333em; /* 16px */ 
+	padding: 5px 15px;
+}
+
+/* begin colors */
+
+.button.orange {
+	background-color: #f78e0c;	
+}
+
+.button.yellow {
+	background-color: #FBB829;	
+}
+
+.button.green {
+	background-color: #7FAF1B;	
+}
+
+.button.retro-green {
+	background-color: #6d8d5b;	
+}
+
+.button.teal {
+	background-color: #4fa29a;	
+}
+
+.button.blue {
+	background-color: #2A8FBD;	
+}
+
+.button.indigo {
+	background-color: #4c6192;	
+}
+
+.button.red {
+	background-color: #E64141;	
+}
+
+.button.pink {
+	background-color: #bd2346;	
+}
+
+.button.purple {
+	background-color: #723f8e;	
+}
+
+.button.black {
+	 background-color: #333;
+}
+
+/* end colors */
+
+.button:hover, .content-form input.button:hover, #comment-form #submit:hover {
+	background-color: #333;		
+}
+
+/* ---------------------------------------------------------------------- */
+/* Blockquotes
+/* ---------------------------------------------------------------------- */
+blockquote {
+	margin-bottom: 20px;
+}
+
+.quote-content {
+	font-style: italic;
+    color: #666;
+}
+
+.quote-content p {
+	margin-top: 20px;	
+	margin-bottom: 0;
+}
+
+.quote-content > p:first-child {
+	margin: 0;	
+}
+
+/* Simple */
+
+blockquote.simple {
+	padding-left: 10px;
+	border-left: 2px solid #dbdbdb;
+}
+
+blockquote.simple .quote-meta {
+	margin-top: 10px;
+}
+
+/* Speech Bubble (Testimonial) */
+
+blockquote.speech-bubble {
+	overflow: hidden;	
+}
+
+blockquote.speech-bubble .quote-content {
+	position: relative;
+	padding: 20px 15px 20px 45px;
+	background: #f5f5f5 url({T_IMAGESET_PATH}/quote.png) no-repeat 15px 20px;
+	border-bottom: 1px solid #dbdbdb;	
+}
+
+blockquote.speech-bubble span.quote-arrow {
+	display: block;
+	width: 16px;
+	height: 16px;
+	background: url({T_IMAGESET_PATH}/testimonial-arrow.png) no-repeat left top;
+	position: absolute;
+	right: 52.173%; /* 240px */
+	bottom: -16px;	
+}
+
+blockquote.speech-bubble .quote-meta {
+	float: right;
+	margin-top: 24px;
+	padding-top: 0.166em; /* 2px */
+	padding-left: 33px;
+	text-align: right;
+	background: no-repeat left top;
+}
+
+blockquote.speech-bubble .quote-meta.author-male {
+	background-image: url({T_IMAGESET_PATH}/testimonial-author-male.png);
+}
+
+blockquote.speech-bubble .quote-meta.author-female {
+	background-image: url({T_IMAGESET_PATH}/testimonial-author-female.png);
+}
+
+blockquote.speech-bubble span {
+	color: #666;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Lists
+/* ---------------------------------------------------------------------- */
+ul.arrow,
+ul.circle,
+ul.square,
+ul.check,
+ul.green-arrow,
+ul.green-plus,
+ul.green-check,
+ol.decimal,
+ol.upper-roman, 
+ol.lower-alpha, 
+ol.upper-alpha {
+	list-style: none;
+	margin: 0 0 20px;
+	padding: 0;
+}
+
+ul.arrow,
+ul.circle,
+ul.square,
+ul.check,
+ul.green-arrow,
+ul.green-plus,
+ul.green-check {
+	overflow: hidden;
+}
+
+ul.arrow ul, 
+ul.circle ul,
+ul.square ul,
+ul.check ul,
+ul.green-arrow ul,
+ul.green-plus ul,
+ul.green-check ul,
+ol.decimal ul,
+ol.upper-roman ul,
+ol.lower-alpha ul,
+ol.upper-alpha ul {
+	list-style: none;
+	margin: 0 0 0 14px;
+	padding: 0;
+}
+
+ul.arrow ol, 
+ul.circle ol,
+ul.square ol,
+ul.check ol,
+ul.green-arrow ol,
+ul.green-plus ol,
+ul.green-check ol,
+ol.decimal, ol.decimal ol,
+ol.upper-roman, ol.upper-roman ol,
+ol.lower-alpha, ol.lower-alpha ol,
+ol.upper-alpha, ol.upper-alpha ol {
+	margin-left: 18px; 	
+}
+
+ul.arrow li,
+ul.circle li,
+ul.square li,
+ul.check li,
+ul.green-arrow li,
+ul.green-plus li,
+ul.green-check li,
+ol.decimal li,
+ol.upper-roman li, 
+ol.lower-alpha li, 
+ol.upper-alpha li {
+	margin-bottom: 5px;
+}
+
+ul.arrow ul li:first-child, ul.arrow ol li:first-child,
+ul.circle ul li:first-child, ul.circle ol li:first-child,
+ul.square ul li:first-child, ul.square ol li:first-child, 
+ul.check ul li:first-child, ul.check ol li:first-child,
+ul.green-arrow ul li:first-child, ul.green-arrow ol li:first-child,
+ul.green-plus ul li:first-child, ul.green-plus ol li:first-child,
+ul.green-check ul li:first-child, ul.green-check ol li:first-child,
+ol.decimal ol li:first-child, ol.decimal ul li:first-child,
+ol.upper-roman ol li:first-child, ol.upper-roman ul li:first-child, 
+ol.lower-alpha ol li:first-child, ol.lower-alpha ul li:first-child, 
+ol.upper-alpha ol li:first-child, ol.upper-alpha ul li:first-child {
+	margin-top: 5px;
+}
+
+/* Unordered Lists */
+
+ul.arrow li {
+	background: url({T_IMAGESET_PATH}/bullets/list-arrow.png) no-repeat left 0.5em; /* 6px */
+	padding-left: 11px;	
+}
+
+ul.circle li {
+	background: url({T_IMAGESET_PATH}/bullets/list-circle.png) no-repeat left 0.583em; /* 7px */
+	padding-left: 11px;	
+}
+
+ul.square li {
+	background: url({T_IMAGESET_PATH}/bullets/list-square.png) no-repeat left 0.583em; /* 7px */
+	padding-left: 11px;	
+}
+
+ul.check li {
+	background: url({T_IMAGESET_PATH}/bullets/list-check.png) no-repeat left 0.416em; /* 5px */
+	padding-left: 17px;	
+}
+
+ul.green-arrow li {
+	background: url({T_IMAGESET_PATH}/bullets/right_16.png) no-repeat left 0.083em; /* 1px */
+	padding-left: 22px;	
+}
+
+ul.green-plus li {
+	background: url({T_IMAGESET_PATH}/bullets/plus_16.png) no-repeat left 0.083em; /* 1px */
+	padding-left: 22px;	
+}
+
+ul.green-check li {
+	background: url({T_IMAGESET_PATH}/bullets/tick_16.png) no-repeat left top; 
+	padding-left: 22px;	
+}
+
+/* Ordered Lists */
+
+ol.decimal {
+	list-style: decimal;	
+}
+
+ol.upper-roman {
+	list-style: upper-roman;	
+}
+
+ol.lower-alpha {
+	list-style: lower-alpha;	
+}
+
+ol.upper-alpha {
+	list-style: upper-alpha;	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Notification Boxes
+/* ---------------------------------------------------------------------- */
+.notification-box {
+	position: relative;
+	margin-bottom: 20px;
+	padding: 10px 24px 10px 36px;
+	background: no-repeat 10px center;
+	border: 1px solid;
+}
+
+a.notification-close {
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: 10px;	
+	color: #666 !important;
+	font-weight: bold;
+	font-size: 1.166em; /* 14px */
+	line-height: normal;
+}
+
+.notification-box p {
+	margin-bottom: 0;
+	margin-top: 20px;
+}
+
+.notification-box > p:first-child {
+	margin: 0;	
+}
+
+.notification-box-info {
+	background-color: #d7ebf5;
+	background-image: url({T_IMAGESET_PATH}/info-16.png);
+	border-color: #99c7de; 	
+}
+
+.notification-box-success {
+	background-color: #e1ebc5;
+	background-image: url({T_IMAGESET_PATH}/tick-16.png);
+	border-color: #bfd188; 	
+}
+
+.notification-box-warning {
+	background-color: #fcf3d7;
+	background-image: url({T_IMAGESET_PATH}/warning-16.png);
+	border-color: #f5d77d; 	
+}
+
+.notification-box-error {
+	background-color: #faede6;
+	background-image: url({T_IMAGESET_PATH}/block-16.png);
+	border-color: #f5ccb8; 	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tabs
+/* ---------------------------------------------------------------------- */
+.ui-tabs {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	line-height: 1.5em; /* 18px */
+	margin-bottom: 20px;
+	padding: 0;
+	border: none;
+	background: none;
+}
+
+.ui-tabs .ui-helper-reset {
+	line-height: 1.5em; /* 18px */	
+}
+
+.ui-tabs .ui-widget-content {
+	color: #333;
+}
+
+.ui-tabs .ui-tabs-hide { 
+	position: absolute;
+    left: -10000em;
+}
+
+.ui-tabs .ui-tabs-nav {
+	padding: 0;
+	border: none;
+}
+
+.ui-tabs .ui-widget-header,
+.ui-tabs .ui-state-active {
+	background: none;
+}
+
+.ui-tabs .ui-tabs-nav li,
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    float: left;
+	margin: 0 2px -1px 0;
+	padding: 0;
+    position: relative;
+    z-index: 10;
+	border: none;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    display: block;
+	padding: 5px 10px;
+	color: #333;
+	background-color: #f5f5f5;
+	border: 1px solid #dbdbdb;
+	border-bottom: none;
+	font-weight: bold;
+}
+
+.ui-tabs .ui-tabs-nav li a:hover {
+	background-color: #fafafa;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-active a {
+    background-color: #fff;
+	padding-bottom: 6px; /* makes the unselected tabs appear above the border */
+	border-left-color: #dbdbdb !important;
+	border-right-color: #dbdbdb !important;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 15px 10px;
+    background-color: #fff;
+	border: 1px solid #dbdbdb;
+	border-radius: 0;
+	overflow: hidden;
+}
+
+.ui-tabs .ui-tabs-panel > *:last-child {
+	margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toggle & Accordion
+/* ---------------------------------------------------------------------- */
+.ui-accordion {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	line-height: 1.5em; /* 18px */
+}
+
+.ui-accordion .ui-helper-reset {
+	line-height: 1.5em; /* 18px */	
+}
+
+.ui-accordion .ui-widget-content {
+	color: #333;	
+}
+
+.toggles-wrap, .accordion {
+	margin-bottom: 20px;	
+}
+
+.toggle, 
+.accordion > div {
+	margin-top: -1px;	
+}
+
+.toggle:first-child, 
+.accordion > div:first-child {
+	margin-top: 0;	
+}
+
+.ui-accordion .ui-accordion-header {
+	display: block;
+	position: relative; /* sets the initial position for the icon */
+	padding: 10px 10px 10px 40px;
+	cursor: pointer;
+	background: none;
+	background-color: #f5f5f5;
+	border: 1px solid #dbdbdb;
+	font-weight: bold;
+	margin: 0;
+	border-radius: 0;
+	color: #333;
+}
+
+.ui-accordion .ui-accordion-header:hover,
+.ui-accordion .ui-accordion-header.ui-state-active {
+	background-color: #fafafa;	
+}
+
+.ui-accordion > div:first-child > .ui-accordion-header {
+	border-top: 1px solid #dbdbdb;	
+}
+
+.ui-accordion .ui-accordion-content {
+    padding: 15px 10px;
+	background-color: #fff;
+	border: 1px solid #dbdbdb;
+	border-top: none;
+	border-radius: 0;
+	overflow: hidden;
+}
+
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+	position: absolute;
+	top: 9px;
+	left: 10px;
+	background: url({T_IMAGESET_PATH}/toggle-plus.png) no-repeat left top;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+}
+
+.ui-accordion .ui-accordion-header.ui-state-active .ui-accordion-header-icon {
+	background-image: url({T_IMAGESET_PATH}/toggle-minus.png);
+}
+
+.ui-accordion .ui-accordion-content > *:last-child {
+	margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dropcaps
+/* ---------------------------------------------------------------------- */
+.dropcap {
+	float: left;
+	font-weight: bold;
+	line-height: 1em;
+	margin-right: 5px;
+}
+
+.dropcap.simple {
+	font-size: 2.5em; /* 30px */
+}
+
+.dropcap.with-bg {
+	font-size: 2em; /* 24px */
+    padding: 6px 10px;
+	background-color: #e5e5e5;
+	border-radius: 3px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Highlights
+/* ---------------------------------------------------------------------- */
+.highlight {
+	color: #fff;
+    padding: 2px;
+}
+
+.highlight.black {
+	background-color: #333;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Preformatted Text & Computer Code
+/* ---------------------------------------------------------------------- */
+pre, code {
+    font-family: 'Courier New', Courier, monospace;
+	color: #888;
+}
+
+pre {
+	background-color: #fff;
+	border-left: 2px solid #dbdbdb;
+    padding: 10px;
+	margin-bottom: 20px;
+	white-space: pre-wrap;
+    word-wrap: break-word;	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Infobox
+/* ---------------------------------------------------------------------- */
+.infobox {
+	border-left: 4px solid;
+	margin-bottom: 20px;
+}
+
+.infobox-inner {
+	background-color: #f5f5f5;
+	border: 1px solid #dbdbdb;
+	border-left: none;
+	padding: 15px 20px;
+	margin-bottom: 20px;
+}
+
+.infobox h2 {
+	margin-bottom: 5px;
+	padding: 0;
+	border: none;
+}
+
+.infobox div.with-button {
+	display: inline;	
+}
+
+.infobox .button {
+	float: right;
+	margin: 0 0 5px 20px;
+}
+
+.infobox .mobile-button {
+	display: none;
+}
+
+.infobox *:last-child {
+	margin-bottom: 0;	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Images
+/* ---------------------------------------------------------------------- */
+.entry-image.alignleft,
+.alignleft.caption {
+    margin: 5px 20px 5px 0;
+}
+
+.entry-image.alignright,
+.alignright.caption {
+    margin: 5px 0 5px 20px;
+}
+
+.entry-image.aligncenter,
+.aligncenter.caption {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.caption .entry-image,
+.caption .caption-text {
+    margin-bottom: 5px;
+}
+
+/* Image with Inner Caption */
+
+.entry-image.inner-caption > div {
+	color: #fff;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.75);
+	text-shadow: 0 -1px rgba(0, 0, 0, 0.75);
+	width: 100%;
+	border-top: 1px solid rgba(0,0,0,0.95);
+	z-index: 2;
+}
+
+.entry-image.inner-caption > div > p {
+	padding: 10px;
+	margin: 0;
+	font-weight: bold;
+	
+	-webkit-transition: padding 0.2s ease-in-out;
+	-moz-transition: padding 0.2s ease-in-out;
+	-ms-transition: padding 0.2s ease-in-out;
+	-o-transition: padding 0.2s ease-in-out;
+	transition: padding 0.2s ease-in-out;
+}
+
+.inner-caption.link-overlay:hover > div > p {
+	padding-bottom: 15px;	
+}
+
+/* ---------------------------------------------------------------------- */
+/* White Space
+/* ---------------------------------------------------------------------- */
+.space20 {
+	height: 20px;	
+}
+
+.space40 {
+	height: 40px;	
+}
+
+.indent {
+	margin-left: 30px !important;	
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dividers
+/* ---------------------------------------------------------------------- */
+.divider-double-line {
+	height: 1px;
+	border-top: 1px solid #e5e5e5;	
+	border-bottom: 1px solid #e5e5e5;	
+	margin: 40px 0;
+}
