@@ -30,14 +30,13 @@
 			<!-- BEGIN custom_tags -->
 				,cb_{custom_tags.BBCODE_ID}: '{custom_tags.A_BBCODE_HELPLINE}'
 			<!-- END custom_tags -->
+			
+			
 		}
 
 	// ]]>
 
-		function move_draft_{donation_pages.S_DONATION_TYPE}()
-		{
-		document.getElementById("{donation_pages.S_DONATION_TYPE}").value = document.getElementById("donation_draft").value;
-		}
+		
 
 
 	</script>
@@ -88,7 +87,6 @@
 					<option value="200">{L_FONT_HUGE}</option>
 				</select>
 			<!-- IF .custom_tags -->
-				<br /><br />
 				<!-- BEGIN custom_tags -->
 					<input type="button" class="button2" name="addbbcode{custom_tags.BBCODE_ID}" value="{custom_tags.BBCODE_TAG}" onclick="bbstyle({custom_tags.BBCODE_ID})"<!-- IF custom_tags.BBCODE_HELPLINE !== '' --> onmouseover="helpline('cb_{custom_tags.BBCODE_ID}')" onmouseout="helpline('tip')"<!-- ENDIF --> />
 				<!-- END custom_tags -->
@@ -102,10 +100,12 @@
 					// <![CDATA[
 						colorPalette('h', 8, 10);
 					// ]]>
+					
 					</script>
 	
 				</dt>
 				<dd>
+					<input type="button" class="button2" name="fastbutton1" value="{acces_groups_fast.NAME}" onclick="add_acces_groups({acces_groups_fast.ID})" /><br />
 					{options.CONTENT}
 				</dd>
 			</dl>
@@ -128,6 +128,11 @@
 		<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
 	<!-- ENDIF -->
 </div>
+<!-- IF .custom_tags -->
+	<!-- BEGIN custom_tags -->
+		<input type="button" class="button2" name="addbbcode{custom_tags.BBCODE_ID}" value="{custom_tags.BBCODE_TAG}" onclick="bbstyle({custom_tags.BBCODE_ID})"<!-- IF custom_tags.BBCODE_HELPLINE !== '' --> onmouseover="helpline('cb_{custom_tags.BBCODE_ID}')" onmouseout="helpline('tip')"<!-- ENDIF --> />
+	<!-- END custom_tags -->
+<!-- ENDIF -->
 <fieldset>
 	<legend>{SUBMIT}</legend>
 	<p class="submit-buttons">

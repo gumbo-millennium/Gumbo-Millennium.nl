@@ -193,6 +193,19 @@ class acp_dc_activity_management
 					include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 				}
 				
+				$sql = "SELECT g.group_id, g.group_name
+					FROM " . GROUPS_TABLE . " g
+					WHERE ". $db->sql_in_set('g.group_id', $activities_handler->get_user_groups($user->data['user_id']), false, false) ."
+					AND ". $db->sql_in_set('g.group_id', unserialize(EXCLUDE_GROUPS_COMMISSION), true, false)."
+					AND ". $db->sql_in_set('g.group_type', unserialize(EXCLUDE_PRE_DEFINED_GROUPS), true, false);
+				$result = $db->sql_query($sql);
+				$user_commissions = array();
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$user_commissions[intval($row['group_id'])] = $row['group_name'];
+				}
+				$db->sql_freeresult($result);
+				
 				$display_vars = array(
 					'title'	=> strtoupper($form_title),
 					'vars'	=> array(				
@@ -266,7 +279,8 @@ class acp_dc_activity_management
 								'validate' => 'int',
 								'type' => 'select',
 								'empty' => false,
-								'method' => 'apc_commission',
+								'method' => 'apc_dropdown',
+								'params' => array('{CONFIG_VALUE}', '{KEY}', $user_commissions, "true"),
 								'explain' => true,
 								'preg'=> '[^0-9]'
 							),
@@ -325,6 +339,7 @@ class acp_dc_activity_management
 								'explain' => true,
 								'append' => ' euro',
 								'preg'=> '[^0-9,.]',  
+								'append' => ' euro',
 								'patern' => array( 'type' => 'money')
 							),
 							'price_member'=> array(
@@ -386,6 +401,35 @@ class acp_dc_activity_management
 
 				// Assigning custom bbcode	
 				display_custom_bbcodes();
+				
+				$fast_access_groups = array ( 
+					array (
+						"name"	=> $user->lang["SELECT_USERS"],
+						"groups"	=> $user->lang["G_GUESTS"].",\n".$user->lang["G_REGISTERED"],
+						"id"	=> 1,
+					),
+					array(
+						"name"	=> $user->lang["G_REGISTERED"],
+						"groups"	=> $user->lang["G_REGISTERED"],
+						"id"	=> 2,
+					),
+					array(
+						"name"	=> $user->lang["GUMBO_MEMBERS"],
+						"groups"	=> "Begunstigers,\nEre Leden,\nGumbo Leden,\nOud leden",
+						"id"	=> 3,
+					),
+				);
+				
+				$template->assign_var('INPUT_FAST_FIELD', 'add_group');							
+				foreach($fast_access_groups AS $index => $acces_group){
+						
+					$template->assign_block_vars("acces_groups_fast", array(
+						'NAME'		=> $acces_group["name"],
+						'GROUPS'		=> $acces_group["groups"],
+						'ID'		=> $acces_group["id"],
+					));
+				}
+				
 				
 				// set title
 				if($mode == 'new_activity'){
@@ -1839,7 +1883,7 @@ class acp_dc_activity_management
 		return $options;
    }  
    
-   function apc_commission($value){
+   function apc_commission($value ){
    
 		global $user, $db;							
 		$sql = "SELECT g.group_id, g.group_name

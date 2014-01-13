@@ -32,8 +32,8 @@ $user->setup('mods/dc_activity');
 if(!isset($_GET["act"])){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);
 }
- 
-// Build main objecs
+
+// Build main objects
 $act_hndlr = new activities_handler();			// build activity handler
 $activity_id = request_var('act', 0);			// get activity by id (default = 0)	
 
@@ -54,7 +54,7 @@ $in_the_past = ($activity->getStartDatetime() < new DateTime('now') ? true : fal
 // get authorisation 
 if (!($activity->user_access($user->data['user_id']) || $manager) )
 {
-     trigger_error('NOT_AUTHORISED');
+	trigger_error('NOT_AUTHORISED');
 }
 
 // set activity readed
@@ -71,19 +71,19 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 	}else {
 		switch($status){														// check new status
 			case 1:																// new status = yes
-				if($activity->is_max_enrolled(1)){
-					trigger_error($user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
-				}else{
-					$activity->set_users_status(
-						array( 
-							array(
-								"user_id"		=> intval($user->data["user_id"]),
-								"user_ip"		=> $user->ip,
-								"status"		=> USER_SIGN_IN,
+			if($activity->is_max_enrolled(1)){
+				trigger_error($user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
+			}else{
+				$activity->set_users_status(
+					array( 
+						array(
+							"user_id"		=> intval($user->data["user_id"]),
+							"user_ip"		=> $user->ip,
+							"status"		=> USER_SIGN_IN,
 							)
 						)
 					);
-					
+				
 					// test sends messagers
 					$url = generate_board_url() . '/' . $user->page['page'];		// get current page
 					$messenger = new messenger(FALSE);
@@ -100,20 +100,20 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 						'DESCRIPTION'    		=> $activity->getDescription_preview(10),
 						'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 						'COMMISSION'    		=> get_group_name($activity->getCommission())
-					));
+						));
 					$messenger->send($user->data['user_notify_type']);
 					$messenger->save_queue();
 				}
 				break;
 			case 2:																// new status = no					
-				$activity->set_users_status(array(
-						array(
-							"user_id"		=> intval($user->data["user_id"]),
-							"user_ip"		=> $user->ip,
-							"status"		=> USER_SIGN_OUT
-						)
-					));
-				break;
+			$activity->set_users_status(array(
+				array(
+					"user_id"		=> intval($user->data["user_id"]),
+					"user_ip"		=> $user->ip,
+					"status"		=> USER_SIGN_OUT
+					)
+				));
+			break;
 		}
 	}
 }
@@ -172,8 +172,8 @@ if($unsubscribe_date_time > new DateTime("now")){				// check if the unsubscrive
 }else{
 	$template->assign_var('UNSUBSCRIBE_DATE_CHECK', false);		// enrol date time past
 }	
-		
-			
+
+
 
 
 // some more default variables
@@ -193,7 +193,7 @@ if($enrol_list!= 0){		// get a list of all enrolled users
 	foreach ($enrol_list as $id => $value)								// split enrolled users in two groups
 	{
 		if($value['status'] == "yes"){
-		
+			
 			if($split < $counter){											// if the half of the group is splitted
 				$enrol_block = 2;											// set next blok
 			}
@@ -201,7 +201,7 @@ if($enrol_list!= 0){		// get a list of all enrolled users
 				'USER_ID'    => $id,
 				'USER_LINK'	=>	append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $id),
 				'USER_NAME'    => $value['username'],
-			));
+				));
 			$counter++;														// next enrolled user
 		}
 	}
@@ -281,18 +281,18 @@ page_header($activity->getName());
 // set template
 
 $template->assign_block_vars('navlinks', array(
-            'FORUM_NAME'         => $user->lang['DC_ACT_LIST'],
+	'FORUM_NAME'         => $user->lang['DC_ACT_LIST'],
             'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 );
 
 $template->assign_block_vars('navlinks', array(
-            'FORUM_NAME'         => $activity->getName(), 
+	'FORUM_NAME'         => $activity->getName(), 
             'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity.$phpEx", "act=".$activity->getId())) //The path to the custom file relative to the phpbb root path.            
 );
 
 $template->set_filenames(array(
-    'body' => 'dc_activity.html',
-));
+	'body' => 'dc_activity.html',
+	));
 
 make_jumpbox(append_sid("{$phpbb_root_path}viewforum.$phpEx"));
 page_footer();

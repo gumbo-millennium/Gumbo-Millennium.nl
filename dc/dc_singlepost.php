@@ -1,7 +1,6 @@
 <?php
 define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
+global $db, $phpbb_root_path, $phpEx;
 include($phpbb_root_path . 'common.' . $phpEx);
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
@@ -13,9 +12,9 @@ $user->setup();
 
 
 //eigen code
-$sql = 'SELECT p.post_text, p.bbcode_bitfield, p.bbcode_uid, t.topic_title, p.post_subject FROM ' . POSTS_TABLE . ' AS p, ' . TOPICS_TABLE . ' as t WHERE p.topic_id = t.topic_id AND p.post_id = 2';
+$sql = 'SELECT p.post_text, p.bbcode_bitfield, p.bbcode_uid, t.topic_title, p.post_subject FROM ' . POSTS_TABLE . ' AS p, ' . TOPICS_TABLE . ' as t WHERE p.topic_id = t.topic_id AND p.post_id = 50';
 // $config['max_topics'] zorgt voor dat je maximaal aantal posts ophaalt als je meerdere zou ophalen om weer te geven
-$result = $db->sql_query_limit($sql, $config['max_topics']);
+$result = $db->sql_query_limit($sql, 1);
 $row = $db->sql_fetchrow($result);
 
 // Parse the message and subject

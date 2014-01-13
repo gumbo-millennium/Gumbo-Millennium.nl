@@ -1,3 +1,8 @@
+AddType application/vnd.ms-fontobject .eot
+AddType application/octet-stream .otf .ttf
+AddType font/otf .otf
+AddType font/opentype .woff
+
 php_flag display_errors On
 RewriteEngine on
 # tor network blocking begin ends on line 922
@@ -8394,3 +8399,4 @@ DirectoryIndex portal.php index.php index.html index.htm
 order allow,deny
 deny from woot.be
 allow from all
+

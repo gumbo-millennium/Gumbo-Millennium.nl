@@ -216,6 +216,7 @@ if ($id)
 
 	// Parse Theme Data
 	$replace = array(
+		'{T_WEBSITE_LAYOUT}'		=> WEBSITE_LAYOUT,
 		'{T_THEME_PATH}'			=> "{$phpbb_root_path}styles/" . rawurlencode($theme['theme_path']) . '/theme',
 		'{T_TEMPLATE_PATH}'			=> "{$phpbb_root_path}styles/" . rawurlencode($theme['template_path']) . '/template',
 		'{T_IMAGESET_PATH}'			=> "{$phpbb_root_path}styles/" . rawurlencode($theme['imageset_path']) . '/imageset',
