@@ -584,11 +584,25 @@ switch ($mode)
 		// If the user has m_approve permission or a_user permission, then list then display unapproved posts
 		if ($auth->acl_getf_global('m_approve') || $auth->acl_get('a_user'))
 		{
-			$sql = '(post_id) as posts_in_queue
-				FROM ' . POSTS_TABLE . '
-				WHERE poster_id = ' . $user_id . '
-					AND post_approved = 0';
+			$sql_where_ary = array(
+				'post.poster_id'    => $user_id,
+				'post_approved'		=> 0
+			);
+
+			$sql_array = array(
+				'SELECT'    => 'post_id posts_in_queue',
+
+				'FROM'      => array(
+					POSTS_TABLE  => 'post',
+				),
+			
+				'WHERE'     => $db->sql_build_array('SELECT', $sql_where_ary)
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+
 			$result = $db->sql_query($sql);
+
+
 			$member['posts_in_queue'] = (int) $db->sql_fetchfield('posts_in_queue');
 			$db->sql_freeresult($result);
 		}
