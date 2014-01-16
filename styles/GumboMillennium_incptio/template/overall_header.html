@@ -597,8 +597,13 @@
                                 <nav id="breadcrumbs" class="one-half column-last">
                                     <ul>
                                         <li>
-                                            <a href="index.php">Forumoverzicht</a>
+                                             <a href="{U_INDEX}">{L_INDEX}</a> <!-- IF navlinks.S_LAST_ROW == FALSE --> &rsaquo; <!-- ENDIF -->
                                         </li>
+                                        <!-- BEGIN navlinks -->
+                                        <li>
+                                             <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a> <!-- IF navlinks.S_LAST_ROW == FALSE --> &rsaquo; <!-- ENDIF -->
+                                        </li>
+                                        <!-- END navlinks -->
                                     </ul>
                                 </nav>
                             </div>
