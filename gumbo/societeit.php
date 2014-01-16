@@ -1,42 +1,71 @@
 <?php
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+	/**
+	*
+	* @package phpBB3
+	* @version $Id$
+	* @copyright (c) 2005 phpBB Group
+	* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+	*
+	*/
 
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup();
+	/**
+	*/
 
-page_header($user->lang['SOCIETEIT']);
+	/**
+	* @ignore
+	*/
+	define('IN_PHPBB', true);
+	$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
+	$phpEx = substr(strrchr(__FILE__, '.'), 1);
+	include($phpbb_root_path . 'common.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
-$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 25';
+	// Start session management
+	$user->session_begin();
+	$auth->acl($user->data);
+	$user->setup('viewforum');
+	
+	// Get the page content and title
+	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 25';
 
-$result = $db->sql_query_limit($sql, $config['portal_max_topics']);
-$row = $db->sql_fetchrow($result);
+	$result = $db->sql_query_limit($sql, 1);
+	$row = $db->sql_fetchrow($result);
+	
+	$options = 	($row['enable_bbcode'] ? OPTION_FLAG_BBCODE : 0) +
+				($row['enable_smilies'] ? OPTION_FLAG_SMILIES : 0) + 
+				($row['enable_magic_url'] ? OPTION_FLAG_LINKS : 0);
+	
+	$message = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
+	
+	$template->assign_var('MESSAGE_TITLE', $row['post_subject']);
+	$template->assign_var('MESSAGE_TEXT', $message);
+	
+	$db->sql_freeresult($result);
+	
+	// Add the title/breadcrumbs bar
+	$template->assign_vars(array(
+		'PAGE_TITLE_BOX_HIDE'	=> false
+	));
+	
+	// Set the breadcrumbs
+	$template->assign_block_vars('navlinks', array(
+		'FORUM_NAME'         => $user->lang['OVER_ONS'],
+		 'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}gumbo/about_gumbo.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+	);
+	
+	$template->assign_block_vars('navlinks', array(
+		'FORUM_NAME'         => $user->lang['SOCIETEIT'], 
+		 'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx") //The path to the custom file relative to the phpbb root path.            
+	));
+	
+	// Output page
+	page_header($user->lang['SOCIETEIT']);
 
-// Parse the message and subject
-$message = censor_text($row['post_text']);
+	$template->set_filenames(array(
+		'body' => 'societeit.html')
+	);
 
-// Second parse bbcode here
-if ($row['bbcode_bitfield'])
-{
-	$bbcode = new bbcode(base64_encode($row['bbcode_bitfield']));
-	$bbcode->bbcode_second_pass($message, $row['bbcode_uid'], $row['bbcode_bitfield']);
-}
+	page_footer();
 
-$message = bbcode_nl2br($message);
-$message = smiley_text($message);
-
-$db->sql_freeresult($result);
-
-$template->assign_var('MESSAGE_TEXT', $message);
-
-$template->set_filenames(array(
-    'body' => 'singlepost_body.html',
-));
-
-page_footer();
+?>
