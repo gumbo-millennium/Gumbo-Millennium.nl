@@ -65,6 +65,7 @@ $lang = array_merge($lang, array(
 	'EQUAL_TO'				=> 'Equal to',
 
 	'FIND_USERNAME_EXPLAIN'	=> 'Use this form to search for specific members. You do not need to fill out all fields. To match partial data use * as a wildcard. When entering dates use the format <kbd>YYYY-MM-DD</kbd>, e.g. <samp>2004-02-29</samp>. Use the mark checkboxes to select one or more usernames (several usernames may be accepted depending on the form itself) and click the Select Marked button to return to the previous form.',
+	'FIRST'					=> 'First',
 	'FLOOD_EMAIL_LIMIT'		=> 'You cannot send another e-mail at this time. Please try again later.',
 
 	'GROUP_LEADER'			=> 'Group leader',
@@ -90,7 +91,8 @@ $lang = array_merge($lang, array(
 	'IM_SEND_MESSAGE'		=> 'Send message',
 	'IM_SENT_JABBER'		=> 'Your message to %1$s has been sent successfully.',
 	'IM_USER'				=> 'Send an instant message',
-
+	
+	'LAST'						=> 'Last',
 	'LAST_ACTIVE'				=> 'Last active',
 	'REALNAME'					=> 'Realname',
 	'LESS_THAN'					=> 'Less than',

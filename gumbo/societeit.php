@@ -50,13 +50,13 @@
 	
 	// Set the breadcrumbs
 	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'         => $user->lang['OVER_ONS'],
-		 'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}gumbo/about_gumbo.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+		'FORUM_NAME'		=> $user->lang['OVER_ONS'],
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/over_ons.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 	);
 	
 	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'         => $user->lang['SOCIETEIT'], 
-		 'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx") //The path to the custom file relative to the phpbb root path.            
+		'FORUM_NAME'		=> $user->lang['SOCIETEIT'], 
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx") //The path to the custom file relative to the phpbb root path.            
 	));
 	
 	// Output page

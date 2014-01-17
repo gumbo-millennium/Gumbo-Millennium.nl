@@ -1,0 +1,52 @@
+<!-- INCLUDE overall_header.html -->	
+
+<!-- begin content -->
+	<section id="content">
+		<div class="container clearfix">
+			<!-- begin memberlist -->
+			<section>
+				
+				<!-- BEGIN memberrow -->
+				<div class="one-sixth<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 == 0 --> column-last<!-- ENDIF -->">
+					<div class="team-member">
+						<!-- IF memberrow.AVATAR_IMG -->
+						<div class="photo">
+							{memberrow.AVATAR_IMG}
+						</div>
+						<!-- ELSE -->
+						<img class="photo" src="{T_IMAGESET_PATH}/team/team-member-1.png" alt="User avatar">
+						<!-- ENDIF -->
+						<div class="content">
+							<h3 class="name">{memberrow.USERNAME_FULL}</h3>
+							<!-- IF A_REALNAME -->
+							<span class="real-name">({memberrow.U_REAL_NAME})</span>
+							<!-- ENDIF -->
+							<span class="job-title">{memberrow.RANK_TITLE}</span>
+						</div>
+					</div>
+				</div>
+				<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 == 0 -->
+				<div class="clear"></div>
+				<!-- ENDIF -->
+				<!-- END memberrow -->
+				
+				<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 != 0 -->
+				<div class="clear"></div>
+				<!-- ENDIF -->
+				
+				<!-- IF PAGINATION -->
+				<nav class="page-nav">
+					<span>
+						{PAGE_NUMBER}
+					</span>
+					{PAGINATION}
+				</nav>
+				<!-- ENDIF -->
+				
+			</section>
+			<!-- end memberlist -->
+		</div>
+	</section>
+	<!-- end content -->
+
+<!-- INCLUDE overall_footer.html -->

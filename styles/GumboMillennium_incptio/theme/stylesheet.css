@@ -494,7 +494,7 @@ ul#navlist li a.selected {
 /* ---------------------------------------------------------------------- */
 /* Columns
 /* ---------------------------------------------------------------------- */
-.one-half, .one-third, .one-fourth, .two-thirds, .three-fourths, .full-screen {
+.one-half, .one-third, .one-fourth, .one-sixth, .two-thirds, .three-fourths, .full-screen {
 	display: inline;
 	float: left;
     margin-right: 2%;
@@ -518,6 +518,11 @@ ul#navlist li a.selected {
 .one-fourth {
 	width: 23.5%;	
 	max-width: 220px;
+}
+
+.one-sixth
+{	width: 16%;
+	max-width: 141px;
 }
 
 .two-thirds {
@@ -631,8 +636,14 @@ ul#navlist li a.selected {
 
 /* Our Team */
 
-.team-member .photo {
+.team-member div.photo {
+	height: 147px;
+	margin: 0 auto 9px auto;
+}
+
+.team-member .photo, .team-member div.photo img {
 	display: block;
+	width: 147px;
 	margin: 0 auto 15px auto;	
 	max-width: 100%;
 }
@@ -645,8 +656,12 @@ ul#navlist li a.selected {
 	margin: 0;
 }
 
-.team-member .name, .team-member .job-title {
+.team-member .name, .team-member .real-name, .team-member .job-title {
 	text-align: center;
+}
+
+.team-member .real-name {
+	display: block;
 }
 
 .team-member .job-title {
