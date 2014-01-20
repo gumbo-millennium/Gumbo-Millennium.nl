@@ -27,7 +27,7 @@
 	$user->setup('viewforum');
 	
 	// Get the page content and title
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 25';
+	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 27';
 
 	$result = $db->sql_query_limit($sql, 1);
 	$row = $db->sql_fetchrow($result);
@@ -38,26 +38,38 @@
 	
 	$message = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
 	
-	$images = array();
-	if(preg_match_all('/<img[^>]+src="([^"]*)"[^>]+>/i', $message, $imgs))
+	$image_links = array();
+	if(preg_match_all('/<img[^>]+src="([^"]*)"[^>]+>/i', $message, $images))
 	{	
-		foreach($imgs[1] as $image)
+		foreach($images[1] as $image)
 		{	
-			$images[] = $image;
+			$image_links[$image] = false;
 		}
-		
-		$message = preg_replace('/<img[^>]+src="([^"]*)"[^>]+>/i', '', $message);
-		
-		foreach($images as $image)
+	}
+
+	if(preg_match_all('#<a[^>]+href="([^>^"]*)"[^>]+>(.*?)</a>#i', $message, $links))
+	{	
+		foreach($links[2] as $index => $innerhtml)
 		{	
-			$template->assign_block_vars('images', array(
-				'IMAGE' => $image
-			));
+			if(preg_match_all('/<img[^>]+src="([^>^"]*)"[^>]+>/i', $innerhtml, $images))
+			{	
+				foreach($images[1] as $image)
+				{	
+					$image_links[$image] = $links[1][$index];
+				}
+			}
 		}
 	}
 	
-	$template->assign_var('MESSAGE_TITLE', $row['post_subject']);
-	$template->assign_var('MESSAGE_TEXT', $message);
+	foreach($image_links as $image => $link)
+	{	
+		$template->assign_block_vars('sponsors', array(
+			'IMAGE' => $image,
+			'LINK' => $link
+		));
+	}
+	
+	//$template->assign_var('MESSAGE_TEXT', $message);
 	
 	$db->sql_freeresult($result);
 	
@@ -73,15 +85,15 @@
 	);
 	
 	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'		=> $user->lang['SOCIETEIT'], 
-		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx") //The path to the custom file relative to the phpbb root path.            
-	));
+		'FORUM_NAME'		=> $user->lang['SPONSOR'],
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/sponsors.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+	);
 	
 	// Output page
-	page_header($user->lang['SOCIETEIT']);
-
+	page_header($user->lang['SPONSOR']);
+	
 	$template->set_filenames(array(
-		'body' => 'societeit.html')
+		'body' => 'sponsors.html')
 	);
 
 	page_footer();
