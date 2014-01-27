@@ -1760,8 +1760,7 @@ class activity {
 			return null;
 
 		if(isset($this->readed_users[$user_id])){
-			return $this->readed_users[$user_id];
-			print("hier");
+			return true;
 		}
 		$sql_where_ary = array(
 			'rd.activity_id'      => (int)$this->id
@@ -1817,7 +1816,7 @@ class activity {
 
 			'WHERE'     =>  $db->sql_build_array('SELECT', $sql_where_ary)
 		);
-
+		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
 		// Run the built query statement

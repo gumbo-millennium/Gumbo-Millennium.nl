@@ -58,7 +58,7 @@ if (!($activity->user_access($user->data['user_id']) || $manager) )
 }
 
 // set activity readed
-if(!$activity->get_read(intval($user->data['user_id']))){
+if(!$activity->get_read( intval($user->data['user_id']) ) ){
 	$activity->set_read( intval($user->data['user_id']));
 }
 // change enrol status

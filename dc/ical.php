@@ -84,7 +84,7 @@ if(($full_list = $activity_controller->get_user_activities( $user_id, USER_ACCES
 		$vevent->setProperty( "LOCATION", $activity->getLocation());
 		  // property name - case independent
 		$vevent->setProperty( "summary", $activity->getName() );
-		$vevent->setProperty( "description", $activity->getDescription_preview(10, false, false, false)); // get preview max 10 sentenaces, no bbcode and no smilies
+		$vevent->setProperty( "description", $activity->getDescription_preview(6, false, false, false)); // get preview max 10 sentenaces, no bbcode and no smilies
 		$vevent->setProperty( "organizer" , $group_name_ary[$activity->getCommission()] ); 
 		$vevent->setProperty( "attendee", $group_name_ary[$activity->getCommission()] );
 		$last	= array(
