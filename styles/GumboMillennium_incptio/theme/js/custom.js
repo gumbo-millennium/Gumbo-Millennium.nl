@@ -526,7 +526,7 @@ jQuery(document).ready(function ($) {
     /* Responsive Search (must be placed after Tiny Nav)
     /* ---------------------------------------------------------------------- */
 
-    var searchInput = $('#s');
+    var searchInput = $('#keywords');
     if (searchInput.length > 0) {
         var responsiveSearchInstance = searchInput.responsiveSearch();
     }
@@ -770,6 +770,14 @@ jQuery(document).ready(function ($) {
                         }
                     }
                 }
+            });
+
+            $(".inline").fancybox({
+                    fitToView   : false,
+                    autoSize    : true,
+                    closeClick  : false,
+                    openEffect  : 'fade',
+                    closeEffect : 'fade'
             });
         }
     }

@@ -20,6 +20,7 @@
 	display: inline-block;
 	margin-right: 0.6em;
 	-webkit-font-smoothing: antialiased;
+	color: rgba(0,0,0,0.3);
 }
 .icon-female:before {
 	content: "\f182";

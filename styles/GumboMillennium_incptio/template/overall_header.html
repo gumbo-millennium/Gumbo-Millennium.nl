@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}">
 <!--[if IE 8]> <html class="ie8 no-js" xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}> <!--<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}"> <!--<![endif]-->
 
 <head>
 
@@ -10,7 +10,7 @@
 <meta http-equiv="content-style-type" content="text/css" />
 <meta http-equiv="content-language" content="{S_USER_LANG}" />
 <meta http-equiv="imagetoolbar" content="no" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="resource-type" content="document" />
 <meta name="distribution" content="global" />
 <meta name="copyright" content="2000, 2002, 2005, 2007 phpBB Group" />
@@ -28,13 +28,13 @@
 	<!-- IF S_ENABLE_FEEDS_TOPICS --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FEED_TOPICS_NEW}" href="{U_FEED}?mode=topics" /><!-- ENDIF -->
 	<!-- IF S_ENABLE_FEEDS_TOPICS_ACTIVE --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FEED_TOPICS_ACTIVE}" href="{U_FEED}?mode=topics_active" /><!-- ENDIF -->
 	<!-- IF S_ENABLE_FEEDS_FORUM and S_FORUM_ID --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_FORUM} - {FORUM_NAME}" href="{U_FEED}?f={S_FORUM_ID}" /><!-- ENDIF -->
-	<!-- IF S_ENABLE_FEEDS_TOPIC and S_TOPIC_ID --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_TOPIC} - {TOPIC_TITLE}" href="{U_FEED}?f={S_FORUM_ID}&amp;t={S_TOPIC_ID}" /><!-- ENDIF -->
+	<!-- IF S_ENABLE_FEEDS_TOPIC and S_TOPIC_ID --><link rel="alternate" type="application/atom+xml" title="{L_FEED} - {L_TOPIC} - {TOPIC_TITLE}" href="{U_FEED}?f={S_FORUM_ID}&amp;t={S_TOPIC_ID}"/><!-- ENDIF -->
 <!-- ENDIF -->
 
 <!--
 	phpBB style name: Gumbo Millennium Inception
 	Based on style:   prosilver (this is the default phpBB3 style)
-	Original author:  Gerco Versloot, Gumbo Milennium ( http://www.gumbo-millennium.nl/ )
+	Original author:  Gerco Versloot, Gumbo Millennium ( http://www.gumbo-millennium.nl/ )
 	Modified by:
 -->
 
@@ -137,478 +137,658 @@
 
 </head>
 <body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION} {T_WEBSITE_LAYOUT}">
-        <div class="menu-container">
-            <!-- Push Wrapper -->
-            <div class="mp-pusher" id="mp-pusher">
+		<div class="menu-container">
+			<!-- Push Wrapper -->
+			<div class="mp-pusher" id="mp-pusher">
 
-               <!-- mp-menu -->
-                <nav id="mp-menu" class="mp-menu">
-                    <div class="mp-level">
-                        <h2 class="icon icon-world">Gumbo Millennium</h2>
-                        <ul>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-world" href="index.php">Home</a>
-                                <div class="mp-level">
-                                    <ul>
-                                        <h2 class="icon icon-world">Home</h2>
-                                        <a class="mp-back" href="#">back</a>
-                                        <li>
-                                            <a href="index.php" class="icon icon-world">Home</a>
-                                        </li>
-                                        <li>
-                                            <a href="plaza_cams.php" class="icon icon-video">Plaza Cameras</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-tag" href="about_gumbo.php">About Gumbo</a>
-                                <div class="mp-level">
-                                    <ul>
-                                        <h2 class="icon icon-tag">About Gumbo</h2>
-                                        <a class="mp-back" href="#">back</a>
-                                        <li>
-                                            <a href="why_gumbo.php" class="icon icon-bubble">Why Gumbo</a>
-                                        </li>
-                                        <li>
-                                            <a href="about_gumbo.php" class="icon icon-tag">About Gumbo</a>
-                                        </li>
-                                        <li>
-                                            <a href="memberlist.php" class="icon icon-t-shirt">Memberlist</a>
-                                        </li>
-                                        <li class="icon icon-arrow-left">
-                                            <a class="icon icon-paperplane" href="disputen.php">Disputen</a>
-                                            <div class="mp-level">
-                                                <ul>
-                                                    <h2 class="icon icon-paperplane">Disputen</h2>
-                                                    <a class="mp-back" href="#">back</a>
-                                                    <li>
-                                                        <a href="equester.php" class="icon ">Equester</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="m-power.php" class="icon ">M-Power</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="proximus.php" class="icon ">Proximus</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="aliquando.php" class="icon ">Aliquando</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="sponsers.php" class="icon icon-star">Sponsers</a>
-                                        </li>
-                                        <li class="icon icon-arrow-left">
-                                            <a class="icon icon-cloud" href="commission.php">Comissions</a>
-                                            <div class="mp-level">
-                                                <ul>
-                                                    <h2 class="icon icon-cloud">Comissions</h2>
-                                                    <a class="mp-back" href="#">back</a>
-                                                    <li>
-                                                        <a href="board_committee.php" class="icon ">Dagelijks bestuur</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="bestuur.php" class="icon ">Digitale Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="sc.php" class="icon ">Soos Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="pc.php" class="icon ">Plaza Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="ac.php" class="icon ">Actviteiten Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="gc.php" class="icon ">Gumbode Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="kascie.php" class="icon ">Kas Commissie</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="ib.php" class="icon ">Intro bestuur</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="societeit.php" class="icon icon-bubble">Sociëteit</a>
-                                        </li>
-                                        <li>
-                                            <a href="bestuurs_history.php" class="icon icon-clock">Bestuurs geschiedenis</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-megaphone" href="actueel.php">Actueel</a>
-                                <div class="mp-level">
-                                    <ul>
-                                        <h2 class="icon icon-megaphone">Actueel</h2>
-                                        <a class="mp-back" href="#">back</a>
-                                        <li class="icon icon-arrow-left">
-                                            <a class="icon icon-news" href="news.php">News</a>
-                                            <div class="mp-level">
-                                                <ul>
-                                                    <h2 class="icon icon-news">News</h2>
-                                                    <a class="mp-back" href="#">back</a>
-                                                    <li>
-                                                        <a href="resent_news.php" class="icon icon-news">Resent news</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="archive_news.php" class="icon icon-clip">Archive news</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="gumbodes.php" class="icon icon-note">Gumbode</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="activities.php" class="icon icon-calendar">Events</a>
-                                        </li>
-                                        <li>
-                                            <a href="pictures.php" class="icon icon-camera">Foto gallery</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-bubble" href="forum.php">Forum</a>
-                                <div class="mp-level">
-                                    <ul>
-                                        <h2 class="icon icon-bubble">Forum</h2>
-                                        <a class="mp-back" href="#">back</a>
-                                        <li>
-                                            <a href="forum.php" class="icon icon-bubble">Forum</a>
-                                        </li>
-                                        <li>
-                                            <a href="forum_unread_posts.php" class="icon icon-megaphone">Unread posts</a>
-                                        </li>
-                                        <li>
-                                            <a href="forum_bookmarks.php" class="icon icon-data">Bookmarks</a>
-                                        </li>
-                                        <li>
-                                            <a href="forum_subscribed.php" class="icon icon-eye">Subscripted treads</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-shop" href="#">Member panels</a>
-                                <div class="mp-level">
-                                    <ul>
-                                        <h2 class="icon icon-shop">Member panels</h2>
-                                        <a class="mp-back" href="#">back</a>
-                                        <li class="icon icon-arrow-left">
-                                            <a class="icon icon-settings" href="ACP.php">User Control panel</a>
-                                            <div class="mp-level">
-                                                <ul>
-                                                    <h2 class="icon icon-settings">User Control panel</h2>
-                                                    <a class="mp-back" href="#">back</a>
-                                                    <li>
-                                                        <a href="overview.php" class="icon icon-eye">Overview</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="profile.php" class="icon icon-user">Profile</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="board_preferences.php" class="icon icon-display">Board preferences</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="usergroups.php" class="icon icon-t-shirt">User groups</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="friends_foes.php" class="icon icon-heart">Friend and foes</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="icon icon-arrow-left">
-                                            <a class="icon icon-video" href="mod_control_panel.php">Moderator Control Panel</a>
-                                            <div class="mp-level">
-                                                <ul>
-                                                    <h2 class="icon icon-video">Moderator Control Panel</h2>
-                                                    <a class="mp-back" href="#">back</a>
-                                                    <li>
-                                                        <a href="mod_control_panel.php" class="icon icon-video">Main</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_queue.php" class="icon icon-stack">Moderation queue</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_report.php" class="icon icon-fire">Reported messages</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_user_node.php" class="icon icon-clip">User notes</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_warnings.php" class="icon icon-megaphone">Warnings</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_log.php" class="icon icon-data">Moderators logs</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="mod_banning.php" class="icon icon-key">Banning</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="apc.php" class="icon icon-lab">Adminstrator control panel</a>
-                                        </li>
-                                        <li>
-                                            <a href="doc_system.php" class="icon icon-stack">Documenten systeem</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="shop.php" class="icon icon-banknote">Shop</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <!-- /mp-menu -->
+			   <!-- mp-menu -->
+				<nav id="mp-menu" class="mp-menu">
+					<div class="mp-level">
+						<h2 class="icon icon-world">{SITENAME}</h2>
+								   
+						<ul>
+							<!-- IF not S_USER_LOGGED_IN -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-key" href="#">{L_LOGIN_LOGOUT}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-world">{L_HOME}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li>
+											 <form action="{S_LOGIN_ACTION}" method="post" id="login_mobile">
+											 <p>
+												<h1>{L_USERNAME}:</h1>
+												<input type="text"  name="username" id="username_mobile" value="{USERNAME}" class="text-form" autocomplete="off" keyev="true" clickev="true">
+												<h1>{L_PASSWORD}:</h1>
+												<input type="password"  id="password_mobile" name="password" class="text-form" autocomplete="off" keyev="true" clickev="true" > 
+												<ul class="arrow">
+													<li>
+														 <!-- IF S_AUTOLOGIN_ENABLED -->
+														<input type="checkbox" name="autologin" id="autologin"  /> {L_LOG_ME_IN}
+														<!-- ENDIF -->
+													</li>
+													<li>
+														<input type="checkbox" name="viewonline" id="viewonline"  /> {L_HIDE_ME}
+													</li>
+													<li>
+													<!-- IF U_SEND_PASSWORD --><a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a><!-- ENDIF -->
+													</li>
+													<li>
+														<!-- IF U_RESEND_ACTIVATION --><a href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</dd><!-- ENDIF -->
+													</li>
+												</ul>
+												<input type="submit" name="login"  value="Login" class="button black large">
+												{S_LOGIN_REDIRECT}
+												{S_HIDDEN_FIELDS}
+											</p>
+											</form>
+										</li>
+								</div>
+							</li>
+							<!-- ELSE -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-user" href="#">{S_USERNAME}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-world">{S_USERNAME}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										 <li class="icon icon-arrow-left">
+											<a class="icon icon-settings" href="{U_PROFILE}">{L_PROFILE}</a>
+											<div class="mp-level">
+												<ul>
+													<h2 class="icon icon-settings">{L_PROFILE}</h2>
+													<a class="mp-back" href="#">{L_BACK}</a>
+													<li>
+														<a href="{U_PROFILE}" class="icon icon-eye">{L_PROFILE}</a>
+													</li>
+													<li>
+														<a href="{U_UCP_PROFILE}" class="icon icon-user">{L_UCP_PROFILE}</a>
+													</li>
+													<li>
+														<a href="{U_UCP_PREFS}" class="icon icon-display">{L_UCP_PREFS}</a>
+													</li>
+													<li>
+														<a href="{U_UCP_USERGROUPS}" class="icon icon-t-shirt">{L_UCP_USERGROUPS}</a>
+													</li>
+													<li>
+														<a href="{U_UCP_FRIENDS_FOES}" class="icon icon-heart">{L_UCP_ZEBRA_FOES}</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											 <a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" class="icon icon-key">{L_LOGIN_LOGOUT}</a>
+										</li>
+								</div>
+							</li>
+							<!-- ENDIF -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-world" href="{U_INDEX}">{L_HOME}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-world">{L_HOME}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li>
+											<a href="{U_INDEX}" class="icon icon-world">{L_HOME}</a>
+										</li>
+										<li>
+											<a href="{U_PLAZACAM}" class="icon icon-video">{L_PLAZACAM}</a>
+										</li>
+								</div>
+							</li>
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-tag" href="{U_ABOUT_US}">{L_ABOUT_US}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-tag">{L_ABOUT_US}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li>
+											<a href="{U_WHY_GUMBO}" class="icon icon-bubble">{L_WHY_GUMBO}</a>
+										</li>
+										<li>
+											<a href="{U_ABOUT_US}" class="icon icon-tag">{L_ABOUT_US}</a>
+										</li>
 
-                <div class="scroller"><!-- this is for emulating position fixed of the nav -->
-                    <div class="scroller-inner">
-                        <!-- begin container -->
-                            <div id="wrap">
-                            <header id="header">
-                            	<div class="clearfix">
-                                    <div id="header_mobile_nav">
-                                        <h2 >
-                                            <a href="#" id="trigger" class="menu-trigger">Navigation</a> 
-                                        </h2>
-                                    </div>
-                                   <!-- begin logo -->
-                                    <h1 id="logo"><a href="index.php">Gumbo Millennium</a></h1>
-                                    <!-- end logo -->
-                                
-                                    <!-- begin navigation wrapper -->
-                                    <div class="nav-wrap clearfix">
-                                
-                                        <!-- begin search form -->
-                                        <form id="search-form" action="search.php" method="get">
-                                            <input id="s" type="text" name="s" placeholder="Search &hellip;" style="display: none;">
-                                            <input id="search-submit" type="submit" name="search-submit" value="Search">
-                                        </form>
-                                        <!-- end search form -->
-                                        <!-- begin navigation -->
-                                        <nav id="nav">
-                                            <ul id="navlist" class="clearfix">
-                                                <li class="current">
-                                                    <a href="index.php" rel="submenu1">Home</a>
-                                                    <ul id="submenu1" class="ddsubmenustyle">
-                                                        <li>
-                                                            <a href="index.php">Home</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="plaza_cams.php">Plaza Cameras</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="about_gumbo.php" rel="submenu2">About Gumbo</a>
-                                                    <ul id="submenu2" class="ddsubmenustyle">
-                                                        <li>
-                                                            <a href="why_gumbo.php">Why Gumbo</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="about_gumbo.php">About Gumbo</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="memberlist.php">Memberlist</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="disputen.php" rel="submenu6">Disputen</a>
-                                                            <ul id="submenu6" class="ddsubmenustyle">
-                                                                <li>
-                                                                    <a href="equester.php">Equester</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="m-power.php">M-Power</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="proximus.php">Proximus</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="aliquando.php">Aliquando</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <a href="sponsers.php">Sponsers</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="commission.php" rel="submenu8">Comissions</a>
-                                                            <ul id="submenu8" class="ddsubmenustyle">
-                                                                <li>
-                                                                    <a href="board_committee.php">Dagelijks bestuur</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="bestuur.php">Digitale Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="sc.php">Soos Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="pc.php">Plaza Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="ac.php">Actviteiten Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="gc.php">Gumbode Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="kascie.php">Kas Commissie</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="ib.php">Intro bestuur</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <a href="societeit.php">Sociëteit</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="bestuurs_history.php">Bestuurs geschiedenis</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="actueel.php" rel="submenu3">Actueel</a>
-                                                    <ul id="submenu3" class="ddsubmenustyle">
-                                                        <li>
-                                                            <a href="news.php" rel="submenu4">News</a>
-                                                            <ul id="submenu4" class="ddsubmenustyle">
-                                                                <li>
-                                                                    <a href="resent_news.php">Resent news</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="archive_news.php">Archive news</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="gumbodes.php">Gumbode</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <a href="activities.php">Events</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="pictures.php">Foto gallery</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="forum.php" rel="submenu4">Forum</a>
-                                                    <ul id="submenu4" class="ddsubmenustyle">
-                                                        <li>
-                                                            <a href="forum.php">Forum</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="forum_unread_posts.php">Unread posts</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="forum_bookmarks.php">Bookmarks</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="forum_subscribed.php">Subscripted treads</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="#" rel="submenu5">Member panels</a>
-                                                    <ul id="submenu5" class="ddsubmenustyle">
-                                                        <li>
-                                                            <a href="ACP.php" rel="submenu6">User Control panel</a>
-                                                            <ul id="submenu6" class="ddsubmenustyle">
-                                                                <li>
-                                                                    <a href="overview.php">Overview</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="profile.php">Profile</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="board_preferences.php">Board preferences</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="usergroups.php">User groups</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="friends_foes.php">Friend and foes</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <a href="mod_control_panel.php" rel="submenu7">Moderator Control Panel</a>
-                                                            <ul id="submenu7" class="ddsubmenustyle">
-                                                                <li>
-                                                                    <a href="mod_control_panel.php">Main</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_queue.php">Moderation queue</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_report.php">Reported messages</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_user_node.php">User notes</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_warnings.php">Warnings</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_log.php">Moderators logs</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="mod_banning.php">Banning</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <a href="apc.php">Adminstrator control panel</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="doc_system.php">Documenten systeem</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="shop.php">Shop</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- end navigation -->
-                                    </div>
-                                    <!-- end navigation wrapper -->
-                                </div>
-                            </header>
-                            <!-- begin page title -->
-                            <!-- IF PAGE_TITLE_BOX_HIDE != true -->
-                            <section id="page-title">
-                            <div class="container clearfix">
-                                <h1 class="one-half">{PAGE_TITLE}</h1>
-                                <nav id="breadcrumbs" class="one-half column-last">
-                                    <ul>
-                                        <li>
-                                             <a href="{U_INDEX}">{L_INDEX}</a> <!-- IF navlinks.S_LAST_ROW == FALSE --> &rsaquo; <!-- ENDIF -->
-                                        </li>
-                                        <!-- BEGIN navlinks -->
-                                        <li>
-                                             <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a> <!-- IF navlinks.S_LAST_ROW == FALSE --> &rsaquo; <!-- ENDIF -->
-                                        </li>
-                                        <!-- END navlinks -->
-                                    </ul>
-                                </nav>
-                            </div>
-                            </section>
-                            <!-- ELSE -->
-                                <!-- Show nothing -->
-                            <!-- ENDIF -->
-                            <!-- begin page title -->
+										<!-- IF S_DISPLAY_MEMBERLIST and not S_IS_BOT -->
+										<li>
+											<a href="{U_MEMBERLIST}" title="{L_MEMBERLIST_EXPLAIN}" class="icon icon-t-shirt">{L_MEMBERLIST}</a>
+										</li>
+										<!-- ENDIF -->
+										<li class="icon icon-arrow-left">
+											<a class="icon icon-paperplane" href="{U_DISPUTES}">{L_DISPUTES}</a>
+											<div class="mp-level">
+												<ul>
+													<h2 class="icon icon-paperplane">{L_DISPUTES}</h2>
+													<a class="mp-back" href="#">{L_BACK}</a>
+													<li>
+														<a href="{U_EQUESTER}" class="icon ">{L_EQUESTER}</a>
+													</li>
+													<li>
+														<a href="{U_M-POWER}" class="icon ">{L_M-POWER}</a>
+													</li>
+													<li>
+														<a href="{U_PROXIMUS}" class="icon ">{L_PROXIMUS}</a>
+													</li>
+													<li>
+														<a href="{U_ALIQUANDO}" class="icon ">{L_ALIQUANDO}</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<a href="{U_SPONSORS}" class="icon icon-star">{L_SPONSORS}</a>
+										</li>
+										<li class="icon icon-arrow-left">
+											<a class="icon icon-cloud" href="{U_COMMISSION}">{L_COMMISSION}</a>
+											<div class="mp-level">
+												<ul>
+													<h2 class="icon icon-cloud">{L_COMMISSION}</h2>
+													<a class="mp-back" href="#">{L_BACK}</a>
+													<li>
+														<a href="{U_BOARD_OF_DIRECTORS}" class="icon ">{L_BOARD_OF_DIRECTORS}</a>
+													</li>
+													<li>
+														<a href="{U_DC}" class="icon ">{L_DC}</a>
+													</li>
+													<li>
+														<a href="{U_SC}" class="icon ">{L_SC}</a>
+													</li>
+													<li>
+														<a href="{U_PC}" class="icon ">{L_PC}</a>
+													</li>
+													<li>
+														<a href="{U_AC}" class="icon ">{L_AC}</a>
+													</li>
+													<li>
+														<a href="{U_GC}" class="icon ">{L_GC}</a>
+													</li>
+													<li>
+														<a href="{U_KC}" class="icon ">{L_KC}</a>
+													</li>
+													<li>
+														<a href="{U_IB}" class="icon ">{L_IB}</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<a href="{U_SOCIETEIT}" class="icon icon-bubble">{L_SOCIETEIT}</a>
+										</li>
+										<li>
+											<a href="{U_BOARD_HISTORY}" class="icon icon-clock">{L_BOARD_HISTORY}</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-megaphone" href="{U_NEWS_AND_EVENTS}">{L_NEWS_AND_EVENTS}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-megaphone">{L_NEWS_AND_EVENTS}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li class="icon icon-arrow-left">
+											<a class="icon icon-news" href="{U_NEWS}">{L_NEWS}</a>
+											<div class="mp-level">
+												<ul>
+													<h2 class="icon icon-news">{L_NEWS}</h2>
+													<a class="mp-back" href="#">{L_BACK}</a>
+													<li>
+														<a href="{U_RESENT_NEWS}" class="icon icon-news">{L_RESENT_NEWS}</a>
+													</li>
+													<li>
+														<a href="{U_ARCHIVE_NEWS}" class="icon icon-clip">{L_ARCHIVE_NEWS}</a>
+													</li>
+													<li>
+														<a href="{U_GUMBODES}" class="icon icon-note">{L_GUMBODES}</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<a href="{U_EVENTS}" class="icon icon-calendar">{L_EVENTS}</a>
+										</li>
+										<li>
+											<a href="{U_PICTURES}" class="icon icon-camera">{L_PICTURES}</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<!-- IF not S_BOARD_DISABLED -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-bubble" href="{U_FORUM}">{L_FORUM}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-bubble">{L_FORUM}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li>
+											<a href="{U_FORUM}" class="icon icon-bubble">{L_FORUM}</a>
+										</li>
+										<li>
+											<a href="{U_SEARCH_UNREAD}" class="icon icon-megaphone">{L_SEARCH_UNREAD}</a>
+										</li>
+										<li>
+											<a href="{U_SEARCH_UNANSWERED}" class="icon icon-megaphone">{L_SEARCH_UNANSWERED}</a>
+										</li>
+										<li>
+											<a href="{U_SEARCH_NEW}" class="icon icon-pen">{L_SEARCH_NEW}</a>
+										</li>
+										<li>
+											<a href="{U_FORUM_BOOKMARKS}" class="icon icon-data">{L_VIEW_BOOKMARKS}</a>
+										</li>
+										<li>
+											<a href="{U_FORUM_SUBSCRIBED}" class="icon icon-eye">{L_FORUM_SUBSCRIBED}</a>
+										</li> 
+										<li>
+											<a href="{U_FEED}" class="icon icon-mail">{L_FEED}</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<!-- ENDIF -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-shop" href="#">{L_MEMBER_PANELS}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-shop">{L_MEMBER_PANELS}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<li class="icon icon-arrow-left">
+											<a class="icon icon-video" href="{U_MODCP}">{L_MCP}</a>
+											<div class="mp-level">
+												<ul>
+													<h2 class="icon icon-video">{L_MCP}</h2>
+													<a class="mp-back" href="#">{L_BACK}</a>
+													<li>
+														<a href="{U_MODCP}" class="icon icon-video">{L_MCP}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_QUEUE}" class="icon icon-stack">{L_MCP_QUEUE}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_REPORT}" class="icon icon-fire">{L_MCP_REPORTS}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_USER_NODE}" class="icon icon-clip">{L_MCP_NOTES}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_WARNINGS}" class="icon icon-megaphone">{L_MCP_WARN}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_LOG}" class="icon icon-data">{L_MCP_LOGS}</a>
+													</li>
+													<li>
+														<a href="{U_MOD_BANNING}" class="icon icon-key">{L_MCP_BAN}</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<a href="{U_ACP}" class="icon icon-lab">{L_ACP}</a>
+										</li>
+										<li>
+											<a href="{U_DOC_SYSTEM}" class="icon icon-stack">{L_DOC_SYSTEM}</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+							<li class="icon icon-arrow-left">
+								<a class="icon icon-search" href="{U_FORUM}">{L_SEARCH}</a>
+								<div class="mp-level">
+									<ul>
+										<h2 class="icon icon-search">{L_SEARCH}</h2>
+										<a class="mp-back" href="#">{L_BACK}</a>
+										<form action="{U_SEARCH}" method="get" id="search_mobile">
+											<li>
+												<input name="keywords" id="keywords_mobile" type="text" title="{L_SEARCH_KEYWORDS}" class="inputbox search text-form" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';" />
+												<hr />
+											</li>
+											<li>
+													<input class="button black large" value="{L_SEARCH}" type="submit" />
+													 {S_SEARCH_HIDDEN_FIELDS}
+											</li>
+										</form>
+										<li>
+											<a href="{U_SEARCH}" title="{L_SEARCH_ADV_EXPLAIN}" class="icon icon-params">{L_SEARCH_ADV}</a>
+										</li>
+									</ul>
+								</div>
+							</li> 
+							<!-- ENDIF -->              
+							<li>
+								<a href="{U_SHOP}" class="icon icon-banknote">{L_SHOP}</a>
+							</li>
+							<!-- IF not S_USER_LOGGED_IN and S_REGISTER_ENABLED and not (S_SHOW_COPPA or S_REGISTRATION) -->
+							<li>
+								<a href="{U_REGISTER}" class="icon icon-world">{L_REGISTER}</a>
+							</li>
+							<!-- ENDIF -->
+						</ul>
+					</div>
+				</nav>
+				<!-- /mp-menu -->
+
+				<div class="scroller"><!-- this is for emulating position fixed of the nav -->
+					<div class="scroller-inner">
+						<!-- begin container -->
+							<div id="wrap">
+							<header id="header">
+								<div class="clearfix">
+									<div id="header_mobile_nav">
+										<h2 >
+											<a href="#" id="trigger" class="menu-trigger">{L_NAVIGATION} &amp; 
+												<!-- IF not S_USER_LOGGED_IN --> 
+													{L_LOGIN_LOGOUT} 
+												<!-- ELSE --> 
+													{S_USERNAME} 
+												<!-- ENDIF --> 
+											</a>  
+										</h2>
+									</div>
+								   <!-- begin logo -->
+									<h1 id="logo"><a href="{U_INDEX}">{SITENAME}</a></h1>
+									<!-- end logo -->
+
+									<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+									<div id="search-box">
+										<form id="search-form" action="search.php" method="get">
+											<input id="keywords" type="text" name="keywords" placeholder="Search &hellip;" style="display: none;" title="{L_SEARCH_KEYWORDS}" value="<!-- IF SEARCH_WORDS-->{SEARCH_WORDS}<!-- ELSE -->{L_SEARCH_MINI}<!-- ENDIF -->" onclick="if(this.value=='{LA_SEARCH_MINI}')this.value='';" onblur="if(this.value=='')this.value='{LA_SEARCH_MINI}';">
+											<input id="search-submit" type="submit" name="search-submit" value="{L_SEARCH}">
+											{S_SEARCH_HIDDEN_FIELDS}
+										</form>
+									</div>
+									<!-- ENDIF -->
+
+									<!-- begin navigation wrapper -->
+									<div class="nav-wrap clearfix">
+								
+										
+										<!-- begin navigation -->
+										<nav id="nav">
+											<ul id="navlist" class="clearfix">
+												<li>
+													<a href="{U_INDEX}" rel="submenu1">{L_HOME}</a>
+													<ul id="submenu1" class="ddsubmenustyle">
+														<li>
+															<a href="{U_INDEX}">{L_HOME}</a>
+														</li>
+														<li>
+															<a href="{U_PLAZACAM}">{L_PLAZACAM}</a>
+														</li>
+													</ul>
+												</li>
+												<li>
+													<a href="{U_ABOUT_US}" rel="submenu2">{L_ABOUT_US}</a>
+													<ul id="submenu2" class="ddsubmenustyle">
+														<li>
+															<a href="{U_WHY_GUMBO}">{L_WHY_GUMBO}</a>
+														</li>
+														<li>
+															<a href="{U_ABOUT_US}">{L_ABOUT_US}</a>
+														</li>
+														<!-- IF S_DISPLAY_MEMBERLIST and not S_IS_BOT -->
+														<li>
+															<a href="{U_MEMBERLIST}" title="{L_MEMBERLIST_EXPLAIN}">{L_MEMBERLIST}</a>
+														</li>
+														<!-- ENDIF -->
+														<li>
+															<a href="{U_DISPUTES}" rel="submenu6">{L_DISPUTES}</a>
+															<ul id="submenu6" class="ddsubmenustyle">
+																<li>
+																	<a href="{U_EQUESTER}">{L_EQUESTER}</a>
+																</li>
+																<li>
+																	<a href="{U_M-POWER}">{L_M-POWER}</a>
+																</li>
+																<li>
+																	<a href="{U_PROXIMUS}">{L_PROXIMUS}</a>
+																</li>
+																<li>
+																	<a href="{U_ALIQUANDO}">{L_ALIQUANDO}</a>
+																</li>
+															</ul>
+														</li>
+														<li>
+															<a href="{U_SPONSORS}">{L_SPONSORS}</a>
+														</li>
+														<li>
+															<a href="{U_COMMISSION}" rel="submenu8">{L_COMMISSION}</a>
+															<ul id="submenu8" class="ddsubmenustyle">
+																<li>
+																	<a href="{U_BOARD_OF_DIRECTORS}">{L_BOARD_OF_DIRECTORS}</a>
+																</li>
+																<li>
+																	<a href="{U_DC}">{L_DC}</a>
+																</li>
+																<li>
+																	<a href="{U_SC}">{L_SC}</a>
+																</li>
+																<li>
+																	<a href="{U_PC}">{L_PC}</a>
+																</li>
+																<li>
+																	<a href="{U_AC}">{L_AC}</a>
+																</li>
+																<li>
+																	<a href="{U_GC}">{L_GC}</a>
+																</li>
+																<li>
+																	<a href="{U_KC}">{L_KC}</a>
+																</li>
+																<li>
+																	<a href="{U_IB}">{L_IB}</a>
+																</li>
+															</ul>
+														</li>
+														<li>
+															<a href="{U_SOCIETEIT}">{L_SOCIETEIT}</a>
+														</li>
+														<li>
+															<a href="{U_BOARD_HISTORY}">{L_BOARD_HISTORY}</a>
+														</li>
+													</ul>
+												</li>
+												<li>
+													<a href="{U_NEWS_AND_EVENTS}" rel="submenu3">{L_NEWS_AND_EVENTS}</a>
+													<ul id="submenu3" class="ddsubmenustyle">
+														<li>
+															<a href="{U_NEWS}" rel="submenu4">{L_NEWS}</a>
+															<ul id="submenu4" class="ddsubmenustyle">
+																<li>
+																	<a href="{U_RESENT_NEWS}">{L_RESENT_NEWS}</a>
+																</li>
+																<li>
+																	<a href="{U_ARCHIVE_NEWS}">{L_ARCHIVE_NEWS}</a>
+																</li>
+																<li>
+																	<a href="{U_GUMBODES}">{L_GUMBODES}</a>
+																</li>
+															</ul>
+														</li>
+														<li>
+															<a href="{U_EVENTS}">{L_EVENTS}</a>
+														</li>
+														<li>
+															<a href="{U_PICTURES}">{L_PICTURES}</a>
+														</li>
+													</ul>
+												</li>
+											   <!-- IF not S_BOARD_DISABLED -->
+												<li>
+													<a href="{U_FORUM}" rel="submenu4">{L_FORUM}</a>
+													<ul id="submenu4" class="ddsubmenustyle">
+														<li>
+															<a href="{U_FORUM}">{L_FORUM}</a>
+														</li>
+														<li>
+															<a href="{U_SEARCH_UNREAD}">{L_SEARCH_UNREAD}</a>
+														</li>
+														<li>
+															<a href="{U_SEARCH_UNANSWERED}">{L_SEARCH_UNANSWERED}</a>
+														</li> 
+														<li>
+															<a href="{U_SEARCH_NEW}">{L_SEARCH_NEW}</a>
+														</li>
+														<li>
+															<a href="{U_FORUM_BOOKMARKS}">{L_VIEW_BOOKMARKS}</a>
+														</li>
+														<li>
+															<a href="{U_FORUM_SUBSCRIBED}">{L_FORUM_SUBSCRIBED}</a>
+														</li>
+														<li>
+															<a href="{U_FEED}">{L_FEED}</a>
+														</li>
+													</ul>
+												</li>
+												<!-- ENDIF -->
+												<li>
+													<a href="#" rel="submenu5">{L_MEMBER_PANELS}</a>
+													<ul id="submenu5" class="ddsubmenustyle">
+														<li>
+															<a href="{U_MODCP}" rel="submenu7">{L_MCP}</a>
+															<ul id="submenu7" class="ddsubmenustyle">
+																<li>
+																	<a href="{U_MODCP}">{L_MCP}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_QUEUE}">{L_MCP_QUEUE}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_REPORT}">{L_MCP_REPORTS}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_USER_NODE}">{L_MCP_NOTES}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_WARNINGS}">{L_MCP_WARN}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_LOG}">{L_MCP_LOGS}</a>
+																</li>
+																<li>
+																	<a href="{U_MOD_BANNING}">{L_MCP_BAN}</a>
+																</li>
+															</ul>
+														</li>
+														<li>
+															<a href="{U_ACP}">{L_ACP}</a>
+														</li>
+														<li>
+															<a href="{U_DOC_SYSTEM}">{L_DOC_SYSTEM}</a>
+														</li>
+														<li>
+															<a href="{U_SHOP}">{L_SHOP}</a>
+														</li>
+													</ul>
+												</li>
+											   <li class="current">
+													<!-- IF not S_USER_LOGGED_IN -->
+													<a href="#" rel="submenu8">{L_LOGIN_LOGOUT}</a>
+													<ul id="submenu8" class="ddsubmenustyle">
+														<li>
+														   <a class="inline" href="#login_box">{L_LOGIN_LOGOUT}</a>
+														   
+														</li>
+														  <!-- IF not S_USER_LOGGED_IN and S_REGISTER_ENABLED and not (S_SHOW_COPPA or S_REGISTRATION) -->
+														<li>
+															<a href="{U_REGISTER}">{L_REGISTER}</a>
+														</li>
+														<!-- ENDIF -->
+													</ul>
+													<!-- ELSE -->
+														<a href="#" rel="submenu8">{S_USERNAME}</a>
+														<ul id="submenu8" class="ddsubmenustyle">
+															 <li>
+																<a href="{U_PROFILE}" rel="submenu6">{L_PROFILE}</a>
+																<ul id="submenu6" class="ddsubmenustyle">
+																	<li>
+																		<a href="{U_PROFILE}">{L_PROFILE}</a>
+																	</li>
+																	<li>
+																		<a href="{U_UCP_PROFILE}">{L_UCP_PROFILE}</a>
+																	</li>
+																	<li>
+																		<a href="{U_UCP_PREFS}">{L_UCP_PREFS}</a>
+																	</li>
+																	<li>
+																		<a href="{U_UCP_USERGROUPS}">{L_UCP_USERGROUPS}</a>
+																	</li>
+																	<li>
+																		<a href="{U_UCP_FRIENDS_FOES}">{L_UCP_ZEBRA_FOES}</a>
+																	</li>
+																</ul>
+															</li>
+															<li>
+															   <a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT}</a>
+															</li>
+														</ul>
+
+													<!-- ENDIF -->                                         
+												</li>
+											</ul>
+										</nav>
+
+									<!-- end navigation wrapper -->
+							<!-- IF U_RESTORE_PERMISSIONS --> &bull;
+							 <a href="{U_RESTORE_PERMISSIONS}">{L_RESTORE_PERMISSIONS}</a>
+							<!-- ENDIF -->
+							</header>
+
+							<div id="login_box" class="nav-wrap clearfix" style="display: none;">
+								<h2>{SITENAME} {L_LOGIN}</h2>
+								<form action="{S_LOGIN_ACTION}" method="post" id="login">
+									<p>
+										<h1>{L_USERNAME}:</h1>
+										<input type="text"  name="username" id="username" value="{USERNAME}" class="text-form" autocomplete="off" keyev="true" clickev="true">
+										<h1>{L_PASSWORD}:</h1>
+										<input type="password"  id="password" name="password" class="text-form" autocomplete="off" keyev="true" clickev="true" > 
+										
+									
+										<ul class="arrow">
+											<li>
+												 <!-- IF S_AUTOLOGIN_ENABLED -->
+												<input type="checkbox" name="autologin" id="autologin"  /> {L_LOG_ME_IN}
+												<!-- ENDIF -->
+											</li><li>
+												<input type="checkbox" name="viewonline" id="viewonline"  /> {L_HIDE_ME}
+											</li>
+											<li>
+											<!-- IF U_SEND_PASSWORD --><a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a><!-- ENDIF -->
+											</li>
+											<li>
+												<!-- IF U_RESEND_ACTIVATION --><a href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</dd><!-- ENDIF -->
+											</li>
+										</ul>
+											 <input type="submit" name="login"  value="Login" class="button">
+										{S_LOGIN_REDIRECT}
+										{S_HIDDEN_FIELDS}
+									</p>
+								</form>
+							</div>
+							<!-- begin page title -->
+							<!-- IF PAGE_TITLE_BOX_HIDE != true -->
+							<section id="page-title">
+							<div class="container clearfix">
+								<h1 class="one-half">{PAGE_TITLE}</h1>
+								<nav id="breadcrumbs" class="one-half column-last">
+									<ul>
+										<li>
+											 <a href="{U_INDEX}">{L_HOME}</a> <!-- IF  not navlinks.S_LAST_ROW --> &rsaquo; <!-- ENDIF -->
+										</li>
+										<!-- BEGIN navlinks -->
+										<li>
+											<!-- IF not navlinks.S_LAST_ROW -->
+											 <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a>  &rsaquo; 
+
+											 <!-- ELSE -->
+												{navlinks.FORUM_NAME}
+											 <!-- ENDIF -->
+										</li>
+										<!-- END navlinks -->
+									</ul>
+								</nav>
+							</div>
+							</section>
+							<!-- ELSE -->
+								<!-- Show nothing -->
+							<!-- ENDIF -->
+							<!-- begin page title -->

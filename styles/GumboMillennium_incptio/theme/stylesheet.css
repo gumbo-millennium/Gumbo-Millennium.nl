@@ -30,7 +30,7 @@ Author URI: http://www.ixtendo.com
 
   
          
-
+   
 /* ---------------------------------------------------------------------- */
 /* Inceptio Styles
 /* ----------------------------------------------------------------------
@@ -38,7 +38,7 @@ TABLE OF CONTENTS
 
 -Generic
 -Containers
--Headings
+-Headings 
 -Links
 -Text & Content Blocks
 -Header
@@ -325,7 +325,7 @@ mark {
 }
 
 #header_mobile_nav{
-    display: none;
+    display: block;
 }
  
 #header{
@@ -363,7 +363,7 @@ ul#navlist li a {
 	font-weight: 600;
 	line-height: normal;
 	color: #333;
-	padding: 41px 20px 26px;
+	padding: 41px 15px 26px;
 	margin-bottom: 4px;
 }
 
@@ -1548,7 +1548,7 @@ input[type="submit"] {
 
 /* After Click */
 
-#s {
+#keywords{
 	position: absolute;
 	top: 35px;
 	right: 0;	
@@ -1560,8 +1560,23 @@ input[type="submit"] {
 	box-shadow: 0 0 5px rgba(0,0,0,0.1) inset;
 }
 
-#s:hover,
-#s:focus {
+#keywords:hover,
+#keywords:focus {
+	border-color: #ccc;	
+}
+
+.text-form  {
+	top: 35px;
+	right: 0;	
+	padding: 6px 10px;
+	border: 1px solid #d9d9d9;
+	width: 198px;
+    border-radius: 0;
+	box-shadow: 0 0 5px rgba(0,0,0,0.1) inset;
+}
+
+input:hover,
+input:focus {
 	border-color: #ccc;	
 }
 
