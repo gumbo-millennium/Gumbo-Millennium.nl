@@ -799,6 +799,7 @@ class activity {
 				}
 				
 				if($users_enrol_ary[$user_data["user_id"]]["price_paid"] != $user_data["price_paid"]){
+
 					$update = true;
 				}
 			}
@@ -842,7 +843,8 @@ class activity {
 			return FALSE;
 		}
 				
-		if(!empty($users_status_change)){		
+		if(!empty($users_status_change)){	
+
 			$sql = "UPDATE " . ACTIVITY_ENROL_TABLE . " 
 						". $this->sql_update_case($users_status_change, "user_id") ."
 							AND activity_id = '" . $db->sql_escape((int)$this->id) ."'";
@@ -900,7 +902,7 @@ class activity {
 		$field_array = array();
 		foreach($cases_array AS $user_id => $case){
 			foreach($case AS $field => $setting){
-				if(!empty($setting)){
+				if($setting !== ""){
 					$build_when[$field][$user_id] = $setting;
 				}
 			}
@@ -912,6 +914,7 @@ class activity {
 		$first = TRUE;
 		
 		foreach($build_when AS $field => $field_data){
+
 			if($first){
 				$return_string = "Set ";
 				$first = FALSE;

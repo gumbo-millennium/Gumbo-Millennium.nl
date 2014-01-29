@@ -1249,7 +1249,8 @@ class acp_dc_activity_management
 					break;
 				case 'send_mail':
 					if(!empty($cfg_array['send_to_users'])){
-						$enroll_list = $activity->get_all_status("all");
+						$enroll_list = $activity->get_enrol_list(ALL_USERS); 
+						
 						$usernames = array_unique(explode("\n", $cfg_array["send_to_users"]));
 						$action_users = $usernames; //$action_users is later used to print the usernames
 						$ttl_users = count($usernames);
