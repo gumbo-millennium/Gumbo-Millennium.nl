@@ -577,9 +577,7 @@ class acp_dc_activity_management
 					'PRMISSN_SBSCRB_LST'	=> $auth->acl_get('a_act_view_subscribe_list'),
 					
 				));
-				
-				//var_dump($auth->acl_get('a_edit_activity'));
-				
+			
 				
 				$this->page_title = 'ACP_DC_ACT_OVERVIEW';
 				$this->tpl_name = 'dc/acp_dc_activity_overview';
@@ -866,12 +864,12 @@ class acp_dc_activity_management
 							
 							'message'	=> array(
 								'lang' => 'MASS_MESSAGE',
-								'validate' => 'string',
+								'validate' => 'text',
 								'type' => 'custom',
 								'empty' => false,
 								'method' => 'acp_description',
 								'explain' => false
-							),	
+							),
 					)
 				);
 
@@ -1250,7 +1248,7 @@ class acp_dc_activity_management
 				case 'send_mail':
 					if(!empty($cfg_array['send_to_users'])){
 						$enroll_list = $activity->get_enrol_list(ALL_USERS); 
-						
+
 						$usernames = array_unique(explode("\n", $cfg_array["send_to_users"]));
 						$action_users = $usernames; //$action_users is later used to print the usernames
 						$ttl_users = count($usernames);
@@ -1710,7 +1708,7 @@ class acp_dc_activity_management
 				// Sort keys
 				$limit	= request_var('st', 25);
 				$sort_key	= request_var('sk', 'r');
-				$sort_dir	= request_var('sd', 'd');
+				$sort_dir	= request_var('sd', 'a');
 				$sort_show	= request_var('ss', 'a');
 
 				// Sorting
@@ -1758,7 +1756,7 @@ class acp_dc_activity_management
 				gen_sort_selects($limit_records, $sort_by_text, $limit, $sort_key, $sort_dir, $s_limit_records, $s_sort_key, $s_sort_dir, $u_sort_param);
 				$sql_sort =($sort_dir == 'd') ? 'DESC' : 'ASC';
 				// send the list if all subscribed users to the template
-				if( $enroll_list = $activity->get_enrol_list($s_sort_show, $sort_by_sql[$sort_key], $sql_sort, $sort_pay , $limit, $start) ){	// are there subscribed users
+				if( $enroll_list = $activity->get_enrol_list($s_sort_show, $sql_sort, $sort_by_sql[$sort_key], $sort_pay , $limit, $start) ){	// are there subscribed users
 					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
 
 						$template->assign_block_vars('users', array(		// set template array
