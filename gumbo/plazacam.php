@@ -13,26 +13,6 @@
 
 	page_header($user->lang['PLAZACAM']);
 
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 168';
-
-	$result = $db->sql_query_limit($sql, $config['portal_max_topics']);
-	$row = $db->sql_fetchrow($result);
-
-	// Parse the message and subject
-	$message = censor_text($row['post_text']);
-
-	// Second parse bbcode here
-	if ($row['bbcode_bitfield'])
-	{
-		$bbcode = new bbcode(base64_encode($row['bbcode_bitfield']));
-		$bbcode->bbcode_second_pass($message, $row['bbcode_uid'], $row['bbcode_bitfield']);
-	}
-
-	$message = bbcode_nl2br($message);
-	$message = smiley_text($message);
-
-	$db->sql_freeresult($result);
-	
 	// 2014-02-24 tijdcheck ivm traffic 
 	$hourarray = array(23, 0, 1, 2, 3, 4, 5, 6);
 	$check = '';
@@ -51,6 +31,26 @@
 	
 	if ( $check !== 1 )
 	{ 
+		$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 168';
+
+		$result = $db->sql_query_limit($sql, $config['portal_max_topics']);
+		$row = $db->sql_fetchrow($result);
+
+		// Parse the message and subject
+		$message = censor_text($row['post_text']);
+
+		// Second parse bbcode here
+		if ($row['bbcode_bitfield'])
+		{
+			$bbcode = new bbcode(base64_encode($row['bbcode_bitfield']));
+			$bbcode->bbcode_second_pass($message, $row['bbcode_uid'], $row['bbcode_bitfield']);
+		}
+
+		$message = bbcode_nl2br($message);
+		$message = smiley_text($message);
+
+		$db->sql_freeresult($result);
+		
 		$template->assign_var('MESSAGE_TEXT', $message);
 	}
 	else
