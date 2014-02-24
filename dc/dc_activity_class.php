@@ -82,6 +82,8 @@ include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
 if(!defined('DC_ACTIVITY_CLASS')){
 	define("DC_ACTIVITY_CLASS", true); 	// set the id of the Gumbo member group
 	define("MEMBER_GROUP_ID", 9); 		// set the id of the Gumbo member group
+	define("OLD_MEMBERS_GROUP_ID", 10); 	// set the id of the Gumbo bestuur group
+	define("ERE_MEMBERS_GROUP_ID", 25); 	// set the id of the Gumbo bestuur group
 	define("AC_GROUP_ID", 14); 		// set the id of the Gumbo activity group
 	define("DC_GROUP_ID", 15); 		// set the id of the Gumbo digitale commisie group
 	define("BESTUUR_GROUP_ID", 13); 	// set the id of the Gumbo bestuur group
@@ -93,8 +95,8 @@ if(!defined('DC_ACTIVITY_CLASS')){
 	define("DISENROLLED_USERS", 2); 	
 	define("MAYBE_USERS", 3); 	
 	define("ALL_USERS", 4); 
-	define("PAID_UERS", 1); 
-	define("NOT_PAID_UERS", 2); 
+	define("PAID_USER", 1); 
+	define("NOT_PAID_USER", 2); 
 	define("USER_SIGN_IN", 1); 
 	define("USER_SIGN_OUT", 2); 
 	define("USER_SIGN_MAYBE", 3); 
@@ -563,7 +565,7 @@ class activity {
 		* 					ALL_USERS for all the users. (enrolled + disenrolled + maybe) 
 		* $order String Order the return list based on this parameter: 'username', 'comments', 'datetime', 'status', 'price_paid', 'real_name'. Default is real_name 
 		* $short String short by ASC or DESC
-		* $sort_paid define Limit the list by users who paid or who not paid: PAID_UERS, NOT_PAID_UERS
+		* $sort_paid define Limit the list by users who paid or who not paid: PAID_USER, NOT_PAID_USER
 		* $limit int Set maximum of returned rows, 0 is all row's 
 		* $offset int set staring row
 		* @returns:
@@ -589,13 +591,20 @@ class activity {
 				'status' 			=> $row['status'],
 				'price_paid' 		=> $row['price_paid'],
 				'real_name'			=> $real_name
-				);  
+			);  
+
+			
+
+
 			switch($status){										// check status
 				case ENROLLED_USERS:
 					if($this->enrolled_users[$current_user_id]["status"] == "yes"){
-						if($this->enr_lst_chck_sort_paid($sort_paid, $this->enrolled_users[$current_user_id])){
-							if(	check_limit_offset($limit, $offset, $this->last_enroll_list_count)){
-								$return_user_list[] = $this->enrolled_users[$current_user_id];
+						
+						// check if users has paid or not paid for sort (Depending on the $sort_paid parameter )
+						if($this->enr_lst_chck_sort_paid($sort_paid, $this->enrolled_users[$current_user_id])){	
+							// check if the limit of the list is reached 
+							if(	check_limit_offset($limit, $offset, $this->last_enroll_list_count)){			
+								$return_user_list[$current_user_id] = $this->enrolled_users[$current_user_id];
 							}
 							
 							$this->last_enroll_list_count++;
@@ -604,7 +613,9 @@ class activity {
 					break;			
 				case DISENROLLED_USERS:
 					if($this->enrolled_users[$current_user_id]["status"] == "no"){
+						// check if users has paid or not paid for sort (Depending on the $sort_paid parameter )
 						if($this->enr_lst_chck_sort_paid($sort_paid, $this->enrolled_users[$current_user_id])){
+							// check if the limit of the list is reached 
 							if(check_limit_offset($limit, $offset, $this->last_enroll_list_count)){
 								$return_user_list[$current_user_id] = $this->enrolled_users[$current_user_id];
 							}
@@ -614,7 +625,9 @@ class activity {
 					break;
 				case MAYBE_USERS:
 					if($this->enrolled_users[$current_user_id]["status"] == "maybe"){
+						// check if users has paid or not paid for sort (Depending on the $sort_paid parameter )
 						if($this->enr_lst_chck_sort_paid($sort_paid, $this->enrolled_users[$current_user_id])){
+							// check if the limit of the list is reached 
 							if(check_limit_offset($limit, $offset, $this->last_enroll_list_count)){
 								$return_user_list[$current_user_id] = $this->enrolled_users[$current_user_id];
 							}
@@ -623,7 +636,9 @@ class activity {
 					} 
 					break;
 				case ALL_USERS:											// all the users
+					// check if users has paid or not paid for sort (Depending on the $sort_paid parameter )
 					if($this->enr_lst_chck_sort_paid($sort_paid, $this->enrolled_users[$current_user_id])){
+						// check if the limit of the list is reached 
 						if(	check_limit_offset($limit, $offset, $this->last_enroll_list_count)){
 							
 							$return_user_list[$current_user_id] = $this->enrolled_users[$current_user_id];
@@ -641,6 +656,7 @@ class activity {
 		}
 		
 		$db->sql_freeresult($result);							// remove query
+
 		return $return_user_list;										// send array
 		
 	}
@@ -680,10 +696,8 @@ class activity {
 				$short = "enrol.price_payed";
 				break;
 			case 'real_name':
-				$short = "LOWER(custom.pf_gumbo_realname)";
-				break;
 			default:
-				$short = "LOWER(custom.pf_gumbo_realname)";
+				$short = "LOWER(custom.pf_gumbo_first_name), LOWER(custom.pf_gumbo_surname), LOWER(users.username)";
 		}
 
 		// check if the order is valid
@@ -692,7 +706,7 @@ class activity {
 		}
 		
 		$sql_array = array(
-			'SELECT'    => 'enrol.user_id user_id, users.username username, enrol.comments comments, enrol.datetime datetime, enrol.price_payed price_paid, enrol.status status, enrol.user_ip, custom.pf_gumbo_realname realname',
+			'SELECT'    => 'enrol.user_id user_id, users.username username, enrol.comments comments, enrol.datetime datetime, enrol.price_payed price_paid, enrol.status status, enrol.user_ip,  CONCAT(TRIM(custom.pf_gumbo_first_name), " ", IFNULL(TRIM(custom.pf_gumbo_surname), "")) realname',
 
 			'FROM'      => array(
 				ACTIVITY_ENROL_TABLE  => 'enrol',
@@ -720,12 +734,12 @@ class activity {
 	
 	private function enr_lst_chck_sort_paid($paid_status, $enr_lst_row){
 		switch($paid_status){
-			case PAID_UERS:
+			case PAID_USER:
 				if($enr_lst_row['price_paid'] < $this->calculate_price($enr_lst_row['user_id'])){		// check if payment is lower than price to pay(depents on if the user is a member)
 					return FALSE;
 				}
 				break;
-			case NOT_PAID_UERS:
+			case NOT_PAID_USER:
 				if($enr_lst_row['price_paid'] >= $this->calculate_price($enr_lst_row['user_id'])){		// check if payment is higher than price to pay(depents on if the user is a member)
 					return FALSE;
 				}
@@ -925,7 +939,7 @@ class activity {
 			foreach($field_data AS $user_id => $setting){
 					$return_string .="WHEN ". $user_id ." THEN '".  utf8_normalize_nfc( $db->sql_escape($setting)) ."' ";
 			}
-			$return_string .="END ";	
+			$return_string .="ELSE '' END ";	
 		}
 		
 		
@@ -937,7 +951,7 @@ class activity {
 	
 	// checks what price the user have to pay
 	function calculate_price($user_id){
-		if($this->is_member($user_id)){							// check if the user is a member 
+		if($this->is_member($user_id) || $this->is_old_member($user_id) || $this->is_ere_member($user_id)){							// check if the user is a member 
 			$price = $this->price_member;						// set member price
 		}else{
 			$price=$this->price;								// set non member price
@@ -951,6 +965,24 @@ class activity {
 		// get the groups of the user
 		$user_groups = (isset($this->activities_handler)) ? $this->activities_handler->get_user_groups($user_id) : all_user_groups($user_id);
 		if(in_array(MEMBER_GROUP_ID, $user_groups))
+			return true;
+		return null;
+	}	
+
+	function is_old_member($user_id){
+	
+		// get the groups of the user
+		$user_groups = (isset($this->activities_handler)) ? $this->activities_handler->get_user_groups($user_id) : all_user_groups($user_id);
+		if(in_array(OLD_MEMBERS_GROUP_ID, $user_groups))
+			return true;
+		return null;
+	}
+
+	function is_ere_member($user_id){
+	
+		// get the groups of the user
+		$user_groups = (isset($this->activities_handler)) ? $this->activities_handler->get_user_groups($user_id) : all_user_groups($user_id);
+		if(in_array(ERE_MEMBERS_GROUP_ID, $user_groups))
 			return true;
 		return null;
 	}
@@ -1257,7 +1289,7 @@ class activity {
 		return $change_list;
 	}
 	
-	// add changelog
+	// add change log
 	function set_change_log($user_id, $user_ip, $modification){
 		global $db;
 		$modification = utf8_normalize_nfc(htmlspecialchars($modification));
@@ -1938,87 +1970,8 @@ class activity {
 	* $images boolean If false strips all images, default is false
 	*/
 	public function getDescription_preview($max_senctences = 5 , $new_lines = false, $bbcode = true, $smilies = true, $urls = true, $images = false){
-		if(gettype($max_senctences) != "integer")
-			return null;
-		if(gettype($bbcode) != "boolean")
-			return null;
-		if(gettype($new_lines) != "boolean")
-			return null;
-		if(gettype($smilies) != "boolean")
-			return null;
-		if(gettype($urls) != "boolean")
-			return null;
-		if(gettype($images) != "boolean")
-			return null;
-		$pattern = 	"(?<=(\[preview:".$this->bbcode_uid."\]))".	// lookahead for [preview] (bbcode_uid is for the unique page)
-					"[\s\S]*".									// look all non white characters and all white charatcers (just all caracters)
-					"(?=(\[\/preview:".$this->bbcode_uid."\]))";// look behind for [/preview] (and the unique bb code)
-		preg_match("/".$pattern."/", $this->description, $matches);
-		if(isset($matches[0])){
-			$prev_desc = $matches[0];
-		}else{
-			$prev_desc = $this->description;
-		}
-		if(!$images){
-			$pattern = 	"/\[img:".$this->bbcode_uid."\]".	
-						"[\s\S]*".	
-						"\[\/img:".$this->bbcode_uid."\]/";
-			$prev_desc = preg_replace($pattern, ' ', $prev_desc);
-		}
-		if(!$smilies || !$bbcode){
-			$pattern = '/<!-- (.*?) --><img src=\"{SMILIES_PATH}\/(.*?)\" alt="(.*?)" title="(.*?)" \/><!-- (.*?) -->/';
-			$prev_desc = preg_replace($pattern, '', $prev_desc);	
 		
-		}
-		if(!$bbcode){
-			strip_bbcode($prev_desc, $this->bbcode_uid);
-		}
-		if($new_lines){
-			$prev_desc = str_replace("\n", ' ', $prev_desc);
-		}
-		
-		$pattern =  '/# Split sentences on whitespace between them.
-				(?<=                # Begin positive lookbehind.
-				  [.!?]             # Either an end of sentence punct,
-				| [.!?][\'"]        # or end of sentence punct and quote.
-				| '.$this->bbcode_uid.'\] [^a-z]  # or the end of bbcode
-				|\n
-				)                   # End positive lookbehind.
-				(?<!                # Begin negative lookbehind.
-				Mr.            # Skip either "Mr."
-				| Mrs\.             # or "Mrs.",
-				| Ms\.              # or "Ms.",
-				| Jr\.              # or "Jr.",
-				| Dr\.              # or "Dr.",
-				| Prof\.            # or "Prof.",
-				| Sr\.              # or "Sr.",
-				| T\.V\.A\.         # or "T.V.A.",
-				| [A-Z]\.         # or 
-									# or... (you get the idea).
-				)                   # End negative lookbehind.
-				\s+                 # Split on whitespace between sentences.
-				/x';
-		
-		$sentences = preg_split($pattern, $prev_desc, -1, PREG_SPLIT_NO_EMPTY);
-		$prev_desc = "";
-		if($new_lines){
-			$new_lines = "\n";
-		}else{
-			$new_lines = "";
-		}
-		
-		$max_senctences = ($max_senctences == 0) ? count($sentences) :  min($max_senctences, count($sentences));
-		
-		for($i = 0; $i < $max_senctences; $i++ ){
-			$prev_desc .= $sentences[$i] . $new_lines ." ";
-		}
-		
-		$options = 	(($bbcode) ? OPTION_FLAG_BBCODE : 0) +
-					(($smilies) ? OPTION_FLAG_SMILIES : 0) + 
-					(($urls) ? OPTION_FLAG_LINKS : 0);
-		$prev_desc = generate_text_for_display($prev_desc, $this->bbcode_uid, $this->bbcode_bitfield, $options);
-		
-		return $prev_desc;
+		return get_preview($this->description, $this->bbcode_uid, $this->bbcode_bitfield, $max_senctences, $new_lines, $bbcode, $smilies, $urls, $images);
     }
 
     public function getStartDatetime(){

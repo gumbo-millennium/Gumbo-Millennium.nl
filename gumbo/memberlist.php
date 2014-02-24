@@ -1070,7 +1070,7 @@ switch ($mode)
 			}
 			
 			$sql_where .= ($username) ? ' AND u.username_clean ' . $db->sql_like_expression(str_replace('*', $db->any_char, utf8_clean_string($username))) : '';
-			$sql_where .= ($realname) ? ' AND LOWER(f.pf_gumbo_realname) ' . $db->sql_like_expression($db->any_char . strtolower(utf8_clean_string($realname)). $db->any_char) . ' AND f.pf_gumbo_realname != \'nieuwbouw\'': '';
+			$sql_where .= ($realname) ? ' AND LOWER(CONCAT(TRIM(u.pf_gumbo_first_name), " ", IFNULL(TRIM(u.pf_gumbo_surname), ""))) ' . $db->sql_like_expression($db->any_char . strtolower(utf8_clean_string($realname)). $db->any_char) : "";
 			$sql_where .= ($auth->acl_get('a_user') && $email) ? ' AND u.user_email ' . $db->sql_like_expression(str_replace('*', $db->any_char, $email)) . ' ' : '';
 			$sql_where .= ($icq) ? ' AND u.user_icq ' . $db->sql_like_expression(str_replace('*', $db->any_char, $icq)) . ' ' : '';
 			$sql_where .= ($aim) ? ' AND u.user_aim ' . $db->sql_like_expression(str_replace('*', $db->any_char, $aim)) . ' ' : '';
@@ -1571,7 +1571,7 @@ switch ($mode)
 
 					'S_CUSTOM_PROFILE'	=> (isset($cp_row['row']) && sizeof($cp_row['row'])) ? true : false,
 					'S_GROUP_LEADER'	=> $is_leader,
-					'U_REAL_NAME' 		=> ($row['pf_gumbo_realname'] != 'nieuwbouw' && $row['pf_gumbo_realname'] != "") ? $row['pf_gumbo_realname'] :  "-",
+					'U_REAL_NAME' 		=> $row['pf_gumbo_first_name'] . " " . $row['pf_gumbo_surname'],
 
 					'U_VIEW_PROFILE'	=> append_sid("{$phpbb_root_path}gumbo/memberlist.$phpEx", 'mode=viewprofile&amp;u=' . $user_id))
 				);

@@ -100,7 +100,7 @@ if($status != 0 && check_form_key('chance_the_subscribe_status')){														
 						'DESCRIPTION'    		=> $activity->getDescription_preview(10),
 						'LINK'    				=> substr($url , 0, strpos($url , '?'))."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 						'COMMISSION'    		=> get_group_name($activity->getCommission())
-						));
+					));
 					$messenger->send($user->data['user_notify_type']);
 					$messenger->save_queue();
 				}

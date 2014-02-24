@@ -13,7 +13,9 @@ $user->setup();
 
 page_header($user->lang['BESTUUR']);
 
-$sql = 'SELECT u.user_id, u.username, pfd.pf_gumbo_realname, u.user_lastvisit, g.group_name FROM ' . USERS_TABLE . ' AS u, ' . PROFILE_FIELDS_DATA_TABLE . ' AS pfd, ' . GROUPS_TABLE . ' AS g, ' . USER_GROUP_TABLE . ' AS ug WHERE u.user_id = ug.user_id AND ug.group_id = g.group_id AND u.user_id = pfd.user_id AND g.group_id in (9, 10, 11, 24, 25)';
+$sql = 'SELECT u.user_id, u.username,  CONCAT(TRIM(pfd.pf_gumbo_first_name), " ", IFNULL(TRIM(pfd.pf_gumbo_surname), "")) realname, u.user_lastvisit, g.group_name 
+FROM ' . USERS_TABLE . ' AS u, ' . PROFILE_FIELDS_DATA_TABLE . ' AS pfd, ' . GROUPS_TABLE . ' AS g, ' . USER_GROUP_TABLE . ' AS ug 
+WHERE u.user_id = ug.user_id AND ug.group_id = g.group_id AND u.user_id = pfd.user_id AND g.group_id in (9, 10, 11, 24, 25)';
 
 /*
 Numbers explained
@@ -29,7 +31,7 @@ $result = $db->sql_query($sql);
 while ($row = $db->sql_fetchrow($result))  
 {   
 	$template->assign_block_vars('groep', array(
-		'GUMBO_REALNAME' 		=> $row['pf_gumbo_realname'],
+		'GUMBO_REALNAME' 		=> $row['realname'],
 		'A_USERNAME'			=> $row['username'],
 		'GROUP_NAME'			=> $row['group_name'],
 		'LAST_VISIT'			=> $row['user_lastvisit'],

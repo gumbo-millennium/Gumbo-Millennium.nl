@@ -250,14 +250,13 @@ class Task {
 		switch($short){
 			case 'username':
 				$short = "LOWER(users.username)";
-			case 'real_name':
-				$short = "LOWER(custom.pf_gumbo_realname)";
 				break;
 			case 'user_id':
 				$short = "LOWER(task.user_id)";
 				break;
+			case 'real_name':
 			default:
-				$short = "LOWER(custom.pf_gumbo_realname)";
+				$short = "LOWER(custom.pf_gumbo_first_name), LOWER(custom.pf_gumbo_surname), LOWER(users.username)";
 		}
 
 		// check if the order is valid
@@ -265,7 +264,7 @@ class Task {
 			$order = 'ASC';
 		}
 		
-		$sql = "SELECT task.user_id user_id, users.username username, custom.pf_gumbo_realname realname
+		$sql = "SELECT task.user_id user_id, users.username username, CONCAT(TRIM(custom.pf_gumbo_first_name), " ", IFNULL(TRIM(custom.pf_gumbo_surname), "")) realname'
 			FROM ". TASK_USER_TABLE ." as task 
 			LEFT JOIN ". USERS_TABLE ." AS users ON task.user_id=users.user_id  
 			LEFT JOIN  ". PROFILE_FIELDS_DATA_TABLE ." AS custom ON custom.user_id = task.user_id

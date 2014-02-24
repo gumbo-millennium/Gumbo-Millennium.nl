@@ -193,7 +193,8 @@ $lang = array_merge($lang, array(
     'ACP_DC_USERS_ADDED'				=> 'User(s) successfully subscribed to the event',
     'ADD_USERS'							=> 'Add user(s)',
     'SELECT_USER'						=> 'Select user',
-    'SELECT_USERS'						=> 'Select all users',
+    'SELECT_USERS'                      => 'Select all users',
+    'ENROLLED_USERS'					=> 'Signed up users',
 ));
 
 // For management send mail

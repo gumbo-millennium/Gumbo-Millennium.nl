@@ -13,7 +13,9 @@ $user->setup();
 
 page_header($user->lang['BESTUUR']);
 
-$sql = 'SELECT u.username, u.user_sig, u.user_sig_bbcode_uid, u.user_sig_bbcode_bitfield, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, pfd.pf_gumbo_realname, pfd.pf_gumbo_verhaal FROM ' . USERS_TABLE . ' AS u, ' . PROFILE_FIELDS_DATA_TABLE . ' AS pfd, ' . USER_GROUP_TABLE . ' AS g WHERE u.user_id = g.user_id AND u.user_id = pfd.user_id AND g.group_id = 13';
+$sql = 'SELECT u.username, u.user_sig, u.user_sig_bbcode_uid, u.user_sig_bbcode_bitfield, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height,  CONCAT(TRIM(pfd.pf_gumbo_first_name), " ", IFNULL(TRIM(pfd.pf_gumbo_surname), "")) realname, pfd.pf_gumbo_verhaal 
+FROM ' . USERS_TABLE . ' AS u, ' . PROFILE_FIELDS_DATA_TABLE . ' AS pfd, ' . USER_GROUP_TABLE . ' AS g 
+WHERE u.user_id = g.user_id AND u.user_id = pfd.user_id AND g.group_id = 13';
 
 $result = $db->sql_query($sql);
 
@@ -33,7 +35,7 @@ while ($row = $db->sql_fetchrow($result))
 	$signature = smiley_text($signature); // Always process smilies after parsing bbcodes
 
 	$template->assign_block_vars('groep', array(
-		'GUMBO_REALNAME' 		=> $row['pf_gumbo_realname'],
+		'GUMBO_REALNAME' 		=> $row['realname'],
 		'A_USERNAME'			=> $row['username'],
 		'SIGNATURE'				=> $signature,
 		'AVATAR_IMG'			=> get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']),
