@@ -1070,7 +1070,7 @@ switch ($mode)
 			}
 			
 			$sql_where .= ($username) ? ' AND u.username_clean ' . $db->sql_like_expression(str_replace('*', $db->any_char, utf8_clean_string($username))) : '';
-			$sql_where .= ($realname) ? ' AND LOWER(CONCAT(TRIM(u.pf_gumbo_first_name), " ", IFNULL(TRIM(u.pf_gumbo_surname), ""))) ' . $db->sql_like_expression($db->any_char . strtolower(utf8_clean_string($realname)). $db->any_char) : "";
+			$sql_where .= ($realname) ? ' AND LOWER(CONCAT(TRIM(f.pf_gumbo_first_name), " ", IFNULL(TRIM(f.pf_gumbo_surname), ""))) ' . $db->sql_like_expression($db->any_char . strtolower(utf8_clean_string($realname)). $db->any_char) : "";
 			$sql_where .= ($auth->acl_get('a_user') && $email) ? ' AND u.user_email ' . $db->sql_like_expression(str_replace('*', $db->any_char, $email)) . ' ' : '';
 			$sql_where .= ($icq) ? ' AND u.user_icq ' . $db->sql_like_expression(str_replace('*', $db->any_char, $icq)) . ' ' : '';
 			$sql_where .= ($aim) ? ' AND u.user_aim ' . $db->sql_like_expression(str_replace('*', $db->any_char, $aim)) . ' ' : '';
