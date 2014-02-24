@@ -756,7 +756,7 @@ class acp_dc_activity_management
 							),	
 							'select_user_multiple'	=> array(
 								'lang' => 'ACP_DC_SELECT_MULTI_USER',
-								'validate' => 'string',
+								'validate' => 'text',
 								'type' => 'custom',
 								'empty' => true,
 								'method' => 'select_user',
@@ -1744,12 +1744,15 @@ class acp_dc_activity_management
 						break;
 					case 'p':
 						$s_sort_show = ENROLLED_USERS;
-						$sort_pay  = PAID_UERS;
+						$sort_pay  = PAID_USER;
 						break;
 					case 'np':
 						$s_sort_show = ENROLLED_USERS;
-						$sort_pay  = NOT_PAID_UERS;
+						$sort_pay  = NOT_PAID_USER;
 						break;
+					case 'e':
+						$s_sort_show = ENROLLED_USERS;
+						$sort_pay  = NULL;
 				}
 
 				$s_limit_records = $s_sort_key = $s_sort_dir = $u_sort_param = '';
@@ -1757,7 +1760,8 @@ class acp_dc_activity_management
 				$sql_sort =($sort_dir == 'd') ? 'DESC' : 'ASC';
 				// send the list if all subscribed users to the template
 				if( $enroll_list = $activity->get_enrol_list($s_sort_show, $sql_sort, $sort_by_sql[$sort_key], $sort_pay , $limit, $start) ){	// are there subscribed users
-					foreach($enroll_list AS $user_id => $info ){			//loop though all the subsribed users 
+					foreach($enroll_list AS $user_id => $info ){			//loop though all the subscribed users
+										
 
 						$template->assign_block_vars('users', array(		// set template array
 							'USER_NAME'			=> $info['username'],
@@ -1964,6 +1968,7 @@ class acp_dc_activity_management
 		$options .= '<option value="a"' . (($value == "a") ? ' selected="selected"' : '') . '>' . $user->lang['ALL'] . '</option>';
 		$options .= '<option value="p"' . (($value == "p") ? ' selected="selected"' : '') . '>' . $user->lang['PAID'] . '</option>';
 		$options .= '<option value="np"' . (($value == "np") ? ' selected="selected"' : '') . '>' . $user->lang['NOT_PAID'] . '</option>';
+		$options .= '<option value="e"' . (($value == "e") ? ' selected="selected"' : '') . '>' . $user->lang['ENROLLED_USERS'] . '</option>';
 		$options .= '</select>';
 		
 		return $options;
