@@ -55,7 +55,7 @@
 	}
 	else
 	{
-		$template->assign_var('MESSAGE_TEXT', '<center><br />23:00 - 07:00<br />Buiten gebruik<br /><br />De DC<br /><br /></center>');
+		$template->assign_var('MESSAGE_TEXT', '<center><br />22:30 - 07:00<br />Buiten gebruik<br /><br />De DC<br /><br /></center>');
 	}
 	
 	$template->set_filenames(array(

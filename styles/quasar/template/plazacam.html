@@ -1,77 +1,77 @@
 <!-- INCLUDE overall_header.html -->
+<!-- IF not S_IS_BOT -->
+	<script type="text/javascript">
 
-<script type="text/javascript">
+	var Webcam;
 
-var Webcam;
+	Webcam = {};
+	Webcam.Image = function (img) {
+		var running = false, timeout = null, preload, delay;
+		var url = (img.src.indexOf("?") > 0) ? img.src.substr(0, img.src.indexOf("?")) : img.src;
 
-Webcam = {};
-Webcam.Image = function (img) {
-	var running = false, timeout = null, preload, delay;
-	var url = (img.src.indexOf("?") > 0) ? img.src.substr(0, img.src.indexOf("?")) : img.src;
+		this.start = function () {
+			running = true;
+			delay = 5000;
+			run();
+		};
 
-	this.start = function () {
-		running = true;
-		delay = 5000;
-		run();
+		this.stop = function () {
+			running = false;
+			clearTimeout(timeout);
+			timeout = null;
+		};
+
+		this.reset = function () {
+			delay = 5000;
+		};
+
+		var load = function() {
+			timeout = null;
+			preload.src = url + "?" + (new Date()).getTime();
+		}.bind(this);
+
+		var run = function() {
+			if (running && timeout === null) {
+				timeout = setTimeout(load, delay);
+				delay = (delay < 600000) ? Math.floor(delay * 1.008) : delay;
+			}
+		}.bind(this);
+
+		preload = new Image();
+
+		preload.onload = function () { if (running) { img.src = preload.src; } run(); }.bind(this);
+		preload.onerror = function () { run(); }.bind(this);
 	};
 
-	this.stop = function () {
-		running = false;
-		clearTimeout(timeout);
-		timeout = null;
-	};
+	Webcam.instances = [];
 
-	this.reset = function () {
-		delay = 5000;
-	};
+	jQuery(document).ready(function($) {
+		jQuery('#page-body table.forumline img').each(function(ingore, elm) {
+			try {
+				var webcam;
 
-	var load = function() {
-		timeout = null;
-		preload.src = url + "?" + (new Date()).getTime();
-	}.bind(this);
+				webcam = new Webcam.Image(elm);
+				webcam.start();
 
-	var run = function() {
-		if (running && timeout === null) {
-			timeout = setTimeout(load, delay);
-			delay = (delay < 600000) ? Math.floor(delay * 1.008) : delay;
-		}
-	}.bind(this);
+				Webcam.instances.push(webcam);
+			} catch(e) {}
+		});
+	});
 
-	preload = new Image();
+	</script>
 
-	preload.onload = function () { if (running) { img.src = preload.src; } run(); }.bind(this);
-	preload.onerror = function () { run(); }.bind(this);
-};
-
-Webcam.instances = [];
-
-jQuery(document).ready(function($) {
-    jQuery('#page-body table.forumline img').each(function(ingore, elm) {
-        try {
-       		var webcam;
-
-            webcam = new Webcam.Image(elm);
-       		webcam.start();
-
-            Webcam.instances.push(webcam);
-       	} catch(e) {}
-    });
-});
-
-</script>
-
-<table width="100%"  border="0" cellspacing="0" cellpadding="4">
-	<tr>
-		<td>
-			<table class="forumline" width="100%" cellspacing="0" cellpadding="4" border="0">
-				<tr>					
-					<td class="row2" colspan="2" align="left" style="padding-left: 10px; padding-right: 10px;"><br clear="all" />
-						<div>{MESSAGE_TEXT}</div>
-					</td>				
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-
+	<table width="100%"  border="0" cellspacing="0" cellpadding="4">
+		<tr>
+			<td>
+				<table class="forumline" width="100%" cellspacing="0" cellpadding="4" border="0">
+					<tr>					
+						<td class="row2" colspan="2" align="left" style="padding-left: 10px; padding-right: 10px;"><br clear="all" />
+							<div>{MESSAGE_TEXT}</div>
+						</td>				
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+<!-- ENDIF -->
 <!-- INCLUDE overall_footer.html -->
