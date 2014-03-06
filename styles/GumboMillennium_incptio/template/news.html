@@ -1,0 +1,29 @@
+<!-- INCLUDE overall_header.html -->
+
+	<!-- begin content -->
+    <section id="content">
+    	<div class="container clearfix">
+    	<!-- begin main content -->
+        <section id="main" class="blog-entry-list three-fourths">
+        	<!-- BEGIN posts -->
+            <article class="entry clearfix">
+            	<div class="entry-date">
+                    <div class="entry-day">{posts.DATE_DAY}</div>
+                    <div class="entry-month">{posts.DATE_MONTH}</div>   
+                </div>
+                <div class="entry-body">
+                    <h2 class="entry-title"><a href="blog-post-image.html">{posts.TITLE}</a></h2>
+                    <div class="entry-meta">
+                    	<span class="author"><a href="#">{posts.AUTHOR}</a></span>
+                        <span class="comments"><a href="#">{posts.COMMENTS}</a></span>
+                    </div>
+                    <div class="entry-content">
+                        <p>{posts.CONTENT}</p>
+                    </div>
+                </div>
+            </article>
+            <!-- END posts -->
+        </section>
+    </section>
+
+<!-- INCLUDE overall_footer.html -->
