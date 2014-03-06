@@ -6,51 +6,53 @@
 // ]]>
 </script>
 
-<form action="{S_LOGIN_ACTION}" method="post" id="login">
-<div class="panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
+<form action="{S_LOGIN_ACTION}" method="post" id="commend-form">
+<div class="container">
+    <p>
 
-	<div class="content">
-		<h2><!-- IF LOGIN_EXPLAIN -->{LOGIN_EXPLAIN}<!-- ELSE -->{L_LOGIN}<!-- ENDIF --></h2>
-
-		<fieldset <!-- IF not S_CONFIRM_CODE -->class="fields1"<!-- ELSE -->class="fields2"<!-- ENDIF -->>
-		<!-- IF LOGIN_ERROR --><div class="error">{LOGIN_ERROR}</div><!-- ENDIF -->
-		<dl>
-			<dt><label for="{USERNAME_CREDENTIAL}">{L_USERNAME}:</label></dt>
-			<dd><input type="text" tabindex="1" name="{USERNAME_CREDENTIAL}" id="{USERNAME_CREDENTIAL}" size="25" value="{USERNAME}" class="inputbox autowidth" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="{PASSWORD_CREDENTIAL}">{L_PASSWORD}:</label></dt>
-			<dd><input type="password" tabindex="2" id="{PASSWORD_CREDENTIAL}" name="{PASSWORD_CREDENTIAL}" size="25" class="inputbox autowidth" /></dd>
+		
+		<!-- IF LOGIN_ERROR --><div class="notification-box notification-box-error">{LOGIN_ERROR}</div><!-- ENDIF --></p>
+		
+		
+                <p>
+			<label for="{USERNAME_CREDENTIAL}">{L_USERNAME}:</label><br/>
+                
+			<input type="text" tabindex="1" name="{USERNAME_CREDENTIAL}" id="{USERNAME_CREDENTIAL}" size="25" value="{USERNAME}" class="text-form" />
+                </p>
+                <p>
+			<label for="{PASSWORD_CREDENTIAL}">{L_PASSWORD}:</label><br/>
+			<input type="password" tabindex="2" id="{PASSWORD_CREDENTIAL}" name="{PASSWORD_CREDENTIAL}" size="25" class="text-form" />
+                </p>
+                <p>
 			<!-- IF S_DISPLAY_FULL_LOGIN and (U_SEND_PASSWORD or U_RESEND_ACTIVATION) -->
-				<!-- IF U_SEND_PASSWORD --><dd><a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a></dd><!-- ENDIF -->
-				<!-- IF U_RESEND_ACTIVATION --><dd><a href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</a></dd><!-- ENDIF -->
+				<!-- IF U_SEND_PASSWORD --><a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a><br/><!-- ENDIF -->
+				<!-- IF U_RESEND_ACTIVATION --><a href="{U_RESEND_ACTIVATION}">{L_RESEND_ACTIVATION}</a><!-- ENDIF -->
 			<!-- ENDIF -->
-		</dl>
+                </p>
+                <p>
 		<!-- IF CAPTCHA_TEMPLATE and S_CONFIRM_CODE -->
 			<!-- DEFINE $CAPTCHA_TAB_INDEX = 3 -->
 			<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
 		<!-- ENDIF -->
 		<!-- IF S_DISPLAY_FULL_LOGIN -->
-		<dl>
-			<!-- IF S_AUTOLOGIN_ENABLED --><dd><label for="autologin"><input type="checkbox" name="autologin" id="autologin" tabindex="4" /> {L_LOG_ME_IN}</label></dd><!-- ENDIF -->
-			<dd><label for="viewonline"><input type="checkbox" name="viewonline" id="viewonline" tabindex="5" /> {L_HIDE_ME}</label></dd>
-		</dl>
+		
+			<!-- IF S_AUTOLOGIN_ENABLED --><label for="autologin"><input type="checkbox" name="autologin" id="autologin" tabindex="4" /> {L_LOG_ME_IN}</label><br/><!-- ENDIF -->
+			<label for="viewonline"><input type="checkbox" name="viewonline" id="viewonline" tabindex="5" /> {L_HIDE_ME}</label>
+                <p>
 		<!-- ENDIF -->
 
 		{S_LOGIN_REDIRECT}
-		<dl>
-			<dt>&nbsp;</dt>
-			<dd>{S_HIDDEN_FIELDS}<input type="submit" name="login" tabindex="6" value="{L_LOGIN}" class="button1" /></dd>
-		</dl>
-		</fieldset>
+		
+			&nbsp;
+			{S_HIDDEN_FIELDS}<input type="submit" name="login" tabindex="6" value="{L_LOGIN}" class="button" />
+                </p>
+		
 	</div>
-	<span class="corners-bottom"><span></span></span></div>
-</div>
-
+	
 
 <!-- IF not S_ADMIN_AUTH and S_REGISTER_ENABLED -->
-	<div class="panel">
+	<div class="container">
+            <p>
 		<div class="inner"><span class="corners-top"><span></span></span>
 
 		<div class="content">
@@ -62,6 +64,7 @@
 		</div>
 
 		<span class="corners-bottom"><span></span></span></div>
+        </p>
 	</div>
 <!-- ENDIF -->
 
