@@ -93,17 +93,19 @@
 		$message = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
 		$user_id = $row['topic_poster'];
 		user_get_id_name($user_id, $username);
+
 		if(is_array($username))
 		{
 			$username = $username[$row['topic_poster']];
 		}
 		$template->assign_block_vars('posts', array(
-			'TITLE'			=> $row['post_subject'],
-			'CONTENT'		=> $message,
-			'DATE_DAY'		=> date('d', $row['post_time']),
-			'DATE_MONTH'	=> date('M', $row['post_time']),
-			'COMMENTS'		=> $row['topic_replies'] . ($row['topic_replies'] == 1 ? ' Comment' : ' Comments'),
-			'AUTHOR'		=> $username
+			'TITLE'			 => $row['post_subject'],
+			'CONTENT'		 => $message,
+			'DATE_DAY'		 => date('d', $row['post_time']),
+			'DATE_MONTH'	 => date('M', $row['post_time']),
+			'COMMENTS'		 => $row['topic_replies'] . ($row['topic_replies'] == 1 ? ' Comment' : ' Comments'),
+			'AUTHOR'		 => $username,
+			'AUTHOR_PROFILE' => append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $row['topic_poster'])
 		));
 	}
 
