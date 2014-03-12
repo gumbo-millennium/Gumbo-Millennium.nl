@@ -838,7 +838,7 @@ class acp_dc_activity_management
 						'legend1'=> 'APC_DC_SEND_MAIL_SETTINGS',
 							'send_to_users'	=> array(
 								'lang' => 'SEND_TO_USERS',
-								'validate' => 'string',
+								'validate' => 'text',
 								'type' => 'custom',
 								'empty' => true,
 								'method' => 'select_user',
