@@ -1259,8 +1259,8 @@ switch ($mode)
 				'U_PM'			=> ($auth->acl_get('u_sendpm') && $auth->acl_get('u_masspm_group') && $group_row['group_receive_pm'] && $config['allow_privmsg'] && $config['allow_mass_pm']) ? append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;mode=compose&amp;g=' . $group_id) : '',)
 			);
 
-			$sql_select = ', ug.group_leader';
-			$sql_from = ', ' . USER_GROUP_TABLE . ' ug';
+			$sql_select = ', ug.group_leader, CONCAT(TRIM(f.pf_gumbo_first_name), " ", IFNULL(TRIM(f.pf_gumbo_surname), "")) realname';
+			$sql_from = 'JOIN ' . USER_GROUP_TABLE . ' ug ON u.user_id = ug.user_id';
 			$order_by = 'ug.group_leader DESC, ';
 
 			$sql_where .= " AND ug.user_pending = 0 AND u.user_id = ug.user_id AND ug.group_id = $group_id";
@@ -1285,7 +1285,7 @@ switch ($mode)
 		if ($sql_where)
 		{
 			$sql = 'SELECT COUNT(u.user_id) AS total_users
-				FROM ' . USERS_TABLE . " u$sql_from
+				FROM ' . USERS_TABLE . " u $sql_from
 				". $sql_join ."
 				WHERE u.user_type IN (" . USER_NORMAL . ', ' . USER_FOUNDER . ")
 				$sql_where";
@@ -1510,15 +1510,15 @@ switch ($mode)
 			{
 				$sql = "SELECT u.*
 						$sql_select
-					FROM " . USERS_TAfBLE . " u
+					FROM " . USERS_TABLE . " u
 						$sql_from
 						$sql_join
-					WHERE " . $db->sql_in_set('u.user_id', $user_list) . "
+					WHERE " . $db->sql_in_set("u.user_id", $user_list) . "
 						$sql_where_data";
 			}
 			else
 			{
-				$sql = 'SELECT *
+				$sql = 'SELECT *, CONCAT(TRIM(f.pf_gumbo_first_name), " ", IFNULL(TRIM(f.pf_gumbo_surname), "")) realname
 					FROM ' . USERS_TABLE . ' u
 					JOIN '. PROFILE_FIELDS_DATA_TABLE .' f 
 						ON u.user_id =  f.user_id
@@ -1571,7 +1571,7 @@ switch ($mode)
 
 					'S_CUSTOM_PROFILE'	=> (isset($cp_row['row']) && sizeof($cp_row['row'])) ? true : false,
 					'S_GROUP_LEADER'	=> $is_leader,
-					'U_REAL_NAME' 		=> $row['pf_gumbo_first_name'] . " " . $row['pf_gumbo_surname'],
+					'U_REAL_NAME' 		=> $row['realname'],
 
 					'U_VIEW_PROFILE'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile&amp;u=' . $user_id))
 				);
