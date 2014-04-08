@@ -14,38 +14,30 @@
     <!-- begin footer -->
 	<footer id="footer">
     	<!-- begin footer featured -->
+    	<!-- IF ADS_19 -->
         <div id="footer-featured">
         	<div class="container clearfix">
                 <div class="three-fourths">
-                    <h1><a href="#" title="Download (ZIP File) Questionnaire"><strong>Overtuigd</strong>? Wordt nu  <strong>lid</strong>.</a></h1>
-                    <p>Our process begins with knowing you and your visitors inside out. Download, complete and return our <a href="#" title="Download (ZIP File) Questionnaire">questionnaire</a>. We will get back to you with a quotation within a week.</p>
+                    {ADS_19}
                 </div>
                 <div class="one-fourth column-last">
                     <a class="entry-image" href="#" title="Download (ZIP File) Questionnaire"><img src="{T_IMAGESET_PATH}/mail.png" alt="Mail"></a>
                 </div>
             </div>
         </div>
+        <!-- ENDIF -->
         <!-- end footer featured -->	
         
         <!-- begin footer top -->
         <div id="footer-top">
         	<div class="container clearfix">
-                <div class="one-fourth">
-                    <div class="widget">
-                         <h3>Who is online</h3>
-                    <p>In total there is 1 user online :: 1 registered, 0 hidden and 0 guests (based on users active over the past 5 minutes)
-					Most users ever online was 17 on Tue 12 Mar 2013, 05:54
-					</p><p>
-					Registered users: nyxus</p>
-                    </div>
-                </div>
-                <div class="one-fourth">
+                <div class="one-third">
                     <div class="widget twitter-widget">
                         <h3>Birthdays</h3>
                         <p>Geen verjaardagen</p>
                     </div>
                 </div>
-                <div class="one-fourth">
+                <div class="one-third">
                     <div class="widget newsletter">
                         <h3>Calender</h3>
                         <table width="100%" cellspacing="1">
@@ -150,7 +142,7 @@
 	</tbody></table>
                     </div>
                 </div>
-                <div class="one-fourth column-last">
+                <div class="one-third column-last">
                     <div class="widget contact-info">
                         <h3>Contact Info</h3>
                         <div>
@@ -200,8 +192,10 @@
 
     </div><!-- /pusher -->
 </div><!-- /menu-container -->
+<!-- IF U_IS_MOBILE -->
 <script>
     new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
 </script>
+<!-- ENDIF -->
 </body>
 </html>
