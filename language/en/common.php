@@ -60,7 +60,9 @@ $lang = array_merge($lang, array(
 	'STORY'				=> 'The story',
 	'ONDERSCHRIFT'		=> 'Subtitel',
 	'EVENTS'			=> 'Events',
+	'EVENTS_ACP'		=> 'Events management',
 	'GUMBO_MEMBERS'		=> 'Gumbo members',
+	'NON_MEMBERS'		=> 'Non members',
 	'WHY_GUBMO'			=> 'Why Gumbo?',
 	'DISPUTES'			=> 'Disputes',
 	

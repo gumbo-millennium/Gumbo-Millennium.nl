@@ -775,7 +775,7 @@ class activity {
 		$users_enrol_ary = $this->enrolled_users;
 		$users_status_change = array();						// the list of all managers who status changes 
 		$users_status_new = array();						// the list of all managers who status changes 
-		// check for exisiting managers with a status change
+		// check for existing users with a status change
 		$temp_user_enrol_count = 0;
 		foreach($new_user_list AS $key => $user_data){				// loop through all group id (current_user) from the new_users_list
 			$update = false;
@@ -799,9 +799,12 @@ class activity {
 						trigger_error($user->lang['DC_ACT_INVALID_STATUS']);
 						return NULL; 
 				}
-				if( $users_enrol_ary[$user_data["user_id"]]["status"] != $user_data["status"] ){
-					
-					$update = true;
+				// check if new status not equals the old status
+				if(isset($users_enrol_ary[$user_data["user_id"]])){
+					if( $users_enrol_ary[$user_data["user_id"]]["status"] != $user_data["status"] ){
+						
+						$update = true;
+					}
 				}
 			}
 			
@@ -1794,9 +1797,11 @@ class activity {
 		if(gettype($user_id) != "integer")
 			return null;
 
+
 		if(isset($this->readed_users[$user_id])){
-			return true;
+			return $this->readed_users[$user_id];
 		}
+
 		$sql_where_ary = array(
 			'rd.activity_id'      => (int)$this->id
 		);
@@ -1937,9 +1942,13 @@ class activity {
     }
 	
 
-	public function getDescription(){
+	public function getDescription($remove_images = FALSE){
 		$description = $this->description;
 		
+		if($remove_images){ 
+			$description = remove_images_from_text($description, $this->getUID()); // this also removes images
+		}
+
 		$options = 	(($this->enable_bbcode) ? OPTION_FLAG_BBCODE : 0) +
 					(($this->enable_smilies) ? OPTION_FLAG_SMILIES : 0) + 
 					(($this->enable_magic_url) ? OPTION_FLAG_LINKS : 0);
@@ -1972,6 +1981,11 @@ class activity {
 	public function getDescription_preview($max_senctences = 5 , $new_lines = false, $bbcode = true, $smilies = true, $urls = true, $images = false){
 		
 		return get_preview($this->description, $this->bbcode_uid, $this->bbcode_bitfield, $max_senctences, $new_lines, $bbcode, $smilies, $urls, $images);
+    }
+
+    public function getDescription_raw($max_senctences = 5 , $new_lines = false, $bbcode = true, $smilies = true, $urls = true, $images = false){
+		
+		return $this->description;
     }
 
     public function getStartDatetime(){

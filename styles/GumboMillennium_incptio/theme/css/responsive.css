@@ -29,9 +29,6 @@ Author URI: http://www.ixtendo.com
         display: inline;
     }
     
-    #header_mobile_nav{
-        display: block;
-    }
     #header_mobile_nav h2{
         margin-bottom: 0px;
     }
@@ -44,10 +41,6 @@ Author URI: http://www.ixtendo.com
 
     .js .tinynav { 
 		display: block; 
-	}
-	
-    .js #navlist { 
-		display: none; 
 	}
 	
 	#nav, .tinynav {
@@ -217,9 +210,6 @@ Author URI: http://www.ixtendo.com
 		display: block;	
 	}
 	
-	.infobox .button {
-		display: none;
-	}
 
 	.infobox .mobile-button {
 		float: none;

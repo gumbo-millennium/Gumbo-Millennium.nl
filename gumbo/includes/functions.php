@@ -27,11 +27,17 @@ function setup_gumbo_overlay()
 
 	// Set up common template variables, mainly used in the navigation  
 	$template->assign_vars(array(
-		
+		'L_GUMBO_MEMBERS'			=> $user->lang['GUMBO_MEMBERS'],
 		'U_PLAZACAM'			=> append_sid("{$phpbb_root_path}gumbo/plazacam.$phpEx"),
 		'L_PLAZACAM'			=> $user->lang['PLAZACAM'],
+
 		'U_EVENTS'				=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx"),
 		'L_EVENTS'				=> $user->lang['EVENTS'],
+		'A_EVENTS_ACCESS'		=> $auth->acl_get('u_list_activities'),
+		'U_EVENTS_ACP'			=> append_sid("{$phpbb_root_path}adm/index.$phpEx", "i=dc_activity_management&mode=overview", true, $user->session_id),
+		'L_EVENTS_ACP'			=> $user->lang['EVENTS_ACP'],
+		'A_EVENTS_ACP_ACCESS'	=> $auth->acl_get('a_overview_activity'),
+
 		'U_CONTACT'				=> append_sid("{$phpbb_root_path}gumbo/contact.$phpEx"),
 		'L_CONTACT'				=> $user->lang['CONTACT'],
 		'U_ABOUT_US'			=> append_sid("{$phpbb_root_path}gumbo/over_ons.$phpEx"),
@@ -52,6 +58,7 @@ function setup_gumbo_overlay()
 		'L_ALIQUANDO'			=> $user->lang['ALIQUANDO'],
 		'U_SPONSORS'			=> append_sid("{$phpbb_root_path}gumbo/sponsors.$phpEx"),
 		'L_SPONSORS'			=> $user->lang['SPONSOR'],
+
 		'U_COMMISSION'			=> append_sid("{$phpbb_root_path}gumbo/commission.$phpEx"),
 		'L_COMMISSION'			=> $user->lang['COMMISSION'],
 		'U_BOARD_OF_DIRECTORS'	=> append_sid("{$phpbb_root_path}gumbo/board_of_directors.$phpEx"),
@@ -70,6 +77,7 @@ function setup_gumbo_overlay()
 		'L_KASCIE'				=> $user->lang['KC'],
 		'U_IB'					=> append_sid("{$phpbb_root_path}gumbo/ib.$phpEx"),
 		'L_IB'					=> $user->lang['IB'],
+
 		'U_SOCIETEIT'			=> append_sid("{$phpbb_root_path}gumbo/societeit.$phpEx"),
 		'L_SOCIETEIT'			=> $user->lang['SOCIETEIT'], 
 		'U_BOARD_HISTORY'		=> append_sid("{$phpbb_root_path}gumbo/board_history.$phpEx"),
@@ -137,7 +145,7 @@ function setup_gumbo_overlay()
 
 /** get_images_data
 * Returns an array with the following data of all images
-* if $remove_images is true, all the images in the text are removed 
+* if $remove_images is true, all the images in the text are removed, 
 * $imgaes[{img_id}] = array (
 *	"URL" = {img url},
 *   "LINK" = {link href}	
@@ -171,9 +179,24 @@ function get_images_data(&$text, $bbcode_uid, $remove_images = true) {
 	// remove the images?
 	if($remove_images){
 		// remove images
-		$text = preg_replace("/".$pattern."/x", "", $text);
+		$text = remove_images_from_text($text, $bbcode_uid);
 	}
 	return $o_images;
+}
+
+function remove_images_from_text($text, $bbcode_uid){
+	//regex pattern to get and remove an image 
+	$pattern = " 
+		(\[url=(\S*):".$bbcode_uid."\])?		# if link: get url in group
+		\[img:".$bbcode_uid."\] 				# begin image tag
+		(\S*)									# get image url in group
+		\[\/img:".$bbcode_uid."\] 				# end image tag
+		(\[\/url:".$bbcode_uid."\])?			# end link tag
+		(\R*)?									# if newlines : remove all new lines
+	";
+
+	$text = preg_replace("/".$pattern."/x", "", $text);
+	return $text;
 }
 
 /*	get_preview

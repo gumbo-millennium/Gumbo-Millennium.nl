@@ -1,0 +1,237 @@
+
+<!-- INCLUDE overall_header.html -->
+    <!-- begin content -->
+    <section id="content">
+     <form action="{URL_CLEAN}" method="POST">
+          {S_FORM_TOKEN}
+        <div class="container clearfix">
+        <!-- begin main content -->
+
+        <section id="main" class="blog-entry-list three-fourths">
+            <!-- begin article -->
+            <article class="entry clearfix">
+                <div class="infobox">
+                        <input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
+                        <input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
+                        <div class="infobox-inner">
+                            <!-- IF ENROLL && USER_ENROLLED_CHECK --> 
+                                <!-- IF UNSUBSCRIBE_DATE_CHECK && ENROLL_DATE_CHECK && not ENROLL_MAX && CHANGE == FALSE -->
+                                    <a class="button large right" href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a>
+                                <!-- ENDIF -->
+
+                                <!-- IF ENROLL_DATE_CHECK && not ENROLL_MAX && CHANGE == true -->
+                                    <button name="status"  class="button large right" type="submit" value="1"> {LANG_SUBSCRIBE}</button>
+                                   
+                                <!-- ENDIF -->
+                                <!-- IF UNSUBSCRIBE_DATE_CHECK  && CHANGE == true -->
+                                    <button name="status"  class="button large black right" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button>
+                                <!-- ENDIF -->
+                            <!-- ELSEIF not USER_ENROLLED_CHECK && ENROLL_DATE_CHECK -->
+                                 <button name="status" type="submit" class="button large" value="1">{LANG_SUBSCRIBE}</button>
+                            <!-- ENDIF -->
+                            <div class="with-button">
+                                <!-- IF not ENROLL -->
+                                    <h2>{LANG_NO_LOGIN_NEEDED}</h2>
+                                <!-- ELSEIF not IS_ACTIVE -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_NOT_ACTIVE}</p>
+                                    <!-- ELSEIF IS_ENROLL_MAX and not USER_ENROLLED_CHECK -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_ENROLL_AMOUNT_MAX}</p>
+                                <!-- ELSEIF not ENROLL_DATE_CHECK and not USER_ENROLLED_CHECK -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_ENROLL_DATETIME_OVER}</p>
+                                <!-- ELSEIF not S_USER_LOGGED_IN and not USER_ENROLLED_CHECK -->
+                                    <a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a>
+                                <!-- ELSEIF USER_ENROLLED_CHECK -->
+                                        <h2>{USER_ENROLLED_TEXT}</h2>
+                                        <p>{LANG_UNSUBSCRIPTIONS}: {UNSUBSCRIBE_MAX_DATETIME}</p>
+                                        <!-- IF PRICE  > 0-->
+                                        <p>{LANG_AMOUNT} {LANG_PAID}: &#8364;{USER_ENROLLED_PAID}</p>
+                                        <!-- ENDIF -->
+                                <!-- ELSE -->
+                                    <p>{LANG_ENROLL_TIME}: {ENROLL_DATE}</p>
+                                    <p>{LANG_SIGN_UPS_LEFT}: {U_SIGN_UPS_LEFT}</p>
+                                <!-- ENDIF -->
+                            </div>
+                        </div> 
+                    </div>
+                            
+                    
+
+				<!-- IF .images -->
+                <div class="full-screen">
+	            	<!-- IF .images > 1 -->
+		            	<!-- begin entry slider -->
+		                <div class="entry-slider">
+		                    <div id="flexslider-portfolio-item" class="flex-container">
+		                        <div class="flexslider">
+		                            <ul class="slides">
+		                            	<!-- BEGIN images -->
+		                                 <li><a class="lightbox image-block" rel="spring" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></li>
+		                                <!-- END images -->
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </div>	
+		                <!-- end entry slider -->
+	            	<!-- ELSE -->
+		            	<!-- BEGIN images -->
+		            		<a class="entry-image image-block lightbox" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a>
+		            	<!-- END images -->
+	            	<!-- ENDIF -->
+                </div>
+                <!-- ENDIF -->
+                <div class="clear-10px full-screen"></div>
+
+                <!-- IF PRICE_MEMBER > 0 -->
+                <div class="one-fourth">
+                    <div class="iconbox icon-left">
+                        <a>
+                            <h2 class="iconbox-title">{LANG_PRICE} {L_GUMBO_MEMBERS}</h2>
+                            <p>&#8364;{PRICE_MEMBER}</p>
+                            <div class="arrow-box-hover"></div>
+                        </a>
+                    </div>
+                </div>
+                <!-- ENDIF -->
+
+                <!-- IF PRICE > 0 -->
+                <div class="one-fourth">
+                    <div class="iconbox icon-left">
+                        <a>
+                            <h2 class="iconbox-title">{LANG_PRICE} {LANG_NON_MEMBERS}</h2>
+                            <p>&#8364;{PRICE}</p>
+                            <div class="arrow-box-hover"></div>
+                        </a>
+                    </div>
+                </div>
+                <!-- ENDIF --> 
+
+                <div class="one-fourth">
+                    <div class="iconbox icon-left">
+                        <a>
+                            <h2 class="iconbox-title">{LANG_DATE}</h2>
+                            <p> {START_DATE_TIME} {LANG_TILL} {END_DATE_TIME}</p>
+                            <div class="arrow-box-hover"></div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="one-fourth">
+                    <div class="iconbox icon-left">
+                        <a>
+                            <h2 class="iconbox-title">{LANG_LOCATION}</h2>
+                            <p> {LOCATION}</p>
+                            <div class="arrow-box-hover"></div>
+                        </a>
+                    </div>
+                </div>
+
+               
+                <div class="clear full-screen"></div>
+ 
+                <!-- begin entry body -->
+                <div class="entry-body full-screen">
+                     <!-- begin entry date -->
+                    <div class="entry-date">
+                        <div class="entry-day">{START_DAY}</div>
+                        <div class="entry-month">{START_MONTH}</div>   
+                    </div>
+                    <!-- end entry date -->
+                    	
+                    <!-- begin entry meta -->
+                    <div class="entry-meta">
+                    	<span class="author"><a href="#">{COMMISSION}</a></span> 
+                    </div>
+                    <!-- end entry meta -->
+                    
+                    <!-- begin entry content -->
+                    <div class="entry-content">
+                        <p>{DESCRIPTION}</p>
+                    </div>
+                    <!-- end entry content -->
+                    
+                    <!-- begin author info -->
+                    <!-- IF USER_ENROLLED_STATUS -->
+                    <!-- IF COMMENT_SAVED -->
+                    <div class="notification-box notification-box-success">
+                        <p>{LANG_SAVED}</p>
+                        <a href="#" class="notification-close notification-close-success">x</a>
+                    </div>
+                    <!-- ENDIF -->
+                    <div class="iconbox content-form">
+                            <a> 
+                                <textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea>
+                                
+                                <div class="full-screen clear-10px"> </div>
+
+                                <input class="button" type="submit" value="{LANG_SAVE_COMMENT}" />
+                        </a>
+                     
+                    </div>
+                    <!-- ENDIF -->
+                    <!-- end author info -->
+                </div>
+                <!-- end entry body -->
+
+            </article>
+            <!-- end article -->
+
+        </section>
+        <!-- end main content -->
+        
+        <!-- begin sidebar -->
+        <aside id="sidebar" class="one-fourth column-last">
+            <!-- IF IS_MANAGER -->
+            <div class="widget">
+                <h2>{EVENT_MANAGEMENT}</h2>
+                <a class="button black" href="{SUBSCRIBE_URL}">{OVERVIEW_NAME}</a>
+                <div class="clear-10px"></div>
+
+                <a class="button black" href="{OVERVIEW_URL}">{SUBSCRIBE_NAME}</a>
+                <div class="clear-10px"></div>
+                <!-- IF IS_PAST -->
+                <a class="button black" href="{RECYLCLE_URL}">{RECYLCLE_NAME}</a>
+                <!-- ELSE -->
+                <a class="button black" href="{EDIT_URL}">{EDIT_NAME}</a>
+                <!-- ENDIF -->
+            </div>
+            <!-- ENDIF -->
+
+            <div class="widget">
+                <h2>{LANG_ENROLLS}</h2>
+                <!-- IF USERS_ENROLLED_CHECK -->
+                <p>{LANG_ENROLL_AMOUNT}: {USERS_ENROLLED_AMOUNT}</p>
+                <!-- ENDIF -->
+                <p>{LANG_SIGN_UPS_LEFT}: {U_SIGN_UPS_LEFT}</p>
+
+            </div>
+
+            <!-- IF USERS_ENROLLED_CHECK && .users_enrolled > 0 -->
+            <div class="widget">    
+                <div class="toggles-wrap">
+                    <!-- begin toggle -->
+                    <div data-id="<!-- IF .users_enrolled < 15 -->open<!-- ELSE -->closed<!-- ENDIF -->" class="toggle">
+                        <span class="toggle-title">{LANG_ENROLLS}</span>
+                        <div class="toggle-inner">
+                            <ul class="menu">   
+                        <!-- BEGIN users_enrolled -->
+                           <li><a href="{users_enrolled.USER_LINK}">{users_enrolled.USER_NAME}</a></li>
+                        <!-- END users_enrolled1 -->
+                    </ul>
+                        </div>
+                    </div>
+                    <!-- end toggle -->
+                </div>
+
+            </div>
+            <!-- ENDIF -->
+        </aside>
+        <!-- end sidebar -->
+    </div>   
+    </form> 
+    </section>
+    <!-- end content -->
+
+<!-- INCLUDE overall_footer.html -->

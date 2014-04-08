@@ -101,7 +101,7 @@ TABLE OF CONTENTS
 	display: inline-block;	
 	cursor: pointer;
 	line-height: normal;
-	margin: 0 10px 20px 0;
+	margin: 0 10px 0px 0;
 	border: none; 
 	border-radius: 3px;
 	color: #fff !important;
@@ -682,9 +682,16 @@ pre {
 	display: inline;	
 }
 
-.infobox .button {
-	float: right;
-	margin: 0 0 5px 20px;
+.infobox .left {
+	float: left;	
+}
+
+.infobox .right {
+	float: right;	
+}
+
+.infobox .button {	
+	margin: 0 20px 5px 0;
 }
 
 .infobox .mobile-button {
@@ -692,8 +699,10 @@ pre {
 }
 
 .infobox *:last-child {
-	margin-bottom: 0;	
+	margin-bottom: 0px;	
 }
+
+
 
 /* ---------------------------------------------------------------------- */
 /* Images

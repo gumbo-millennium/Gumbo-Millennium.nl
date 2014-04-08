@@ -1,0 +1,60 @@
+<!-- INCLUDE overall_header.html -->
+	<!-- begin content -->
+    <section id="content">
+    	<div class="container clearfix">
+    	<!-- begin main content -->
+        <section id="main" class="blog-entry-list full-screen" on>
+        <!-- BEGIN activity -->
+            <article class="entry clearfix">
+            	<!-- IF .activity.imgs -->
+	            	<!-- IF .activity.imgs > 1 -->
+		            	<!-- begin entry slider -->
+		                <div class="entry-slider">
+		                    <div id="flexslider-portfolio-item" class="flex-container">
+		                        <div class="flexslider">
+		                            <ul class="slides">
+		                            	<!-- BEGIN imgs -->
+		                                <li><a class="entry-image image-block link-overlay" href="{activity.ACT_LINK}" title="{activity.NAME}"><span class="overlay"></span><img src="{activity.imgs.URL}" alt="{activity.NAME}"></a></li>
+		                                <!-- END imgs -->
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </div>	
+		                <!-- end entry slider -->
+	            	<!-- ELSE -->
+		            	<!-- BEGIN imgs -->
+		            		<a class="entry-image image-block link-overlay" href="{activity.ACT_LINK}" title="{activity.NAME}"><span class="overlay"></span><img src="{activity.imgs.URL}" alt="{activity.NAME}"></a>
+		            	<!-- END imgs -->
+	            	<!-- ENDIF -->
+            	<!-- ENDIF -->
+            	
+            	<div class="entry-date">
+                    <div class="entry-day">{activity.START_DAY}</div>
+                    <div class="entry-month">{activity.START_MONTH}</div>   
+                </div>
+                <div class="entry-body  <!-- IF activity.READED == FALSE --> introbox <!-- ENDIF -->">
+                    <h2 class="entry-title"><a href="{activity.ACT_LINK}">{activity.NAME}</a></h2>
+                    <div class="entry-meta">
+                    	<span class="author"><a href="{activity.ACT_LINK}">{activity.COMMISSION}</a></span> 
+                        <span class="category"><a href="{activity.ACT_LINK}">{activity.START_DATE_TIME}</a></span>
+                        <span class="multi-user"><a href="{activity.ACT_LINK}">{activity.ENROLLED}</a></span>
+                        <!-- IF activity.READED == FALSE -->
+                        	<img src="{T_IMAGESET_PATH}/ribbon-new.png" alt="New">
+                        <!-- ENDIF -->
+                    </div>
+                    <div class="entry-content">
+                        <p>{activity.PREVIEW}</p>
+                        <div class="clear-20px"></div>
+                        <a href="{activity.ACT_LINK}" class="button colored">{LANG_GO_TO_EVENT}</a>
+                    </div>
+                </div>
+            </article>
+        <!-- END activity -->
+            
+        </section>
+        <!-- end main content -->
+    </div>    
+    </section>
+    <!-- end content --> 
+
+<!-- INCLUDE overall_footer.html -->

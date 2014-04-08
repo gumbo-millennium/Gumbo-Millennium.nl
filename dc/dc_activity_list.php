@@ -15,6 +15,11 @@ $auth->acl($user->data);
 $user->setup('mods/dc_activity');
 global $db;
 
+if (!$auth->acl_get('u_list_activities'))
+{
+     trigger_error('NOT_AUTHORISED');
+}
+
 //check if user readed 
 $activity_controller = new activities_handler();
 
@@ -42,11 +47,22 @@ if(($full_list = $activity_controller->get_user_activities( intval($user->data['
 			'NAME'    						=> $activity->getName(),
 			'ACT_LINK'   				=>  append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
 			'COMMISSION'    			=>  $group_name_ary[$activity->getCommission()],
-			'START_DATE_TIME' 	=>  $user->format_date( $activity->getStartDatetime()->getTimestamp()),
+			'START_DAY' 				=>  $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'j'),
+			'START_MONTH' 				=>  $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'M'),
+			'START_DATE_TIME' 			=>  $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 			'ENROLLED'  				=>  $activity->getAmountEnrolledUser(),
-			'READED'						=> 	((intval($user->data['user_id']) == 1 ) ? TRUE : $activity->get_read(intval($user->data['user_id']))), 	
-			'S_ROW_COUNT'    	=>  $row_count,
+			'READED'					=> 	((intval($user->data['user_id']) == 1 ) ? TRUE : $activity->get_read(intval($user->data['user_id']))), 	
+			'PREVIEW'					=> 	$activity->getDescription_preview(), 	
+			'S_ROW_COUNT'    			=>  $row_count,
 		));
+
+		foreach (get_images_data($activity->getDescription_raw(), $activity->getUID(), FALSE) as $img_id => $img_data)
+	    {
+	        $template->assign_block_vars('activity.imgs', array(
+	            'URL'        => $img_data["URL"]
+	        ));
+	    }
+
 		$row_count++;
 	}
 }else{
@@ -54,7 +70,7 @@ if(($full_list = $activity_controller->get_user_activities( intval($user->data['
 }	
 
 // some additional words for translation
-
+$template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx));
 $template->assign_var('URL_ICAL', $phpbb_root_path . 'dc/ical.' . $phpEx .'?id='.$user->data['user_id']);
 $template->assign_var('LANG_ICAL', $user->lang['DC_ACT_LANG_ICAL']);
 $template->assign_var('LANG_ICAL_EXPLAIN', $user->lang['DC_ACT_LANG_ICAL_EXPLAIN']);
@@ -72,14 +88,14 @@ $template->assign_var('LANG_AMOUNT', $user->lang['AMOUNT']);
 $template->assign_var('LANG_PAID', strtolower($user->lang['PAID']));
 $template->assign_var('LANG_CANCEL', $user->lang['CANCEL']);
 $template->assign_var('LANG_SAVED', $user->lang['SAVED']);
-$template->assign_var('LANG_TO', strtolower($user->lang['TO']));
+$template->assign_var('LANG_GO_TO_EVENT', $user->lang['DC_ACT_GO_TO']);
 
 page_header($user->lang['DC_ACT_LIST']);
 // set template
 
 $template->assign_block_vars('navlinks', array(
 	'FORUM_NAME'         => $user->lang['DC_ACT_LIST'], //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
-	'U_VIEW_FORUM'      	=> append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.
+	'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.
 );
 
 $template->set_filenames(array(

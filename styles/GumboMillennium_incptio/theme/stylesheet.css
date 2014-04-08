@@ -27,8 +27,8 @@ Author URI: http://www.ixtendo.com
 @import url('css/smoothness/jquery-ui-1.10.1.custom.min.css');
  
 @import url('css/shortcodes.css');
-
-  
+       
+       
          
    
 /* ---------------------------------------------------------------------- */
@@ -103,20 +103,20 @@ body.boxed {
 
 iframe, video, audio {
 	display: block;	
-}
+} 
 
 /*img,*/ embed, object, video { /* Note: keeping IMG here will cause problems if you're using foreground images as sprites. */
 	max-width: 100%;
-}
+} 
 
-video {
+video {   
 	width: 100%;
     height: auto;
 }
-
+ 
 /* Clearfix */
-
-.clear {
+   
+.clear { 
 	clear: both;
 	display: block;
 	height: 0;
@@ -125,6 +125,24 @@ video {
 	width: 0;
 }
 
+.clear-20px { 
+	margin-bottom: 20px;
+	clear: both;
+	display: block;
+	height: 0;
+	overflow: hidden; 
+	visibility: hidden;
+	width: 0;
+}
+.clear-10px { 
+	margin-bottom: 10px;
+	clear: both;
+	display: block;
+	height: 0;
+	overflow: hidden; 
+	visibility: hidden;
+	width: 0;
+}
 /* ---------------------------------------------------------------------- */
 /* Containers
 /* ---------------------------------------------------------------------- */
@@ -198,7 +216,7 @@ h6 {
 	line-height: 1.5em; /* 18px */	
 	font-weight: bold;
 }
-
+  
 /* ---------------------------------------------------------------------- */
 /* Links
 /* ---------------------------------------------------------------------- */
@@ -220,14 +238,10 @@ a, a > *,
 a:hover, a > * {
 	color: #333;	
 }
-
+ 
 /* ---------------------------------------------------------------------- */
 /* Text & Content Blocks
 /* ---------------------------------------------------------------------- */
-p {
-	margin-bottom: 20px;
-}
-
 section,
 #page-header {
 	margin-bottom: 20px;
@@ -322,10 +336,6 @@ mark {
 #logo a img {
 	max-width: 100%;
 	display: block;	
-}
-
-#header_mobile_nav{
-    display: block;
 }
  
 #header{
@@ -482,24 +492,24 @@ ul#navlist li a.selected {
 }
 
 #breadcrumbs a {
-	margin: 0 3px;
+	margin: 0 3px; 
 	color: #fff;
 	font-weight: bold;
 }
 
 #breadcrumbs li:last-child {
 	margin-left: 3px;
-}
-
+}               
+          
 /* ---------------------------------------------------------------------- */
 /* Columns
 /* ---------------------------------------------------------------------- */
 .one-half, .one-third, .one-fourth, .one-sixth, .two-thirds, .three-fourths, .full-screen {
 	display: inline;
 	float: left;
-    margin-right: 2%;
-}
-
+    margin-right: 1.5%;
+} 
+    
 .full-screen {
 	width: 99%;	
 	max-width: 920px;
@@ -895,6 +905,9 @@ ul#search-results h2 a strong {
 .entry-image img,
 .entry-slider img {
 	display: block;
+	width: auto; 
+	margin-left: auto; 
+	margin-right: auto;
 }
 
 .entry-slider iframe {
@@ -1147,7 +1160,7 @@ ul.portfolio-grid > li.full-screen {
 .entry-title {
 	margin-bottom: 5px;	
 }
-
+ 
 .entry-title {
 	border: none;
 	padding: 0;
@@ -1179,13 +1192,13 @@ ul.portfolio-grid > li.full-screen {
 }
 
 .blog-entry-list .entry-content {
-	margin-bottom: 30px;	
+	margin-bottom: 10px;	
 }
 
 .blog-entry-list .entry-meta span {
 	background: no-repeat left center;
 	padding-right: 12px;
-	margin-right: 12px;
+	margin-right: 12px; 
 	border-right: 1px solid #ccc;
 }
 
@@ -1198,6 +1211,12 @@ ul.portfolio-grid > li.full-screen {
 .blog-entry-list .entry-meta .author {
 	background-image: url({T_IMAGESET_PATH}/blog/author.png);
 	padding-left: 21px;	
+}
+
+.blog-entry-list .entry-meta .multi-user {
+	background-image: url({T_IMAGESET_PATH}/blog/multi-user.png);
+	padding-left: 21px;	
+	padding-top: 3px;
 }
 
 .blog-entry-list .entry-meta .category {
@@ -1299,6 +1318,10 @@ ul.portfolio-grid > li.full-screen {
 .author-info,
 .author-bio {
 	overflow: hidden;	
+}
+
+.author-bio textarea{
+	margin-bottom: 5px; 
 }
 
 .author-image {
