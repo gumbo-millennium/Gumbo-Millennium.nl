@@ -82,11 +82,12 @@ include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
 if(!defined('DC_ACTIVITY_CLASS')){
 	define("DC_ACTIVITY_CLASS", true); 	// set the id of the Gumbo member group
 	define("MEMBER_GROUP_ID", 9); 		// set the id of the Gumbo member group
-	define("OLD_MEMBERS_GROUP_ID", 10); 	// set the id of the Gumbo bestuur group
-	define("ERE_MEMBERS_GROUP_ID", 25); 	// set the id of the Gumbo bestuur group
+	define("OLD_MEMBERS_GROUP_ID", 10); 	// set the id of the oude lede group
+	define("ERE_MEMBERS_GROUP_ID", 25); 	// set the id of the ere leden group
 	define("AC_GROUP_ID", 14); 		// set the id of the Gumbo activity group
 	define("DC_GROUP_ID", 15); 		// set the id of the Gumbo digitale commisie group
 	define("BESTUUR_GROUP_ID", 13); 	// set the id of the Gumbo bestuur group
+	define("BEGUNSTIGERS_GROUP_ID", 24); 	// set the id of the Begunstigers group
 	define("ADM_GROUP_ID", 5); 		// set the id of the Administrators group
 	define("SEE_ALL_ACTIVITIES_GROUP", serialize( array(ADM_GROUP_ID, BESTUUR_GROUP_ID, DC_GROUP_ID))); // the array of the groups who are allowed the see all the activities
 	
@@ -954,7 +955,11 @@ class activity {
 	
 	// checks what price the user have to pay
 	function calculate_price($user_id){
-		if($this->is_member($user_id) || $this->is_old_member($user_id) || $this->is_ere_member($user_id)){							// check if the user is a member 
+		if(	$this->is_member($user_id) || 
+			$this->is_old_member($user_id) || 
+			$this->is_ere_member($user_id)|| 
+			$this->is_begunstigers_member($user_id)
+		){							// check if the user is a member 
 			$price = $this->price_member;						// set member price
 		}else{
 			$price=$this->price;								// set non member price
@@ -986,6 +991,15 @@ class activity {
 		// get the groups of the user
 		$user_groups = (isset($this->activities_handler)) ? $this->activities_handler->get_user_groups($user_id) : all_user_groups($user_id);
 		if(in_array(ERE_MEMBERS_GROUP_ID, $user_groups))
+			return true;
+		return null;
+	}
+
+	function is_begunstigers_member($user_id){
+	
+		// get the groups of the user
+		$user_groups = (isset($this->activities_handler)) ? $this->activities_handler->get_user_groups($user_id) : all_user_groups($user_id);
+		if(in_array(BEGUNSTIGERS_GROUP_ID, $user_groups))
 			return true;
 		return null;
 	}
@@ -1799,7 +1813,7 @@ class activity {
 
 
 		if(isset($this->readed_users[$user_id])){
-			return $this->readed_users[$user_id];
+			return TRUE;
 		}
 
 		$sql_where_ary = array(
