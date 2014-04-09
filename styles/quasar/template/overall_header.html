@@ -464,11 +464,13 @@ position:absolute; z-index:99; top:40%; right:1%;
 									    <div id="page-header">
 											{ADS_1}
 										    <!-- IF $QUASAR_MENUPOSITION eq 'full' or $QUASAR_MENUPOSITION eq 'fluid' -->
+										   	 <!-- IF not $S_IN_PORTAL or S_DISPLAY_PHPBB_MENU -->
 											    <div class="navbar">
 												    <div class="inner">
 													    <!-- IF not S_IS_BOT and S_USER_LOGGED_IN -->
 														    <ul class="linklist leftside">
 															    <li class="icon-ucp">
+															    	<!-- IF U_PORTAL --><a href="{U_PORTAL}">{L_PORTAL}</a> &#187; <!-- ENDIF -->
 																    <a href="{U_PROFILE}" title="{L_PROFILE}" accesskey="e">{L_PROFILE}</a>
 																	<!-- IF S_DISPLAY_PM --> (<a href="{U_PRIVATEMSGS}">{PRIVATE_MESSAGE_INFO}</a>)<!-- ENDIF -->
 																	<!-- IF S_DISPLAY_SEARCH --> &bull;
@@ -491,6 +493,7 @@ position:absolute; z-index:99; top:40%; right:1%;
 														</ul>
 													</div>
 												</div>
+											 <!-- ENDIF -->
 											<!-- ENDIF -->
 										</div>
 									</div>

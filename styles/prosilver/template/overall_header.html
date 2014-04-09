@@ -123,12 +123,13 @@
 
 			<span class="corners-bottom"><span></span></span></div>
 		</div>
-
+		
+		<!-- IF not $S_IN_PORTAL or S_DISPLAY_PHPBB_MENU -->
 		<div class="navbar">
 			<div class="inner"><span class="corners-top"><span></span></span>
 
 			<ul class="linklist navlinks">
-				<li class="icon-home"><a href="{P_INDEX}" accesskey="p">{L_PORTAL}</a> <strong>&#8249;</strong> <a href="{U_INDEX}" accesskey="h">{L_INDEX}</a> <!-- BEGIN navlinks --> <strong>&#8249;</strong> <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a><!-- END navlinks --></li>
+				<li class="icon-home"><!-- IF U_PORTAL --><a href="{U_PORTAL}">{L_PORTAL}</a> &#187; <!-- ENDIF --><a href="{P_INDEX}" accesskey="p">{L_PORTAL}</a> <strong>&#8249;</strong> <a href="{U_INDEX}" accesskey="h">{L_INDEX}</a> <!-- BEGIN navlinks --> <strong>&#8249;</strong> <a href="{navlinks.U_VIEW_FORUM}">{navlinks.FORUM_NAME}</a><!-- END navlinks --></li>
 
 				<li class="rightside"><a href="#" onclick="fontsizeup(); return false;" onkeypress="return fontsizeup(event);" class="fontsize" title="{L_CHANGE_FONT_SIZE}">{L_CHANGE_FONT_SIZE}</a></li>
 
@@ -164,7 +165,7 @@
 
 			<span class="corners-bottom"><span></span></span></div>
 		</div>
-
+	<!-- ENDIF -->
 	</div>
 
 	<!-- IF ADS_2 -->

@@ -61,7 +61,7 @@ function set_portal_config($config_name, $config_value)
 	}
 
 	$portal_config[$config_name] = $config_value;
-	
+
 	$cache->destroy('portal_config');
 }
 
@@ -410,7 +410,7 @@ function get_sub_taged_string($message, $bbcode_uid, $length)
 	{
 		include($phpbb_root_path . 'includes/trim_message/trim_message.' . $phpEx);
 	}
-	
+
 	if(!class_exists('phpbb_trim_message_bbcodes'))
 	{
 		include($phpbb_root_path . 'includes/trim_message/bbcodes.' . $phpEx);
@@ -527,39 +527,6 @@ function generate_portal_pagination($base_url, $num_items, $per_page, $start_ite
 }
 
 /**
-* Format user date for the Birthday block
-* Note: this function is used as we already added timezones, etc
-*
-* borrowed from Upcoming Birthday Mod
-* @author: lefty
-* changed to work outside session.php by B3P
-* @function: format_dateucb
-*/ 
-
-function format_birthday($date, $format = false)
-{
-	global $user;
-
-	$lang_dates		= $user->lang['datetime'];
-	$format			= (!$format) ? $user->data['user_dateformat'] : $format;
-
-	// Short representation of month in format
-	if ((strpos($format, '\M') === false && strpos($format, 'M') !== false) || (strpos($format, '\r') === false && strpos($format, 'r') !== false))
-	{
-		$lang_dates['May'] = $lang_dates['May_short'];
-	}
-	unset($lang_dates['May_short']);
-
-	// We need to create a UNIX timestamp for date()
-	$day = substr($date, 0, strpos($date, '-'));
-	$month = substr($date, (strpos($date, '-')+1), 2);
-	$year = substr($date, -4);
-	$birthday_time = mktime(0, 0, 0, $month, $day, $year);
-
-	return strtr(@date(str_replace('|', '', $format), $birthday_time), $lang_dates);
-}
-
-/**
 * Check if table exists
 * @copyright (c) 2007 phpBB Group
 *
@@ -590,9 +557,9 @@ function sql_table_exists($table_name)
 function get_portal_tracking_info($fetch_news)
 {
 	global $config, $user;
-	
+
 	$last_read = $topic_ids = $forum_ids = $tracking_info = $rev_forum_ids = array();
-	
+
 	/**
 	* group everything by the forum IDs
 	*/
@@ -604,15 +571,15 @@ function get_portal_tracking_info($fetch_news)
 		$forum_ids[] = $fetch_news[$i]['forum_id'];
 		$rev_forum_ids[$fetch_news[$i]['topic_id']] = $fetch_news[$i]['forum_id']; // the other way round also helps
 	}
-	
+
 	foreach ($tracking_info as $forum_id => $current_forum)
 	{
 		if ($config['load_db_lastread'] && $user->data['is_registered'])
 		{
 			global $db;
-			
+
 			$mark_time = array();
-			
+
 			$sql = 'SELECT topic_id, mark_time
 				FROM ' . TOPICS_TRACK_TABLE . "
 				WHERE user_id = {$user->data['user_id']}
@@ -703,7 +670,7 @@ function get_portal_tracking_info($fetch_news)
 			}
 		}
 	}
-	
+
 	return $last_read;
 }
 
@@ -720,24 +687,24 @@ function get_portal_tracking_info($fetch_news)
 function board3_basic_install($mode = 'install', $purge_modules = true, $u_action = '')
 {
 	global $db, $phpbb_root_path, $phpEx, $cache, $user, $table_prefix, $config;
-	
+
 	// Shouldn't happen but we should check this nonetheless
 	if (!defined('PORTAL_MODULES_TABLE'))
 	{
 		include($phpbb_root_path . 'portal/includes/constants.' . $phpEx);
 	}
-	
+
 	if ($mode == 'install')
 	{
 		$directory = $phpbb_root_path . 'portal/modules/';
-		
+
 		if ($purge_modules)
 		{
 			$sql = 'DELETE FROM ' . PORTAL_MODULES_TABLE;
 			$result = $db->sql_query($sql);
 			$db->sql_freeresult($result);
 		}
-		
+
 		/* 
 		* this is a list of the basic modules that will be installed
 		* module_name => array(module_column, module_order)
@@ -753,7 +720,7 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 			'portal_topposters'		=> array(1, 8),
 			'portal_latest_members'	=> array(1, 9),
 			'portal_link_us'		=> array(1, 10),
-			
+
 			// center column
 			'portal_welcome'		=> array(2, 1),
 			'portal_recent'			=> array(2, 2),
@@ -761,7 +728,7 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 			'portal_news'			=> array(2, 4),
 			'portal_poll'			=> array(2, 5),
 			'portal_whois_online'	=> array(2, 6),
-			
+
 			// right column
 			'portal_user_menu'		=> array(3, 1),
 			'portal_statistics'		=> array(3, 2),
@@ -770,7 +737,7 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 			'portal_latest_bots'	=> array(3, 5),
 			'portal_links'			=> array(3, 6),
 		);
-		
+
 		foreach ($modules_ary as $module_name => $module_data)
 		{			
 			$class_name = $module_name . '_module';
@@ -782,7 +749,7 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 			{
 				trigger_error('CLASS_NOT_FOUND', E_USER_ERROR);
 			}
-			
+
 			$c_class = new $class_name();
 
 			$sql_ary = array(
@@ -801,7 +768,7 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 
 			$c_class->install($db->sql_nextid());
 		}
-		
+
 		// Make sure we get rid of old data
 		$cache->destroy('portal_modules');
 
@@ -824,28 +791,28 @@ function board3_basic_install($mode = 'install', $purge_modules = true, $u_actio
 		$sql = 'DELETE FROM ' . CONFIG_TABLE . ' WHERE config_name ' . $db->sql_like_expression(utf8_clean_string('board3_') . $db->any_char) . '
 					AND ' . $db->sql_in_set('config_name', $skip_entries, true);
 		$db->sql_query($sql);
-		
+
 		return $user->lang['PORTAL_BASIC_UNINSTALL'];
 	}
 }
 
-	
+
 /**
 * check if the entered source file actually exists
 */
 function check_file_src($value, $key, $module_id, $force_error = true)
 {
 	global $db, $phpbb_root_path, $phpEx, $user;
-	
+
 	$error = '';
-	
+
 	// We check if the chosen file is present in all active styles
 	$sql = 'SELECT st.theme_path
 			FROM ' . STYLES_THEME_TABLE . ' st
 				LEFT JOIN ' . STYLES_TABLE . ' s
 					ON (st.theme_id = s.style_id)
 			WHERE s.style_active = 1';
-			
+
 	$result = $db->sql_query($sql);
 	while ($row = $db->sql_fetchrow($result))
 	{
@@ -855,7 +822,7 @@ function check_file_src($value, $key, $module_id, $force_error = true)
 		}
 	}
 	$db->sql_freeresult($result);
-	
+
 	if (!empty($error))
 	{
 		if ($force_error)
@@ -871,4 +838,36 @@ function check_file_src($value, $key, $module_id, $force_error = true)
 	{
 		return false;
 	}
+}
+
+/**
+* Get the groups a user is in
+*
+* @return array Array containing the user's groups
+*/
+function get_user_groups()
+{
+	global $cache, $db, $user;
+
+	$groups_ary = $cache->get('_user_groups_' . $user->data['user_id']);
+
+	if ($groups_ary === false)
+	{
+		// get user's groups
+		$sql = 'SELECT group_id
+				FROM ' . USER_GROUP_TABLE . '
+				WHERE user_id = ' . (int) $user->data['user_id'] . '
+				ORDER BY group_id ASC';
+		$result = $db->sql_query($sql);
+		while($row = $db->sql_fetchrow($result))
+		{
+			$groups_ary[] = $row['group_id'];
+		}
+		$db->sql_freeresult($result);
+
+		// save data in cache for 60 seconds
+		$cache->put('_user_groups_' . $user->data['user_id'], $groups_ary, 60);
+	}
+
+	return $groups_ary;
 }

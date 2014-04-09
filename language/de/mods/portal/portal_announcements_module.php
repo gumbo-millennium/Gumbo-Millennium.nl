@@ -47,7 +47,7 @@ $lang = array_merge($lang, array(
 	'JUMP_NEWEST'					=> 'Zum letzten Beitrag springen',
 	'JUMP_FIRST'					=> 'Zum ersten Beitrag springen',
 	'JUMP_TO_POST'					=> 'Rufe den Beitrag auf',
-	
+
 	// ACP
 	'ACP_PORTAL_ANNOUNCE_SETTINGS'				=> 'Einstellungen für Bekanntmachungen',
 	'ACP_PORTAL_ANNOUNCE_SETTINGS_EXP'		=> 'Hier kannst du die Einstellungen für die Bekanntmachungen ändern.',
@@ -62,8 +62,8 @@ $lang = array_merge($lang, array(
 	'PORTAL_ANNOUNCEMENTS_LENGTH'				=> 'Maximale Länge der Bekanntmachungen',
 	'PORTAL_ANNOUNCEMENTS_LENGTH_EXP'		=> '0 bedeutet unbegrenzt',
 	'PORTAL_GLOBAL_ANNOUNCEMENTS_FORUM'			=> 'Foren der Bekanntmachungen',
-	'PORTAL_GLOBAL_ANNOUNCEMENTS_FORUM_EXP'	=> 'Die ID des Forums, aus welchem die Bekanntmachungen angezeigt werden sollen. Frei lassen, um aus allen Foren anzeigen zu lassen. Falls "Foren aussschließen" auf "Ja" steht, wähle die Foren die du ausschließen willst.<br />Falls "Foren aussschließen" auf "Nein" steht, wähle die Foren die du sehen willst.<br />Wähle mehrere Foren aus/ab, indem du beim Klicken die <samp>Strg</samp>-Taste drückst.',
-	'PORTAL_ANNOUNCEMENTS_FORUM_EXCLUDE'		=> 'Foren aussschließen',
+	'PORTAL_GLOBAL_ANNOUNCEMENTS_FORUM_EXP'	=> 'Die ID des Forums, aus welchem die Bekanntmachungen angezeigt werden sollen. Frei lassen, um aus allen Foren anzeigen zu lassen. Falls "Foren ausschließen" auf "Ja" steht, wähle die Foren die du ausschließen willst.<br />Falls "Foren ausschließen" auf "Nein" steht, wähle die Foren die du sehen willst.<br />Wähle mehrere Foren aus/ab, indem du beim Klicken die <samp>Strg</samp>-Taste drückst.',
+	'PORTAL_ANNOUNCEMENTS_FORUM_EXCLUDE'		=> 'Foren ausschließen',
 	'PORTAL_ANNOUNCEMENTS_FORUM_EXCLUDE_EXP'=> 'Wähle "Ja" wenn du die ausgewählten Foren vom Bekanntmachungen-Block ausschließen willst, und "Nein" wenn du nur die Bekanntmachungen aus den ausgewählten Foren im Bekanntmachungen-Block sehen willst.',
 	'PORTAL_ANNOUNCEMENTS_PERMISSIONS'			=> 'Berechtigungen prüfen anschalten?',
 	'PORTAL_ANNOUNCEMENTS_PERMISSIONS_EXP'	=> 'Berücksichtigt Berechtigungen beim Anzeigen der Bekanntmachungen',

@@ -1,72 +1,8 @@
-<!DOCTYPE HTML>
-<!--[if IE 8]> <html class="ie8 no-js"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-	<!-- begin meta -->
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=8, IE=9, IE=10">
-	<meta name="description" content="">
-	<meta name="keywords" content="">
-	<meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<!-- end meta -->
-	
-	<!-- begin CSS -->
-	<link href="{T_THEME_PATH}/style.css" type="text/css" rel="stylesheet" id="main-style">
-    
-    <!-- Revolution Slider CSS -->
-    <link rel="stylesheet" type="text/css" href="{T_THEME_PATH}/css/fullwidth.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="{T_THEME_PATH}/rs-plugin/css/settings.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="{T_THEME_PATH}/css/rs-custom.css" media="screen">
-    
-	<link href="{T_THEME_PATH}/css/responsive.css" type="text/css" rel="stylesheet">
-	<!--[if IE]> <link href="{T_THEME_PATH}/css/ie.css" type="text/css" rel="stylesheet"> <![endif]-->
-	<link href="{T_TEMPLATE_PATH}/color-style.php" type="text/css" rel="stylesheet" id="color-style">
-    <!-- end CSS -->
-    
-	<!-- begin JS -->
-    <script src="{T_THEME_PATH}/js/jquery-1.8.2.min.js" type="text/javascript"></script> <!-- jQuery -->
-    <script src="{T_THEME_PATH}/js/ie.js" type="text/javascript"></script> <!-- IE detection -->
-    <script src="{T_THEME_PATH}/js/jquery.easing.1.3.js" type="text/javascript"></script> <!-- jQuery easing -->
-	<script src="{T_THEME_PATH}/js/modernizr.custom.js" type="text/javascript"></script> <!-- Modernizr -->
-    <!--[if IE 8]>
-    <script src="{T_THEME_PATH}/js/respond.min.js" type="text/javascript"></script> 
-    <script src="{T_THEME_PATH}/js/selectivizr-min.js" type="text/javascript"></script> 
-    <![endif]--> 
-    <script src="{T_THEME_PATH}/js/ddlevelsmenu.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        ddlevelsmenu.setup("nav", "topbar");
-    </script>
-    <script src="{T_THEME_PATH}/js/tinynav.min.js" type="text/javascript"></script> <!-- tiny nav -->
-    <script src="{T_THEME_PATH}/js/jquery.validate.min.js" type="text/javascript"></script> <!-- form validation -->
-    <script src="{T_THEME_PATH}/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script> <!-- tabs, toggles, accordion -->
-    <script src="{T_THEME_PATH}/js/jquery.flexslider-min.js" type="text/javascript"></script> <!-- slider -->
-    <script src="{T_THEME_PATH}/js/jquery.jcarousel.min.js" type="text/javascript"></script> <!-- carousel -->
-    <script src="{T_THEME_PATH}/js/jquery.ui.totop.min.js" type="text/javascript"></script> <!-- scroll to top -->
-    <script src="{T_THEME_PATH}/js/jquery.fitvids.js" type="text/javascript"></script> <!-- responsive video embeds -->
-    <script src="{T_THEME_PATH}/js/jquery.tweet.js" type="text/javascript"></script> <!-- Twitter widget -->
-    <script src="{T_THEME_PATH}/js/jquery.tipsy.js" type="text/javascript"></script> <!-- tooltips -->
-	<script type="text/javascript" src="{T_THEME_PATH}/rs-plugin/js/jquery.themepunch.plugins.min.js"></script> <!-- swipe gestures -->
-    <script type="text/javascript" src="{T_THEME_PATH}/rs-plugin/js/jquery.themepunch.revolution.min.js"></script> <!-- Revolution Slider -->
-    <script src="{T_THEME_PATH}/js/jquery.fancybox.pack.js" type="text/javascript"></script> <!-- lightbox -->
-    <script src="{T_THEME_PATH}/js/jquery.fancybox-media.js" type="text/javascript"></script> <!-- lightbox -->
-    <script src="{T_THEME_PATH}/js/froogaloop.min.js" type="text/javascript"></script> <!-- video manipulation -->
-    <script src="{T_THEME_PATH}/js/custom.js" type="text/javascript"></script> <!-- jQuery initialization -->
-    <!-- end JS -->
-	
-	<title>Inceptio - Responsive Multi-Purpose Theme</title>
-</head>
- <?php include('settings.php'); ?>
-<body class="boxed">
-<!-- begin container -->
-<div id="wrap">
-	<!-- begin header -->
-	<!-- INCLUDE header.php -->
-    <!-- end header -->
-	
-    <!-- begin slider -->
+<!-- INCLUDE overall_header.html -->
+
+<!-- begin slider -->
     <section id="slider-home">
-        <div class="fullwidthbanner-container">
+        <div class="fullwidthbanner-container jsonly">
             <div class="fullwidthbanner">
                 <ul>
                     <!-- slide 1 -->
@@ -81,7 +17,7 @@
                              data-speed="1000" 
                              data-start="1000" 
                              data-easing="easeOutBack">
-                                A Flexible, Multi-Purpose Theme
+                                Welkom op de S.V. Gumbo Millennium.nl!
                         </div>
                         
                         <div class="tp-caption small black sft"
@@ -90,7 +26,16 @@
                              data-speed="1000"
                              data-start="1500"
                              data-easing="easeOutBack">
-                                Clean look, handy functionality, easy customization
+                                Dubbel L Dubbel N, Dubbel genieten!
+                        </div>
+                        
+                        <div class="tp-caption sfb"
+                             data-x="500"
+                             data-y="0"
+                             data-speed="1000"
+                             data-start="1000"
+                             data-easing="easeOutExpo">
+                                <img src="https://si0.twimg.com/profile_images/446848797/Gumbo.png">
                         </div>
                         
                         <div class="tp-caption sfb"
@@ -99,7 +44,7 @@
                              data-speed="1000"
                              data-start="2000"
                              data-easing="easeOutExpo">
-                                <a href="portfolio.php" class="button colored">Learn More</a>
+                                <div id="filter" class="option-set jsonly"><a href="#gallery" data-filter=".news" class="button colored">Learn More</a></div>
                         </div>
                     </li>
                     
@@ -109,27 +54,40 @@
                         <img src="{T_IMAGESET_PATH}/slider/slides/1920x400/spring-1920x400.png" alt=""> 
                         
                         <!-- captions -->
+                        <div class="tp-caption sfb"
+                             data-x="900"
+                             data-y="101"
+                             data-speed="500"
+                             data-start="750"
+                             data-easing="easeOutExpo">
+                                <a href="portfolio.php" class="button colored">Event</a>
+                        </div>  
+                        
                         <div class="tp-caption big black sfl"
                              data-x="0"
-                             data-y="131"
+                             data-y="101"
                              data-speed="1000" 
                              data-start="1000" 
                              data-easing="easeOutBack">
-                                Fully Responsive &amp; Touch Enabled
+                                Filmavond
                         </div>
                         
                         <div class="tp-caption small white sfr"
                              data-x="0"
-                             data-y="178"
+                             data-y="148"
                              data-speed="1000"
                              data-start="1500"
                              data-easing="easeOutBack">
-                                Inceptio is ready to use on mobile devices, like tablets and phones.
+                                vertrekken we vanuit <span style="font-weight: bold"><span style="font-size: 150%; line-height: 116%;">plaza</span></span> naar lokaal X1.77.Deze keer gaan we Trollhunter.
+                                Iedereen is welkom en het is nog gratiskijken.
+                                een regel  efsefsefsefsef se
+                                een regel asfsdfsfsdfsdfs sf sfsefse
+                                een regel sefsefsfsefsef
                         </div>
                         
                         <div class="tp-caption sfb"
                              data-x="0"
-                             data-y="236"
+                             data-y="290"
                              data-speed="1000"
                              data-start="2000"
                              data-easing="easeOutExpo">
@@ -179,7 +137,7 @@
                                 <iframe src="http://player.vimeo.com/video/58413545?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff" width="460" height="259" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
                         </div>
                     </li>
-                </ul>		
+                </ul>       
            </div>
        </div>
     </section>
@@ -187,270 +145,382 @@
            
     <!-- begin content -->
     <section id="content">
-    	<!-- begin featured content -->
+        <!-- begin featured content -->
         <section>
             <div class="content-featured">
                 <div class="container">
-                    <p>Inceptio is a multi-purpose theme with a clean look, handy functionality and flexible customization possibilities. <a href="portfolio.php">Get Started &rsaquo;</a></p>
+                    <p>Welkom op de website van gumbo millennium <br> Doe nu mee met de intro!</p>
                 </div>
             </div>
         </section>
-        <!-- end featured content -->
-    
-    	<div class="container clearfix">
-        <!-- begin services -->
-        <section>
-        	<div class="one-fourth">
-                <div class="iconbox icon-top">
-                    <a href="services.php#digital-art">
-                    	<div class="iconbox-icon"><img src="{T_IMAGESET_PATH}/icon-boxes/128x128/digital_art_128x128.png" alt="Digital Art"></div>
-                        <h2 class="iconbox-title">Digital Art</h2>
-                        <p>Pellentesque suscipit, mauris id scelerisque sagittis, nisl massa consectetur quam, vitae ultricies justo leo eu elit vestibulum.</p>
-                        <p class="call-to-action"><strong>Save up to $100 instantly</strong></p>
-                        <span class="button">Learn More</span>
-                    	<div class="arrow-box-hover"></div>
-                    </a>
-                </div>
-           </div>
-           
-           <div class="one-fourth">     
-                <div class="iconbox icon-top">
-                    <a href="services.php#vector-art">
-                    	<div class="iconbox-icon"><img src="{T_IMAGESET_PATH}/icon-boxes/128x128/vector_art_128x128.png" alt="Vector Art"></div>
-                        <h2 class="iconbox-title">Vector Art</h2>
-                        <p>Aenean lacinia euismod lectus, non viverra augue lobortis at. Praesent scelerisque nibh nec purus molestie sed hendrerit.</p>
-                        <p class="call-to-action"><strong>All icon bundle at only $99</strong></p>
-                        <span class="button">Learn More</span>
-                    	<div class="arrow-box-hover"></div>
-                    </a>
-                </div>
+     </section>
+     <!-- begin content -->
+     <!-- begin content -->
+    <section id="content">
+        <div class="container clearfix">
+            <!-- begin filter -->
+            <div id="filter" class="option-set jsonly">
+                <span>Snel filter:</span>
+                <ul>
+                    
+                    <li><a href="#" data-filter="*">Alles</a></li>
+                    <li><a class="selected" href="#" data-filter=".start">Home</a></li>
+                    <li><a href="#" data-filter=".news">Resent nieuws</a></li>
+                    <li><a href="#" data-filter=".events">Komende activiteiten</a></li>
+                    <li><a href="#" data-filter=".pictures">Fotos</a></li>
+                    <li><a href="#" data-filter=".topics">Populaire topics</a></li>
+                    <li><a href="#" data-filter=".twitter">Twitter</a></li>
+                </ul>
             </div>
+            <!-- end filter -->
+                
+            <!-- begin gallery -->
+        <ul id="gallery" class="portfolio-grid  clearfix">      
+            <!-- start news -->
             
-           <div class="one-fourth">     
-                <div class="iconbox icon-top">
-                    <a href="services.php#programming">
-                    	<div class="iconbox-icon"><img src="{T_IMAGESET_PATH}/icon-boxes/128x128/programming_128x128.png" alt="Programming"></div>
-                        <h2 class="iconbox-title">Programming</h2>
-                        <p>Integer rutrum vehicula quam nec eleifend. Pellentesque quis pulvinar lorem. Proin pharetra sagittis auctor mauris tristique.</p>
-                        <p class="call-to-action"><strong>Check out our special offer</strong></p>
-                        <span class="button">Learn More</span>
-                    	<div class="arrow-box-hover"></div>
-                    </a>
-                </div>
-            </div>
+           <li class="entry blog-entry-list one-half start news">
+                <article class="clearfix">
+                    <a class="entry-image image-block link-overlay" href="blog-post-image.php" title="Post Title"><span class="overlay"></span><img src="{T_IMAGESET_PATH}/test_imgs/img1.jpg" alt=""></a>
+                     <h2 class="entry-title"><a href="blog-post-image.php">Introductieweek Gumbo Millennium</a></h2>
+                    <blockquote class="speech-bubble">
+                        <div class="quote-content">
+                            <p>De introductieweek komt er weer aan!  
+                                Van 27 augustus t/m 31 augustus. We starten dinsdag om 13:00 uur. Dit sluit mooi aan op de introductie van de opleidingen ICT.
+                                <br>
+                                <br>
+                                Heb jij zin om je studiejaar leuk te beginnen, Zwolle te leren kennen en aankomende medestudenten te ontmoeten? Dan is het leuk als je je inschrijft!
+                                <br>
+                                <br>
+                                Voor maar €40,00 heb je een geweldige week.     
+                                <br>
+                                <br>
+                                Voor meer informatie en inschrijven kijk op:  <a href="http://intro-informatica.nl/">http://intro-informatica.nl/</a></p>
+                            <span class="quote-arrow"></span>
+                        </div>
+                        <div class="quote-meta author-male"><strong>RosiMoss</strong>, Bestuur<br>
+                            <div class="entry-meta">
+                                <span class="category"><a href="#">Nieuws, Openbaar</a></span>
+                                <span class="comments"><a href="#">4 Comments</a></span>
+                            </div>
+                        </div>
+                    </blockquote>
+                    <div class="arrow-box-hover"></div>
+                </article>
+            </li>
             
-            <div class="one-fourth column-last">     
-                <div class="iconbox icon-top">
-                    <a href="services.php#photography">
-                    	<div class="iconbox-icon"><img src="{T_IMAGESET_PATH}/icon-boxes/128x128/photography_128x128.png" alt="Photography"></div>
-                        <h2 class="iconbox-title">Photography</h2>
-                        <p>Mauris pretium libero sit amet erat fringilla ut molestie sem accumsan. Nunc eu nibh diam, quis commodo diam curabitur.</p>
-                        <p class="call-to-action"><strong>Stock photo bundle at only $49</strong></p>
-                        <span class="button">Learn More</span>
-                    	<div class="arrow-box-hover"></div>
-                    </a>
-                </div>
-            </div>
+            <li class="entry blog-entry-list one-half news isotope-hidden" style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate(240px, 0px) scale(0.001, 0.001); opacity: 0;" >
+                <article class="clearfix">
+                     <h2 class="entry-title"><a href="blog-post-image.php">Nieuw GumboPlaza</a></h2>
+                    <blockquote class="speech-bubble">
+                        <div class="quote-content">
+                            <p>We krijgen een nieuwe plek. Namenlijk 1 deurtje opzij. Met meer ramen, directe toegang tot het balkon. Meer in het gangpad (exposure!) en minder buren waar wij last van kunnen hebben   
+                            <br><br>
+                            De NHL gaat donderdag de 4e hun biezen pakken en plaats maken voor ons. Wij moeten er echter die zelfde donderdag nog inzitten.
+                            <br><br>
+                            Dit vraagt om een mega-verhuis-operatie.
+                            <br><br>
+                            Meld je hieronder aan om donderdag de 4e vanaf 14h00 te komen helpen om plaza 1hokje opzij te verplaatsen!
+                            Gratis bier/fris voor de verhuizers is aanwezig.</p>
+                            <span class="quote-arrow"></span>
+                        </div>
+                        <div class="quote-meta author-male"><strong>Leo</strong>, Bestuur<br>
+                            <span class="category"><a href="#">Niews</a>, <a href="#">Openbaar</a></span>
+                            <span class="comments"><a href="#">10 Comments</a></span>
+                        </div>
+                    </blockquote>
+                    <div class="arrow-box-hover"></div>
+                </article>
+            </li>
             
-            <div class="clear"></div>
-        </section>
-        <!-- end services -->
-        
-        <!-- begin process -->
-        <section>
-        	<div class="one-fourth">
-            	<div class="arrowbox arrowbox-first">
-                    <h2 class="arrowbox-title">Planning
-                        <span class="arrowbox-title-arrow-front"></span>
-                    </h2>
-                    <p>Our process begins with a careful planning of each project:</p>
-                    <ul class="green-arrow">
-                        <li><strong>Requirements analysis</strong></li>
-                        <li><strong>Project charter</strong></li>
-                        <li><strong>Site map</strong></li>
-                    </ul>
-                </div>
-            </div>
+            <li class="entry blog-entry-list one-half news isotope-hidden" style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate(240px, 0px) scale(0.001, 0.001); opacity: 0;">
+                <article class="clearfix">
+                     <h2 class="entry-title"><a href="blog-post-image.php">Gumbo-Badjassen te koop</a></h2>
+                    <blockquote class="speech-bubble">
+                        <div class="quote-content">
+                            <p>Ze zijn binnen, en ze moeten natuurlijk mee naar LHW! (en de Toga/badjassen party)
+                            <br>
+                            Ze zijn van hoge kwaliteit katoen, zwart, met grote gouden geborduurde letters op de rug.
+                            </p>
+                            <span class="quote-arrow"></span>
+                        </div>
+                        <div class="quote-meta author-male"><strong>Leo</strong>, Bestuur<br>
+                            <span class="category"><a href="#">Algemeen</a>, <a href="#">Alleen leden</a></span>
+                            <span class="comments"><a href="#">2 Comments</a></span>
+                        </div>
+                    </blockquote>
+                    <div class="arrow-box-hover"></div>
+                </article>
+            </li>
             
-            <div class="one-fourth">
-            	<div class="arrowbox">
-                    <h2 class="arrowbox-title">Design
-                        <span class="arrowbox-title-arrow-back"></span>
-                        <span class="arrowbox-title-arrow-front"></span>
-                    </h2>
-                    <p>We move the planning further into reality in the design stage:</p>
-                    <ul class="green-arrow">
-                        <li><strong>Wireframe planning</strong></li>
-                        <li><strong>Mock-ups creation</strong></li>
-                        <li><strong>Review and approval cycle</strong></li>
-                    </ul>
-                </div>
-            </div>
+            <li class="entry blog-entry-list one-half news isotope-hidden" style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate(240px, 0px) scale(0.001, 0.001); opacity: 0;">
+                <article class="clearfix">
+                    <a class="entry-image image-block link-overlay" href="blog-post-image.php" title="Post Title"><span class="overlay"></span><img src="{T_IMAGESET_PATH}/test_imgs/792361_10151297698357496_169961574_o.jpg" alt=""></a>
+                     <h2 class="entry-title"><a href="blog-post-image.php">Koninginnenach ZHTC</a></h2>
+                    <blockquote class="speech-bubble">
+                        <div class="quote-content">
+                            <p>
+                            Vanaf 17:00 uur is er een barbecue, rond 19:30 gaan we starten met de 90'ties quiz en vanaf 21:00 uur wisselen de ninetiesnummers elkaar af, dus de grootste happyhardcore hits afgewisseld met boy- en girlbands en rock en grunge.
+                            <br>
+                            Voor meer informatie zie ook</p>
+                            <span class="quote-arrow"></span>
+                        </div>
+                        <div class="quote-meta author-male"><strong>emileuitapeldoorn</strong><br>
+                            <span class="category"><a href="#">Studenten vereningen</a>, <a href="#">Openbaar</a></span>
+                            <span class="comments"><a href="#">1 Comment</a></span>
+                        </div>
+                    </blockquote>
+                    <div class="arrow-box-hover"></div>
+                </article>
+            </li>
+                
+            <!-- end news -->
             
-            <div class="one-fourth">
-            	<div class="arrowbox">
-                    <h2 class="arrowbox-title">Development
-                        <span class="arrowbox-title-arrow-back"></span>
-                        <span class="arrowbox-title-arrow-front"></span>
-                    </h2>
-                    <p>Development is the programming work and the content loading:</p>
-                    <ul class="green-arrow">
-                        <li><strong>Build development framework</strong></li>
-                        <li><strong>Code page templates</strong></li>
-                        <li><strong>Fill with content</strong></li>
-                    </ul>
-                </div>
-            </div>
+            <!-- begin events -->       
+            <li class="entry blog-entry-list one-half events start">
+                <article class="clearfix">
+                    <a class="entry-image image-block link-overlay" href="blog-post-image.php" title="Post Title"><span class="overlay"></span><img src="{T_IMAGESET_PATH}/test_imgs/429984_491666247568807_400593166_n.jpg" alt=""></a>
+                    <div class="entry-date">
+                        <div class="entry-day">22</div>
+                        <div class="entry-month">Jun</div>    
+                    </div>
+                    <div class="entry-body">
+                        <h2 class="entry-title"><a href="blog-post-image.php">Koninginnenach ZHTC</a></h2>  
+                        <div class="entry-content">
+                            <p>Hoe kan een jaar beter eindigen dan met een grote barbecue op T5.
+                            <br>
+                            Voor de genen die hier niet mee bekend zijn:<br>
+                            Dit is niet zo maar een BBQ, maar echt een grootschalige. <br>
+                            Het vlees wordt aan geleverd door slagerij Mekers. Je leest het goed, geen dievrieshamburgers voor deze BBQ. <br>
+                            Hierbij zullen ook de XXL Frikadellen weer aanwezig zijn.<br>
+                            Net als voorgaande jaren is het drinken (fris, wijn en bier) volledig bij de prijs inbegrepen (gratis)!<br>
+                            <br>
+                            Uiterlijke in- en uit-schrijf datum is 16-6-2013. (i.v.m. bestelling van het vlees)</p>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="author"><a href="#">Activiteiten commissie</a></span> 
+                            <span class="category"><a href="#">Acitiviteit, Openbaar</a></span>
+                            <span class="comments"><a href="#">10 Comments</a></span>
+                        </div>
+                    </div>
+                    <div class="arrow-box-hover"></div> 
+                </article>
+            </li>
             
-            <div class="one-fourth column-last">
-            	<div class="arrowbox">
-                    <h2 class="arrowbox-title">Quality Control
-                        <span class="arrowbox-title-arrow-back"></span>
-                        <span class="arrowbox-title-arrow-front"></span>
-                    </h2>
-                    <p>The website is put through a rigorous post-production process:</p>
-                    <ul class="green-arrow">
-                        <li><strong>Test planning</strong></li>
-                        <li><strong>Browser testing</strong></li>
-                        <li><strong>Process improvement</strong></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="clear"></div>
-        </section>
-        <!-- end process -->
-        
-        <!-- begin video -->
-        <section class="two-thirds">
-        	<h2>Featured Video</h2>
-            <div class="one-half">
-            	<div class="entry-video">
-                	<iframe width="460" height="259" src="http://www.youtube.com/embed/LzTMRjufvqk?rel=0" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
             
-            <p>Curabitur risus justo, scelerisque vitae tristique nec, sodales quis orci. Cras sapien enim, adipiscing et varius sed, molestie quis nisl. Donec a blandit nunc. Praesent tincidunt, sapien sed consequat facilisis.</p>
-            <ul class="green-check indent">
-                <li>Maecenas porttitor accumsan magna.</li>
-                <li>Mauris tempus blandit magna.</li>
-                <li>Quisque mattis tincidunt fringilla.</li>
-            </ul>  
-        </section>
-        <!-- end video -->
-        
-        <!-- begin featured projects -->
-        <section class="one-third column-last">
-        	<h2>Featured Projects</h2>
-            <ul class="thumbs clearfix">
-            	<li><a href="portfolio-item-image.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/canoes-on-moraine-lake-70x70.png" alt=""></a></li>
-                <li><a href="portfolio-item-slider.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/spring-70x70.png" alt=""></a></li>
-                <li><a href="portfolio-item-image.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/sailing-70x70.png" alt=""></a></li>
-                <li><a href="portfolio-item-slider.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/sunrise-70x70.png" alt=""></a></li>
-                <li><a href="portfolio-item-image.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/southern-alps-70x70.png" alt=""></a></li>
-                <li><a href="portfolio-item-video.php" title="Project Title"><img src="{T_IMAGESET_PATH}/entries/70x70/the-golden-sea-bali-70x70.png" alt=""></a></li>
-            </ul>
-        </section>
-        <!-- end featured projects -->
-        
-    	</div>   
+            <li class="entry blog-entry-list one-half events isotope-hidden" style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate(240px, 0px) scale(0.001, 0.001); opacity: 0;">
+                <article class="clearfix">
+                    <a class="entry-image image-block link-overlay" href="blog-post-image.php" title="Post Title"><span class="overlay"></span><img src="{T_IMAGESET_PATH}/test_imgs/792361_10151297698357496_169961574_o.jpg" alt=""></a>
+                    <div class="entry-date">
+                        <div class="entry-day">11</div>
+                        <div class="entry-month">Mar</div>   
+                    </div>
+                    <div class="entry-body">
+                        <h2 class="entry-title"><a href="blog-post-image.php">Koninginnenach ZHTC</a></h2>
+                        
+                        <div class="entry-content">
+                            <p>
+                            Vanaf 17:00 uur is er een barbecue, rond 19:30 gaan we starten met de 90'ties quiz en vanaf 21:00 uur wisselen de ninetiesnummers elkaar af, dus de grootste happyhardcore hits afgewisseld met boy- en girlbands en rock en grunge.
+                            <br>
+                            Voor meer informatie zie ook</p>
+                        </div>
+                    </div>
+                    <div class="entry-meta">
+                            <span class="author"><a href="#">emileuitapeldoorn</a></span> 
+                            <span class="category"><a href="#">Studenten vereningen</a>, <a href="#">Openbaar</a></span>
+                            <span class="comments"><a href="#">1 Comment</a></span>
+                        </div>
+                    <div class="arrow-box-hover"></div> 
+                </article>
+            </li>
+            <!-- end events -->
+            <!-- begin poll -->
+            <li class="entry one-fourth start">
+                <section>
+                        <div class="arrowbox arrowbox-first">
+                            <h2 class="arrowbox-title">Poll
+                                <span class="arrowbox-title-arrow-front"></span>
+                            </h2>
+                            <p>Our process begins with a careful planning of each project:</p>
+                            <ul class="green-arrow">
+                                <li><strong>Requirements analysis</strong></li>
+                                <li><strong>Project charter</strong></li>
+                                <li><strong>Site map</strong></li>
+                            </ul>
+                        </div>
+                    <div class="clear"></div>
+                </section>
+            </li>
+            <!-- end poll -->
+            <!-- begin last posts -->
+            <li class="entry one-fourth start">
+                <section>
+                        <div class="arrowbox arrowbox-first">
+                            <h2 class="arrowbox-title">Latest posts
+                                <span class="arrowbox-title-arrow-front"></span>
+                            </h2>
+                            <p>Our process begins with a careful planning of each project:</p>
+                            <ul class="arrow">
+                                <li><strong>Requirements analysis</strong></li>
+                                <li><strong>Project charter</strong></li>
+                                <li><strong>Site map</strong></li>
+                            </ul>
+                        </div>
+                    <div class="clear"></div>
+                </section>
+            </li>
+            <!-- end last posts -->
+            <!-- begin resent posts -->
+            <li class="entry one-fourth start">
+                <section>
+                        <div class="arrowbox arrowbox-first">
+                            <h2 class="arrowbox-title">resent posts
+                                <span class="arrowbox-title-arrow-front"></span>
+                            </h2>
+                            <p>Our process begins with a careful planning of each project:</p>
+                            <ul class="arrow">
+                                <li><strong>Requirements analysis</strong></li>
+                                <li><strong>Project charter</strong></li>
+                                <li><strong>Site map</strong></li>
+                            </ul>
+                        </div>
+                    <div class="clear"></div>
+                </section>
+            </li>
+            <!-- end resent posts -->
+            <!-- begin twitter -->
+            <li class="entry one-fourth start">
+                <section>
+                        <div class="arrowbox arrowbox-first">
+                            <h2 class="arrowbox-title">Latest Tweets
+                                <span class="arrowbox-title-arrow-front"></span>
+                            </h2>
+                            <p>Our process begins with a careful planning of each project:</p>
+                            <ul class="arrow">
+                                <li><strong>Requirements analysis</strong></li>
+                                <li><strong>Project charter</strong></li>
+                                <li><strong>Site map</strong></li>
+                            </ul>
+                        </div>
+                    <div class="clear"></div>
+                </section>
+            </li>
+            <!-- end twitter -->
+            <!-- Begin gumbo cam -->
+            <li class="entry one-half start">
+                <section>
+                <div class="tabs">
+                        <ul class="tabs-nav clearfix">
+                            <li><a href="#tab-1">Plaza cam</a></li>
+                            <li><a href="#tab-2">Koffie cam</a></li>
+                        </ul>
+                                            
+                        <div id="tab-1" class="tab">
+                            <a class="entry-image inner-caption link-overlay lightbox" href="http://www.gumbocam.nl/capture1.jpg?1379583005505" title="Gumbo Millennium Plaza webcam">
+                                <span class="overlay"></span>
+                                <img src="http://www.gumbocam.nl/capture1.jpg?1379583005505" alt="">
+                                <div><p>De thuis basis van alle leden van Gumbo Millennium</p></div>
+                            </a>
+                        </div>
+                        
+                        <div id="tab-2" class="tab">
+                            <a class="entry-image inner-caption link-overlay lightbox" href="http://www.gumbocam.nl/capture2.jpg?1379583218583" title="Gumbo Millennium koffie webcam">
+                                <span class="overlay"></span>
+                                <img src="http://www.gumbocam.nl/capture2.jpg?1379583218583" alt="">
+                                <div><p>Hoeveel koffie is er nog?</p></div>
+                            </a>
+                        </div>
+                    </div>
+            </section>
+            </li>
+            <!-- end gumbo cam -->  
+            <!-- Begin gumbo cam -->
+            <li class="entry one-half start">
+                <section>
+                    <h2>Poll</h2>
+                    dit is de poll
+                    <p></p>
+                </section>
+            </li>
+            <!-- end gumbo cam -->
+            <!-- Begin fotos-->
+            <li class="entry full-screen start pictures">
+                <section id="content">
+                    <div class="container clearfix">
+                        <section>
+                            <h2>Images</h2>
+                            <div class="one-fourth">
+                                <h3>Simple</h3>
+                                <div class="entry-image">
+                                    <img src="{T_IMAGESET_PATH}/entries/220x140/canoes-on-moraine-lake-220x140.png" alt="" title="Image Title">
+                                </div>
+                            </div>
+                            
+                            <div class="one-fourth">
+                                <h3>With Caption</h3>
+                                <div class="caption">
+                                    <div class="entry-image"><img src="{T_IMAGESET_PATH}/entries/220x140/spring-220x140.png" alt="" title="Image Title"></div>
+                                    <p class="caption-text">Caption Text</p>
+                                </div>
+                            </div>
+                            
+                            <div class="one-fourth">
+                                <h3>With Lightbox</h3>
+                                <a class="entry-image lightbox" href="{T_IMAGESET_PATH}/entries/full-size/sailing.jpg" title="Image Title"><span class="overlay zoom"></span><img src="{T_IMAGESET_PATH}/entries/220x140/sailing-220x140.png" alt=""></a>
+                            </div>
+                            
+                            <div class="one-fourth column-last">
+                                <h3>With Lightbox Gallery</h3>
+                                <div>
+                                    <a class="entry-image lightbox" rel="sunrise" href="{T_IMAGESET_PATH}/entries/full-size/sunrise.jpg" title="Project Title"><span class="overlay zoom"></span><img src="{T_IMAGESET_PATH}/entries/220x140/sunrise-220x140.png" alt=""></a>  
+                                    <a class="entry-image lightbox invisible" rel="sunrise" href="{T_IMAGESET_PATH}/entries/full-size/southern-alps.jpg" title="Project Title"><span class="overlay zoom"></span><img src="{T_IMAGESET_PATH}/entries/220x140/southern-alps-220x140.png" alt=""></a>
+                                    <a class="entry-image lightbox invisible" rel="sunrise" href="{T_IMAGESET_PATH}/entries/full-size/canoes-on-moraine-lake.jpg" title="Project Title"><span class="overlay zoom"></span><img src="{T_IMAGESET_PATH}/entries/220x140/canoes-on-moraine-lake-220x140.png" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="one-fourth">
+                                <h3>With Link</h3>
+                                <a class="entry-image link-overlay" href="#" title="Image Title">
+                                    <span class="overlay"></span>
+                                    <img src="{T_IMAGESET_PATH}/entries/220x140/sailing-220x140.png" alt="">
+                                </a>
+                            </div>
+                            <div class="one-fourth">
+                                <h3>With Caption &amp; Link</h3>
+                                <div class="caption">
+                                    <a class="entry-image link-overlay" href="#" title="Image Title">
+                                        <span class="overlay"></span>
+                                        <img src="{T_IMAGESET_PATH}/entries/220x140/grand-canyon-aerials-220x140.png" alt="">
+                                    </a>
+                                    <p class="caption-text">Caption Text</p>
+                                </div>
+                            </div>
+                            <div class="one-fourth">
+                                <h3>With Inner Caption</h3>
+                                <a class="entry-image inner-caption" href="#" title="Image Title">
+                                    <img src="{T_IMAGESET_PATH}/entries/220x140/the-golden-sea-bali-220x140.png" alt="">
+                                    <div><p>Image with Inner Caption</p></div>
+                                </a>
+                            </div>
+                            <div class="one-fourth column-last">
+                                <h3>With Inner Caption &amp; Link</h3>
+                                <a class="entry-image inner-caption link-overlay" href="#" title="Image Title">
+                                    <span class="overlay"></span>
+                                    <img src="{T_IMAGESET_PATH}/entries/220x140/canoes-on-moraine-lake-220x140.png" alt="">
+                                    <div><p>Image with Inner Caption &amp; Link</p></div>
+                                </a>
+                            </div>
+                        </section>
+                    </div>    
+                </section>
+            </li>
+            
+            <!-- end fotos-->
+            
+        </ul>
+        <!-- end gallery -->
+    </div>    
     </section>
-    <!-- end content -->  
-    
-    <!-- begin footer -->
-	<footer id="footer">
-    	<!-- begin footer featured -->
-        <div id="footer-featured">
-        	<div class="container clearfix">
-                <div class="three-fourths">
-                    <h1><a href="#" title="Download (ZIP File) Questionnaire"><strong>Convinced</strong>? Get an <strong>estimate</strong>.</a></h1>
-                    <p>Our process begins with knowing you and your visitors inside out. Download, complete and return our <a href="#" title="Download (ZIP File) Questionnaire">questionnaire</a>. We will get back to you with a quotation within a week.</p>
-                </div>
-                <div class="one-fourth column-last">
-                    <a class="entry-image" href="#" title="Download (ZIP File) Questionnaire"><img src="{T_IMAGESET_PATH}/mail.png" alt="Mail"></a>
-                </div>
-            </div>
-        </div>
-        <!-- end footer featured -->	
-        
-        <!-- begin footer top -->
-        <div id="footer-top">
-        	<div class="container clearfix">
-                <div class="one-fourth">
-                    <div class="widget">
-                        <h3>Text Widget</h3>
-                        <p>Cras pretium elit quis nunc congue ut sollicitudin ante mattis. Nam cursus tellus vel libero pretium ut sagittis felis.</p>
-						<p>Etiam laoreet nisl a dolor convallis euismod. Nulla felis velit, elementum ut fringilla ac, tincidunt eu justo.</p>
-                    </div>
-                </div>
-                <div class="one-fourth">
-                    <div class="widget twitter-widget">
-                        <h3>Latest Tweets</h3>
-                        <div class="tweet"></div>
-                    </div>
-                </div>
-                <div class="one-fourth">
-                    <div class="widget newsletter">
-                        <h3>Newsletter</h3>
-                        <p>Subscribe to our email newsletter for useful tips and valuable resources sent out every second Monday.</p>
-                        <div id="newsletter-notification-box-success" class="notification-box notification-box-success" style="display: none;">
-                            <p>You have successfully subscribed to our newsletter. Look for the confirmation email.</p>
-                            <a href="#" class="notification-close notification-close-success">x</a>
-                        </div>
-        
-                        <div id="newsletter-notification-box-error" class="notification-box notification-box-error" style="display: none;">
-                            <p>Your email address couldn't be subscribed because a server error occurred. Please try again later.</p>
-                            <a href="#" class="notification-close notification-close-error">x</a>
-                        </div>
-                        <form id="newsletter-form" class="content-form" action="#" method="post">
-                            <input id="newsletter" type="email" name="newsletter" placeholder="Enter your email address &hellip;" class="required">
-                            <input id="subscribe" class="button" type="submit" name="subscribe" value="Subscribe">
-                        </form>
-                    </div>
-                </div>
-                <div class="one-fourth column-last">
-                    <div class="widget contact-info">
-                        <h3>Contact Info</h3>
-                        <div>
-                            <p class="address"><strong>Address:</strong> 123 Street, City, Country</p>
-                            <p class="phone"><strong>Phone:</strong> (123) 456-7890</p>
-                            <p class="fax"><strong>Fax:</strong> (123) 456-7890</p>
-                            <p class="email"><strong>Email:</strong> <a href="mailto:office@company.com">office@company.com</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end footer top -->
+    <!-- end content -->
+         
 
-        <!-- begin footer bottom -->
-        <div id="footer-bottom">
-        	<div class="container clearfix">
-                <div class="one-half">
-                    <p>Copyright &copy; 2013 Inceptio. Created by <a href="http://themeforest.net/user/ixtendo">Ixtendo</a>.</p>
-                </div>
-        
-                <div class="one-half column-last">
-                    <ul class="social-links">
-                        <li class="twitter"><a href="#" title="Twitter" target="_blank">Twitter</a></li>
-                        <li class="facebook"><a href="#" title="Facebook" target="_blank">Facebook</a></li>
-                        <li class="google-plus"><a href="#" title="Google+" target="_blank">Google+</a></li>
-                        <li class="linkedin"><a href="#" title="LinkedIn" target="_blank">LinkedIn</a></li>
-                        <li class="vimeo"><a href="#" title="Vimeo" target="_blank">Vimeo</a></li>
-                        <li class="youtube"><a href="#" title="YouTube" target="_blank">YouTube</a></li>
-                        <li class="skype"><a href="#" title="Skype" target="_blank">Skype</a></li>
-                        <li class="digg"><a href="#" title="Digg" target="_blank">Digg</a></li>
-                        <li class="delicious"><a href="#" title="Delicious" target="_blank">Delicious</a></li>
-                        <li class="tumbler"><a href="#" title="Tumbler" target="_blank">Tumbler</a></li>
-                        <li class="dribbble"><a href="#" title="Dribbble" target="_blank">Dribbble</a></li>
-                        <li class="stumbleupon"><a href="#" title="StumbleUpon" target="_blank">StumbleUpon</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- end footer bottom -->
-	</footer>
-	<!-- end footer -->  
-</div>
-<!-- end container -->
-</body>
-</html>
+<!-- INCLUDE overall_footer.html -->

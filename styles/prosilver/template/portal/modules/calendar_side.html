@@ -44,9 +44,10 @@
 					<!-- IF minical.cur_events.EVENT_URL --><a href="{minical.cur_events.EVENT_URL}" title="{minical.cur_events.EVENT_TITLE}" <!-- IF minical.cur_events.EVENT_URL_NEW_WINDOW -->onclick="window.open('{minical.cur_events.EVENT_URL}'); return false;"<!-- ENDIF -->><!-- ENDIF -->
 					<span style="font-weight: bold;">{minical.cur_events.EVENT_TITLE}:</span><br />
 					<!-- IF minical.cur_events.ALL_DAY -->{L_EVENT_START}:&nbsp;{minical.cur_events.START_TIME}<br />{L_EVENT_ALL_DAY}<br />
-					<!-- ELSEIF not minical.cur_events.ALL_DAY and minical.cur_events.END_TIME -->{L_EVENT_START}:&nbsp;{minical.cur_events.START_TIME}<br />
+					<!-- ELSEIF not minical.cur_events.ALL_DAY and minical.cur_events.END_TIME -->{L_EVENT_START}:&nbsp;{minical.cur_events.START_TIME}<br />{L_EVENT_END}:&nbsp;{minical.cur_events.END_TIME}<br />
 					<!-- ELSE -->{L_EVENT_ALL_DAY}<br />
 					<!-- ENDIF -->
+					<!-- IF minical.cur_events.EVENT_DESC --><span style="font-style: italic;">{minical.cur_events.EVENT_DESC}</span><!-- ENDIF -->
 					<!-- IF minical.cur_events.EVENT_URL --></a><!-- ENDIF -->
 				</dt>
 			</dl>
@@ -60,35 +61,28 @@
 	<div class="menutitle" style="font: bold 12px 'Trebuchet MS','Lucida Grande',Arial,sans-serif; text-decoration: underline;">{L_UPCOMING_EVENTS}:</div>
 	<ul class="portal-events">
 		<!-- BEGIN upcoming_events -->
-		
+
 		<li class="row">
 			<dl class="icon">
 				<dt style="width: 100%; padding-left: 0px; padding-bottom: 5px;">
 					<!-- IF minical.upcoming_events.EVENT_URL --><a href="{minical.upcoming_events.EVENT_URL}" title="{minical.upcoming_events.EVENT_TITLE}" <!-- IF minical.upcoming_events.EVENT_URL_NEW_WINDOW -->onclick="window.open('{minical.upcoming_events.EVENT_URL}'); return false;"<!-- ENDIF -->><!-- ENDIF -->
 					<span style="font-weight: bold;">{minical.upcoming_events.EVENT_TITLE}:</span><br />
 					<!-- IF not minical.upcoming_events.ALL_DAY and not minical.upcoming_events.END_TIME -->{L_EVENT_TIME}:&nbsp;{minical.upcoming_events.START_TIME}<br />
-					<!-- ELSEIF not minical.upcoming_events.ALL_DAY and minical.upcoming_events.END_TIME -->{L_EVENT_START}:&nbsp;{minical.upcoming_events.START_TIME}<br />
+					<!-- ELSEIF not minical.upcoming_events.ALL_DAY and minical.upcoming_events.END_TIME -->{L_EVENT_START}:&nbsp;{minical.upcoming_events.START_TIME}<br />{L_EVENT_END}:&nbsp;{minical.upcoming_events.END_TIME}<br />
 					<!-- ELSE -->{L_EVENT_TIME}:&nbsp;{minical.upcoming_events.START_TIME}<br />{L_EVENT_ALL_DAY}<br />
 					<!-- ENDIF -->
+					<!-- IF minical.upcoming_events.EVENT_DESC --><span style="font-style: italic;">{minical.upcoming_events.EVENT_DESC}</span><br /><!-- ENDIF -->
 					<!-- IF minical.upcoming_events.EVENT_URL --></a><!-- ENDIF -->
 				</dt>
 			</dl>
 		</li>
-		
+
 		<!-- BEGINELSE -->
 		<li class="calendar-info"><span style="float:left;" class="gensmall"><strong>{L_NO_UPCOMING_EVENTS}</strong></span><br /></li>
 		<!-- END upcoming_events -->
 	</ul>
 	<br />
 	<!-- ENDIF -->
-
-<!-- ENDIF -->
-
-<!-- IF S_USER_LOGGED_IN -->
-	 <a href="{URL_ICAL}" > <img src="http://kigkonsult.se/iCalcreator/images/icalCalendar.png" alt="ical"> <br> {LANG_ICAL} </a>
-
-<!-- ELSE -->
- <a href="{URL_ICAL}" > <img src="http://kigkonsult.se/iCalcreator/images/icalCalendar.png" alt="ical"> </a>
-
+{$LR_BLOCK_F_L}{$LR_BLOCK_F_R}
 <!-- ENDIF -->
 <!-- END minical -->

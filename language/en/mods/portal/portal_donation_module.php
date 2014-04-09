@@ -55,10 +55,11 @@ $lang = array_merge($lang, array(
 	'EUR'						=> 'Euros (EUR)',
 	'MXN'						=> 'Mexican Pesos (MXN)',
 	'ILS'						=> 'Israeli New Shekels (ILS)',
-	
+
 	// ACP
 	'ACP_PORTAL_PAYPAL_SETTINGS'			=> 'Paypal settings',
 	'ACP_PORTAL_PAYPAL_SETTINGS_EXP'		=> 'This is where you customize the Paypal block.',
 	'PORTAL_PAY_ACC'						=> 'Paypal account to use',
 	'PORTAL_PAY_ACC_EXP'					=> 'Enter your Paypal e-mail address eg. xxx@xxx.com',
+	'PORTAL_PAY_CUSTOM'				=> 'Append username to Paypal donation',
 ));

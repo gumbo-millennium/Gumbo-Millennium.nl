@@ -4786,6 +4786,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		}
 	}
 
+	$user->add_lang('mods/portal');
 	// The following assigns all _common_ variables that may be used at any point in a template.
 	$template->assign_vars(array(
 		'SITENAME'						=> $config['sitename'],
@@ -4817,6 +4818,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		'L_ONLINE_EXPLAIN'	=> $l_online_time,
 		
 		'U_PRIVATEMSGS'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
+		'U_PORTAL'				=> (isset($config['board3_enable']) && $config['board3_enable'] && $auth->acl_get('u_view_portal')) ? append_sid("{$phpbb_root_path}portal.$phpEx") : '',
 		'U_RETURN_INBOX'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
 		'U_POPUP_PM'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;mode=popup'),
 		'UA_POPUP_PM'			=> addslashes(append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;mode=popup')),

@@ -1628,7 +1628,7 @@ class user extends session
 		$this->add_lang($lang_set);
 		unset($lang_set);
 
-		if (!empty($_GET['style']) && $auth->acl_get('a_styles') && !defined('ADMIN_START'))
+		if (!empty($_GET['style']) && !defined('ADMIN_START') && !$this->data['is_bot'])
 		{
 			global $SID, $_EXTRA_URL;
 

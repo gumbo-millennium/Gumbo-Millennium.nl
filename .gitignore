@@ -5,6 +5,7 @@
 cache/*.*
 config.php
 web.config
+store/*.*
 
 # Logs and databases #
 ######################
