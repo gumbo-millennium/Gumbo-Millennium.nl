@@ -4,7 +4,10 @@
     	<div class="container clearfix">
     	<!-- begin main content -->
         <section id="main" class="blog-entry-list full-screen" on>
-        <!-- BEGIN activity -->
+
+            
+
+        <!-- BEGIN activity -->  
             <article class="entry clearfix">
             	<!-- IF .activity.imgs -->
 	            	<!-- IF .activity.imgs > 1 -->
@@ -50,6 +53,19 @@
                 </div>
             </article>
         <!-- END activity -->
+        
+        <div class="infobox">
+                <input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
+                <input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
+                <div class="infobox-inner">
+                   <a href="{URL_ICAL}" class="button large right">{LANG_ICAL_URL}</a>
+                    <div class="with-button">
+                        <h2>{LANG_ICAL_TITLE}</h2>
+                        <p>{LANG_ICAL_EXPLAIN}</p>
+                        <a href="{LANG_ICAL_HOW_URL}">{LANG_ICAL_HOW}</a>
+                    </div>
+                </div> 
+            </div>
             
         </section>
         <!-- end main content -->
