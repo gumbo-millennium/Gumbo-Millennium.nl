@@ -20,7 +20,7 @@ if (!$auth->acl_get('u_list_activities'))
      trigger_error('NOT_AUTHORISED');
 }
 
-//check if user readed 
+
 $activity_controller = new activities_handler();
 
 $search_parameters = NULL;
@@ -59,7 +59,9 @@ if(($full_list = $activity_controller->get_user_activities( intval($user->data['
 		foreach (get_images_data($activity->getDescription_raw(), $activity->getUID(), FALSE) as $img_id => $img_data)
 	    {
 	        $template->assign_block_vars('activity.imgs', array(
-	            'URL'        => $img_data["URL"]
+	            'URL'        => $img_data["URL"],
+	            'LINK'        => $img_data["LINK"],
+
 	        ));
 	    }
 
@@ -72,8 +74,11 @@ if(($full_list = $activity_controller->get_user_activities( intval($user->data['
 // some additional words for translation
 $template->assign_var('URL_CLEAN', append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx));
 $template->assign_var('URL_ICAL', $phpbb_root_path . 'dc/ical.' . $phpEx .'?id='.$user->data['user_id']);
-$template->assign_var('LANG_ICAL', $user->lang['DC_ACT_LANG_ICAL']);
+$template->assign_var('LANG_ICAL_TITLE', $user->lang['DC_ACT_LANG_ICAL_TITLE']);
+$template->assign_var('LANG_ICAL_URL', $user->lang['DC_ACT_LANG_ICAL_URL']);
 $template->assign_var('LANG_ICAL_EXPLAIN', $user->lang['DC_ACT_LANG_ICAL_EXPLAIN']);
+$template->assign_var('LANG_ICAL_HOW', $user->lang['DC_ACT_LANG_ICAL_MORE_INFO']);
+$template->assign_var('LANG_ICAL_HOW_URL', "https://support.google.com/calendar/answer/37100?hl=nl");
 $template->assign_var('LANG_LOCATION', $user->lang['DC_ACT_LANG_LOCATION']);
 $template->assign_var('LANG_ENROLL_NOBODY', $user->lang['DC_ACT_ENROLL_NOBODY']);
 $template->assign_var('LANG_ENROLL_FORCE', $user->lang['DC_ACT_ENROLL_FORCE']);
@@ -94,7 +99,7 @@ page_header($user->lang['DC_ACT_LIST']);
 // set template
 
 $template->assign_block_vars('navlinks', array(
-	'FORUM_NAME'         => $user->lang['DC_ACT_LIST'], //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
+	'FORUM_NAME'        => $user->lang['DC_ACT_LIST'], //Name of the page you wish to see on the navlinks page. You should use language files, but for the purpose of this demonstration I have not.
 	'U_VIEW_FORUM'      => append_sid("{$phpbb_root_path}dc/dc_activity_list.$phpEx")) //The path to the custom file relative to the phpbb root path.
 );
 

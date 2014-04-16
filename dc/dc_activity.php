@@ -155,7 +155,6 @@ if($comment != $salt && check_form_key('chance_the_subscribe_status')){									
 	}
 }
 
-
 add_form_key('chance_the_subscribe_status'); // set form key to avoid cross side scripting
 // set default variables
 
