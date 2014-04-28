@@ -1810,10 +1810,9 @@ class activity {
 		global $db;							// get database connection
 		if(gettype($user_id) != "integer")
 			return null;
-
-
+		
 		if(isset($this->readed_users[$user_id])){
-			return TRUE;
+			return $this->readed_users[$user_id];
 		}
 
 		$sql_where_ary = array(

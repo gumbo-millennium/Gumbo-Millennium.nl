@@ -21,8 +21,6 @@ if (!$auth->acl_get('u_list_activities'))
 }
 
 
-$activity_controller = new activities_handler();
-
 $search_parameters = NULL;
 
 // check if reeded events is needed 
@@ -33,7 +31,7 @@ if(intval($user->data['user_id']) > 1){
 		MANAGERS_GROUPS		=> FALSE,
 	);
 }
-if(($full_list = $activity_controller->get_user_activities( intval($user->data['user_id']), USER_ACCESS, FUTURE_ACTIVE, $search_parameters, START_DATETIME)) != NULL){
+if(($full_list = $activities_handler->get_user_activities( intval($user->data['user_id']), USER_ACCESS, FUTURE_ACTIVE, $search_parameters, START_DATETIME)) != NULL){
 	$template->assign_var('LIST_AVAILABLE', true);
 	$row_count = 1;
 	$group_name_ary = array();

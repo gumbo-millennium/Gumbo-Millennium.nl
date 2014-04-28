@@ -39,7 +39,7 @@ if(!isset($_GET["act"])){
 }
 
 // Build main objects
-$act_hndlr = new activities_handler();			// build activity handler
+$act_hndlr = $activities_handler;			// build activity handler
 $activity_id = request_var('act', 0);			// get activity by id (default = 0)	
 
 if($activity_id == 0){
@@ -171,7 +171,7 @@ $template->assign_vars(array(
 	'START_DAY' 			=> $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'j'),
 	'START_MONTH' 			=> $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'M'),
 	'COMMISSION'    		=> get_group_name($activity->getCommission()),
-	'DESCRIPTION'    		=> $activity->getDescription(TRUE), // set description without images 
+	'DESCRIPTION'    		=> $activity->getDescription(FALSE), // set description with images 
 	'START_DATE_TIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()), 
 	'END_DATE_TIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()), 
 ));

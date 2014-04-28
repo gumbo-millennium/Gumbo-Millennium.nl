@@ -41,7 +41,7 @@ class acp_dc_activity_management
    function main($id, $mode)
    {
 		global $db, $user, $auth, $template;
-		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx, $activities_handler;
 		global $cache;
 
 		$user->add_lang('mods/dc_activity');
@@ -50,7 +50,6 @@ class acp_dc_activity_management
 		$action	= request_var('action', '');
 		$submit = (isset($_POST['submit'])) ? true : false;
 		$preview = (isset($_POST['preview'])) ? true : false;
-		$activities_handler = new activities_handler();
 		
 		// if mode is edit_activity this varible can change to false if the activity is 'current'
 			// current means startdatetime <= now and endDateTime >= now 
