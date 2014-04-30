@@ -28,7 +28,7 @@ Author URI: http://www.ixtendo.com
  
 @import url('css/shortcodes.css');
        
-       
+                    
          
    
 /* ---------------------------------------------------------------------- */
@@ -1407,7 +1407,7 @@ ol.comment-list .comment-author.post-author span {
 	color: #e64141;
 }
 
-ol.comment-list .comment-meta {
+ol.comment-list .comment-meta { 
 	margin-bottom: 15px;	
 	color: #888;
 }

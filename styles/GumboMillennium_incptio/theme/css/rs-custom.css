@@ -35,7 +35,7 @@ TABLE OF CONTENTS
 }
 
 .tp-caption.small {
-	padding: 8px 15px;	
+	padding: 4px 15px;	
 	font-size: 1.333em; /* 16px */
 	line-height: 1.375em; /* 22px/16px */
 }
@@ -52,6 +52,8 @@ TABLE OF CONTENTS
 
 .tp-caption.white {
 	background-color: #fff;
+	opacity:0.9;
+	filter:alpha(opacity=90); /* For IE8 and earlier */
 }
 
 .tp-caption.colored {
