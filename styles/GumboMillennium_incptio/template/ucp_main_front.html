@@ -1,0 +1,44 @@
+<!-- INCLUDE ucp_header.html -->
+<h2>{L_TITLE}</h2>
+
+<div class="panel " >
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<p>{L_UCP_WELCOME}</p>
+
+<!-- IF .topicrow -->
+	<h3>{L_IMPORTANT_NEWS}</h3>
+
+	<ul class="topiclist cplist">
+	<!-- BEGIN topicrow -->
+		<li class="row<!-- IF topicrow.S_ROW_COUNT is odd --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+			<dl class="icon" style="background-image: url({topicrow.TOPIC_FOLDER_IMG_SRC}); background-repeat: no-repeat;">
+				<dt <!-- IF topicrow.TOPIC_ICON_IMG -->style="background-image: url({T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}); background-repeat: no-repeat;"<!-- ENDIF -->>
+					<!-- IF topicrow.S_UNREAD --><a href="{topicrow.U_NEWEST_POST}">{NEWEST_POST_IMG}</a> <!-- ENDIF --><a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">{topicrow.TOPIC_TITLE}</a><br />
+					<!-- IF topicrow.PAGINATION --><strong class="pagination"><span>{topicrow.PAGINATION}</span></strong><!-- ENDIF -->
+					<!-- IF topicrow.ATTACH_ICON_IMG -->{topicrow.ATTACH_ICON_IMG} <!-- ENDIF -->{L_POST_BY_AUTHOR} {topicrow.TOPIC_AUTHOR_FULL} &raquo; {topicrow.FIRST_POST_TIME}
+				</dt>
+				<dd class="lastpost"><span>{L_LAST_POST} {L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR_FULL}
+					<a href="{topicrow.U_LAST_POST}">{LAST_POST_IMG}</a> <br />{topicrow.LAST_POST_TIME}</span>
+				</dd>
+			</dl>
+		</li>
+	<!-- END topicrow -->
+	</ul>
+<!-- ENDIF -->
+
+	<h3 style="margin-top:2rem;">{L_YOUR_DETAILS}</h3>
+
+	<section class="details">
+		<strong>{L_JOINED}:</strong> {JOINED}<br />
+		<strong>{L_VISITED}:</strong> {LAST_VISIT_YOU}<br />
+		<strong>{L_TOTAL_POSTS}:</strong> <!-- IF POSTS_PCT -->{POSTS}<!-- IF S_DISPLAY_SEARCH --> | <strong><a href="{U_SEARCH_USER}">{L_SEARCH_YOUR_POSTS}</a></strong><!-- ENDIF --><br />({POSTS_DAY} / {POSTS_PCT})<!-- ELSE -->{POSTS}<!-- ENDIF --><br />
+			<!-- IF ACTIVE_FORUM != '' --><strong>{L_ACTIVE_IN_FORUM}:</strong> <strong><a href="{U_ACTIVE_FORUM}">{ACTIVE_FORUM}</a></strong><br />({ACTIVE_FORUM_POSTS} / {ACTIVE_FORUM_PCT})<br /><!-- ENDIF -->
+			<!-- IF ACTIVE_TOPIC != '' --><strong>{L_ACTIVE_IN_TOPIC}:</strong> <strong><a href="{U_ACTIVE_TOPIC}">{ACTIVE_TOPIC}</a></strong><br />({ACTIVE_TOPIC_POSTS} / {ACTIVE_TOPIC_PCT})<br /><!-- ENDIF -->
+			<!-- IF WARNINGS --><strong>{L_YOUR_WARNINGS}:</strong> <dd class="error">{WARNING_IMG} [{WARNINGS}]</dd><!-- ENDIF -->
+	</section>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- INCLUDE ucp_footer.html -->

@@ -1023,11 +1023,15 @@ ul.portfolio-grid > li.full-screen {
 	margin-right: 5px;
 }
 
+#filter li#active-subsection a
+{
+	background-color: #93AC12;
+}
+
 #filter a {
 	display: block;
 	line-height: normal;
-	color: #333;
-	background-color: #e5e5e5;
+	background-color: #333;
 	padding: 6px 10px;
 	border-radius: 3px;
 	
@@ -1039,9 +1043,17 @@ ul.portfolio-grid > li.full-screen {
 	background-repeat: repeat-x;
 }
 
-#filter a:hover, #filter a.selected {
-	color: #fff;
+#filter a span
+{
+	color: 			#fff;
+	font-weight:	bold;
 }
+#filter a:hover span, #filter li#active-subsection a span
+{
+	color: 				#333;
+	font-weight:		bold;
+}
+
 
 /* Start: Recommended Isotope styles */
 
