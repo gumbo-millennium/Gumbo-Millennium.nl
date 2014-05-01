@@ -24,8 +24,8 @@ function setup_gumbo_overlay()
 
 	require($phpbb_root_path . 'gumbo/includes/Mobile_Detect.' . $phpEx);
 
-
 	// Set up common template variables, mainly used in the navigation  
+	$user->setup('mods/dc_gumbo_layout');
 	$template->assign_vars(array(
 		'L_GUMBO_MEMBERS'			=> $user->lang['GUMBO_MEMBERS'],
 		'U_PLAZACAM'			=> append_sid("{$phpbb_root_path}gumbo/plazacam.$phpEx"),
@@ -227,29 +227,27 @@ function remove_images_from_text($text, $bbcode_uid){
 			return null;
 		$pattern = 	"(?<=(\[preview:".$bbcode_uid."\]))".	// lookahead for [preview] (bbcode_uid is for the unique page)
 					"[\s\S]*".									// look all non white characters and all white characters (just all characters)
+					"(?=(\\r\\r))".
 					"(?=(\[\/preview:".$bbcode_uid."\]))";// look behind for [/preview] (and the unique bb code)
 		preg_match("/".$pattern."/", $text, $matches);
 		if(isset($matches[0])){
-			$prev_desc = $matches[0];
+			$preview = $matches[0];
 		}else{
-			$prev_desc = $text;
+			$preview = $text;
 		}
 		if(!$images){
-			$pattern = 	"/\[img:".$bbcode_uid."\]".	
-						"[\s\S]*".	
-						"\[\/img:".$bbcode_uid."\]/";
-			$prev_desc = preg_replace($pattern, ' ', $prev_desc);
+			$preview = remove_images_from_text($preview, $bbcode_uid);
 		}
 		if(!$smilies || !$bbcode){
 			$pattern = '/<!-- (.*?) --><img src=\"{SMILIES_PATH}\/(.*?)\" alt="(.*?)" title="(.*?)" \/><!-- (.*?) -->/';
-			$prev_desc = preg_replace($pattern, '', $prev_desc);	
+			$preview = preg_replace($pattern, '', $preview);	
 		
 		}
 		if(!$bbcode){
-			strip_bbcode($prev_desc, $bbcode_uid);
+			strip_bbcode($preview, $bbcode_uid);
 		}
 		if($new_lines){
-			$prev_desc = str_replace("\n", ' ', $prev_desc);
+			$preview = str_replace("\n", ' ', $preview);
 		}
 		
 		$pattern =  '/# Split sentences on whitespace between them.
@@ -274,26 +272,29 @@ function remove_images_from_text($text, $bbcode_uid){
 				\s+                 # Split on whitespace between sentences.
 				/x';
 		
-		$sentences = preg_split($pattern, $prev_desc, -1, PREG_SPLIT_NO_EMPTY);
-		$prev_desc = "";
-		if($new_lines){
-			$new_lines = "\n";
-		}else{
-			$new_lines = "";
-		}
-		
+		$sentences = preg_split($pattern, $preview, -1, PREG_SPLIT_NO_EMPTY);
 		$max_senctences = ($max_senctences == 0) ? count($sentences) :  min($max_senctences, count($sentences));
 		
-		for($i = 0; $i < $max_senctences; $i++ ){
-			$prev_desc .= $sentences[$i] . $new_lines ." ";
+
+		if($new_lines){
+			$preview = "";
+			for($i = 0; $i < $max_senctences; $i++ ){
+			$preview .= $sentences[$i] . "\n";
+		}
+		}else{
+			$new_lines = "";
+			//preg_match("/.*". preg_quote($sentences[$max_senctences-1])."/s", $preview, $matches);
+			//$preview = $matches[0];
+
+			$preview = substr($preview, 0, strpos($preview,$sentences[$max_senctences-1])) . $sentences[$max_senctences-1];
 		}
 		
 		$options = 	(($bbcode) ? OPTION_FLAG_BBCODE : 0) +
 					(($smilies) ? OPTION_FLAG_SMILIES : 0) + 
 					(($urls) ? OPTION_FLAG_LINKS : 0);
-		$prev_desc = generate_text_for_display($prev_desc, $bbcode_uid, $bbcode_bitfield, $options);
+		$preview = generate_text_for_display($preview, $bbcode_uid, $bbcode_bitfield, $options);
 		
-		return $prev_desc;
+		return $preview;
     }
 
 

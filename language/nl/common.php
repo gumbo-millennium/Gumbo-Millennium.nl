@@ -58,6 +58,8 @@ $lang = array_merge($lang, array(
 	'ONDERSCHRIFT'		=> 'Onderschrift',
 	'EVENTS'			=> 'Activiteiten',
 	//GUMBO END
+
+	'PORTAL_INDEX'		=> 'Portal',
 	
 	'TRANSLATION_INFO'	=> '<a href="http://www.phpbb.nl">phpBB.nl Vertaling</a>', // Copyright mag verwijderd worden
 	'DIRECTION'			=> 'ltr',
