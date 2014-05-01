@@ -14,7 +14,7 @@
                         <input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
                         <input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
                         <div class="infobox-inner">
-                            <!-- IF ENROLL && USER_ENROLLED_CHECK --> 
+                            <!-- IF ENROLL && USER_ENROLLED_CHECK && S_USER_LOGGED_IN --> 
                                 <!-- IF UNSUBSCRIBE_DATE_CHECK && ENROLL_DATE_CHECK && not ENROLL_MAX && CHANGE == FALSE -->
                                     <a class="button large right" href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a>
                                 <!-- ENDIF -->
@@ -26,7 +26,7 @@
                                 <!-- IF UNSUBSCRIBE_DATE_CHECK  && CHANGE == true -->
                                     <button name="status"  class="button large black right" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button>
                                 <!-- ENDIF -->
-                            <!-- ELSEIF not USER_ENROLLED_CHECK && ENROLL_DATE_CHECK -->
+                            <!-- ELSEIF not USER_ENROLLED_CHECK && ENROLL_DATE_CHECK && S_USER_LOGGED_IN -->
                                  <button name="status" type="submit" class="button large" value="1">{LANG_SUBSCRIBE}</button>
                             <!-- ENDIF -->
                             <div class="with-button">

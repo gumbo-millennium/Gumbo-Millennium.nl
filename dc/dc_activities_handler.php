@@ -90,6 +90,7 @@ class activities_handler{
 				trigger_error('Get_user_activities: Invalided user id');
 				return NULL;
 		}
+
 		
 		$user_groups = $this->get_user_groups(intval($user->data["user_id"]));
 		
@@ -230,6 +231,7 @@ class activities_handler{
 		if(isset($sql_having)){
 			$sql = str_replace("ORDER BY", $sql_having." ORDER BY", $sql);	// small hack to implement sql HAVING statment
 		}
+
 		$sql_result = $db->sql_query($sql, 3600);
 		
 		$return_list = array();
@@ -318,6 +320,7 @@ class activities_handler{
 		}
 		$db->sql_freeresult($sql_result);							// remove query
 		$this->add_activities($return_list);		// add new all activities to the ($this->)activities array
+
 		return $return_list;						// return the actives
 		
 	}

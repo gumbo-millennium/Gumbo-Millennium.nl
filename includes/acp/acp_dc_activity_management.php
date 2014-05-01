@@ -44,6 +44,7 @@ class acp_dc_activity_management
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx, $activities_handler;
 		global $cache;
 
+		$user->add_lang('mods/dc_gumbo_layout');
 		$user->add_lang('mods/dc_activity');
 		$user->add_lang(array('posting','acp/board'));
 
