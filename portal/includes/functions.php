@@ -96,9 +96,11 @@ function obtain_portal_modules()
 }
 
 // fetch post for news & announce
-function phpbb_fetch_posts($module_id, $forum_from, $permissions, $number_of_posts, $text_length, $time, $type, $start = 0, $invert = false)
+function phpbb_fetch_posts($module_id, $forum_from, $permissions, $number_of_posts, $text_length, $time, $type, $start = 0, $invert = false, $allow_bbcode = true, $allow_images = false, $new_line = false)
 {
 	global $db, $phpbb_root_path, $auth, $user, $bbcode_bitfield, $bbcode, $portal_config, $config;
+
+
 
 	$posts = $update_count = array();
 	$post_time = ($time == 0) ? '' : 'AND t.topic_time > ' . (time() - $time * 86400);
@@ -300,23 +302,26 @@ function phpbb_fetch_posts($module_id, $forum_from, $permissions, $number_of_pos
 			$db->sql_freeresult($result2);
 		}
 
+		//BEGIN MOD GUBMO (PART 1): add extraction of images from a post 
+		$images = array();
+		foreach (get_images_data($row['post_text'], $row['bbcode_uid'], FALSE) as $img_id => $img_data)
+	    {
+	    	$images[] = array('URL' => $img_data["URL"], 'LINK' => $img_data["LINK"]);
+	    }
+	    // END MOD GUMBO
+
 		$posts[$i]['bbcode_uid'] = $row['bbcode_uid'];
 		$len_check = $row['post_text'];
-		$maxlen = $text_length;
+	
 
-		if (($text_length != 0) && (strlen($len_check) > $text_length))
-		{
-			$message = str_replace(array("\n", "\r"), array('<br />', "\n"), $row['post_text']);
-			$message = get_sub_taged_string($message, $row['bbcode_uid'], $maxlen);
-			$posts[$i]['striped'] = true;
-		}
-		else 
-		{
-			$message = str_replace("\n", '<br/> ', $row['post_text']);
-		}
+		//BEGIN MOD GUBMO: create preview from text
 
-		$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_magic_url']) ? OPTION_FLAG_LINKS : 0);
-		$message = generate_text_for_display($message, $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']);
+		$message = get_preview($row['post_text'], $row['bbcode_uid'],  $row['bbcode_bitfield'], intval($text_length), $new_line, $allow_bbcode, true, true, $allow_images);
+		
+		$message = str_replace(array("\n", "\r"), array('<br />', "\n"), $message);
+
+		
+		//END MOD GUBMO
 
 		if (!empty($attachments))
 		{
@@ -356,6 +361,9 @@ function phpbb_fetch_posts($module_id, $forum_from, $permissions, $number_of_pos
 			'topic_views'			=> $row['topic_views'],
 			'forum_name'			=> $row['forum_name'],
 			'attachments'			=> (!empty($attachments)) ? $attachments : array(),
+			//BEGIN MOD GUBMO (PART 2): add extraction of images from a post
+			'images'				=> (!empty($images)) ? $images : array(),
+			// END MOD GUMBO
 		));
 		$posts['global_id'] = $global_f;
 		++$i;

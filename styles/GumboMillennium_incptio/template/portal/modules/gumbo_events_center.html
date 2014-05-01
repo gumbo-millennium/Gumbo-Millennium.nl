@@ -1,0 +1,48 @@
+<!-- BEGIN activity -->
+
+<li class="entry blog-entry-list one-half {$MODULE_ID}  <!-- IF activity.S_FIRST_ROW --> start" <!-- ELSE --> isotope-hidden"  style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate(240px, 0px) scale(0.001, 0.001); opacity: 0;" <!-- ENDIF --> >
+	<article class="clearfix">
+
+		<!-- IF .activity.imgs -->
+        	<!-- IF .activity.imgs > 1 -->
+            	<!-- begin entry slider -->
+                <div class="entry-slider">
+                    <div id="flexslider-portfolio-item" class="flex-container">
+                        <div class="flexslider">
+                            <ul class="slides">
+                            	<!-- BEGIN imgs -->
+                                <li><a class="entry-image image-block link-overlay" href="{activity.ACT_LINK}" title="{activity.NAME}"><span class="overlay"></span><img src="{activity.imgs.URL}" alt="{activity.NAME}"></a></li>
+                                <!-- END imgs -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>	
+                <!-- end entry slider -->
+        	<!-- ELSE -->
+            	<!-- BEGIN imgs -->
+            		<a class="entry-image image-block link-overlay" href="{activity.ACT_LINK}" title="{activity.NAME}"><span class="overlay"></span><img src="{activity.imgs.URL}" alt="{activity.NAME}"></a>
+            	<!-- END imgs -->
+        	<!-- ENDIF -->
+    	<!-- ENDIF -->
+
+
+		<div class="entry-date">
+            <div class="entry-day">{activity.START_DAY}</div>
+            <div class="entry-month">{activity.START_MONTH}</div>   
+        </div>
+
+		<div class="entry-body">
+			<h2 class="entry-title"><a href="{activity.ACT_LINK}">{activity.NAME}</a></h2>	
+			<div class="entry-content">
+				<p>{activity.PREVIEW}</p>
+			</div>
+			<div class="entry-meta">
+				<span class="author"><a href="#">{activity.COMMISSION}</a></span> 
+				<span class="category"><a href="{URL_ACTIVITIES_LIST}">{LANG_ACTIVITY}</a></span>
+				<span class="comments"><a href="{activity.ACT_LINK}">{activity.ENROLLED}</a></span>
+			</div>
+		</div>
+		<div class="arrow-box-hover"></div>	
+	</article>
+</li>
+<!-- END activity --> 

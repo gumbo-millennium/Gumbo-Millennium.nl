@@ -173,6 +173,10 @@ $template->assign_vars(array(
 	'B3P_DISPLAY_JUMPBOX'	=> $config['board3_display_jumpbox'],
 ));
 
+$template->assign_vars(array(
+	'PAGE_TITLE_BOX_HIDE'	=> true
+));
+
 // Output page
 page_header($user->lang['PORTAL']);
 

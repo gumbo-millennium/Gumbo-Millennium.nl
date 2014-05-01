@@ -1,0 +1,57 @@
+<!-- begin content -->
+<!-- BEGIN news_row_unreaded -->
+<li data-transition="fade" data-slotamount="7" data-masterspeed="300">
+    <!-- main image -->
+    <img src="{news_row_unreaded.IMG}" alt=""> 
+    
+    <!-- captions -->
+    <div class="tp-caption sfb"
+         data-x="850"
+         data-y="70"
+         data-speed="500"
+         data-start="750"
+         data-easing="easeOutExpo">
+            <a href="#" data-filter=".{$MODULE_ID}"  class="button colored">{news_row_unreaded.FORUM_NAME}</a>
+    </div>   
+    
+    <div class="tp-caption big black sfl"
+         data-x="0"
+         data-y="70"
+         data-speed="1000" 
+         data-start="1000" 
+         data-easing="easeOutBack">
+            {news_row_unreaded.TITLE}
+    </div>
+    
+    <!-- BEGIN preview -->
+        <div class="tp-caption small white sfr"
+             data-x="0"
+             data-y="{news_row_unreaded.preview.HEIGHT}"
+             data-speed="1000"
+             data-start="{news_row_unreaded.preview.TIME}"
+             data-easing="easeOutBack">
+               {news_row_unreaded.preview.SENTENCE}
+        </div>
+        <!-- DEFINE $HEIGHT = $HEIGHT + 5 -->
+    <!-- END preview -->
+
+    <div class="tp-caption sfb"
+         data-x="0"
+         data-y="290"
+         data-speed="1000"
+         data-start="2500"
+         data-easing="easeOutExpo">
+            <a href="#" data-filter=".{$MODULE_ID}"  class="button black">{news_row_unreaded.POSTER}</a>
+    </div>  
+    
+    <div class="tp-caption sfb"
+         data-x="0"
+         data-y="325"
+         data-speed="1000"
+         data-start="2700"
+         data-easing="easeOutExpo">
+            <a href="{news_row_unreaded.U_VIEW_COMMENTS}" class="button black">Read more</a>
+    </div>
+
+</li>
+<!-- END news_row_unreaded -->

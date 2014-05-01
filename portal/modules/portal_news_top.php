@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 /**
 * @package News
 */
-class portal_news_module
+class portal_news_top_module
 {
 	/**
 	* Allowed columns: Just sum up your options (Exp: left + right = 10)
@@ -28,7 +28,7 @@ class portal_news_module
 	* right		8
 	* bottom	16
 	*/
-	public $columns = 4;
+	public $columns = 1;
 
 	/**
 	* Default modulename
@@ -62,7 +62,7 @@ class portal_news_module
 		
 
 		$portal_news_length = ($config['board3_news_length_' . $module_id] > 0) ? $config['board3_news_length_' . $module_id] : 1000;
-		$fetch_news = phpbb_fetch_posts($module_id, $config['board3_news_forum_' . $module_id], $config['board3_news_permissions_' . $module_id], $config['board3_number_of_news_' . $module_id], $portal_news_length, 0, ($config['board3_show_all_news_' . $module_id]) ? 'news_all' : 'news', $start, $config['board3_news_exclude_' . $module_id], true, false);
+		$fetch_news = phpbb_fetch_posts($module_id, $config['board3_news_forum_' . $module_id], $config['board3_news_permissions_' . $module_id], $config['board3_number_of_news_' . $module_id], $portal_news_length, 0, ($config['board3_show_all_news_' . $module_id]) ? 'news_all' : 'news', $start, $config['board3_news_exclude_' . $module_id], false, false, true);
 
 
 		// Any news present? If not terminate it here.
@@ -146,6 +146,15 @@ class portal_news_module
 				$count = $fetch_news['topic_count'];
 				for ($i = 0; $i < $count; $i++)
 				{
+
+					// unread?
+					$forum_id = $fetch_news[$i]['forum_id'];
+					$topic_id = $fetch_news[$i]['topic_id'];
+					$unread_topic = (isset($topic_tracking_info[$topic_id]) && $fetch_news[$i]['topic_last_post_time'] > $topic_tracking_info[$topic_id]) ? true : false;
+					if (!$unread_topic && intval($user->data['user_id']) > 1) {
+						continue;
+					}
+
 					if(isset($fetch_news[$i]['striped']) && $fetch_news[$i]['striped'] == true)
 					{
 						$open_bracket = '[ ';
@@ -158,10 +167,7 @@ class portal_news_module
 						$close_bracket = '';
 						$read_full = '';
 					}
-					// unread?
-					$forum_id = $fetch_news[$i]['forum_id'];
-					$topic_id = $fetch_news[$i]['topic_id'];
-					$unread_topic = (isset($topic_tracking_info[$topic_id]) && $fetch_news[$i]['topic_last_post_time'] > $topic_tracking_info[$topic_id]) ? true : false;
+					
 
 					$read_full_url = (isset($_GET['np'])) ? 'np='. $start . '&amp;news=' . $i . '#n' . $i : 'news=' . $i . '#n' . $i;
 					$view_topic_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . (($fetch_news[$i]['forum_id']) ? $fetch_news[$i]['forum_id'] : $forum_id) . '&amp;t=' . $topic_id);
@@ -193,13 +199,6 @@ class portal_news_module
 						break;
 					}
 
-					$images_available = false;
-					if(!empty($fetch_news[$i]['images'])){
-						$images_available = true;
-					}
-
-					
-
 					if ($fetch_news[$i]['topic_status'] == ITEM_LOCKED)
 					{
 						$folder .= '_locked';
@@ -216,8 +215,15 @@ class portal_news_module
 
 					// Grab icons
 					$icons = $cache->obtain_icons();
+					
+					$web_path = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? $board_url : $phpbb_root_path;
+					$imgs_path = "{$web_path}styles/" . rawurlencode($user->theme['imageset_path']) . '/imageset/test_imgs';
 
-					$template->assign_block_vars('news_row', array(
+					$default_img = scandir($imgs_path);
+
+					$image = isset($fetch_news[$i]['images'][0]) ? $fetch_news[$i]['images'][0]["URL"] : $imgs_path . "/" .  $default_img[mt_rand(2, 8)];
+
+					$template->assign_block_vars('news_row_unreaded', array(
 						'ATTACH_ICON_IMG'		=> ($fetch_news[$i]['attachment'] && $config['allow_attachments']) ? $user->img('icon_topic_attach', $user->lang['TOTAL_ATTACHMENTS']) : '',
 						'FORUM_NAME'			=> ($forum_id) ? $fetch_news[$i]['forum_name'] : '',
 						'TITLE'					=> $fetch_news[$i]['topic_title'],
@@ -227,7 +233,6 @@ class portal_news_module
 						'U_USER_PROFILE'		=> (($fetch_news[$i]['user_type'] == USER_NORMAL || $fetch_news[$i]['user_type'] == USER_FOUNDER) && $fetch_news[$i]['user_id'] != ANONYMOUS) ? append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile&amp;u=' . $fetch_news[$i]['user_id']) : '',
 						'TIME'					=> $fetch_news[$i]['topic_time'],
 						'LAST_POST_TIME'		=> $user->format_date($fetch_news[$i]['topic_last_post_time']),
-						'TEXT'					=> $fetch_news[$i]['post_text'],
 						'REPLIES'				=> $fetch_news[$i]['topic_replies'],
 						'TOPIC_VIEWS'			=> $fetch_news[$i]['topic_views'],
 						'N_ID'					=> $i,
@@ -252,25 +257,28 @@ class portal_news_module
 						'S_UNREAD_INFO'			=> $unread_topic,
 						'PAGINATION'			=> topic_generate_pagination($fetch_news[$i]['topic_replies'], $view_topic_url),
 						'S_HAS_ATTACHMENTS'		=> (!empty($fetch_news[$i]['attachments'])) ? true : false,
-						'IMAGES_AVAILABLE'		=> $images_available,
+						'IMG'					=> $image,
 					));
 
-					if($images_available){
-						foreach ($fetch_news[$i]['images'] as $img_id => $img_data)
-					    {
-					        $template->assign_block_vars('news_row.imgs', array(
-					            'URL'        => $img_data["URL"]
-					        ));
-					    }
+					$preview = explode( "<br/>", $fetch_news[$i]['post_text'], -1);
+					$height = 117;
+					$time = 1500;
+					foreach ($preview as $key => $sentence) {
+						$template->assign_block_vars('news_row_unreaded.preview', array(
+				            'SENTENCE'      => $sentence,
+				            'HEIGHT'        => $height,
+				            'TIME'        	=> $time
+				        ));
+				        $height += 29;
+				        $time 	+= 50;
 					}
-
-				
+	
 
 					if(!empty($fetch_news[$i]['attachments']))
 					{
 						foreach ($fetch_news[$i]['attachments'] as $attachment)
 						{
-							$template->assign_block_vars('news_row.attachment', array(
+							$template->assign_block_vars('news_row_unreaded.attachment', array(
 								'DISPLAY_ATTACHMENT'	=> $attachment)
 							);
 						}
@@ -366,14 +374,7 @@ class portal_news_module
 			'S_TOPIC_ICONS'				=> $topic_icons,
 		));
 
-		if($config['board3_news_style_' . $module_id])
-		{
-			return 'news_compact_center.html';
-		}
-		else
-		{
-			return 'news_center.html';
-		}
+		return 'news_top.html';
 	}
 
 	public function get_template_acp($module_id)

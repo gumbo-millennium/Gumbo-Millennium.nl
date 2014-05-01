@@ -1,0 +1,55 @@
+<!-- BEGIN activity_unreaded -->
+<li data-transition="fade" data-slotamount="7" data-masterspeed="300">
+    <!-- main image -->
+    <img src="{activity_unreaded.IMG}" alt=""> 
+    
+    <!-- captions -->
+    <div class="tp-caption sfb"
+         data-x="900"
+         data-y="70"
+         data-speed="500"
+         data-start="750"
+         data-easing="easeOutExpo">
+            <a href="#" data-filter=".{$MODULE_ID}"  class="button colored">{LANG_ACTIVITY}</a>
+    </div>   
+    
+    <div class="tp-caption big black sfl"
+         data-x="0"
+         data-y="70"
+         data-speed="1000" 
+         data-start="1000" 
+         data-easing="easeOutBack">
+            {activity_unreaded.NAME}
+    </div>
+    <!-- BEGIN preview -->
+        <div class="tp-caption small white sfr"
+             data-x="0"
+             data-y="{activity_unreaded.preview.HEIGHT}"
+             data-speed="1000"
+             data-start="{activity_unreaded.preview.TIME}"
+             data-easing="easeOutBack">
+               {activity_unreaded.preview.SENTENCE}
+        </div>
+        <!-- DEFINE $HEIGHT = $HEIGHT + 5 -->
+    <!-- END preview -->
+
+    <div class="tp-caption sfb"
+         data-x="0"
+         data-y="290"
+         data-speed="1000"
+         data-start="2500"
+         data-easing="easeOutExpo">
+            <a href="#" data-filter=".{$MODULE_ID}"  class="button black">{activity_unreaded.COMMISSION}</a>
+    </div>  
+    
+    <div class="tp-caption sfb"
+         data-x="0"
+         data-y="325"
+         data-speed="1000"
+         data-start="2700"
+         data-easing="easeOutExpo">
+            <a href="{activity_unreaded.ACT_LINK}" class="button black">{LANG_ACTIVITY_GOTO}</a>
+    </div>
+
+</li>
+<!-- END activity_unreaded --> 

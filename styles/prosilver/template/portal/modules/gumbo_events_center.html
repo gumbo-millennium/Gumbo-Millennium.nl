@@ -1,0 +1,32 @@
+{$C_BLOCK_H_L}{$TITLE}{$C_BLOCK_H_R}
+<div class="postbody" style="width: 100%">
+<div class="post bg2" style="margin-bottom: 0px">
+<div class="inner"><span class="portal-corners-top-inner"></span>
+    <div style="text-align: center;">
+        <!-- BEGIN activity -->
+        	<ul class="topiclist topics">
+			<li class="row<!-- IF activity.S_ROW_COUNT is even -->bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+				<dl class="icon" style="background-image: url({topicrow.TOPIC_FOLDER_IMG_SRC}); background-repeat: no-repeat;">
+					<dt style="background-image: url({T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}); background-repeat: no-repeat;" title="No unread posts">
+					
+					
+					<!-- IF activity.READED -->
+						<a href="{activity.ACT_LINK}" class="topictitle">{activity.NAME}</a>
+					<!-- ELSE --> 
+						<a href="{activity.ACT_LINK}" class="topictitle"><h5>{activity.NAME}</h5></a>
+					<!-- ENDIF -->
+					<br>Door: <div class="username-coloured" style="color: #AA0000;">{activity.COMMISSION}</div>
+
+					</dt>
+					<dd class="posts"> </dd>
+					<dd class="views">{activity.ENROLLED}</dd>
+					<dd class="lastpost"><span>{activity.START_DATE_TIME}</span>
+					</dd>
+				</dl>
+			</li>
+			</ul>
+        <!-- END activity -->
+    </div>
+    <br />
+<span class="portal-corners-bottom-inner"></span></div></div></div>
+{$C_BLOCK_F_L}{$C_BLOCK_F_R}
