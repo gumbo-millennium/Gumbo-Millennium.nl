@@ -18,9 +18,9 @@
 				<!-- IF S_PRIVMSGS and not t_block2.S_LAST_ROW -->
 				<ul>
 					<!-- IF t_block2.S_SELECTED -->
-						<li id="active-subsection"><a href="{t_block2.U_TITLE}"><span>{t_block2.L_TITLE}</span></a></li>
+						<li id="active-subsection"><a href="{t_block2.U_TITLE}">{t_block2.L_TITLE}</a></li>
 					<!-- ELSE -->
-						<li><a href="{t_block2.U_TITLE}"><span>{t_block2.L_TITLE}</span></a></li>
+						<li><a href="{t_block2.U_TITLE}">{t_block2.L_TITLE}</a></li>
 					<!-- ENDIF -->
 				</ul>
 				<!-- ENDIF -->
@@ -32,7 +32,7 @@
 				<!-- IF folder.S_CUR_FOLDER -->
 					<li id="active-subsection"><a href="{folder.U_FOLDER}"><!-- IF folder.UNREAD_MESSAGES > 0 --><strong>{folder.FOLDER_NAME} ({folder.UNREAD_MESSAGES})</strong><!-- ELSE -->{folder.FOLDER_NAME}<!-- ENDIF --></a></li>
 				<!-- ELSE -->
-					<li><a href="{folder.U_FOLDER}"><span><!-- IF folder.UNREAD_MESSAGES > 0 --><strong>{folder.FOLDER_NAME} ({folder.UNREAD_MESSAGES})</strong><!-- ELSE -->{folder.FOLDER_NAME}<!-- ENDIF --></span></a></li>
+					<li><a href="{folder.U_FOLDER}"><!-- IF folder.UNREAD_MESSAGES > 0 --><strong>{folder.FOLDER_NAME} ({folder.UNREAD_MESSAGES})</strong><!-- ELSE -->{folder.FOLDER_NAME}<!-- ENDIF --></a></li>
 				<!-- ENDIF -->
 				<!-- IF folder.S_LAST_ROW --></ul><!-- ENDIF -->
 			<!-- END folder -->
@@ -43,9 +43,9 @@
 		<!-- BEGIN t_block2 -->
 			<!-- IF (S_PRIVMSGS and t_block2.S_LAST_ROW) or not S_PRIVMSGS -->
 				<!-- IF t_block2.S_SELECTED -->
-					<li id="active-subsection"><a href="{t_block2.U_TITLE}"><span>{t_block2.L_TITLE}</span></a></li>
+					<li id="active-subsection"><a href="{t_block2.U_TITLE}">{t_block2.L_TITLE}</a></li>
 				<!-- ELSE -->
-					<li><a href="{t_block2.U_TITLE}"><span>{t_block2.L_TITLE}</span></a></li>
+					<li><a href="{t_block2.U_TITLE}">{t_block2.L_TITLE}</a></li>
 				<!-- ENDIF -->
 			<!-- ENDIF -->
 		<!-- END t_block2 -->
