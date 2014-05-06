@@ -68,7 +68,7 @@ class portal_gumbo_events_top_module
 			include_once($phpbb_root_path . 'dc/dc_activities_handler.' . $phpEx);
 			include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 			include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-			$user->setup('mods/dc_activity');
+			$user->add_lang('mods/dc_activity');
 			
         	$this->activity_controller = $activities_handler;
 

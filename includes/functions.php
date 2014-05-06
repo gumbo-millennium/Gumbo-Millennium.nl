@@ -18,8 +18,6 @@ if (!defined('IN_PHPBB'))
 
 // Common global functions
 
-// include gumbo functions  
-require($phpbb_root_path . 'gumbo/includes/functions.' . $phpEx);
 /**
 * set_var
 *
@@ -4761,9 +4759,6 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 	require($phpbb_root_path . 'ads/functions.' . $phpEx);
 	setup_ads();
 
-	// Gumbo millennium layout overlay settings 
-	setup_gumbo_overlay();
-
 	// Send a proper content-language to the output
 	$user_lang = $user->lang['USER_LANG'];
 	if (strpos($user_lang, '-x-') !== false)
@@ -4786,7 +4781,7 @@ function page_header($page_title = '', $display_online_list = true, $item_id = 0
 		}
 	}
 
-	$user->add_lang('mods/portal');
+	
 	// The following assigns all _common_ variables that may be used at any point in a template.
 	$template->assign_vars(array(
 		'SITENAME'						=> $config['sitename'],

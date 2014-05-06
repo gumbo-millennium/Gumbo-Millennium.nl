@@ -25,6 +25,7 @@
 	$user->session_begin();
 	$auth->acl($user->data);
 	$user->setup('viewforum');
+
 	
 	// Get the page content and title
 	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 25';
@@ -83,6 +84,7 @@
 	$template->set_filenames(array(
 		'body' => 'societeit.html')
 	);
+
 
 	page_footer();
 
