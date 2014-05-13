@@ -41,6 +41,7 @@ if(!isset($_GET["act"])){
 $act_hndlr = $activities_handler;			// build activity handler
 $activity_id = request_var('act', 0);			// get activity by id (default = 0)	
 
+
 if($activity_id == 0){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);
 }
@@ -48,7 +49,6 @@ if($activity_id == 0){
 $activity = Activity::get_activity($activity_id, $act_hndlr, intval($user->data['user_id']));	
 if($activity == NULL){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);				// send error to the user
-	
 	return null;
 }
 
@@ -57,12 +57,13 @@ $in_the_past = ($activity->getStartDatetime() < new DateTime('now') ? true : fal
 
 // get authorisation 
 if (!($activity->user_access($user->data['user_id']) || $manager) )
-{
+{	
+	$activity->set_error_log("Page ".__FILE__.": No user access;");
 	trigger_error('NOT_AUTHORISED');
 }
 
 // set activity readed
-if(!$activity->get_read( intval($user->data['user_id']) ) ){
+if($activity->get_read( intval($user->data['user_id']) )  == FALSE ){
 	$activity->set_read( intval($user->data['user_id']));
 }
 // change enrol status
@@ -89,11 +90,13 @@ if (isset($enrol_list[ $user->data['user_id']])) {
 
 if($status != 0 && check_form_key('chance_the_subscribe_status') && $status != $current_status ){															// if a new status
 	if($user->data['user_id'] == ANONYMOUS || $user->data['user_type'] == USER_INACTIVE){	// check if user is guest or if user is inactive
+		$activity->set_error_log("Page ".__FILE__.": User tried to subscribe without access;");
 		trigger_error($user->lang['LOGIN_VIEWFORUM']);				// send error to the user
 	}else {
 		switch($status){														// check new status
 			case 1:																// new status = yes
 			if($activity->is_max_enrolled(1)){
+				$activity->set_error_log("Page ".__FILE__.": Max amount of users enrolled");
 				trigger_error($user->lang['DC_ACT_ENROLL_AMOUNT_MAX']);
 			}else{
 				$activity->set_users_status(

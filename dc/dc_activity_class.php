@@ -193,6 +193,7 @@ class activity {
 	
 	static function get_activity($activity_id, $activities_handler = NULL, $user_id = NULL){
 		if(gettype($activity_id) != "integer"){ // check if the id is a int
+			$this->set_error_log("Function: get_activity; param $activity_id is not an integer (activity_id: ".$activity_id .")");
 			trigger_error("get_activity: param $activity_id is not a integer"); // set error log
 			return NULL;
 		}
@@ -238,7 +239,7 @@ class activity {
 			return NULL;
 		}
 		
-		if(gettype($user_id) != "integer" && $user_id != NULL){ // check if the id is a int
+		if(gettype($user_id) != "integer" && $user_id != NULL){ // pcheck if the id is a int
 			$this->set_error_log("Function: Fill_database; param $user_id is not a integer"); // set error log
 			return NULL;
 		}
@@ -1808,12 +1809,20 @@ class activity {
 
 	function get_read($user_id){
 		global $db;							// get database connection
-		if(gettype($user_id) != "integer")
-			return null;
+		if(gettype($user_id) != "integer"){
+			$this->set_error_log("Function: get_read; Invalid user_id (id: ".$user_id .")");
+			trigger_error("Invalid user id, see errorlog. Please contact the administrator");
+			return NULL;
+		}
 		
 		if(isset($this->readed_users[$user_id])){
-			return $this->readed_users[$user_id];
+			if($this->readed_users[$user_id] == TRUE ){
+				return TRUE;
+			}else{
+				return FALSE;
+			}
 		}
+
 
 		$sql_where_ary = array(
 			'rd.activity_id'      => (int)$this->id
@@ -1851,10 +1860,17 @@ class activity {
 	// user set read
 	function set_read($user_id){
 		global $db, $cache;												// get database connection
-		if(gettype($user_id) != "integer")
-			return null;
-		
-		$this->readed_users[$user_id] == TRUE;
+		if(gettype($user_id) != "integer"){
+			$this->set_error_log("Function: set_read; Invalid user_id (id: ".$user_id .")");
+			trigger_error("Invalid user id, see errorlog. Please contact the administrator");
+			return NULL;
+		}
+		if($this->readed_users[$user_id] ){
+			$this->set_error_log("Function: set_read; user is already set as read  (id: ".$user_id .")");
+			trigger_error("User already read this event, see errorlog. Please contact the administrator");
+			return NULL;
+		}
+		$this->readed_users[$user_id] = TRUE;
 		
 		$sql_where_ary = array(
 			"u.user_id"		=>(int) $user_id,
@@ -1876,18 +1892,22 @@ class activity {
 		$result = $db->sql_query($sql);
 		$output = $db->sql_fetchrow($result);
 		
-		if( $output['user_count'] != 1  )								// if not found or there are more id's
-			return null;
+		if( $output['user_count'] != 1  ){							// if not found or there are more id's
+			$this->set_error_log("Function: set_read; User id not found the user table (id: ".$user_id .")");
+			trigger_error("User not found, see errorlog. Please contact the administrator");
+			return NULL;
+		}
 		$db->sql_freeresult($result);							// remove query
 		$sql = 'INSERT INTO `dc_activity_read`(`activity_id`, `user_id`) VALUES ('. $this->id . ','.$user_id.')';	// get if user readed 
 		$result = $db->sql_query($sql);							// send query
 		$db->sql_freeresult($result);							// remove query
-		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE);
+		$cache->destroy('sql', ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE, ACTIVITY_READED_TABLE);
 		return true;
 	}
 	
 	public function is_max_enrolled($add_users = 0){
 		if(gettype($add_users) != "integer"){
+			$this->set_error_log("Function: is_max_enrolled; param add_users is not a integer (add_users: ".$add_users .")");
 			trigger_error("is_max_enrolled: param add_users is not a integer");
 			return null;
 			
