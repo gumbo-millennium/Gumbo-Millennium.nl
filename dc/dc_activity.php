@@ -46,11 +46,12 @@ if($activity_id == 0){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);
 }
 
-$activity = Activity::get_activity($activity_id, $act_hndlr, intval($user->data['user_id']));	
+$activity = Activity::get_activity($activity_id, intval($user->data['user_id']));	
 if($activity == NULL){
 	trigger_error($user->lang['DC_ACT_NO_ACT']);				// send error to the user
 	return null;
 }
+	
 
 $manager = $activity->is_manager($user->data['user_id']);
 $in_the_past = ($activity->getStartDatetime() < new DateTime('now') ? true : false) ;

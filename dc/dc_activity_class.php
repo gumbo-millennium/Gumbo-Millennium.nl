@@ -191,7 +191,9 @@ class activity {
 	* NULL if nothing is found
 	*/
 	
-	static function get_activity($activity_id, $activities_handler = NULL, $user_id = NULL){
+	static function get_activity($activity_id, $user_id = NULL){
+	 global $activities_handler;
+
 		if(gettype($activity_id) != "integer"){ // check if the id is a int
 			$this->set_error_log("Function: get_activity; param $activity_id is not an integer (activity_id: ".$activity_id .")");
 			trigger_error("get_activity: param $activity_id is not a integer"); // set error log
@@ -210,12 +212,13 @@ class activity {
 		
 		if($activities_handler){
 			if($activity = $activities_handler->get_activity($activity_id)){
+
 				return $activity;
 			}
 		}
 		
 		$activity = new activity();
-		if($activity->fill_database($activity_id, $activities_handler ,$user_id)){
+		if($activity->fill_database($activity_id,$user_id)){
 			return $activity;
 		}
 		
@@ -231,16 +234,16 @@ class activity {
 	 * TRUE if function succeeded
 	 * FALSE if function fails  
 	*/
-    private function fill_database($activity_id, $activities_handler = NULL, $user_id = NULL) 
+    private function fill_database($activity_id, $user_id = NULL) 
 	{
-		global $db, $user;
+		global $db, $user, $activities_handler;
 		if(gettype($activity_id) != "integer"){ // check if the id is a int
-			$this->set_error_log("Function: Fill_database; param $activity_id is not a integer"); // set error log
+			$this->set_error_log("Function: Fill_database; param activity_id is not a integer"); // set error log
 			return NULL;
 		}
 		
 		if(gettype($user_id) != "integer" && $user_id != NULL){ // pcheck if the id is a int
-			$this->set_error_log("Function: Fill_database; param $user_id is not a integer"); // set error log
+			$this->set_error_log("Function: Fill_database; param user_id is not a integer"); // set error log
 			return NULL;
 		}
 		
@@ -295,7 +298,7 @@ class activity {
 		);
 		
 		if($user_id != NULL){
-			$sql_array['SELECT'] .= ', GROUP_CONCAT(rd.user_id) readed_users';
+			$sql_array['SELECT'] .= ', GROUP_CONCAT(DISTINCT  rd.user_id) readed_users';
 			$sql_array['LEFT_JOIN'][] = array(
 				'FROM' 	=> array( ACTIVITY_READED_TABLE => 'rd'),
 				'ON'	=> 'act.id = rd.activity_id'
@@ -414,10 +417,9 @@ class activity {
 		$bbcode_uid,
 		$enable_magic_url,
 		$enable_bbcode,
-		$enable_smilies,
-		
-		$activities_handler
+		$enable_smilies
 	){
+		global $activities_handler;
 		
 		if(!$this->set_activities_handler($activities_handler)){
 			trigger_error('Fill_database_multiple: No valid activities_handler. : activity:' . $name .' id: ' . $id );
@@ -509,7 +511,6 @@ class activity {
 		$pay_option = null
 		
 	){
-	
 		if(!$this->setname($name)) return FALSE;
 		if(!$this->setDescription($description)) return FALSE;
 		if(!$this->setStartDatetime($start_datetime)) return FALSE;
@@ -1814,13 +1815,9 @@ class activity {
 			trigger_error("Invalid user id, see errorlog. Please contact the administrator");
 			return NULL;
 		}
-		
+
 		if(isset($this->readed_users[$user_id])){
-			if($this->readed_users[$user_id] == TRUE ){
-				return TRUE;
-			}else{
-				return FALSE;
-			}
+			$this->readed_users[$user_id];
 		}
 
 

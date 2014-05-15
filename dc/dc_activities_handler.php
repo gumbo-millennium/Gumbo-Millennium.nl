@@ -91,7 +91,6 @@ class activities_handler{
 				return NULL;
 		}
 
-		
 		$user_groups = $this->get_user_groups(intval($user->data["user_id"]));
 		
 		switch($short){
@@ -291,9 +290,7 @@ class activities_handler{
 					(String)$row['bbcode_uid'],
 					(int)$row['enable_magic_url'],
 					(int)$row['enable_bbcode'],
-					(int)$row['enable_smilies'],
-					
-					$this
+					(int)$row['enable_smilies']
 				);
 			}
 			switch($user_access_type){
