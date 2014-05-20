@@ -104,54 +104,53 @@
 	<dt><h3><strong>{LANG_SUBSCRIPTIONS}:</strong></h3></dt>
 	<form action="{URL_CLEAN}" method="POST">
 	{S_FORM_TOKEN}
-	<!-- IF not ENROLL -->
-		<dd>{LANG_NO_LOGIN_NEEDED}</dd>
-	<!-- ELSEIF not IS_ACTIVE -->
-		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
-		<dd><dt>{LANG_NOT_ACTIVE}</dt></dd>
-		<!-- ELSEIF IS_ENROLL_MAX and not USER_ENROLLED_CHECK -->
-		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
-		<dd><dt>{LANG_ENROLL_AMOUNT_MAX}</dt></dd>
-	<!-- ELSEIF not ENROLL_DATE_CHECK and not USER_ENROLLED_CHECK -->
-		<dd><dt><h4>{LANG_ENROLL_CLOSED}</h4></dt></dd>
-		<dd><dt>{LANG_ENROLL_DATETIME_OVER}</dt></dd>
-	<!-- ELSEIF not S_USER_LOGGED_IN and not USER_ENROLLED_CHECK -->
-		<dt><a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a></dt>
-	<!-- ELSEIF USER_ENROLLED_CHECK -->
-		<!-- IF CHANGE == FALSE -->
-			<dt><strong>{LANG_AMOUNT} {LANG_PAID}:</strong></dd>
-				<dd>&#8364;{USER_ENROLLED_PAID}</dd>
-			<dt>&nbsp;</dt>
-			<dd>{USER_ENROLLED_STATUS}</dd>
-			<!-- IF UNSUBSCRIBE_DATE_CHECK && USER_ENROLLED_STATUS == "Yes" -->
-				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
-			<!-- ELSEIF USER_ENROLLED_STATUS == "No" && ENROLL_DATE_CHECK && not ENROLL_MAX -->
-				<dd><a href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a></dd>
-			<!-- ENDIF -->
-			<dt>&nbsp;</dt>
-			<dd><textarea name="comment" >{USER_ENROLLED_COMMENT}</textarea></dd>
-			<!-- IF COMMENT_SAVED -->
-			<dd>{LANG_SAVED}</dd>
-			<!-- ENDIF -->
-			<dd><input type="submit" value="{LANG_SAVE_COMMENT}"></dd>
-			<input type="hidden" name="act" value="{FORM_HIDDEN_ACT}" />
-			<input type="hidden" name="sid" value="{FORM_HIDDEN_SID}" />
-		<!-- ELSE -->
-			<!-- IF USER_ENROLLED_STATUS == 'No' && ENROLL_DATE_CHECK && not ENROLL_MAX -->
-				<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
-				<!-- IF UNSUBSCRIBE_DATE_CHECK -->
-					<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-				<!-- ENDIF -->
-			<!-- ELSEIF USER_ENROLLED_STATUS == 'Yes' && UNSUBSCRIBE_DATE_CHECK -->
-				<dd><button name="status" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button></dd>
-				<dd><a href="{URL_CLEAN}"><strong>{LANG_CANCEL}</strong></a></dd>
-			<!-- ENDIF -->
-		<!-- ENDIF -->
-	<!-- ELSE -->
-		<!-- IF ENROLL_DATE_CHECK -->
-			<dd><button name="status" type="submit" value="1"><h3> {LANG_SUBSCRIBE} </h3></button></dd>
-		<!-- ENDIF -->
-	<!-- ENDIF -->
+	<!-- IF ENROLL && USER_ENROLLED_CHECK && S_USER_LOGGED_IN --> 
+                                <!-- IF UNSUBSCRIBE_DATE_CHECK && ENROLL_DATE_CHECK && not ENROLL_MAX && CHANGE == FALSE -->
+                                    <a class="button large right" href="{URL_CHANGE_STATUS}">{LANG_CHANGE}</a>
+                                <!-- ENDIF -->
+
+                                <!-- IF ENROLL_DATE_CHECK && not ENROLL_MAX && CHANGE == true -->
+                                    <button name="status"  class="button large right" type="submit" value="1"> {LANG_SUBSCRIBE}</button>
+                                   
+                                <!-- ENDIF -->
+                                <!-- IF UNSUBSCRIBE_DATE_CHECK  && CHANGE == true -->
+                                    <button name="status"  class="button large black right" type="submit" value="2"> {LANG_UNSUBSCRIBE} </button>
+                                <!-- ENDIF -->
+                            <!-- ELSEIF not USER_ENROLLED_CHECK && ENROLL_DATE_CHECK && S_USER_LOGGED_IN -->
+                                 <button name="status" type="submit" class="button large" value="1"><h3>{LANG_SUBSCRIBE}</h3></button>
+                            <!-- ENDIF -->
+                            <div class="with-button">
+                            <!-- IF EVENT_FINISHED -->
+                                    <h2>{LANG_EVENT_FINISHED}</h2>
+                                    <p>{LANG_ENROLL_CLOSED}</p>
+                                    <!-- IF USER_ENROLLED_CHECK and PRICE  > 0 -->
+                                        <p>{LANG_AMOUNT} {LANG_PAID}: &#8364;{USER_ENROLLED_PAID}</p>
+                                    <!-- ENDIF -->
+                            <!-- ELSE -->
+                                <!-- IF not ENROLL -->
+                                    <h2>{LANG_NO_LOGIN_NEEDED}</h2>
+                                <!-- ELSEIF not IS_ACTIVE -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_NOT_ACTIVE}</p>
+                                <!-- ELSEIF IS_ENROLL_MAX and not USER_ENROLLED_CHECK -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_ENROLL_AMOUNT_MAX}</p>
+                                <!-- ELSEIF not ENROLL_DATE_CHECK and not USER_ENROLLED_CHECK -->
+                                    <h2>{LANG_ENROLL_CLOSED}</h2>
+                                    <p>{LANG_ENROLL_DATETIME_OVER}</p>
+                                <!-- ELSEIF not S_USER_LOGGED_IN and not USER_ENROLLED_CHECK -->
+                                    <a href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT} {LANG_TO} {LANG_SUBSCRIBE}</a>
+                                <!-- ELSEIF USER_ENROLLED_CHECK -->
+                                        <h2>{USER_ENROLLED_TEXT}</h2>
+                                        <p>{LANG_UNSUBSCRIPTIONS}: {UNSUBSCRIBE_MAX_DATETIME}</p>
+                                        <!-- IF PRICE  > 0-->
+                                        <p>{LANG_AMOUNT} {LANG_PAID}: &#8364;{USER_ENROLLED_PAID}</p>
+                                        <!-- ENDIF -->
+                                <!-- ELSE -->
+                                    <p>{LANG_ENROLL_TIME}: {ENROLL_DATE}</p>
+                                    <p>{LANG_SIGN_UPS_LEFT}: {U_SIGN_UPS_LEFT}</p>
+                                <!-- ENDIF -->
+                            <!-- ENDIF -->
 	</form>
 	</dl>
 	<div class="back2top"><a href="#wrap" class="top" title="Top">Top</a></div>

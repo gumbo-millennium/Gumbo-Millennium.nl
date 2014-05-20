@@ -82,7 +82,7 @@ class acp_dc_activity_management
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
 				
-				$activity = Activity::get_activity($activity_id, $activities_handler);								
+				$activity = Activity::get_activity($activity_id);								
 				
 				if($activity == NULL){
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
@@ -119,7 +119,7 @@ class acp_dc_activity_management
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
 						}
 						
-						$activity = Activity::get_activity($activity_id, $activities_handler);
+						$activity = Activity::get_activity($activity_id);
 						
 						if($activity == NULL){
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
@@ -681,7 +681,7 @@ class acp_dc_activity_management
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
 				
-				$activity = Activity::get_activity($activity_id, $activities_handler);								
+				$activity = Activity::get_activity($activity_id);								
 				
 				if($activity == NULL){
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
@@ -1317,7 +1317,7 @@ class acp_dc_activity_management
 				case 'new_activity':
 				
 					if( isset($activity_id) ){
-							$activity = Activity::get_activity($activity_id, $activities_handler);
+							$activity = Activity::get_activity($activity_id);
 							
 							if($activity == NULL){
 								trigger_error($user->lang['DC_ACT_NO_ACT']);

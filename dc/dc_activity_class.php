@@ -195,7 +195,6 @@ class activity {
 	 global $activities_handler;
 
 		if(gettype($activity_id) != "integer"){ // check if the id is a int
-			$this->set_error_log("Function: get_activity; param $activity_id is not an integer (activity_id: ".$activity_id .")");
 			trigger_error("get_activity: param $activity_id is not a integer"); // set error log
 			return NULL;
 		}
@@ -206,7 +205,6 @@ class activity {
 		}
 		
 		if(gettype($user_id) != "integer" && $user_id != NULL){ // check if the id is a int
-			$this->set_error_log("Function: Fill; param $user_id is not a integer"); // set error log
 			return NULL;
 		}
 		
@@ -1513,7 +1511,7 @@ class activity {
 		if(!empty($groups_acces_ary) && $full_list){
 		
 			$sql = "UPDATE " . ACTIVITY_GROUP_ACCESS_TABLE . " AS grs
-					SET grs.disabled = 'no'
+					SET grs.disabled = 1
 					WHERE " . $db->sql_in_set("grs.group_id", array_keys($groups_acces_ary)) ."
 					AND grs.activity_id = '" . $db->sql_escape((int)$this->id) ."'";
 					$db->sql_query($sql);
