@@ -1,0 +1,38 @@
+<li class="entry one-third {$MODULE_ID} start">
+    <section>
+			<div class="arrowbox arrowbox-first">
+				<h2 class="arrowbox-title">{L_PORTAL_RECENT_HOT_TOPIC}
+					<span class="arrowbox-title-arrow-front"></span>
+				</h2>
+				
+				<ul class="arrow">
+					<!-- IF .latest_hot_topics -->
+						<!-- BEGIN latest_hot_topics -->
+							<li><strong><a href="{latest_hot_topics.U_VIEW_TOPIC}" title="{latest_hot_topics.FULL_TITLE}">{latest_hot_topics.TITLE}</a></strong></li>
+						<!-- END latest_hot_topics -->
+					<!-- ENDIF -->
+				</ul>
+			</div>
+		<div class="clear"></div>
+	</section>
+</li>
+
+
+<li class="entry one-third {$MODULE_ID} start">
+    <section>
+			<div class="arrowbox arrowbox-first">
+				<h2 class="arrowbox-title">{L_PORTAL_RECENT_TOPIC}
+					<span class="arrowbox-title-arrow-front"></span>
+				</h2>
+				
+				<ul class="arrow">
+					<!-- IF .latest_topics -->
+						<!-- BEGIN latest_topics -->
+							<li><strong><a href="{latest_topics.U_VIEW_TOPIC}" title="{latest_topics.FULL_TITLE}">{latest_topics.TITLE}</a></strong></li>
+						<!-- END latest_topics -->
+					<!-- ENDIF -->
+				</ul>
+			</div>
+		<div class="clear"></div>
+	</section>
+</li>

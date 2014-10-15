@@ -1,0 +1,142 @@
+<script type="text/javascript">
+// <![CDATA[
+function init_highchars(){
+	jQuery(document).ready(function ($) { 
+		$("#poll_table td").click(function(event) {
+			$(this).parent("table").children('input').removeAttr("selected");
+			$(this).children('input').attr('checked', 'checked');
+		});
+
+		<!-- BEGIN poll(0,0) -->
+			var poll_question = '{poll.POLL_QUESTION}';
+			var poll_data = [
+				<!-- BEGIN poll_option -->
+					['{poll_option.POLL_OPTION_CAPTION}', {poll_option.POLL_OPTION_RESULT}],
+
+				<!-- END poll_option -->
+			];
+		<!-- END poll -->
+
+
+		$('#{$MODULE_ID}').highcharts({
+		        chart: {
+		            plotBackgroundColor: null,
+		            plotBorderWidth: 0,
+		            plotShadow: true,
+
+		        },
+		        title: {
+		            text: poll_question,
+		            align: 'center',
+		            verticalAlign: 'top',
+		        },
+		        tooltip: {
+		            pointFormat: '{point.y} votes: <b>{point.percentage:.1f}%</b>'
+		        },
+		        plotOptions: {
+		            pie: {
+		        		allowPointSelect: true,
+		                dataLabels: {
+		                    enabled: true,
+		                    distance: -50,
+		                    style: {
+		                        fontWeight: 'bold',
+		                        color: 'white',
+		                        textShadow: '0px 1px 2px black'
+		                    }
+		                },
+
+		  
+		            }
+		        },
+		        series: [{
+		            type: 'pie',
+		            name: 'Poll',
+		            innerSize: '50%',
+		            data: poll_data
+		        }]
+		    });
+
+		return true;
+	});
+};
+onload_functions.push('init_highchars()');
+
+	// ]]>
+</script>
+<!-- IF S_HAS_POLL -->
+<li class="entry one-half {$MODULE_ID} start" sytle="max-width=200px">
+	<section>
+		<h2>{$TITLE}</h2>
+
+		<!-- BEGIN poll(0,0) -->
+		<!-- IF poll.S_CAN_VOTE -->
+		<form method="post" action="{poll.S_POLL_ACTION}">
+		    <table id="poll_table" class="gen-table">
+		        <caption>
+		        {poll.POLL_QUESTION}
+		        </caption>
+		           <tfoot>
+		            <tr>
+		                <td>
+		                    <input type="submit" name="update" value="{L_SUBMIT_VOTE}" class="button" />
+		                </td>
+		            </tr>
+		        </tfoot>
+		        <tbody>
+		            <!-- BEGIN poll_option -->
+		            <tr>
+		                <td>
+		                    <!-- IF poll.S_IS_MULTI_CHOICE -->
+		                        <input 
+		                            type="checkbox"  
+		                            name="vote_id[]" 
+		                            id="poll_{poll.TOPIC_ID}_vote_{poll.poll_option.POLL_OPTION_ID}" 
+		                            value="{poll.poll_option.POLL_OPTION_ID}"
+		                            <!-- IF poll.poll_option.POLL_OPTION_VOTED --> 
+		                                checked="checked"
+		                            <!-- ENDIF --> 
+		                        >
+		                    <!-- ELSE -->
+		                        <input type="radio" 
+		                            name="vote_id[]" 
+		                            id="poll_{poll.TOPIC_ID}_vote_{poll.poll_option.POLL_OPTION_ID}" 
+		                            value="{poll.poll_option.POLL_OPTION_ID}"
+		                            <!-- IF poll.poll_option.POLL_OPTION_VOTED --> 
+		                                checked="checked"
+		                            <!-- ENDIF --> 
+		                        >   
+		                    <!-- ENDIF -->
+		                    <label for="poll_{poll.TOPIC_ID}_vote_{poll.poll_option.POLL_OPTION_ID}">
+		                        {poll.poll_option.POLL_OPTION_CAPTION}
+		                    </label>
+		                </td>
+		            </tr>
+		            <!-- END poll_option -->
+
+		        </tbody>
+		    </table>
+		    {poll.S_HIDDEN_FIELDS}
+		</form>
+		<!-- ENDIF -->
+
+			<!-- IF poll.S_DISPLAY_RESULTS -->
+
+				<div id="{$MODULE_ID}"></div>
+				<p>display:res: {poll.S_DISPLAY_RESULTS}</p>
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+
+		<!-- IF S_HAS_POLL -->
+			<!-- IF poll.S_DISPLAY_RESULTS -->
+				<div id="{$MODULE_ID}"></div>
+			<!-- ENDIF -->
+		<!-- ENDIF -->	
+
+		<!-- END poll -->
+		
+		
+		
+		<div class="clear"></div>
+	</section>
+</li>

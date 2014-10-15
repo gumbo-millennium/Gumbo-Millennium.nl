@@ -11,7 +11,14 @@
 
 function add_gumbo_layout()
 {
+	// HOOK detection
+	if (defined("HOOK_GUMBO_LAYOUT")) {
+		return;
+  	}
+  	define("HOOK_GUMBO_LAYOUT", true);
+	
   global $phpbb_root_path, $phpEx, $template, $user, $auth;
+ 	
 
   	require($phpbb_root_path . 'gumbo/includes/functions.' . $phpEx);
 	require($phpbb_root_path . 'gumbo/includes/Mobile_Detect.' . $phpEx);
@@ -142,7 +149,10 @@ function add_gumbo_layout()
 
 
 
+// HOOK detection
+if (!defined("HOOK_GUMBO_LAYOUT")) {
+	$phpbb_hook->add_hook("add_gumbo_layout"); // This is a non standard hook, add this one without having to edit the core hooks file
+	$phpbb_hook->register('phpbb_user_session_handler', "add_gumbo_layout"); // Tell hook to perform my_user_delete directly when the function user_delete is called
+}
 
-$phpbb_hook->add_hook("add_gumbo_layout"); // This is a non standard hook, add this one without having to edit the core hooks file
-$phpbb_hook->register('phpbb_user_session_handler', "add_gumbo_layout"); // Tell hook to perform my_user_delete directly when the function user_delete is called
 ?>

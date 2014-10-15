@@ -1,0 +1,42 @@
+<!-- BEGIN minical -->
+<!-- IF minical.MODULE_ID eq $MODULE_ID -->
+<a id="minical{minical.MODULE_ID}" style="float: right;"></a>
+{$LR_BLOCK_H_L}<!-- IF $S_BLOCK_ICON --><img src="{$IMAGE_SRC}" width="{$IMAGE_WIDTH}" height="{$IMAGE_HEIGHT}" alt="" />&nbsp;<!-- ENDIF -->{$LR_BLOCK_H_R}
+ <div class="one-fourth">
+    <div class="widget newsletter">
+        <h3>{$TITLE}</h3>	
+				<table width="100%" cellspacing="1">
+					<tr>
+						<td colspan="7" align="center"><span class="genmed">{minical.L_MINI_CAL_MONTH}</span></td>
+					</tr>
+					<tr>
+						<!-- IF minical.S_SUNDAY_FIRST -->
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_SUN}</span></td>
+						<!-- ENDIF -->
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_MON}</span></td>
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_TUE}</span></td>
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_WED}</span></td>
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_THU}</span></td>
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_FRI}</span></td>
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_SAT}</span></td>
+						<!-- IF not minical.S_SUNDAY_FIRST -->
+							<td style="width: 14%;"><span class="gensmall" style="font-weight: bold">{minical.L_MINI_CAL_SUN}</span></td>
+						<!-- ENDIF -->
+					</tr>
+					<!-- BEGIN mini_cal_row -->
+					<!-- IF minical.mini_cal_row.MODULE_ID eq $MODULE_ID -->
+					<tr>
+						<!-- BEGIN mini_cal_days -->
+							<td class="row1" align="center"><span class="gensmall">{minical.mini_cal_row.mini_cal_days.MINI_CAL_DAY}</span></td>
+						<!-- END mini_cal_days -->
+					</tr>
+					<!-- ENDIF -->
+					<!-- END mini_cal_row -->
+				</table>
+			{$LR_BLOCK_F_L}{$LR_BLOCK_F_R}
+		</div>
+	<p>{CURRENT_TIME}</p>
+     <p>{S_TIMEZONE}</p>
+</div>
+<!-- ENDIF -->
+<!-- END minical -->

@@ -27,9 +27,6 @@ class acp_portal
 		global $db, $user, $cache, $template;
 		global $config, $phpbb_root_path, $portal_root_path, $phpbb_admin_path, $phpEx;
 
-		$user->add_lang('mods/portal');
-
-		include($phpbb_root_path . 'portal/includes/constants.' . $phpEx);
 		$portal_root_path = PORTAL_ROOT_PATH;
 
 		$this->db = $db;

@@ -28,7 +28,7 @@ class portal_calendar_module
 	* right		8
 	* bottom	16
 	*/
-	public $columns = 10;
+	public $columns = 26;
 
 	/**
 	* Default modulename
@@ -56,7 +56,7 @@ class portal_calendar_module
 	/**
 	* additional variables
 	*/
-	private $mini_cal_fdow;
+	private $imni_cal_fdow;
 
 	/**
 	* constants
@@ -65,7 +65,17 @@ class portal_calendar_module
 	const DAYS_PER_WEEK = 6; // indexes start at 0
 	const MONTHS_PER_YEAR = 12;
 
+	public function get_template_center($module_id)
+	{
+		return $this->parse_template($module_id);
+	}
+
 	public function get_template_side($module_id)
+	{
+		return $this->parse_template($module_id, 'side');
+	}
+
+	public function parse_template($module_id, $type = 'center')
 	{
 		global $config, $template, $user, $phpbb_root_path, $phpEx, $db;
 
@@ -117,10 +127,9 @@ class portal_calendar_module
 			'L_MINI_CAL_SAT'	=> $user->lang['mini_cal']['day'][7], 
 			'U_PREV_MONTH'		=> $prev_month,
 			'U_NEXT_MONTH'		=> $next_month,
-			'S_DISPLAY_EVENTS'	=> ($config['board3_display_events_' . $module_id]) ? true : false,
 			'MODULE_ID'			=> $module_id,
 		));
-
+		
 		// output the days for the current month 
 		for($i = 0; $i < $mini_cal_month_days;)
 		{
@@ -165,84 +174,6 @@ class portal_calendar_module
 				$mini_cal_count++;
 			}
 		}
-
-		/* 
-		* Let's start displaying the events
-		* make sure we only display events in the future
-		*/
-		$events = $this->utf_unserialize($portal_config['board3_calendar_events_' . $module_id]);
-
-		if(!empty($events) && $config['board3_display_events_' . $module_id])
-		{
-			// we sort the $events array by the start time
-			foreach($events as $key => $cur_event)
-			{
-				$time_ary[$key] = $cur_event['start_time'];
-			}
-			array_multisort($time_ary, SORT_NUMERIC, $events);
-
-			$groups_ary = get_user_groups();
-
-			foreach($events as $key => $cur_event)
-			{
-				if(($cur_event['start_time'] + $user->timezone + $user->dst) >= $today_timestamp || 
-					($cur_event['end_time'] + $user->timezone + $user->dst) >= $today_timestamp || 
-					(($cur_event['start_time'] + $user->timezone + $user->dst + self::TIME_DAY) >= $today_timestamp && $cur_event['all_day']))
-				{
-					$cur_permissions = explode(',', $cur_event['permission']);
-					$permission_check = array_intersect($groups_ary, $cur_permissions);
-
-					if(!empty($permission_check) || $cur_event['permission'] == '')
-					{
-						// check if this is an external link
-						if (isset($cur_event['url']) && strpos($cur_event['url'], generate_board_url()) === false)
-						{
-							$is_external = true;
-						}
-						else
-						{
-							$is_external = false;
-						}
-
-						/** 
-						* Current events
-						*
-						* Events are treated as current if the following is met:
-						* - We have an all day event and the start of that event is less than 1 day (86400 seconds) away
-						* - We have a normal event with a start that is less then 1 day away and that hasn't ended yet
-						*/
-						if((($cur_event['start_time'] + $user->timezone + $user->dst - $today_timestamp) <= self::TIME_DAY && $cur_event['all_day']) || 
-						(($cur_event['start_time'] + $user->timezone + $user->dst - $today_timestamp) <= self::TIME_DAY && ($cur_event['end_time'] + $user->timezone + $user->dst) >= $today_timestamp))
-						{
-							$template->assign_block_vars('minical.cur_events', array(
-								'EVENT_URL'		=> (isset($cur_event['url']) && $cur_event['url'] != '') ? $this->validate_url($cur_event['url']) : '',
-								'EVENT_TITLE'	=> $cur_event['title'],
-								'START_TIME'	=> $user->format_date($cur_event['start_time'], 'j. M Y, H:i'),
-								'END_TIME'		=> (!empty($cur_event['end_time'])) ? $user->format_date($cur_event['end_time'], 'j. M Y, H:i') : false,
-								'EVENT_DESC'	=> (isset($cur_event['desc']) && $cur_event['desc'] != '') ? $cur_event['desc'] : '',
-								'ALL_DAY'	=> ($cur_event['all_day']) ? true : false,
-								'MODULE_ID'		=> $module_id,
-								'EVENT_URL_NEW_WINDOW'	=> ($is_external && $config['board3_events_url_new_window_' . $module_id]) ? true : false,
-							));
-						}
-						else
-						{
-							$template->assign_block_vars('minical.upcoming_events', array(
-								'EVENT_URL'		=> (isset($cur_event['url']) && $cur_event['url'] != '') ? $this->validate_url($cur_event['url']) : '',
-								'EVENT_TITLE'	=> $cur_event['title'],
-								'START_TIME'	=> $user->format_date($cur_event['start_time'], 'j. M Y, H:i'),
-								'END_TIME'		=> (!$cur_event['all_day']) ? $user->format_date($cur_event['end_time'], 'j. M Y, H:i') : '',
-								'EVENT_DESC'	=> (isset($cur_event['desc']) && $cur_event['desc'] != '') ? $cur_event['desc'] : '',
-								'ALL_DAY'	=> (($cur_event['start_time'] - $cur_event['end_time']) == 1) ? true : false,
-								'MODULE_ID'		=> $module_id,
-								'EVENT_URL_NEW_WINDOW'	=> ($is_external && $config['board3_events_url_new_window_' . $module_id]) ? true : false,
-							));
-						}
-					}
-				}
-			}
-		}
-
 		return 'calendar_side.html';
 	}
 
@@ -256,9 +187,6 @@ class portal_calendar_module
 				'board3_calendar_sunday_color_' . $module_id	=> array('lang' => 'PORTAL_CALENDAR_SUNDAY_COLOR' ,	'validate' => 'string', 'type' => 'text:10:10',	 'explain' => true),
 				'board3_long_month_' . $module_id				=> array('lang' => 'PORTAL_LONG_MONTH' ,	'validate' => 'bool',	'type' => 'radio:yes_no',	 'explain' => true),
 				'board3_sunday_first_' . $module_id				=> array('lang' => 'PORTAL_SUNDAY_FIRST' ,	'validate' => 'bool',	'type' => 'radio:yes_no',	 'explain' => true),
-				'board3_display_events_' . $module_id			=> array('lang' => 'PORTAL_DISPLAY_EVENTS',	'validate' => 'bool',	'type' => 'radio:yes_no',	 'explain' => true),
-				'board3_events_url_new_window_' . $module_id	=> array('lang' => 'PORTAL_EVENTS_URL_NEW_WINDOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => false),
-				'board3_events_' . $module_id					=> array('lang' => 'PORTAL_EVENTS_MANAGE', 'validate' => 'string',	'type' => 'custom',	'explain' => false, 'method' => 'manage_events', 'submit' => 'update_events'),
 			),
 		);
 	}

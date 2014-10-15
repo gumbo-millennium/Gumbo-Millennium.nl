@@ -448,7 +448,7 @@ class ucp_profile
 				}
 
 				include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 				$enable_bbcode	= ($config['allow_sig_bbcode']) ? (bool) $user->optionget('sig_bbcode') : false;
 				$enable_smilies	= ($config['allow_sig_smilies']) ? (bool) $user->optionget('sig_smilies') : false;
@@ -552,7 +552,7 @@ class ucp_profile
 
 			case 'avatar':
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 				$display_gallery = request_var('display_gallery', '0');
 				$avatar_select = basename(request_var('avatar_select', ''));

@@ -1,0 +1,64 @@
+<!-- Begin gumbo cam -->
+<script type="text/javascript">
+// <![CDATA[
+function init_plazacam_refresh(){
+	
+	jQuery(document).ready(function($) {
+		var myVar = setInterval(function(){webcam_update_interval()}, {REFRESH_RATE});
+		function webcam_update_interval() {
+			var new_plazacam_url = "{S_PLAZACAM_URL}" +"?"+ new Date().getTime();
+			var new_koffiecam_url = "{S_KOFFIECAM_URL}" +"?"+ new Date().getTime();
+			//check if fancybox is open
+			if($('.fancybox-image').length == 1){
+				// check withs webcam tab is open
+				if($("#tab-1").attr("aria-expanded") == "true"){
+					//update fancybox image with plazacam feed
+					$(".fancybox-image").attr("src", new_plazacam_url);
+				}else if($("#tab-2").attr("aria-expanded") == "true"){
+					// update fancybox image with koffiecam feed
+					$(".fancybox-image").attr("src", new_koffiecam_url);
+				}
+			}
+			//update plazacam
+			$("#plazacam-img").attr("src", new_plazacam_url)
+			//update koffiecam
+			$("#koffiecam-img").attr("src", new_koffiecam_url);
+			
+		}
+	});
+};
+onload_functions.push('init_plazacam_refresh()');
+	// ]]>
+</script>
+<li class="entry one-half {$MODULE_ID} start" >
+	<section >
+		<h2>{$TITLE}</h2>
+		<!-- IF WEBCAM_AVAILABLE -->
+		<div class="tabs">
+			<ul class="tabs-nav clearfix">
+				<li><a href="#tab-1">Plaza cam</a></li>
+				<li><a href="#tab-2">Koffie cam</a></li>
+			</ul>
+			
+			<div id="tab-1" class="tab">
+				<a class="entry-image inner-caption link-overlay lightbox"  href="{S_PLAZACAM_URL}" title="{L_PLAZACAM_TITLE}">
+					<span class="overlay"></span>
+					<img id="plazacam-img" src="{S_PLAZACAM_URL}" alt="{L_PLAZACAM_ALT}">
+					<div><p>{L_PLAZACAM_SUB}</p></div>
+				</a>
+			</div>
+			
+			<div id="tab-2" class="tab">
+				<a class="entry-image inner-caption link-overlay lightbox" href="{S_KOFFIECAM_URL}" title="{L_KOFFIECAM_TITLE}">
+					<span class="overlay"></span>
+					<img id="koffiecam-img" src="{S_KOFFIECAM_URL}" alt="{L_KOFFIECAM_ALT}">
+					<div><p>{L_KOFFIECAM_SUB}</p></div>
+				</a>
+			</div>
+		</div>
+		<!-- ELSE -->
+		<p>{MESSAGE_TEXT}</p>
+		<!-- ENDIF -->
+	</section>
+</li>
+<!-- end gumbo cam -->

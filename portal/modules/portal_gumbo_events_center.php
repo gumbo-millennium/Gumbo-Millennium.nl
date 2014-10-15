@@ -28,7 +28,7 @@ class portal_gumbo_events_center_module
 	* right		8
 	* bottom	16
 	*/
-	public $columns = 4;
+	public $columns = 20;
 
 	/**
 	* Default modulename

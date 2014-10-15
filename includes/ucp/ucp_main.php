@@ -198,7 +198,7 @@ class ucp_main
 
 			case 'subscribed':
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 				$user->add_lang('viewforum');
 
@@ -383,7 +383,7 @@ class ucp_main
 					break;
 				}
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 				$user->add_lang('viewforum');
 

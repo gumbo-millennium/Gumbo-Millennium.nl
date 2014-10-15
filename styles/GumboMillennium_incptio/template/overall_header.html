@@ -40,6 +40,15 @@
 
 <script type="text/javascript">
 // <![CDATA[
+	<!-- BEGIN poll(0,0) -->
+		var poll_question = '{poll.POLL_QUESTION}';
+		var poll_data = [
+			<!-- BEGIN poll_option -->
+				['{poll_option.POLL_OPTION_CAPTION}', {poll_option.POLL_OPTION_RESULT}],
+
+			<!-- END poll_option -->
+		];
+	<!-- END poll -->
 	var jump_page = '{LA_JUMP_PAGE}:';
 	var on_page = '{ON_PAGE}';
 	var per_page = '{PER_PAGE}';
@@ -98,7 +107,6 @@
 <script type="text/javascript">
 	ddlevelsmenu.setup("nav", "topbar");
 </script>
-<script src="{T_THEME_PATH}/js/tinynav.min.js" type="text/javascript"></script> <!-- tiny nav -->
 <script src="{T_THEME_PATH}/js/jquery.validate.min.js" type="text/javascript"></script> <!-- form validation -->
 <script src="{T_THEME_PATH}/js/jquery.isotope.min.js" type="text/javascript"></script> <!-- portfolio filter -->
 <script src="{T_THEME_PATH}/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script> <!-- tabs, toggles, accordion -->
@@ -118,6 +126,8 @@
 <script src="{T_THEME_PATH}/js/push-menu/mlpushmenu.js"></script>
 <!-- ENDIF -->
 <script src="{T_THEME_PATH}/js/custom.js" type="text/javascript"></script> <!-- jQuery initialization -->
+
+<script src="{T_THEME_PATH}/js/highcharts/highcharts-custom.js"></script>
 
 <!-- CSS -->
 <noscript><style> .jsonly { display: none } </style></noscript>

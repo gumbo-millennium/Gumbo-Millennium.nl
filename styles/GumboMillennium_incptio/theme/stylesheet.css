@@ -1512,7 +1512,40 @@ input, textarea, select {
 	line-height: inherit;
 	color: inherit;
 }
+/*
+#poll_table  input[type="radio"]{
+	display:	none;
+}
 
+#poll_table td:has(input.selected){
+	background-color: blue;
+}
+
+input[type=checkbox]:not(old),
+input[type=radio   ]:not(old){
+  width   : 28px;
+  margin  : 0;
+  padding : 0;
+  opacity : 0;
+}
+
+input[type=checkbox]:not(old) + label,
+input[type=radio   ]:not(old) + label{
+  display      : inline-block;
+  margin-left  : -28px;
+  padding-left : 28px;
+  background   : url('{T_IMAGESET_PATH}/checks.png') no-repeat 0 0;
+  line-height  : 24px;
+}
+
+input[type=checkbox]:not(old):checked + label{
+  background-position : 0 -24px;
+}
+
+input[type=radio]:not(old):checked + label{
+  background-position : 0 -48px;
+}
+*/
 input, textarea {
 	-webkit-appearance: none; /* Fix for Mobile Safari */
 }

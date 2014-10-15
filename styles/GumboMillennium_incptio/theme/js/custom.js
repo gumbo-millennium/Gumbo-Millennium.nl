@@ -523,6 +523,11 @@ jQuery(document).ready(function ($) {
     initAllCarousels();
 
     /* ---------------------------------------------------------------------- */
+    /* Highcarts
+    /* ---------------------------------------------------------------------- */
+    
+
+    /* ---------------------------------------------------------------------- */
     /* Responsive Search (must be placed after Tiny Nav)
     /* ---------------------------------------------------------------------- */
 
@@ -1177,31 +1182,10 @@ jQuery(document).ready(function ($) {
     /* Sticky Footer
     /* ---------------------------------------------------------------------- */
 
-    // Set minimum height so that the footer will stay at the bottom of the window even if there isn't enough content
-    function setMinHeight() {
-        var body = $('body');
-        var wrap = $('#wrap');
-        var content = $('#content');
-        content.css('min-height',
-            $(window).outerHeight(true)
-                - ( body.outerHeight(true) - body.height() )
-                - ( wrap.outerHeight(true) - wrap.height() )
-                - $('#header').outerHeight(true)
-                - $('#slider-home').outerHeight(true)
-                - $('#page-title').outerHeight(true)
-                - ( content.outerHeight(true) - content.height() )
-                - $('#footer').outerHeight(true)
-        );
-    }
-
-    // Init
-    setMinHeight();
-
     // Window resize
     $(window).on('resize', function () {
         var timer = window.setTimeout(function () {
             window.clearTimeout(timer);
-            setMinHeight();
             resizeAllCarousels();
             resizeGoogleMap();
         }, 30);
@@ -1226,3 +1210,4 @@ jQuery(document).ready(function ($) {
     }
 
 });
+

@@ -15,7 +15,7 @@
 */
 // set defines
 define("GROUP_SEPARATOR", ",");											// separator for selecting groups
-define("EXCLUDE_PRE_DEFINED_GROUPS", serialize(array(3)));				// exclude pre definde (like ADMINISTRATORS) groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
+define("EXCLUDE_PRE_DEFINED_GROUPS", serialize(array(3)));				// exclude pre defined (like ADMINISTRATORS) groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 define("EXCLUDE_GROUPS_COMMISSION", serialize(array(9, 10, 11)));		// exclude groups for selecting the making commission ,groups by id: 9: leden, 10: oud leden, 11: A-leden 
 
 // defines for action list on the subscriptions page
@@ -32,7 +32,7 @@ include_once($phpbb_root_path . '/includes/functions_posting.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 class acp_dc_activity_management
 {
