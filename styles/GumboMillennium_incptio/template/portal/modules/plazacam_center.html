@@ -30,17 +30,18 @@ function init_plazacam_refresh(){
 onload_functions.push('init_plazacam_refresh()');
 	// ]]>
 </script>
+
 <li class="entry one-half {$MODULE_ID} start" >
 	<section >
 		<h2>{$TITLE}</h2>
 		<!-- IF WEBCAM_AVAILABLE -->
 		<div class="tabs">
 			<ul class="tabs-nav clearfix">
-				<li><a href="#tab-1">Plaza cam</a></li>
-				<li><a href="#tab-2">Koffie cam</a></li>
+				<li><a href="#{$MODULE_ID}_plazacam">Plaza cam</a></li>
+				<li><a href="#{$MODULE_ID}_koffiecam">Koffie cam</a></li>
 			</ul>
 			
-			<div id="tab-1" class="tab">
+			<div id="{$MODULE_ID}_plazacam" class="tab">
 				<a class="entry-image inner-caption link-overlay lightbox"  href="{S_PLAZACAM_URL}" title="{L_PLAZACAM_TITLE}">
 					<span class="overlay"></span>
 					<img id="plazacam-img" src="{S_PLAZACAM_URL}" alt="{L_PLAZACAM_ALT}">
@@ -48,7 +49,7 @@ onload_functions.push('init_plazacam_refresh()');
 				</a>
 			</div>
 			
-			<div id="tab-2" class="tab">
+			<div id="{$MODULE_ID}_koffiecam" class="tab">
 				<a class="entry-image inner-caption link-overlay lightbox" href="{S_KOFFIECAM_URL}" title="{L_KOFFIECAM_TITLE}">
 					<span class="overlay"></span>
 					<img id="koffiecam-img" src="{S_KOFFIECAM_URL}" alt="{L_KOFFIECAM_ALT}">

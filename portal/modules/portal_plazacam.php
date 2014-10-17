@@ -73,7 +73,7 @@ class portal_plazacam_module
 			$check += 1;
 		}
 		
-		if ( $check !== 1  || true)
+		if ( $check !== 1)
 		{  
 			$template->assign_var('WEBCAM_AVAILABLE', true);
 			$post_id = intval($config['board3_plazacam_post_id' . $module_id]);
