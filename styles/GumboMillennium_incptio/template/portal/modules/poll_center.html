@@ -31,8 +31,8 @@ onload_functions.push('init_highchars()');
       google.setOnLoadCallback(drawChart);
       function drawChart() {
 
-	var data = google.visualization.arrayToDataTable(data );
-
+	console.log(data);
+	data = google.visualization.arrayToDataTable(data );
 	var options = {
 	  pieHole: 0.4,
 	   width: '100%',
