@@ -263,7 +263,39 @@ class portal_news_top_module
 					$preview = explode( "<br/>", $fetch_news[$i]['post_text'], -1);
 					$height = 117;
 					$time = 1500;
+
+
+
+
+					$height = 117;
+					$time = 1500;
+
+					// check if sentences are to long
+					$usable_sentence = array(0 => "");
+					$sentence_counter = 0;
 					foreach ($preview as $key => $sentence) {
+						// max 124 chars
+						if(strlen($sentence) > 124){
+							$sentence_words = preg_split("/(?<=\w)\b\s/", $sentence, -1, PREG_SPLIT_NO_EMPTY);
+							$new_sentence_counter = 0;
+							foreach ($sentence_words as $word_index => $word) {
+								if(!isset($usable_sentence[$sentence_counter])){
+									$usable_sentence[$sentence_counter] = $word;
+								}elseif((strlen($usable_sentence[$sentence_counter]) + strlen($word) - (123 * $new_sentence_counter)) < 123){
+									$usable_sentence[$sentence_counter] .= " " .$word ;
+								}else{
+									$sentence_counter++;
+									$usable_sentence[$sentence_counter] = $word;
+									$new_sentence_counter++;
+								}
+							}
+						}else{
+							$usable_sentence[$sentence_counter++] = $sentence;
+						}
+						$sentence_counter++;
+					}
+					
+					foreach ($usable_sentence as $key => $sentence) {
 						$template->assign_block_vars('news_row_unreaded.preview', array(
 				            'SENTENCE'      => $sentence,
 				            'HEIGHT'        => $height,
