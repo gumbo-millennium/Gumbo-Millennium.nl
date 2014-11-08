@@ -81,12 +81,13 @@ class acp_dc_activity_management
 				if(!$activity_id){											// if activity id is emty
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
-				
-				$activity = Activity::get_activity($activity_id);								
-				
+				if(!isset($activity)){
+					$activity = Activity::get_activity($activity_id);								
+				}
 				if($activity == NULL){
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
+
 				// get authorisation 
 				if (!$activity->is_manager($user->data['user_id']))
 				{
@@ -113,28 +114,29 @@ class acp_dc_activity_management
 					$this->page_title = 'ACP_DC_ACT_EDIT';
 				}
 				// no break!
+
 			case 'recycle_activity':
 					if($mode == 'recycle_activity' && !$submit){
-						if(!$activity_id){									// if activity id is emty
+						if(!$activity_id){									// if activity id is empty
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
 						}
-						
-						$activity = Activity::get_activity($activity_id);
-						
+						if(!isset($activity)){
+							$activity = Activity::get_activity($activity_id);
+						}
 						if($activity == NULL){
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
 						}
 						
-						// get authorisation 
+						// get authorization 
 						if (!$activity->is_manager($user->data['user_id']))
 						{
 							 trigger_error('NOT_AUTHORISED');
 						}
 						
 						
-						unset($activity_id);									// unset activity_id to make a new activity at save!
+						//unset($activity_id);									// unset activity_id to make a new activity at save!
 					}
-					// Check if user not submited. That means the user is the first time on this page and some fields are needed to be set.
+					// Check if user not submitted. That means the user is the first time on this page and some fields are needed to be set.
 					if(!$submit){
 				
 						$this->new_config['activity_name'] = $activity->getName();
@@ -152,7 +154,7 @@ class acp_dc_activity_management
 						$managers = $activity->get_groups_manage_list(GROUPS_MANAGES_ENABLED, TRUE);				// get all groups that are managers			
 						$group_array = array();													// define group array
 						foreach($managers AS $group_id => $value){							// convert index (group_id) to a array
-							$group_array[] = $managers[$group_id]["group_name"]; 					// get groep name from id
+							$group_array[] = $managers[$group_id]["group_name"]; 					// get group name from id
 						}
 						$this->new_config['add_group_manager'] = implode(GROUP_SEPARATOR ."\n",$group_array);	// convert the user id's array to a string with a new line in between
 						// unset the managers variables 
@@ -161,7 +163,7 @@ class acp_dc_activity_management
 						unset($group_array);
 						
 						//get all groups that have acces to this activity
-						$groups = $activity->get_groups_access_list(GROUPS_ACCESS_ENABLED, TRUE);				// get all groups that have acces
+						$groups = $activity->get_groups_access_list(GROUPS_ACCESS_ENABLED, TRUE);				// get all groups that have access
 						$group_array = array();													// define group array
 						foreach($groups AS $group_id => $value){				// get array of group names
 							$groups_name_array[] = $groups[$group_id]["group_name"]; 
@@ -480,31 +482,31 @@ class acp_dc_activity_management
 				// get all comming activities
 				
 				$group_name_ary = array();
-				foreach($comming_activities AS $index => $activity){
+				foreach($comming_activities AS $index => $comming_activity){
 					
-					if(!isset($group_name_ary[$activity->getCommission()])){
-						$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
+					if(!isset($group_name_ary[$comming_activity->getCommission()])){
+						$group_name_ary[$comming_activity->getCommission()] = get_group_name($comming_activity->getCommission());
 					}
 					
-					$event_active = (($activity->getActive() == 1) ? "_active" : "_deactive");
-					$event_active = ((($activity->getStartDatetime() <= new Datetime("now")) && ($activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active ); // check if event is now, if active block: events_now
+					$event_active = (($comming_activity->getActive() == 1) ? "_active" : "_deactive");
+					$event_active = ((($comming_activity->getStartDatetime() <= new Datetime("now")) && ($comming_activity->getEndDatetime() >= new Datetime("now") ) )? "_now" : $event_active ); // check if event is now, if active block: events_now
 
 					// creates 3 block_vars: event_active, event_deactive and event_now
 					$template->assign_block_vars('events'.$event_active, array(
-						'EVENT_TITLE'		=> $activity->getName(),
-						'EVENT_ENTERED'		=> $activity->getAmountEnrolledUser(),
-						'EVENT_COMMISSION'	=> $group_name_ary[$activity->getCommission()],
+						'EVENT_TITLE'		=> $comming_activity->getName(),
+						'EVENT_ENTERED'		=> $comming_activity->getAmountEnrolledUser(),
+						'EVENT_COMMISSION'	=> $group_name_ary[$comming_activity->getCommission()],
 
-						'EVENT_ACTIVE'		=> (($activity->getActive() == 1) ? true : false) ,
-						'EVENT_ACTIVATE'	=> $this->u_action.'&activate='.$activity->getId(),
-						'EVENT_DEACTIVATE'	=> $this->u_action.'&deactivate='.$activity->getId(),
+						'EVENT_ACTIVE'		=> (($comming_activity->getActive() == 1) ? true : false) ,
+						'EVENT_ACTIVATE'	=> $this->u_action.'&activate='.$comming_activity->getId(),
+						'EVENT_DEACTIVATE'	=> $this->u_action.'&deactivate='.$comming_activity->getId(),
 
-						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$activity->getId()),
-						'START_DATE_TIME'	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
+						'EVENT_PREVIEW'		=> append_sid($phpbb_root_path. "dc/dc_activity.".$phpEx, 'act='.$comming_activity->getId()),
+						'START_DATE_TIME'	=> $user->format_date( $comming_activity->getStartDatetime()->getTimestamp()),
 						
-						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
-						'ENROLL_LINK'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $activity->getId()),
-						'U_EDIT'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=edit_activity&amp;id=' . $activity->getId()),
+						'U_ENROLL'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $comming_activity->getId()),
+						'ENROLL_LINK'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=enrolls&amp;id=' . $comming_activity->getId()),
+						'U_EDIT'			=> append_sid($phpbb_root_path.'adm/index.'.$phpEx, 'i=dc_activity_management&mode=edit_activity&amp;id=' . $comming_activity->getId()),
 					));
 				}
 									
@@ -676,13 +678,7 @@ class acp_dc_activity_management
 				$this->page_title = 'ACP_DC_ACT_PAST';
 				$this->tpl_name = 'dc/acp_dc_activity_past';
 				break;
-			case 'enrolls':
-				if(!$activity_id){											// if activity id is emty
-					trigger_error($user->lang['DC_ACT_NO_ACT']);
-				}
-				
-				$activity = Activity::get_activity($activity_id);								
-				
+			case 'enrolls':						
 				if($activity == NULL){
 					trigger_error($user->lang['DC_ACT_NO_ACT']);
 				}
@@ -1284,9 +1280,9 @@ class acp_dc_activity_management
 		}
 		/// end mode = new_activity ///
 		
-		//////////////////////////////////////
-		////// CHECK FOR ERRORS AND SEND /////
-		//////////////////////////////////////
+		////////////////////////////////////////
+		////// CHECK FOR ERRORS AND update /////
+		////////////////////////////////////////
 		
 		// Do not write values if there is an error
 		if (sizeof($error)){
@@ -1317,8 +1313,7 @@ class acp_dc_activity_management
 				case 'new_activity':
 				
 					if( isset($activity_id) ){
-							$activity = Activity::get_activity($activity_id);
-							
+							$activity = Activity::get_activity($activity_id);							
 							if($activity == NULL){
 								trigger_error($user->lang['DC_ACT_NO_ACT']);
 							}
@@ -1331,7 +1326,9 @@ class acp_dc_activity_management
 					}else{
 						$activity = new Activity();
 					}
-						
+					
+
+
 					if($activity->check_allowed_to_change(false)){
 						$activity->setStartDatetime($start_date_time);
 						$activity->setEnrolDateTime($enroll_date_time);

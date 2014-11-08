@@ -193,7 +193,6 @@ class activity {
 	
 	static function get_activity($activity_id, $user_id = NULL){
 	 global $activities_handler;
-
 		if(gettype($activity_id) != "integer"){ // check if the id is a int
 			trigger_error("get_activity: param $activity_id is not a integer"); // set error log
 			return NULL;
@@ -210,7 +209,6 @@ class activity {
 		
 		if($activities_handler){
 			if($activity = $activities_handler->get_activity($activity_id)){
-
 				return $activity;
 			}
 		}
@@ -459,8 +457,8 @@ class activity {
 				$this->readed_users = $readed_users;
 			}
 		}
-		
 		if(is_array($groups_access)){
+
 			if(is_array($this->groups_access)){
 				$this->groups_access = $this->groups_access + $groups_access;
 			}else{
@@ -918,13 +916,13 @@ class activity {
 		
 		$build_when = array();
 		$field_array = array();
-		foreach($cases_array AS $user_id => $case){
+		foreach($cases_array AS $row_id => $case){
 			foreach($case AS $field => $setting){
 				if($setting !== ""){
-					$build_when[$field][$user_id] = $setting;
+					$build_when[$field][$row_id] = $setting;
 				}
 			}
-			$field_array[] = $user_id;
+			$field_array[] = $row_id;
 		}
 		
 		$return_string = "";
@@ -936,12 +934,12 @@ class activity {
 			if($first){
 				$return_string = "Set ";
 				$first = FALSE;
-			}ELSE{	
+			}else{	
 				$return_string .= ", ";
 			}
 			$return_string .= $field ." = CASE ". $in_set ." ";
-			foreach($field_data AS $user_id => $setting){
-					$return_string .="WHEN ". $user_id ." THEN '".  utf8_normalize_nfc( $db->sql_escape($setting)) ."' ";
+			foreach($field_data AS $row_id => $setting){
+					$return_string .="WHEN ". $row_id ." THEN '".  utf8_normalize_nfc( $db->sql_escape($setting)) ."' ";
 			}
 			$return_string .="ELSE '' END ";	
 		}
@@ -1098,6 +1096,7 @@ class activity {
 		
 		
 		if(!isset($this->managers_groups) || $force_update){
+			$this->managers_groups = array(); // clear the current managers groups to refill 
 			$sql_array = array(
 				'SELECT'    => 'agm.group_id, agm.created, agm.disabled access, grs.group_name',
 
@@ -1115,9 +1114,8 @@ class activity {
 			);
 			
 			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query($sql, 3600);							// send query
-			$this->groups_access = array();
-			$return_ary = array();
+			$result = $db->sql_query($sql, 3600);					// send query and keep in cache for 3600 ms 
+			$return_ary = array(); 									// create return array
 			while ($row = $db->sql_fetchrow($result))				// walk through all the rows
 			{
 			
@@ -1378,7 +1376,6 @@ class activity {
 			);
 
 			$sql = $db->sql_build_query('SELECT', $sql_array);
-
 			$result = $db->sql_query($sql, 3600);							// send query
 			$this->groups_access = array();
 			$return_ary = array();
@@ -1404,7 +1401,6 @@ class activity {
 				}
 			}
 		}
-
 		return $return_ary;
 	}
 	
@@ -1422,7 +1418,6 @@ class activity {
 	*/
 	function set_groups_access($new_group_list, $full_list = 0){
 		global $db, $user, $cache;
-		
 		//check if the activity is allowed to change
 		if(!$this->check_allowed_to_change()){
 			// This activity is not allowed to change
@@ -1431,58 +1426,65 @@ class activity {
 			trigger_error($user->lang['DC_ACT_IN_PAST']);
 			return null; 					// not allowed to change	
 		}
-				
-		
-		if(!is_array($new_group_list)){									// check if group id list is an array
+		// check if group id list is an array
+		if(!is_array($new_group_list)){									
 			$this->set_error_log('Function: set_groups_access; new_group_list not an array');	// set administrator log
 			trigger_error('new_group_list is not an array');				// send error to the group
 		}
 		
-		if(empty($new_group_list)){									// check if group id list is an array
+		// check if group id list is empty
+		if(empty($new_group_list)){									
 			$this->set_error_log('Function: set_groups_access; new_group_list is empty');	// set administrator log
 			trigger_error('new_group_list is empty');				// send error to the group
 		}
 		
-		if(!is_array($this->groups_access)){
-			$this->get_groups_access_list();		// get a list of all the groups with access
-		}
-		$groups_acces_ary = $this->groups_access;
-		$groups_access_change = array();						// the list of all managers who status changes 
-		$groups_access_new = array();						// the list of all managers who status changes 
-		// check for exisiting managers with a status change
+		// get access group list
 		
-		foreach($new_group_list AS $key => $group_data){				// loop through all group id (current_user) from the new_users_list
-			$access = $group_data["access"];
+
+		var_dump($this->groups_access);
+		$groups_acces_ary =$this->get_groups_access_list(GROUPS_ACCESS_ALL, true); // force update of the group access, required to get the disabled groups
+		$groups_access_change = array();						// the list of all groups who status changes 
+		$groups_access_new = array();						// the list of all groups who status changes 
+		
+		// check for existing groups with a status change
+		foreach($new_group_list AS $key => $new_group_data){				// loop through all group id (current_user) from the new_users_list
+			$access = $new_group_data["access"];
 			switch($access){
 				case GROUPS_ACCESS_ENABLED:
-					$group_data["access"] = 0;
+					$new_group_data["access"] = 0;
 				break;
 				case GROUPS_ACCESS_DISABLED:
-					$group_data["access"] = 1;
+					$new_group_data["access"] = 1;
 				break;
 				default:
-					$this->set_error_log("Function: set_groups_access; Invalid group (id: ". $group_data["group_id"] .") access: ". $access);
+					$this->set_error_log("Function: set_groups_access; Invalid group (id: ". $new_group_data["group_id"] .") access: ". $access);
 					trigger_error("Invalid group data, see errorlog. Please contact the administrator");
 					return NULL; 
 			}
 			
-			if(isset($groups_acces_ary[$group_data["group_id"]])){				// check if group id is in the current manager list
-				if( $groups_acces_ary[$group_data["group_id"]]["access"] != $group_data["access"]){ 	// check if current_group_id access is the same as new access
-					// the group id exist and has new access
-					$groups_access_change[$group_data["group_id"]] =  $group_data["access"];
+			// check if group id is in the current group access list
+			if(isset($groups_acces_ary[$new_group_data["group_id"]])){
+				// check if current_group_id access is the same as new access				
+				if( $groups_acces_ary[$new_group_data["group_id"]]["access"] != $new_group_data["access"]){ 	
+					//Update the group
+					$groups_access_change[$new_group_data["group_id"]]['disabled'] =  $new_group_data["access"];
 				}
 			}else{
 				$groups_access_new[] = array(
-						"group_id"		=> $group_data["group_id"],
-						"disabled"		=> $group_data["access"],
+						"group_id"		=> $new_group_data["group_id"],
+						"disabled"		=> $new_group_data["access"],
 						"activity_id"	=> (int)$this->id,
 				);
 			}
-			unset($groups_acces_ary[ $group_data["group_id"] ]);				// remove group id from the groups_acces_ary list
+			unset($groups_acces_ary[ $new_group_data["group_id"] ]);				// remove group id from the groups_acces_ary list
 		}
 		
-				
+		var_dump("HENK IN HET GROOT");		
+		var_dump($groups_access_change);		
 		if(!empty($groups_access_change)){		
+			var_dump("HIER GAAN WE WAT DOEN");
+			var_dump($groups_access_change);
+			var_dump($this->sql_update_case($groups_access_change, "group_id"));
 			$sql = "UPDATE " . ACTIVITY_GROUP_ACCESS_TABLE . " 
 					SET disabled = CASE group_id 
 						". $this->sql_update_case($groups_access_change, "group_id") ."
@@ -1533,7 +1535,6 @@ class activity {
 	// checks is the user is a manager 
 		// returns a boolean
 	function is_manager($user_id){
-
 		if(!is_array($this->managers_groups)){
 			$this->get_groups_manage_list();
 		}
