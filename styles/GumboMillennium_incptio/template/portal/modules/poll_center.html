@@ -1,15 +1,15 @@
 <script type="text/javascript">
 // <![CDATA[
+function init_highchars() {
+	jQuery(document).ready(function ($) { 
+		$("#poll_table td").click(function(event) {
+			$(this).parent("table").children('input').removeAttr("selected");
+			$(this).children('input').attr('checked', 'checked');
+		});
 
-jQuery(document).ready(function ($) { 
-	$("#poll_table td").click(function(event) {
-		$(this).parent("table").children('input').removeAttr("selected");
-		$(this).children('input').attr('checked', 'checked');
 	});
 
-});
-
-
+}
 
 
 // ]]>
@@ -19,7 +19,7 @@ onload_functions.push('init_highchars()');
 </script>
 
 <script type="text/javascript">
-	var test_array=[
+	var data =[
 		['Answer', 'amount'],
 		<!-- BEGIN poll(0,0) -->
 			<!-- BEGIN poll_option -->
@@ -31,7 +31,7 @@ onload_functions.push('init_highchars()');
       google.setOnLoadCallback(drawChart);
       function drawChart() {
 
-	var data = google.visualization.arrayToDataTable(test_array);
+	var data = google.visualization.arrayToDataTable(data );
 
 	var options = {
 	  pieHole: 0.4,
@@ -47,9 +47,16 @@ onload_functions.push('init_highchars()');
         }
 	};
 
-	var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+	var chart = new google.visualization.PieChart(document.getElementById('{$MODULE_ID}_donutchart'));
 
 	chart.draw(data, options);
+	/*
+	google.visualization.events.addListener(chart, 'select', selectHandler);
+
+	function selectHandler(e) {
+	  alert('A table row was selected');
+	}
+	*/
 }
 </script>
 
@@ -116,7 +123,7 @@ onload_functions.push('init_highchars()');
             
             <div id="{$MODULE_ID}_result" class="tab">
                 <!-- IF poll.S_DISPLAY_RESULTS -->
-					<div id="donutchart"></div>
+					<div id="{$MODULE_ID}_donutchart"></div>
 				<!-- ENDIF -->
             </div>
         </div>
@@ -129,7 +136,8 @@ onload_functions.push('init_highchars()');
 
 		<!-- IF S_HAS_POLL -->
 			<!-- IF poll.S_DISPLAY_RESULTS -->
-				<div style="height: 35em;" id="donutchart"></div>
+				<h3>{poll.POLL_QUESTION}</h3>
+				<div id="{$MODULE_ID}_donutchart"></div>
 			<!-- ENDIF -->
 		<!-- ENDIF -->	
 
