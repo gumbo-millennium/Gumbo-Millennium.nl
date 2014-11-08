@@ -62,6 +62,7 @@ class acp_dc_activity_management
 			case "edit_activity":
 			case "enrolls":
 				$activity_id = utf8_normalize_nfc(request_var('id', 0));	// get activity id
+				$activity = Activity::get_activity($activity_id);	
 			break;	
 		}
 		

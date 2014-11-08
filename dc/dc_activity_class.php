@@ -902,6 +902,9 @@ class activity {
 		return true;															// return successful
 	}
 	
+	/**
+	* 
+	*/
 	private function sql_update_case($cases_array, $in_set){
 		global $db, $user;
 		if(!is_array($cases_array)){
@@ -928,18 +931,18 @@ class activity {
 		$return_string = "";
 		$header = "";
 		$first = TRUE;
-		
 		foreach($build_when AS $field => $field_data){
 
 			if($first){
 				$return_string = "Set ";
 				$first = FALSE;
+
 			}else{	
 				$return_string .= ", ";
 			}
 			$return_string .= $field ." = CASE ". $in_set ." ";
 			foreach($field_data AS $row_id => $setting){
-					$return_string .="WHEN ". $row_id ." THEN '".  utf8_normalize_nfc( $db->sql_escape($setting)) ."' ";
+				$return_string .="WHEN ". $row_id ." THEN '".  utf8_normalize_nfc( $db->sql_escape($setting)) ."' ";
 			}
 			$return_string .="ELSE '' END ";	
 		}
@@ -1389,7 +1392,7 @@ class activity {
 				);
 				
 				if($this->groups_access[ $row["group_id"] ]["access"] == $status || $status == GROUPS_ACCESS_ALL){
-					$return_ary[] = $this->groups_access[$row["group_id"]];
+					$return_ary[$row["group_id"]] = $this->groups_access[$row["group_id"]];
 				}
 				
 			}
@@ -1439,15 +1442,12 @@ class activity {
 		}
 		
 		// get access group list
-		
-
-		var_dump($this->groups_access);
-		$groups_acces_ary =$this->get_groups_access_list(GROUPS_ACCESS_ALL, true); // force update of the group access, required to get the disabled groups
+		$this->get_groups_access_list(GROUPS_ACCESS_ALL, true); // force update of the group access, required to get the disabled groups
+		$groups_acces_ary = $this->groups_access;
 		$groups_access_change = array();						// the list of all groups who status changes 
-		$groups_access_new = array();						// the list of all groups who status changes 
-		
+		$groups_access_new = array();						// the list of all groups who status changes 	
 		// check for existing groups with a status change
-		foreach($new_group_list AS $key => $new_group_data){				// loop through all group id (current_user) from the new_users_list
+		foreach($new_group_list AS $key => $new_group_data){// loop through all group id (current_user) from the new_users_list
 			$access = $new_group_data["access"];
 			switch($access){
 				case GROUPS_ACCESS_ENABLED:
@@ -1478,18 +1478,18 @@ class activity {
 			}
 			unset($groups_acces_ary[ $new_group_data["group_id"] ]);				// remove group id from the groups_acces_ary list
 		}
-		
-		var_dump("HENK IN HET GROOT");		
-		var_dump($groups_access_change);		
+		$remove_groups = array();
+		foreach ($groups_acces_ary	as $group_id => $group_data) {
+			if($group_data["access"] == GROUPS_ACCESS_ENABLED){
+				$remove_groups[] = $group_id;
+			}
+		}
+
+				
 		if(!empty($groups_access_change)){		
-			var_dump("HIER GAAN WE WAT DOEN");
-			var_dump($groups_access_change);
-			var_dump($this->sql_update_case($groups_access_change, "group_id"));
-			$sql = "UPDATE " . ACTIVITY_GROUP_ACCESS_TABLE . " 
-					SET disabled = CASE group_id 
+			$sql = "UPDATE " . ACTIVITY_GROUP_ACCESS_TABLE . "
 						". $this->sql_update_case($groups_access_change, "group_id") ."
 							AND activity_id = '" . $db->sql_escape((int)$this->id) ."'";
-							
 			$db->sql_query($sql);
 				if(!$db->sql_affectedrows()){									// check for changed records
 					// no changed records
@@ -1510,23 +1510,22 @@ class activity {
 			$this->groups_access = $groups_access_new + $this->groups_access;
 		}
 		
-		if(!empty($groups_acces_ary) && $full_list){
-		
+		if(!empty($remove_groups) && $full_list){
 			$sql = "UPDATE " . ACTIVITY_GROUP_ACCESS_TABLE . " AS grs
 					SET grs.disabled = 1
-					WHERE " . $db->sql_in_set("grs.group_id", array_keys($groups_acces_ary)) ."
+					WHERE " . $db->sql_in_set("grs.group_id", $remove_groups) ."
 					AND grs.activity_id = '" . $db->sql_escape((int)$this->id) ."'";
-					$db->sql_query($sql);
+			$db->sql_query($sql);
 			if(!$db->sql_affectedrows()){									// check for changed records
 					// no changed records
 					$this->set_error_log("Function: set_groups_access; UPDATE status (full_list): No new record");
 					trigger_error($user->lang['DC_ACT_ERROR_NO_ROWS_ADDED']);
 			}
-			foreach($groups_acces_ary AS $group_id => $group_data ){
+			foreach($remove_groups AS $key => $group_id ){
 				$this->group_access[$group_id]["access"] = GROUPS_ACCESS_DISABLED;
 			}
 		}
-		// update enrol list
+		// update enroll list
 		$cache->destroy('sql',ACTIVITY_GROUP_ACCESS_TABLE, ACTIVITY_TABLE, ACTIVITY_UPCOMMING_ACTIVE_TABLE, ACTIVITY_ALL_ACTIVE_TABLE, ACTIVITY_FURTURE_TABLE); 
 		return true;															// return successful
 	}

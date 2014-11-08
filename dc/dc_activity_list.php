@@ -22,25 +22,26 @@ if (!$auth->acl_get('u_list_activities'))
 
 $search_parameters = NULL;
 
-// check if reeded events is needed 
-if(intval($user->data['user_id']) > 1){
-	
+// check if user is not a guest
+if(intval($user->data['user_id']) != 1){
+	// get the readed events  and do not load the activities of mangers  
 	$search_parameters = array(
 		USER_READED 		=> TRUE,
 		MANAGERS_GROUPS		=> FALSE,
 	);
 }
-if(($full_list = $activities_handler->get_user_activities( intval($user->data['user_id']), USER_ACCESS, FUTURE_ACTIVE, $search_parameters, START_DATETIME)) != NULL){
+$activities_list = $activities_handler->get_user_activities( intval($user->data['user_id']), USER_ACCESS, FUTURE_ACTIVE, $search_parameters, START_DATETIME);
+
+if($activities_list != NULL){
 	$template->assign_var('LIST_AVAILABLE', true);
 	$row_count = 1;
 	$group_name_ary = array();
-	foreach($full_list AS $index => $activity){
+	foreach($activities_list AS $index => $activity){
 		
 		if(!isset($group_name_ary[$activity->getCommission()])){
 			$group_name_ary[$activity->getCommission()] = get_group_name($activity->getCommission());
 		}
-		
-		$template->assign_block_vars('activity', array(
+		$template->assign_block_vars('activity_list', array(
 			'NAME'    						=> $activity->getName(),
 			'ACT_LINK'   				=>  append_sid($phpbb_root_path.'dc/dc_activity.'.$phpEx, "act=" . $activity->getId()),
 			'COMMISSION'    			=>  $group_name_ary[$activity->getCommission()],
@@ -52,10 +53,11 @@ if(($full_list = $activities_handler->get_user_activities( intval($user->data['u
 			'PREVIEW'					=> 	$activity->getDescription_preview(), 	
 			'S_ROW_COUNT'    			=>  $row_count,
 		));
+		
 
 		foreach (get_images_data($activity->getDescription_raw(), $activity->getUID(), FALSE) as $img_id => $img_data)
 	    {
-	        $template->assign_block_vars('activity.imgs', array(
+	        $template->assign_block_vars('activity_list.imgs', array(
 	            'URL'        => $img_data["URL"],
 	            'LINK'        => $img_data["LINK"],
 

@@ -57,7 +57,7 @@ $lang = array_merge($lang, array(
     'DC_ACT_ERROR_LOAD'   				=> 'Error while loading this event',
     'DC_ACT'   							=> 'Event',
     'DC_ACT_LANG_TILL'   				=> 'Till',
-    'DC_ACT_LANG_ENROLLS'   			=> 'Sign up list',
+    'DC_ACT_LANG_ENROLLS'   			=> 'People who are going',
     'DC_ACT_LANG_SUBSCRIBE'   			=> 'Subscription',
     'DC_ACT_LANG_DATE'   				=> 'Date and time',
     'DC_ACT_LANG_PRICE'   				=> 'Price',
@@ -80,8 +80,8 @@ $lang = array_merge($lang, array(
     'DC_ACT_NO_LOGIN_NEEDED'  			=> 'This event is open for everybody.<br>So you dont need to sign up.',
     'DC_ACT_LIST'                       => 'Events',
     'DC_ACT_GO_TO'                      => 'Go to event',
-    'DC_ACT_USER_ENROLLED'              => 'You are joining this event',
-    'DC_ACT_IS_NOT_ENROLLED'            => 'You are not joining to this event',
+    'DC_ACT_USER_ENROLLED'              => 'You are going to this event',
+    'DC_ACT_IS_NOT_ENROLLED'            => 'You are not going to this event',
     'DC_ACT_EVENT_MANAGEMENT'  		    => 'Event management',
 ));
 
