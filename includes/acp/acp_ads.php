@@ -30,7 +30,7 @@ class acp_ads
 		global $cache, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		require($phpbb_root_path . 'ads/constants.' . $phpEx);
-		require($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		require_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 		$user->add_lang('mods/ads');
 		$this->tpl_name = 'acp_ads';
