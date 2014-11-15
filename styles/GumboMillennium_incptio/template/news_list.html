@@ -1,0 +1,73 @@
+<!-- INCLUDE overall_header.html -->
+<!-- begin content -->
+<section id="content">
+    <div class="container clearfix">
+    <!-- begin main content -->
+    <!-- IF NEWS_AVAILABLE -->
+    <section id="main" class="blog-entry-list full-screen" on>
+
+        
+
+    <!-- BEGIN posts -->  
+        <article class="entry clearfix">
+            <!-- IF .posts.imgs -->
+                <!-- IF .posts.imgs > 1 -->
+                    <!-- begin entry slider -->
+                    <div class="entry-slider">
+                        <div id="flexslider-portfolio-item" class="flex-container">
+                            <div class="flexslider">
+                                <ul class="slides">
+                                    <!-- BEGIN imgs -->
+                                    <li><a class="entry-image image-block link-overlay" href="{posts.HREF}" title="{posts.TITLE}"><span class="overlay"></span><img src="{posts.imgs.URL}" alt="{posts.TITLE}"></a></li>
+                                    <!-- END imgs -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>  
+                    <!-- end entry slider -->
+                <!-- ELSE -->
+                    <!-- BEGIN imgs -->
+                        <a class="entry-image image-block link-overlay" href="{posts.HREF}" title="{posts.TITLE}"><span class="overlay"></span><img src="{posts.imgs.URL}" alt="{posts.TITLE}"></a>
+                    <!-- END imgs -->
+                <!-- ENDIF -->
+            <!-- ENDIF -->
+            
+            <div class="entry-date">
+                <div class="entry-day">{posts.DATE_DAY}</div>
+                <div class="entry-month">{posts.DATE_MONTH}</div>   
+            </div>
+            <div class="entry-body  <!-- IF posts.READED == FALSE --> introbox <!-- ENDIF -->">
+                <h2 class="entry-title"><a href="{posts.HREF}">{posts.TITLE}</a></h2>
+                <div class="entry-meta">
+                    <span class="author"><a href="{posts.AUTHOR_PROFILE}">{posts.AUTHOR}</a></span> 
+                    <span class="multi-user"><a href="{posts.HREF}">{posts.COMMENTS}</a></span>
+                    <!-- IF posts.READED == FALSE -->
+                        <img src="{T_IMAGESET_PATH}/ribbon-new.png" alt="New">
+                    <!-- ENDIF -->
+                </div>
+                <div class="entry-content">
+                    <p>{posts.PREVIEW}</p>
+                    <div class="clear-20px"></div>
+                    <a href="{posts.HREF}" class="button colored">{L_GO_TO_NEWS}</a>
+                </div>
+            </div>
+        </article>
+    <!-- END posts -->        
+    </section>
+    <!-- end main content -->
+    <!-- ELSE -->
+        <div class="infobox">
+                <div class="infobox-inner">
+                    <div class="with-button">
+                        <h2>{L_NEWS_AVAILABLE_TITLE}</h2>
+                        <p>{L_NEWS_AVAILABLE_TEXT}</p>
+                    </div>
+                </div>
+            </div>
+
+    <!-- ENDIF -->
+</div>    
+</section>
+<!-- end content --> 
+
+<!-- INCLUDE overall_footer.html -->

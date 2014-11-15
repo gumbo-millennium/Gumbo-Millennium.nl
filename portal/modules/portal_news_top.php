@@ -243,7 +243,7 @@ class portal_news_top_module
 						'TOPIC_ICON_IMG_WIDTH'	=> (!empty($icons[$fetch_news[$i]['icon_id']])) ? $icons[$fetch_news[$i]['icon_id']]['width'] : '',
 						'TOPIC_ICON_IMG_HEIGHT'	=> (!empty($icons[$fetch_news[$i]['icon_id']])) ? $icons[$fetch_news[$i]['icon_id']]['height'] : '',
 						'FOLDER_IMG'			=> $user->img('topic_read', 'NO_NEW_POSTS'),
-						'U_VIEWFORUM'			=> append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $fetch_news[$i]['forum_id']),
+						'U_VIEWFORUM'			=> append_sid("{$phpbb_root_path}/gumbo/news.$phpEx", 'n=' . $fetch_news[$i]['topic_id']),
 						'U_LAST_COMMENTS'		=> append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . $fetch_news[$i]['forum_id'] . '&amp;t=' . $fetch_news[$i]['topic_id'] . '&amp;p=' . $fetch_news[$i]['topic_last_post_id'] . '#p' . $fetch_news[$i]['topic_last_post_id']),
 						'U_VIEW_COMMENTS'		=> append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . $fetch_news[$i]['forum_id'] . '&amp;t=' . $fetch_news[$i]['topic_id']),
 						'U_VIEW_UNREAD'			=> append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . $fetch_news[$i]['forum_id'] . '&amp;t=' . $fetch_news[$i]['topic_id'] . '&amp;view=unread#unread'),
@@ -261,12 +261,6 @@ class portal_news_top_module
 					));
 
 					$preview = explode( "<br/>", $fetch_news[$i]['post_text'], -1);
-					$height = 117;
-					$time = 1500;
-
-
-
-
 					$height = 117;
 					$time = 1500;
 
@@ -399,7 +393,8 @@ class portal_news_top_module
 		$template->assign_vars(array(
 			'NEWEST_POST_IMG'			=> $user->img('icon_topic_newest', 'VIEW_NEWEST_POST'),
 			'READ_POST_IMG'				=> $user->img('icon_topic_latest', 'VIEW_LATEST_POST'),
-			'GOTO_PAGE_IMG'				=> $user->img('icon_post_target', 'GOTO_PAGE'),
+			'READ_POST_IMG'				=> $user->img('icon_topic_latest', 'VIEW_LATEST_POST'),
+			'L_GO_TO_NEWS'				=> $user->lang['GO_TO_NEWS'],
 			'S_NEWEST_OR_FIRST'			=> ($config['board3_news_show_last_' . $module_id]) ? $user->lang['JUMP_NEWEST'] : $user->lang['JUMP_FIRST'],
 			'POSTED_BY_TEXT'			=> ($config['board3_news_show_last_' . $module_id]) ? $user->lang['LAST_POST'] : $user->lang['POSTED'],
 			'S_DISPLAY_NEWS_RVS'		=> ($config['board3_show_news_replies_views_' . $module_id]) ? true : false,

@@ -98,6 +98,10 @@ $lang = array_merge($lang, array(
 
     'BACK'                  => 'Back', 
     'NAVIGATION'            => 'Navigation', 
+    'GO_TO_NEWS'            => 'Jump to news', 
+    'NEWS_AVAILABLE_TITLE'  => 'There is currently no news', 
+    'NEWS_AVAILABLE_TEXT'   => 'Try again on a later date or time', 
+
 ));
 
 ?>
