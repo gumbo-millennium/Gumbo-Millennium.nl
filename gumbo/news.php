@@ -33,8 +33,11 @@
 
 	$news_id = request_var('n', 0);
 
+	$posts = fetch_posts(14, true, 10, 5, 0, "news_all", 0, false, true, true, false);
+	//$posts = fetch_posts(14, true, 10, 5, 0, "news_all", 0, false, true);
 	// check if news id exists in database!
-	if($news_id > 0 ){
+	if(isset($posts[$news_id])){
+		$post = $posts[$news_id];
 		include($phpbb_root_path . '/gumbo/news_single.' . $phpEx);
 	}else{
 		include($phpbb_root_path . '/gumbo/news_list.' . $phpEx);

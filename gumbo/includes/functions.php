@@ -169,8 +169,22 @@ function get_preview($text, $bbcode_uid, $bbcode_bitfield, $max_senctences = 5 ,
 	return $preview;
 }
 
-
-function fetch_posts($forum_from, $permissions, $number_of_posts, $max_sentences, $time, $type, $start = 0, $invert = false, $allow_bbcode = true, $allow_images = false, $new_line = false)
+/**
+ *  Fetch post form the forum
+ * @param  int  $forum_from      	The forum id there the post has to come from
+ * @param  boolean  $permissions    Get the same permissions as the forum
+ * @param  int  $number_of_posts 	Max number of posts
+ * @param  int  $max_sentences   	Max sentences of the post, 0 is infinite 
+ * @param  int  $time               Limit number of post by time
+ * @param  String  $type            Type of fetching 
+ * @param  integer $start           Offset of the limit
+ * @param  boolean $invert          Invert the order
+ * @param  boolean $allow_bbcode    Allow bbcode into the text
+ * @param  boolean $allow_images    Allow images in the text
+ * @param  boolean $new_line        Each sentence on a new line
+ * @return array                    Post[post_id]
+ */
+function fetch_posts($forum_from, $permissions, $number_of_posts, $max_sentences, $time, $type, $start = 0, $invert = false, $allow_bbcode = true, $remove_images = false, $new_line = false)
 {
 	global $db, $phpbb_root_path, $auth, $user, $bbcode_bitfield, $bbcode, $config;
 
@@ -342,17 +356,18 @@ function fetch_posts($forum_from, $permissions, $number_of_posts, $max_sentences
 	$sql = $db->sql_build_query('SELECT', $sql_array);	
 	if ($number_of_posts != 0)
 	{
-		$result = $db->sql_query_limit($sql, $number_of_posts, $start);
+		$result = $db->sql_query_limit($sql, $number_of_posts, $start, 3600);
 	}
 	else
 	{
-		$result = $db->sql_query($sql);
+		$result = $db->sql_query($sql, 3600);
 	}
 
 	$i = 0;
 
 	while ($row = $db->sql_fetchrow($result))
 	{
+		$topic_id = $row['topic_id'];
 		$attachments = array();
 		if (($auth->acl_get('u_download') && ($auth->acl_get('f_download', $row['forum_id']) || $row['forum_id'] == 0)) && $config['allow_attachments'] && $row['post_id'] && $row['post_attachment'])
 		{
@@ -379,22 +394,33 @@ function fetch_posts($forum_from, $permissions, $number_of_posts, $max_sentences
 	    }
 	    // END MOD GUMBO
 
-		$posts[$i]['bbcode_uid'] = $row['bbcode_uid'];
+		$posts[$topic_id ]['bbcode_uid'] = $row['bbcode_uid'];
 		$len_check = $row['post_text'];
 	
 
 		//BEGIN MOD GUBMO: create preview from text
 
-		$message = get_preview($row['post_text'], $row['bbcode_uid'],  $row['bbcode_bitfield'], intval($max_sentences), $new_line, $allow_bbcode, true, true, $allow_images);
+		$preview = get_preview($row['post_text'], $row['bbcode_uid'],  $row['bbcode_bitfield'], intval($max_sentences), $new_line, $allow_bbcode, true, true, !$remove_images);
 		
-		$message = str_replace(array("\n", "\r"), array('<br />', "\n"), $message);
+		$preview = str_replace(array("\n", "\r"), array('<br />', "\n"), $preview);
 
+		// remove the images?
+		if($remove_images){
+			// remove images
+			$message = remove_images_from_text($row['post_text'], $row['bbcode_uid']);
+		}
+
+		$options = 	(($allow_bbcode) ? OPTION_FLAG_BBCODE : 0) +
+					 OPTION_FLAG_SMILIES + 
+					 OPTION_FLAG_LINKS;
+		
+		$message = generate_text_for_display($message, $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
 		
 		//END MOD GUBMO
 
 		if (!empty($attachments))
 		{
-			parse_attachments($row['forum_id'], $message, $attachments, $update_count);
+			parse_attachments($row['forum_id'], $preview, $attachments, $update_count);
 		}
 
 		if ($global_f < 1)
@@ -410,7 +436,8 @@ function fetch_posts($forum_from, $permissions, $number_of_posts, $max_sentences
 		$topic_last_post_time = new DateTime();
 		$topic_last_post_time->setTimestamp($row["topic_last_post_time"]);
 
-		$posts[$i] = array_merge($posts[$i], array(
+		$posts[$topic_id] = array_merge($posts[$topic_id], array(
+			'post_preview'				=> ap_validate($preview),
 			'post_text'				=> ap_validate($message),
 			'topic_id'				=> $row['topic_id'],
 			'topic_last_post_id'	=> $row['topic_last_post_id'],

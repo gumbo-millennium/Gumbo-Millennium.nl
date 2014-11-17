@@ -1,9 +1,88 @@
 <!-- INCLUDE overall_header.html -->
 <!-- begin content -->
 <section id="content">
-    <div class="container clearfix">
-    Hier staat de single news item
-    </div>    
+ <div class="container clearfix">
+        <!-- begin main content -->
+        <section id="main" class="blog-entry-list">
+            <!-- begin pagination -->
+           
+            <!-- end pagination -->
+            
+            <!-- begin article -->
+            <article class="entry clearfix full-screen">
+                
+
+                
+                <!-- begin entry body -->
+                <div  class="<!-- IF .images -->one-half<!-- ENDIF -->">
+                <!-- begin entry date -->
+                    <div class="entry-date">
+                        <div class="entry-day">{POST_DAY}</div>
+                        <div class="entry-month">{POST_MONTH}</div>   
+                    </div>
+                    <!-- end entry date -->
+
+                    <!-- begin entry title -->
+                    <h2 class="entry-title">{TITLE}</h2>
+                    <!-- end entry title -->
+                    
+                    <!-- begin entry meta -->
+                    <div class="entry-meta">
+                        <span class="author"><a href="#">{AUTHOR}</a></span> 
+                        <span class="comments"><a href="#">{COMMENTS} Comments</a></span>
+                    </div>
+                    <!-- end entry meta -->
+                    
+                    <!-- begin entry content -->
+                    <div class="entry-content">
+                        <p>{CONTENT}</p>
+                    </div>
+                    <!-- end entry content -->
+                </div>
+                <!-- end entry body -->
+
+                <!-- IF .images -->
+                <div class="remove-margin one-half">
+                    <!-- IF .images > 1 -->
+                        <!-- begin entry slider -->
+                        <div class="entry-slider">
+                            <div id="flexslider-portfolio-item" class="flex-container">
+                                <div class="flexslider">
+                                    <ul class="slides">
+                                        <!-- BEGIN images -->
+                                         <li><center><a class="lightbox" rel="spring" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center></li>
+                                        <!-- END images -->
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>  
+                        <!-- end entry slider -->
+                    <!-- ELSE -->
+                        <!-- BEGIN images -->
+                            <center><a class="entry-image lightbox" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center>
+                        <!-- END images -->
+                    <!-- ENDIF -->
+                </div>
+                <!-- ENDIF -->
+            </article>
+            <!-- end article -->
+
+        </section>
+        <!-- end main content -->
+
+    </div>   
+
+
+</section>
+
+<section class=" container related-posts-wrap">
+    <h3>Other Posts</h3>
+    <ul class="square">
+        <!-- BEGIN posts_other -->  
+            <li><a href="{posts_other.HREF}">{posts_other.TITLE} </a></li>
+        <!-- END posts_other -->  
+    </ul>
 </section>
 <!-- end content --> 
 

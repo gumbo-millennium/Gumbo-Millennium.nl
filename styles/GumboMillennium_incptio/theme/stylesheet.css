@@ -504,6 +504,10 @@ ul#navlist li a.selected {
 /* ---------------------------------------------------------------------- */
 /* Columns
 /* ---------------------------------------------------------------------- */
+.remove-margin{
+	margin: 0px 0px 0px 0px !important;
+}
+
 .one-half, .one-third, .one-fourth, .one-sixth, .two-thirds, .three-fourths, .full-screen {
 	display: inline;
 	float: left;

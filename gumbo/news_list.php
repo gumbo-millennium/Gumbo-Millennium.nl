@@ -17,23 +17,29 @@
 		exit;
 	}
 
-
-	
-	$posts = fetch_posts(14, true, 10, 5, 0, "news_all");
 	if(is_array($posts)){
 		$template->assign_var('NEWS_AVAILABLE', true);
+		reset($posts);
+		$year = intval(current($posts)["topic_time"]->format("Y"));
+		$next_year = false;
 		foreach ($posts as $key => $post) {
-			if (is_array($post)) {	
+			if (is_array($post)) {
+				$post_year = intval($post["topic_time"]->format("Y"));
+				if($post_year < $year){
+					$next_year = true;
+					$year = $post_year;
+				}
 				$template->assign_block_vars('posts', array(
 					'TITLE'			 => $post['topic_title'],
-					'PREVIEW'		 => $post['post_text'],
+					'PREVIEW'		 => $post['post_preview'],
 					'HREF'			 => append_sid($phpbb_root_path.'/gumbo/news.'.$phpEx, "n=". $post['topic_id']),
-					'DATE_DAY'		 => $post['topic_time']->format("d"),
-					'DATE_MONTH'	 => $post['topic_time']->format("M"),
+					'DATE_DAY'		 => $user->format_date( $post['topic_time']->getTimestamp(), 'j'),
+					'DATE_MONTH'	 => $user->format_date( $post['topic_time']->getTimestamp(), 'M'),
 					'COMMENTS'		 => $post['topic_replies'],
 					'AUTHOR'		 => $post['username'],
 					'READED'		 => (intval($user->data['user_id']) == 1 ) ? TRUE : $post["user_readed"],
 					'AUTHOR_PROFILE' => append_sid($phpbb_root_path.'memberlist.'.$phpEx, "mode=viewprofile&u=". $post['user_id']),
+					'NEXT_YEAR'		 => $next_year,
 
 				));
 				foreach ($post['images'] as $img_id => $img_data)
@@ -44,7 +50,7 @@
 			        ));
 			    }
 			}
-		
+			$next_year = false;
 		}
 	}else{
 		$template->assign_vars(array(
