@@ -79,7 +79,7 @@ $lang = array_merge($lang, array(
     'DOC_SYSTEM'        => 'Documentensystem',
     'SHOP'              => 'Winkel',
     'FORUM_SUBSCRIBED'  => 'Geabonneerde forumtreads',
-    'MEMBER_PANELS'     => 'Ledenpanelen',
+    'MEMBER_PANELS'     => 'Lenedpanelen',
 
     'FORUM_UNREAD_POSTS'    => 'Ongelezen Posts', 
     'FORUM_BOOKMARKS'       => 'Bladwijzers', 
