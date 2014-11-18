@@ -27,7 +27,7 @@
 	$user->setup('viewforum');
 	
 	// Get the page content and title
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 27';
+	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1256';
 
 	$result = $db->sql_query_limit($sql, 1);
 	$row = $db->sql_fetchrow($result);
@@ -38,38 +38,7 @@
 	
 	$message = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
 	
-	$image_links = array();
-	if(preg_match_all('/<img[^>]+src="([^"]*)"[^>]+>/i', $message, $images))
-	{	
-		foreach($images[1] as $image)
-		{	
-			$image_links[$image] = false;
-		}
-	}
-
-	if(preg_match_all('#<a[^>]+href="([^>^"]*)"[^>]+>(.*?)</a>#i', $message, $links))
-	{	
-		foreach($links[2] as $index => $innerhtml)
-		{	
-			if(preg_match_all('/<img[^>]+src="([^>^"]*)"[^>]+>/i', $innerhtml, $images))
-			{	
-				foreach($images[1] as $image)
-				{	
-					$image_links[$image] = $links[1][$index];
-				}
-			}
-		}
-	}
-	
-	foreach($image_links as $image => $link)
-	{	
-		$template->assign_block_vars('sponsors', array(
-			'IMAGE' => $image,
-			'LINK' => $link
-		));
-	}
-	
-	//$template->assign_var('MESSAGE_TEXT', $message);
+	$template->assign_var('MESSAGE_TEXT', $message);
 	
 	$db->sql_freeresult($result);
 	
@@ -80,20 +49,15 @@
 	
 	// Set the breadcrumbs
 	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'		=> $user->lang['OVER_ONS'],
-		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/over_ons.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
-	);
-	
-	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'		=> $user->lang['SPONSOR'],
-		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/sponsors.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+		'FORUM_NAME'		=> $user->lang['BOARD_HISTORY'],
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/board_history.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 	);
 	
 	// Output page
-	page_header($user->lang['SPONSOR']);
+	page_header($user->lang['BOARD_HISTORY']);
 	
 	$template->set_filenames(array(
-		'body' => 'sponsors.html')
+		'body' => 'dc_singlepost_body.html')
 	);
 
 	page_footer();
