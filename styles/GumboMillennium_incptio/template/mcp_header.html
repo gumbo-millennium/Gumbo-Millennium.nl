@@ -15,9 +15,9 @@
 			<!-- IF l_block1.S_SELECTED -->
 				<!-- BEGIN l_block2 -->
 				<!-- IF l_block1.l_block2.S_SELECTED -->
-				<button id="active-subsection" href="{l_block1.l_block2.U_TITLE}"  class="button colored selected">{l_block1.l_block2.L_TITLE}<!-- IF l_block1.l_block2.ADD_ITEM --> ({l_block1.l_block2.ADD_ITEM})<!-- ENDIF --></button>
+				<li id="active-subsection"><a href="{l_block1.l_block2.U_TITLE}" class="selected"><span>{l_block1.l_block2.L_TITLE}<!-- IF l_block1.l_block2.ADD_ITEM --> ({l_block1.l_block2.ADD_ITEM})<!-- ENDIF --></span></a></li>
 				<!-- ELSE -->
-				<button href="{l_block1.l_block2.U_TITLE}" class="button black">{l_block1.l_block2.L_TITLE}<!-- IF l_block1.l_block2.ADD_ITEM --> ({l_block1.l_block2.ADD_ITEM})<!-- ENDIF --></button>
+				<li><a href="{l_block1.l_block2.U_TITLE}"><span>{l_block1.l_block2.L_TITLE}<!-- IF l_block1.l_block2.ADD_ITEM --> ({l_block1.l_block2.ADD_ITEM})<!-- ENDIF --></span></a></li>
 				<!-- ENDIF -->
 				<!-- END l_block2 -->
 			<!-- ENDIF -->
