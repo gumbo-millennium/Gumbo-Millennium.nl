@@ -102,7 +102,7 @@ function add_gumbo_layout()
 		'U_FORUM_SUBSCRIBED'	=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=main&mode=subscribed'), 
 		'L_FORUM_SUBSCRIBED'	=> $user->lang['FORUM_SUBSCRIBED'],
 		'L_MEMBER_PANELS'		=> $user->lang['MEMBER_PANELS'],
-		'U_DOC_SYSTEM'			=> append_sid("{$phpbb_root_path}gumbo/viewforum.$phpEx", "f=35"),
+		'U_DOC_SYSTEM'			=> append_sid("{$phpbb_root_path}viewforum.$phpEx", "f=35"),
 		'L_DOC_SYSTEM'			=> $user->lang['DOC_SYSTEM'],
 		'U_SHOP'				=> append_sid("{$phpbb_root_path}gumbo/shop.$phpEx"),
 		'L_SHOP'				=> $user->lang['SHOP'],
