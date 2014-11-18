@@ -24,7 +24,7 @@
 		}
 	}
 
-	if ( date('G') == 22 && date(i) < 59 && date(i) > 30)
+	if ( date('G') == 22 && date('i') < 59 && date('i') > 30)
 	{
 		$check += 1;
 	}
