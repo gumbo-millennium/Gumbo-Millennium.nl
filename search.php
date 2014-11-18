@@ -21,6 +21,9 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('search');
 
+header("Location: gumbo/forum.php");
+die();
+
 // Define initial vars
 $mode			= request_var('mode', '');
 $search_id		= request_var('search_id', '');
