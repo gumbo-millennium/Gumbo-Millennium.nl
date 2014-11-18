@@ -142,6 +142,11 @@ $template->assign_vars(array(
 // Output page
 page_header($user->lang['INDEX']);
 
+// Add the title/breadcrumbs bar
+	$template->assign_vars(array(
+		'PAGE_TITLE_BOX_HIDE'	=> false
+	));
+
 $template->set_filenames(array(
 	'body' => 'index_body.html')
 );

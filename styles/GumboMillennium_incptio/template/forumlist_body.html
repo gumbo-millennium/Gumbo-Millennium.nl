@@ -1,0 +1,45 @@
+
+<!-- BEGIN forumrow -->
+
+	<!-- IF forumrow.S_IS_CAT or forumrow.S_FIRST_ROW  or forumrow.S_NO_CAT  -->
+
+	<h1>
+		<!-- IF forumrow.S_IS_CAT --><a href="{forumrow.U_VIEWFORUM}">{forumrow.FORUM_NAME}</a><!-- ELSE -->{L_FORUM}<!-- ENDIF -->
+	</h1>
+	<p>{L_TOPICS} {L_POSTS} {L_LAST_POST}</p>
+	<!-- ENDIF -->
+
+	<!-- IF not forumrow.S_IS_CAT -->
+		<a href="{forumrow.U_VIEWFORUM}">{forumrow.FORUM_NAME}</a> : 
+		{forumrow.FORUM_DESC}
+		<!-- IF forumrow.MODERATORS -->
+			<br /><strong>{forumrow.L_MODERATOR_STR}:</strong> {forumrow.MODERATORS}
+		<!-- ENDIF -->
+		<br>
+		<!-- IF forumrow.SUBFORUMS and forumrow.S_LIST_SUBFORUMS --><br /><strong>{forumrow.L_SUBFORUM_STR}</strong> {forumrow.SUBFORUMS}<!-- ENDIF -->
+
+		<!-- IF forumrow.CLICKS -->
+			{L_REDIRECTS}: {forumrow.CLICKS}
+		<!-- ELSEIF not forumrow.S_IS_LINK -->
+			{L_TOPICS}:{forumrow.TOPICS}
+			{L_POSTS}:{forumrow.POSTS}
+			<br>
+			<!-- IF forumrow.U_UNAPPROVED_TOPICS -->
+				<a href="{forumrow.U_UNAPPROVED_TOPICS}">{UNAPPROVED_IMG}</a>
+			<!-- ENDIF -->
+			<!-- IF forumrow.LAST_POST_TIME -->
+				{L_LAST_POST}: {L_POST_BY_AUTHOR} {forumrow.LAST_POSTER_FULL}
+				<!-- IF not S_IS_BOT -->
+					<a href="{forumrow.U_LAST_POST}">Ga naar de laatste post</a>
+			 	<!-- ENDIF -->
+			 	{forumrow.LAST_POST_TIME}
+		 	<!-- ELSE -->
+		 		{L_NO_POSTS}
+ 			<!-- ENDIF -->		
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+	<br>
+	<br>
+<!-- BEGINELSE -->
+{L_NO_FORUMS}
+<!-- END forumrow -->

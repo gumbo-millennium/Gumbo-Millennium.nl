@@ -66,30 +66,7 @@
                     </div>
                                        
 
-				<!-- IF .images -->
-                <div class="full-screen">
-	            	<!-- IF .images > 1 -->
-		            	<!-- begin entry slider -->
-		                <div class="entry-slider">
-		                    <div id="flexslider-portfolio-item" class="flex-container">
-		                        <div class="flexslider">
-		                            <ul class="slides">
-		                            	<!-- BEGIN images -->
-		                                 <li><center><a class="lightbox image-block" rel="spring" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center></li>
-		                                <!-- END images -->
-		                            </ul>
-		                        </div>
-		                    </div>
-
-		                </div>	
-		                <!-- end entry slider -->
-	            	<!-- ELSE -->
-		            	<!-- BEGIN images -->
-		            		<center><a class="entry-image image-block lightbox" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center>
-		            	<!-- END images -->
-	            	<!-- ENDIF -->
-                </div>
-                <!-- ENDIF -->
+				
                 <div class="clear-10px full-screen"></div>
 
                 <!-- IF PRICE_MEMBER > 0 -->
@@ -140,7 +117,7 @@
                 <div class="clear full-screen"></div>
  
                 <!-- begin entry body -->
-                <div class="entry-body full-screen">
+                <div class="entry-body <!-- IF .images -->one-half <!-- ELSE --> full-screen <!-- ENDIF -->">
                      <!-- begin entry date -->
                     <div class="entry-date">
                         <div class="entry-day">{START_DAY}</div>
@@ -182,7 +159,30 @@
                     <!-- end author info -->
                 </div>
                 <!-- end entry body -->
+                <!-- IF .images -->
+                <div class="remove-margin one-half">
+                    <!-- IF .images > 1 -->
+                        <!-- begin entry slider -->
+                        <div class="entry-slider">
+                            <div id="flexslider-portfolio-item" class="flex-container">
+                                <div class="flexslider">
+                                    <ul class="slides">
+                                        <!-- BEGIN images -->
+                                         <li><center><a class="lightbox image-block" rel="spring" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center></li>
+                                        <!-- END images -->
+                                    </ul>
+                                </div>
+                            </div>
 
+                        </div>  
+                        <!-- end entry slider -->
+                    <!-- ELSE -->
+                        <!-- BEGIN images -->
+                            <center><a class="entry-image image-block lightbox" href="{images.URL}" title="{TITLE}"><span class="overlay zoom"></span><img src="{images.URL}" alt=""></a></center>
+                        <!-- END images -->
+                    <!-- ENDIF -->
+                </div>
+                <!-- ENDIF -->
             </article>
             <!-- end article -->
 

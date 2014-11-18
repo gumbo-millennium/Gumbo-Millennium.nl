@@ -16,6 +16,11 @@
 	{
 		exit;
 	}
+
+	if(intval($user->data['user_id']) != 1 && !$post["user_readed"]){
+		markread("topic", $post['forum_id'] , $post['topic_id']);
+	}
+
 	$template->assign_vars(array(
 		'TITLE' 				=> $post["topic_title"],
 		'POST_DAY' 			=> $user->format_date( $post['topic_time']->getTimestamp(), 'j'),

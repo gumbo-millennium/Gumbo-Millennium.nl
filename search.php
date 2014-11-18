@@ -14,7 +14,7 @@
 define('IN_PHPBB', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
+include_once($phpbb_root_path . 'common.' . $phpEx);
 
 // Start session management
 $user->session_begin();
@@ -283,7 +283,7 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 		trigger_error('NO_SUCH_SEARCH_MODULE');
 	}
 
-	require("{$phpbb_root_path}includes/search/$search_type.$phpEx");
+	require_once("{$phpbb_root_path}includes/search/$search_type.$phpEx");
 
 	// We do some additional checks in the module to ensure it can actually be utilised
 	$error = false;
@@ -560,11 +560,11 @@ if ($keywords || $author || $author_id || $search_id || $submit)
 
 	if ($show_results == 'posts')
 	{
-		include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
 	}
 	else
 	{
-		include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 	}
 
 	$user->add_lang('viewtopic');

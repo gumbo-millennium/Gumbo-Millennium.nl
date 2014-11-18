@@ -1,0 +1,181 @@
+<!-- INCLUDE overall_header.html -->
+ <section id="content">
+    	<div class="container clearfix">
+<h2><a href="{U_VIEW_FORUM}">{FORUM_NAME}</a></h2> <br><br>
+<!-- IF FORUM_DESC or MODERATORS or U_MCP -->
+
+	<!-- IF FORUM_DESC -->
+		{FORUM_DESC}
+		<brs>
+	<!-- ENDIF -->
+	<br>
+	<!-- IF MODERATORS -->
+		<!-- IF S_SINGLE_MODERATOR -->
+			{L_MODERATOR}
+		<!-- ELSE -->
+			{L_MODERATORS}
+		<!-- ENDIF -->
+		:{MODERATORS}
+	<!-- ENDIF -->
+
+<!-- ENDIF -->
+
+<!-- IF S_FORUM_RULES -->
+	<!-- IF U_FORUM_RULES -->
+			<a href="{U_FORUM_RULES}">{L_FORUM_RULES}</a>
+		<!-- ELSE -->
+			{L_FORUM_RULES}: {FORUM_RULES}
+		<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- IF S_HAS_SUBFORUM -->
+	<!-- IF not S_IS_BOT and U_MARK_FORUMS -->
+		<br>
+		<a href="{U_MARK_FORUMS}">{L_MARK_SUBFORUMS_READ}</a>
+	<!-- ENDIF -->
+	<!-- INCLUDE forumlist_body.html -->
+<!-- ENDIF -->
+
+<br>
+<!-- IF S_DISPLAY_POST_INFO or PAGINATION or TOTAL_POSTS or TOTAL_TOPICS -->
+	<!-- IF not S_IS_BOT and S_DISPLAY_POST_INFO -->
+		<a href="{U_POST_NEW_TOPIC}">
+			<!-- IF S_IS_LOCKED -->
+				{L_FORUM_LOCKED}
+			<!-- ELSE -->
+				{L_POST_TOPIC}
+			<!-- ENDIF -->
+		</a>
+	<!-- ENDIF -->
+<br>
+	<!-- IF PAGINATION or TOTAL_POSTS or TOTAL_TOPICS -->
+		<br>
+		<!-- IF not S_IS_BOT and U_MARK_TOPICS -->
+			<a href="{U_MARK_TOPICS}" accesskey="m">{L_MARK_TOPICS_READ}</a> 
+		<!-- ENDIF -->
+		<!-- IF TOTAL_TOPICS -->
+			{TOTAL_TOPICS}
+		<!-- ENDIF -->
+		<!-- IF PAGE_NUMBER -->
+			<br>
+			<!-- IF PAGINATION --> 
+				<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a>{PAGINATION}
+			<!-- ELSE -->
+				{PAGE_NUMBER}
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+	<!-- ENDIF -->
+
+<!-- ENDIF -->
+
+<!-- IF S_NO_READ_ACCESS -->
+	{L_NO_READ_ACCESS}
+	<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+		log in om alles te lezen
+	<!-- ENDIF -->
+
+<!-- ENDIF -->
+
+<!-- BEGIN topicrow -->
+
+	<br><br>
+	<!-- IF topicrow.S_FIRST_ROW or not topicrow.S_TOPIC_TYPE_SWITCH -->
+		<!-- IF S_DISPLAY_ACTIVE -->
+			{L_ACTIVE_TOPICS}
+		<!-- ELSEIF topicrow.S_TOPIC_TYPE_SWITCH and (topicrow.S_POST_ANNOUNCE or topicrow.S_POST_GLOBAL) -->
+			{L_ANNOUNCEMENTS}
+		<!-- ELSE -->
+			{L_TOPICS}
+		<!-- ENDIF -->
+		{L_REPLIES}
+		{L_VIEWS}
+		{L_LAST_POST}
+		<br>
+		<br>
+	<!-- ENDIF -->
+		<!-- IF topicrow.S_UNREAD_TOPIC -->
+			<a href="{topicrow.U_NEWEST_POST}">{NEWEST_POST_IMG}</a> 
+		<!-- ENDIF -->
+		<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">
+			{topicrow.TOPIC_TITLE}
+		</a>
+		<!-- IF topicrow.S_TOPIC_UNAPPROVED or topicrow.S_POSTS_UNAPPROVED -->
+			<a href="{topicrow.U_MCP_QUEUE}">{topicrow.UNAPPROVED_IMG}</a>
+		<!-- ENDIF -->
+		<!-- IF topicrow.S_TOPIC_REPORTED --><a href="{topicrow.U_MCP_REPORT}">{REPORTED_IMG}</a><!-- ENDIF --><br />
+		<!-- IF topicrow.PAGINATION -->{topicrow.PAGINATION}<!-- ENDIF -->
+		<!-- IF topicrow.ATTACH_ICON_IMG -->{topicrow.ATTACH_ICON_IMG} <!-- ENDIF -->{L_POST_BY_AUTHOR} {topicrow.TOPIC_AUTHOR_FULL} {topicrow.FIRST_POST_TIME}
+
+		{L_REPLIES}: {topicrow.REPLIES}
+		{L_VIEWS}:{topicrow.VIEWS}
+		{L_POST_BY_AUTHOR}: {L_LAST_POST} {topicrow.LAST_POST_AUTHOR_FULL}
+		<!-- IF not S_IS_BOT -->
+			<a href="{topicrow.U_LAST_POST}">ga naar de laaste post</a> 
+		<!-- ENDIF -->
+		{topicrow.LAST_POST_TIME}
+		<br>
+		<br>
+
+<!-- BEGINELSE -->
+	<!-- IF S_IS_POSTABLE -->
+	<div class="panel">
+		<div class="inner"><span class="corners-top"><span></span></span>
+		<strong>{L_NO_TOPICS}</strong>
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+	<!-- ENDIF -->
+<!-- END topicrow -->
+
+<!-- IF S_SELECT_SORT_DAYS and not S_DISPLAY_ACTIVE -->
+	<form method="post" action="{S_FORUM_ACTION}">
+		<fieldset class="display-options">
+			<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
+			<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
+	<!-- IF not S_IS_BOT -->
+			<label>{L_DISPLAY_TOPICS}: {S_SELECT_SORT_DAYS}</label>
+			<label>{L_SORT_BY} {S_SELECT_SORT_KEY}</label>
+			<label>{S_SELECT_SORT_DIR} <input type="submit" name="sort" value="{L_GO}" class="button2" /></label>
+	<!-- ENDIF -->
+		</fieldset>
+	</form>
+	<hr />
+<!-- ENDIF -->
+
+<!-- IF .topicrow and not S_DISPLAY_ACTIVE -->
+
+		<!-- IF not S_IS_BOT and S_DISPLAY_POST_INFO -->
+				<a href="{U_POST_NEW_TOPIC}"><!-- IF S_IS_LOCKED -->{L_FORUM_LOCKED}<!-- ELSE -->{L_POST_TOPIC}<!-- ENDIF --></a>
+		<!-- ENDIF -->
+
+		<!-- IF PAGINATION or TOTAL_POSTS or TOTAL_TOPICS -->
+
+			<!-- IF TOTAL_TOPICS and not S_IS_BOT and U_MARK_TOPICS -->
+				<a href="{U_MARK_TOPICS}">{L_MARK_TOPICS_READ}</a> 
+			<!-- ENDIF -->
+			<!-- IF TOTAL_POSTS and not NEWEST_USER --> {TOTAL_POSTS}<!-- ELSEIF TOTAL_TOPICS and not NEWEST_USER --> {TOTAL_TOPICS}<!-- ENDIF -->
+			<!-- IF TOTAL_USERS -->{TOTAL_USERS}<!-- ENDIF -->
+			<!-- IF PAGINATION --> <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a>
+				{PAGINATION}
+			<!-- ELSE -->
+				{PAGE_NUMBER}
+			<!-- ENDIF -->
+
+		<!-- ENDIF -->
+	</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE jumpbox.html -->
+
+<!-- IF S_DISPLAY_ONLINE_LIST -->
+	<h3><!-- IF U_VIEWONLINE --><a href="{U_VIEWONLINE}">{L_WHO_IS_ONLINE}</a><!-- ELSE -->{L_WHO_IS_ONLINE}<!-- ENDIF --></h3>
+	<p>{LOGGED_IN_USER_LIST}</p>
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_POST_INFO -->
+	<h3>{L_FORUM_PERMISSIONS}</h3>
+	<p><!-- BEGIN rules -->{rules.RULE}<br /><!-- END rules --></p>
+<!-- ENDIF -->
+
+	</div>
+</section>
+<!-- INCLUDE overall_footer.html -->

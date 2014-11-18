@@ -174,7 +174,7 @@ $template->assign_vars(array(
 	'START_DAY' 			=> $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'j'),
 	'START_MONTH' 			=> $user->format_date( $activity->getStartDatetime()->getTimestamp(), 'M'),
 	'COMMISSION'    		=> get_group_name($activity->getCommission()),
-	'DESCRIPTION'    		=> $activity->getDescription(FALSE), // set description with images 
+	'DESCRIPTION'    		=> $activity->getDescription(true), // set description with images 
 	'START_DATE_TIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()), 
 	'END_DATE_TIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()), 
 ));
