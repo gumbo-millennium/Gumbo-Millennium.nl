@@ -3,7 +3,7 @@ AddType application/octet-stream .otf .ttf
 AddType font/otf .otf
 AddType font/opentype .woff
 
-php_flag display_errors On
+#php_flag display_errors On
 RewriteEngine on
 # tor network blocking begin ends on line 922
 <Filesmatch "^(ucp|index)\.php$">
