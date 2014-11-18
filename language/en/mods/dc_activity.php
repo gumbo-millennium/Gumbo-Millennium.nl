@@ -1,15 +1,5 @@
 <?php
 /**
-*
-* @package phpBB3
-* @version $Id$
-* @athor: Gerco Versloot
-* @date: 6 - 8 - 2012
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @Gumbo millennium
-*/
-
-/**
 * @ignore
 */
 if (!defined('IN_PHPBB'))
@@ -76,8 +66,8 @@ $lang = array_merge($lang, array(
     'DC_ACT_LANG_ICAL_TITLE'            => 'Personal iCal for your calander',
     'DC_ACT_LANG_ICAL_URL'  			=> 'Copy your personal iCal link',
     'DC_ACT_LANG_ICAL_EXPLAIN'          => 'This is your personal iCal feed. You can use this link to automaticly sync the Gumbo Millennium events with your digital calander. The iCal link is personal because it also looks for events that are only visable for you.<br/> (Login is needed, otherwise you only get the public events)',
-    'DC_ACT_LANG_ICAL_MORE_INFO'  		=> 'How to add this iCal link to your google calander?',
-    'DC_ACT_NO_LOGIN_NEEDED'  			=> 'This event is open for everybody.<br>So you dont need to sign up.',
+    'DC_ACT_LANG_ICAL_MORE_INFO'  		=> 'How to add this iCal link to your Google Calendar?',
+    'DC_ACT_NO_LOGIN_NEEDED'  			=> 'This event is open for everybody.<br />So you dont need to sign up.',
     'DC_ACT_LIST'                       => 'Events',
     'DC_ACT_GO_TO'                      => 'Jump to event',
     'DC_ACT_USER_ENROLLED'              => 'You are going to this event',
@@ -110,11 +100,11 @@ $lang = array_merge($lang, array(
     'ACP_DC_ACT_COMMISSION'  			=> 'Commission',
     'ACP_DC_ACT_COMMISSION_EXPLAIN'  	=> 'What commission is making this event',
     'ACP_DC_ACT_ENROLL_DATE'  			=> 'Max subscribe date',
-    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can subscribe. <br>If left empty the max subscribe date will equal with the start date',
+    'ACP_DC_ACT_ENROLL_DATE_EXPLAIN'  	=> 'The date users can subscribe. <br />If left empty the max subscribe date will equal with the start date',
 	'ACP_DC_ACT_ENROLL_TIME'  			=> 'Max subscribe time',
-    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can subscribe on de max subscribe day. <br>If left empty the max subscribe time will equal with the start time',
+    'ACP_DC_ACT_ENROLL_TIME_EXPLAIN'  	=> 'The time users can subscribe on de max subscribe day. <br />If left empty the max subscribe time will equal with the start time',
     'ACP_DC_ACT_ENROLL_MAX'  			=> 'Max users',
-    'ACP_DC_ACT_ENROLL_MAX_EXPLAIN'  	=> 'The max amount of user that can subscribe to this event <br>0 is unlimited',
+    'ACP_DC_ACT_ENROLL_MAX_EXPLAIN'  	=> 'The max amount of user that can subscribe to this event <br />0 is unlimited',
     'ACP_DC_ACT_PRICE'  				=> 'Price',
     'ACP_DC_ACT_PRICE_EXPLAIN'  		=> 'The price non Gumbo Millennium members have to pay',
 	'ACP_DC_ACT_PRICE_MEMBER'  			=> 'Price for Gumbo Millennium members',
@@ -143,13 +133,13 @@ $lang = array_merge($lang, array(
 	'ACP_DC_ACT_RECYCLE'  				=> 'Recycle this event',
 	'ACP_DC_ACT_RECYCLE_EXPLAIN'  		=> 'Making a new event from a old event without the old data like start date and time',
 	'ACP_DC_ACT_PAST'  					=> 'Past events',
-	'ACP_DC_ACT_PAST_EXPLAIN'  			=> 'The list of events that are past. You can recycle or preview the event. <br>Use the input fields to find all other events.',
+	'ACP_DC_ACT_PAST_EXPLAIN'  			=> 'The list of events that are past. You can recycle or preview the event. <br />Use the input fields to find all other events.',
 	'ACP_DC_ACT_PAST_OVERVIEW_EXPLAIN'  => 'The list of  the 10 last events that are past. You can recycle, review and see all subscriptions the event',
 	'ADVANCED_SEARCH'  					=> 'Advanced search',
 	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE'  			=> 'End date to unsubscribe',
-	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br>If left empty the max subscribe date will equal with the start date',
+	'ACP_DC_ACT_END_DATE_UNSUBSCRIBE_EXPLAIN'  	=> 'The date the user has to unsubscribe form this event. <br />If left empty the max subscribe date will equal with the start date',
 	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE'  			=> 'End time to unsubscribe',
-	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE_EXPLAIN'  	=> 'The time the user has to unsubscribe from this event. <br>If left empty the max subscribe time will equal with the start time',
+	'ACP_DC_ACT_END_TIME_UNSUBSCRIBE_EXPLAIN'  	=> 'The time the user has to unsubscribe from this event. <br />If left empty the max subscribe time will equal with the start time',
 	'ACP_DC_ACT_CURRENT'  				=> 'Current events',
 	'ACP_DC_ACT_ACTIVE'  				=> 'Active events',
 	'ACP_DC_ACT_DEACTIVE'  				=> 'Deactive events',
@@ -187,16 +177,16 @@ $lang = array_merge($lang, array(
 	'LIST_USER'    						=> '1 User',
     'ACP_DC_SELECT_USERS'    			=> 'Select user(s)',
     'ACP_DC_SELECT_MULTI_USER'    		=> 'Select multiple users',
-    'ACP_DC_SELECT_MULTI_USER_EXPLAIN'	=> 'Instert usernames to change the amount paid of multiple users. <br> If you enter a username in the field, the "Select a user" field will not be used.',
+    'ACP_DC_SELECT_MULTI_USER_EXPLAIN'	=> 'Instert usernames to change the amount paid of multiple users. <br /> If you enter a username in the field, the "Select a user" field will not be used.',
     'ACP_DC_ACT_DISPLAY_LIMIT'    		=> 'Display entries',
     'ACP_DC_ACT_INVALED_USERNAME'    	=> 'Invalid username(s)',
     'DC_ACT_INVALID_ACTION'    			=> 'Invalid action',
     'ACP_DC_ACTION_OPTIONS'    			=> 'Select action',
     'ACP_DC_ACTION_OPTIONS_EXPLAIN'		=> 'Select the action you like to execute',
-    'ACP_DC_ACTION_PAY'					=> 'Chance payment',
-    'ACP_DC_ACTION_EMAIL'				=> 'Send e-mail',
-    'ACP_DC_ACTION_SUBSCRIBE'			=> 'Subscribe user(s) (Chance status to yes)',
-    'ACP_DC_ACTION_UNSUBSCRIBE'			=> 'Unsubscribe users(s) (Chance status to no)',
+    'ACP_DC_ACTION_PAY'					=> 'Change payment',
+    'ACP_DC_ACTION_EMAIL'				=> 'Send email',
+    'ACP_DC_ACTION_SUBSCRIBE'			=> 'Subscribe user(s) (Change status to yes)',
+    'ACP_DC_ACTION_UNSUBSCRIBE'			=> 'Unsubscribe users(s) (Change status to no)',
     'ACP_DC_USERS_ADDED'				=> 'User(s) successfully subscribed to the event',
     'ADD_USERS'							=> 'Add user(s)',
     'SELECT_USER'						=> 'Select user',
@@ -210,23 +200,8 @@ $lang = array_merge($lang, array(
     'ACP_DC_AC_SEND_MAIL_EXPLAIN'  		=> 'Compose a mail',
 	'APC_DC_SEND_MAIL_SETTINGS'			=> 'Email settings',
 	'DC_ACT_EMAIL_FROM'					=> 'Sending and replaying email address',
-	'DC_ACT_EMAIL_FROM_EXPLAIN'			=> 'If an email address given this will be the sending email adress. Also you recive the replayed emails on this adress. <br> If you leave this emty the sending email address is noreply@gumbo-millennium.nl',
+	'DC_ACT_EMAIL_FROM_EXPLAIN'			=> 'If an email address given this will be the sending email adress. Also you recive the replayed emails on this adress. <br /> If you leave this emty the sending email address is noreply@gumbo-millennium.nl',
 ));
-
-
-
-$lang = array_merge($lang, array(
-    'FIND_GROUP'  						=> 'Find a group',
-    'NO_GROUPS'  						=> 'No groups found for this search criterion.',
-    'GROUPLIST'  						=> 'Group list',
-    'FIND_GROUPNAME_EXPLAIN'	=> 'Use this form to search for specific groups. You do not need to fill out all fields. To match partial data use * as a wildcard. Use the mark checkboxes to select one or more usernames (several usernames may be accepted depending on the form itself) and click the Select Marked button to return to the previous form.',
-    'GROUPNAME'  						=> 'Group name',
-    'SORT_GROUPNAME'  					=> 'Group name',
-	'L_FIND_GROUP'						=> 'Find a group',
-	'LIST_GROUP'						=> '1 Group',
-	'LIST_GROUPS'						=> '%d Groups',
-));
-
 
 // For group list
 $lang = array_merge($lang, array(
