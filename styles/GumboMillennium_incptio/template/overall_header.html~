@@ -630,7 +630,7 @@
 															<a href="{U_NEWS}" rel="submenu4">{L_NEWS}</a>
 															<ul id="submenu4" class="ddsubmenustyle">
 																<li>
-																	<a href="{U_NEWS}">{L_RECENT_NEWS}</a>
+																	<a href="{U_NEWS}">{L_RESENT_NEWS}</a>
 																</li>
 																<li>
 																	<a href="{U_GUMBODES}">{L_GUMBODES}</a>
