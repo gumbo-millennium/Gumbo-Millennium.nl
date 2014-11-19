@@ -1,0 +1,10 @@
+Subject: {SUBJECT}
+
+Hello {USERNAME},
+
+{MESSAGE}
+
+<a href="{LINK}">Click here for the event</a>
+
+This event is hosted by the {COMMISSION}.
+S.V. Gumbo Millennium.
