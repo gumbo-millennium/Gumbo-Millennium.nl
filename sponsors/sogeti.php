@@ -36,7 +36,7 @@ $db->sql_freeresult($result);
 $template->assign_var('MESSAGE_TEXT', $message);
 
 $template->set_filenames(array(
-    'body' => 'singlepost_body.html',
+    'body' => 'dc_singlepost_body.html',
 ));
 
 page_footer();
