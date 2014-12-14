@@ -22,6 +22,7 @@ function add_gumbo_layout()
 
   	require($phpbb_root_path . 'gumbo/includes/functions.' . $phpEx);
 	require($phpbb_root_path . 'gumbo/includes/Mobile_Detect.' . $phpEx);
+	
 
 	// Set up common template variables, mainly used in the navigation  
 	$user->add_lang('mods/dc_gumbo_layout');

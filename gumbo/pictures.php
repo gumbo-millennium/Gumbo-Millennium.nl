@@ -17,31 +17,95 @@
 	define('IN_PHPBB', true);
 	$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 	$phpEx = substr(strrchr(__FILE__, '.'), 1);
-	include($phpbb_root_path . 'common.' . $phpEx);
-	include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+	require_once($phpbb_root_path . 'gumbo/includes/class.googleplus.' . $phpEx);
+	include_once($phpbb_root_path . 'common.' . $phpEx);
+
 
 	// Start session management
 	$user->session_begin();
 	$auth->acl($user->data);
-	$user->setup('viewforum');
-	
-	// Get the page content and title
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1256';
+	$user->setup();
+	global $db;
 
-	$result = $db->sql_query_limit($sql, 1);
-	$row = $db->sql_fetchrow($result);
-	
-	$options = 	($row['enable_bbcode'] ? OPTION_FLAG_BBCODE : 0) +
-				($row['enable_smilies'] ? OPTION_FLAG_SMILIES : 0) + 
-				($row['enable_magic_url'] ? OPTION_FLAG_LINKS : 0);
-	
-	$message = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $options);
-	
-	$template->assign_var('MESSAGE_TEXT', $message);
-	
-	$db->sql_freeresult($result);
-	
+
+	$album = new googleplus('album');
+    // --Set your userid and albumid here
+    // --Example https://plus.google.com/u/0/photos/107220479963902311084/albums/5144980848872213393
+    // --After photos/ is your userid and after albums is your albumid
+    $album->set_userid('115209623445926663380');
+    $album->set_albumid('6011837005474064769');
+    // --Max results - 1000 is default
+    $album->set_maxresults(1000);
+    // --Set your thumbsize here
+    $album->set_thumbsize(160);
+    // --Set to crop thumbs or not - c = crop u = uncropped
+    $album->set_cropping('c');
+    // --Cache your xml for better performance true or false
+    $album->set_cachexml(false);
+    // --How long must the cach been saved (in seconds)
+    $album->set_cachelife(86400);
+    // --This part is the foreach list
+    // --You can easily make your own output here
+	//$data = $album->get_album();
+	$albums = $album->get_albums();
+	//var_dump($data);
+	/*$albums = $data['album'];
+	$total = $data['total'];
+	$maxtotal = $data['maxtotal'];
+	$albumtitle = $data['albumtitle'];
+    $author = $data['name'];
+    $url = $data['url'];
+
+    
+    foreach ($albums as $year => $year_album) {
+
+		//var_dump($gValue['content']);
+	    $template->assign_block_vars('fotos', array(
+			'TITLE'    					=> $gValue['title']
+		));
+	}
+	*/
+
+	foreach ($albums['entries'] as $year => $albums_year)
+	{
+	    // categories in this example are "food" and "animal"
+	    $template->assign_block_vars('albums', array(
+	        'YEAR'    => $year,
+	    ));
+
+	    // each item within the year is assigned to the second block.
+	    foreach ($albums_year as $key => $album)
+	    {
+	        $template->assign_block_vars('albums.album', array(
+	            'URL'          => append_sid($phpbb_root_path.'gumbo/album.'.$phpEx, "album=" . $album['id']),
+	            'TITLE'        => $album['title'],
+	            'TUMBNAIL_URL' => $album['thumbnail_url'],
+	        ));
+	    }
+	}
+
+
+
+	/*
+    if ( $albums !=null ) {
+    	$template->assign_vars(array(
+			'FOTOS_FOUND'	=> true
+		));
+    	$i = 0;
+
+        foreach ($albums as $gKey => $gValue) {
+    		//var_dump($gValue['content']);
+            $template->assign_block_vars('fotos', array(
+				'NAME'    					=> $gValue['title'],
+				'URL'   					=> $gValue['content'] ,
+			));
+        }
+    }else{
+        $template->assign_vars(array(
+			'FOTOS_FOUND'	=> false
+		));
+    }
+*/
 	// Add the title/breadcrumbs bar
 	$template->assign_vars(array(
 		'PAGE_TITLE_BOX_HIDE'	=> false
@@ -57,7 +121,7 @@
 	page_header($user->lang['PICTURES']);
 	
 	$template->set_filenames(array(
-		'body' => 'under_construction.html')
+		'body' => 'pictures.html')
 	);
 
 	page_footer();
