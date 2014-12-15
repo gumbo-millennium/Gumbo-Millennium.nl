@@ -3,42 +3,49 @@
 	<!-- begin content -->
 	<section id="content">
 		<div class="container clearfix">
-			<!-- begin sociëteit -->
-			<section>
-				<!-- BEGIN albums -->
-				   <h2>{albums.YEAR}</h2> 
-			        <ul class="project-carousel project-list">
+			<section class="three-fourths">
+				<!-- BEGIN albums_page -->
+			        <section>
+				   	<h2>{albums_page.YEAR}  ({albums_page.ALBUMS_COUNT} albums)</h2> 
 			        	<!-- BEGIN album -->
-			            <li class="entry">
-			                <a class="entry-image lightbox" href="{albums.album.TUMBNAIL_URL}" title="{albums.album.TITLE}">
-			                	<span class="overlay zoom"></span><img src="{albums.album.TUMBNAIL_URL}" alt="{albums.album.TITLE}">
-			            	</a>
-			                <a class="entry-meta" href="{albums.album.URL}">
-			                    <h4 class="entry-title">{albums.album.TITLE}</h4>
-			                    <div class="entry-content">
-			                        <p></p>
-			                    </div>
-			                    <div class="arrow-box-hover"></div>
+			        	<div class="one-fourth">
+			                <a class="entry-image inner-caption link-overlay" href="{albums_page.album.URL}" title="{albums_page.album.TITLE}">
+			                    <span class="overlay"></span>
+			                    <img src="{albums_page.album.TUMBNAIL_URL}" alt="{albums_page.album.TITLE}">
+			                    <div><p>{albums_page.album.TITLE}</p></div>
 			                </a>
-			            </li>
+			            </div>
 			            <!-- END album -->
-			        </ul>
-				<!-- END albums -->
+			        </section>
+			        <div class="clear"></div>
+				<!-- END albums_page -->
 			</section>
-			<!-- end sociëteit -->
+			<!-- begin sidebar -->
+	        <aside id="sidebar" class="one-fourth column-last">
+	            <div class="widget">    
+	            	<h2>Other albums</h2>
+	              	<div class="accordion">
+				        <!-- BEGIN albums_side -->
+				        <div>
+				            <span class="accordion-title">{albums_side.YEAR} ({albums_side.ALBUMS_COUNT} albums)</span>
+				            <div class="accordion-inner">
+				            	<button class="button colored">Preview {albums_side.YEAR}</button>
+				            	<hr>
+				            	<ul class="arrow">
+				            	<!-- BEGIN album -->
+				            		<li>
+				                		<a class="entry-meta" href="{albums_side.album.URL}">{albums_side.album.TITLE}</a>
+				            		</li>
+				            		<!-- END album -->
+				                </ul>
+				            </div>
+				        </div>
+				        <!-- END albums_side -->
+				    </div>
+	            </div>
+	        </aside>
+	        <!-- end sidebar -->
 		</div>
-
-
-
-
-
-
-
-
-
-
-
-
 	</section>
 	<!-- end content -->
 

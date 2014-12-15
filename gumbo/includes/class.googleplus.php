@@ -288,7 +288,7 @@ class googleplus
 				$albums['totalAlbums']--;
 			}
 		}
-		ksort($albums);
+		krsort($albums['entries']);
 		return $albums;
 	}
 	
@@ -314,6 +314,15 @@ class googleplus
 	protected function cache_file($file) // check for cache life time
 	{
 		return file_exists($file) && filemtime($file) > time() - $this->cachelife;
+	}
+
+	private static function albumsYearSort($a, $b)
+	{
+		var_dump($b);
+	    if ($a == $b) {
+	        return 0;
+	    }
+	    return ($a < $b) ? -1 : 1;
 	}
 }
 ?>

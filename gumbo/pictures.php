@@ -66,22 +66,28 @@
 	}
 	*/
 
+
+	$max_years_on_page = 2;
+	$position = 'page';
 	foreach ($albums['entries'] as $year => $albums_year)
 	{
+		if($max_years_on_page <= 0){ $position = 'side'; }
 	    // categories in this example are "food" and "animal"
-	    $template->assign_block_vars('albums', array(
+	    $template->assign_block_vars('albums_'.$position, array(
 	        'YEAR'    => $year,
+	        'ALBUMS_COUNT' => count($albums_year)
 	    ));
 
 	    // each item within the year is assigned to the second block.
 	    foreach ($albums_year as $key => $album)
 	    {
-	        $template->assign_block_vars('albums.album', array(
+	        $template->assign_block_vars('albums_'.$position.'.album', array(
 	            'URL'          => append_sid($phpbb_root_path.'gumbo/album.'.$phpEx, "album=" . $album['id']),
 	            'TITLE'        => $album['title'],
 	            'TUMBNAIL_URL' => $album['thumbnail_url'],
 	        ));
 	    }
+	    $max_years_on_page--;
 	}
 
 
