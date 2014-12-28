@@ -13,9 +13,7 @@
 
 class googleplus
 {
-    protected $type = 'album';
 	protected $userid = '115209623445926663380';
-	protected $albumid = '6011837005474064769';
 	protected $cachelife = 86400; //24*60*60;
 	protected $maxresults = 1000;
 	protected $thumbsize = 200;
@@ -27,11 +25,10 @@ class googleplus
 	protected $descriptionlength = 300;
 	protected $titlelength = 75;
 
-	public function __construct($type)
+	public function __construct()
 	{
 		global $phpbb_root_path;
 		$this->curlinit = function_exists('curl_init');
-		$this->type = $type;
 		$this->curlinit = $phpbb_root_path. "/cache";
 	}
 
@@ -64,11 +61,6 @@ class googleplus
 	public function set_userid($userid) // Set username
 	{
 		$this->userid = $userid;
-	}
-
-	public function set_albumid($albumid) // Set username
-	{
-		$this->albumid = $albumid;
 	}
 
 	public function set_titlelength($titlelength) // Set title lenght
@@ -126,12 +118,12 @@ class googleplus
 		$this->xmlpath = $path;
 	}
 
-	protected function build_url($type) // Generate url
+	protected function build_url($type, $album_uuid = 0) // Generate url
 	{
 		switch ($type)
 		{
 			case 'album':
-                return 'https://picasaweb.google.com/data/feed/api/user/' . $this->userid . '/albumid/' . $this->albumid . '?imgmax=d&thumbsize=' . $this->thumbsize . $this->cropping . '&kind=photo&max-results=' . $this->maxresults . '&prettyprint=true';
+                return 'https://picasaweb.google.com/data/feed/api/user/' . $this->userid . '/albumid/' . $album_uuid . '?imgmax=d&thumbsize=' . $this->thumbsize . $this->cropping . '&kind=photo&max-results=' . $this->maxresults . '&prettyprint=true';
 				break; 
 			case 'albums':
                 return 'https://picasaweb.google.com/data/feed/api/user/' . $this->userid . '?prettyprint=true';
@@ -141,11 +133,11 @@ class googleplus
 		}
 	}
 
-	public function get_album() // Use this function. You have to use the right type
+	public function get_album($album_uuid) // Use this function. You have to use the right type
 	{
 		$xmldoc = new DOMDocument();
 
-		$url = $this->build_url('album');
+		$url = $this->build_url('album', $album_uuid);
 		$file = realpath($this->xmlpath) . DIRECTORY_SEPARATOR . md5($url) . '.xml';
 
 		if($this->cachexml && $this->cache_file($file))
@@ -180,8 +172,6 @@ class googleplus
 		}
 
 		$xml = simplexml_load_file($url);
-		//print_r($xml);
-		//exit();
 
 		$xpath = new DOMXPath($xmldoc);
 
@@ -195,6 +185,7 @@ class googleplus
         $albumtitle  = (string) $xml->children()->title;
         $author = (string) $xml->children()->author->name;
         $url = (string) $xml->children()->author->uri;
+        $published = (string) $xml->children()->updated;
 		foreach($data as $dat)
 		{
 			$temparray = array();
@@ -220,9 +211,20 @@ class googleplus
 			$query = 'media:group/media:thumbnail';
 			$temparray['thumbnail'] = $xpath->query($query, $dat)->item(0)->getAttribute('url');
 
+			$title_convered = $this->album_title_converter($albumtitle, $published);
+			
 			$albumdata[] = $temparray;
 		}
-		return array('total' => $total, 'album' => $albumdata, 'albumtitle' => $albumtitle, 'name' => $author, 'url' => $url, 'maxtotal' => $maxtotal);
+		$title_convered = $this->album_title_converter($albumtitle, $published);
+		return array(
+			'total' => $total, 
+			'photos' => $albumdata, 
+			'albumtitle' => $title_convered['title'], 
+			'name' => $author, 
+			'url' => $url, 
+			'maxtotal' => $maxtotal, 
+			'published' => $title_convered['published']
+		);
 	}
 	
 	
@@ -265,8 +267,6 @@ class googleplus
 			}
 		}
 
-		//$xml = simplexml_load_file($url);
-
 		$xml = new SimpleXMLElement($url, null, true);
 
 		$albums = array();
@@ -276,20 +276,41 @@ class googleplus
 			$temparray['id'] = $entry->children('gphoto',true)->id;
 			$temparray['thumbnail_url'] = $entry->children('media',true)->group->children('media',true)->thumbnail->attributes()->url;
 			
-			$year = intval(substr($entry->title, 0, 4));
-			$month = intval(substr($entry->title, 4, 2));
-			$day = intval(substr($entry->title, 6, 2));
-			$datetimeString = $year ."-". $month ."-". $day;
-			if(strlen($year) == 4 && checkdate($month, $day, $year)){
-				$temparray['published'] = new dateTime($datetimeString);
-				$temparray['title'] = substr($entry->title, 8);
-				$albums['entries'][$year][] = $temparray;
+			$title_convered = $this->album_title_converter($entry->title, $entry->children('gphoto',true)->timestamp);
+			if($title_convered['from_map_title']){ // if the title is retrieved from the map name (yyyymmdd) it a gumbo album for display   
+				$temparray['published'] = $title_convered['published'];
+				$temparray['title'] = $title_convered['title'];
+				$albums['entries'][$title_convered['published']->format('Y')][] = $temparray;
 			}else{
 				$albums['totalAlbums']--;
 			}
 		}
 		krsort($albums['entries']);
 		return $albums;
+	}
+
+	protected function album_title_converter($album_title, $timestamp){
+
+		$year = intval(substr($album_title, 0, 4));
+		$month = intval(substr($album_title, 4, 2));
+		$day = intval(substr($album_title, 6, 2));
+		if(strlen($year) == 4 && checkdate($month, $day, $year)){
+			$new_title = substr($album_title, 8);
+			$published = new dateTime($year ."-". $month ."-". $day);
+			$from_map_title = true;
+		}else{
+			$new_title = $album_title;
+			$published = new dateTime();
+			$published->setTimestamp(floatval( strval($timestamp) )/1000);
+			$from_map_title = false;
+		}
+		return array(
+			'full_title' 	=> $album_title,
+			'title'			=> $new_title,
+			'published' 	=> $published,
+			'from_map_title'	=> $from_map_title
+
+		);
 	}
 	
 
@@ -318,7 +339,6 @@ class googleplus
 
 	private static function albumsYearSort($a, $b)
 	{
-		var_dump($b);
 	    if ($a == $b) {
 	        return 0;
 	    }

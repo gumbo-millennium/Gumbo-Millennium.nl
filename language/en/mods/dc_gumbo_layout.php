@@ -102,6 +102,8 @@ $lang = array_merge($lang, array(
     'NEWS_AVAILABLE_TITLE'  => 'There is currently no news', 
     'NEWS_AVAILABLE_TEXT'   => 'Try again on a later date or time', 
 
+    'PIC_INVALID_YEAR'      => '%d is an invalided year or there are no pictures from that year',
+
 ));
 
 ?>

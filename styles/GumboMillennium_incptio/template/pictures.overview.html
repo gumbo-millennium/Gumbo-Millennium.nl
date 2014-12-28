@@ -4,6 +4,12 @@
 	<section id="content">
 		<div class="container clearfix">
 			<section class="three-fourths">
+				<!-- IF not  PREVIEW_VALID -->
+				<div class="notification-box notification-box-error">
+                    <p>{PREVIEW_INVALID_TEXT}</p>
+                    <a href="#" class="notification-close notification-close-error">x</a>
+                </div>
+                <!-- ENDIF -->
 				<!-- BEGIN albums_page -->
 			        <section>
 				   	<h2>{albums_page.YEAR}  ({albums_page.ALBUMS_COUNT} albums)</h2> 
@@ -29,7 +35,7 @@
 				        <div>
 				            <span class="accordion-title">{albums_side.YEAR} ({albums_side.ALBUMS_COUNT} albums)</span>
 				            <div class="accordion-inner">
-				            	<button class="button colored">Preview {albums_side.YEAR}</button>
+				            	<a href="{albums_side.PREVIEW_URL}" class="button colored">Preview {albums_side.YEAR}</a>
 				            	<hr>
 				            	<ul class="arrow">
 				            	<!-- BEGIN album -->
