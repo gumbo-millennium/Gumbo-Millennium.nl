@@ -96,13 +96,23 @@ $lang = array_merge($lang, array(
     'MCP_LOGS'              => 'Moderators Log', 
     'MCP_BAN'               => 'Banning', 
 
+    //NEWS
     'BACK'                  => 'Back', 
     'NAVIGATION'            => 'Navigation', 
     'GO_TO_NEWS'            => 'Jump to News', 
     'NEWS_AVAILABLE_TITLE'  => 'There is currently no news', 
     'NEWS_AVAILABLE_TEXT'   => 'Try again on a later date or time', 
 
+    // PICTURES
     'PIC_INVALID_YEAR'      => '%d is an invalided year or there are no pictures from that year',
+    'NOPHOTOS'              => 'No photo\'s in this album, please try again later', 
+    'PHOTOS'                => 'Photo\'s', 
+    'FOTOS_PUBLISHED'       => 'Published', 
+    'RETURN_PICTURES'       => 'Return to albums overview', 
+    'ALUBMS'                => 'albums', 
+    'OTHER_ALUBMS'          => 'Other albums', 
+    'PREVIEW_ALUBMS'        => 'Preview', 
+    
 
 ));
 

@@ -12,7 +12,7 @@
                 <!-- ENDIF -->
 				<!-- BEGIN albums_page -->
 			        <section>
-				   	<h2>{albums_page.YEAR}  ({albums_page.ALBUMS_COUNT} albums)</h2> 
+				   	<h2>{albums_page.YEAR}  ({albums_page.ALBUMS_COUNT} {L_ALBUMS})</h2> 
 			        	<!-- BEGIN album -->
 			        	<div class="one-fourth">
 			                <a class="entry-image inner-caption link-overlay" href="{albums_page.album.URL}" title="{albums_page.album.TITLE}">
@@ -29,13 +29,13 @@
 			<!-- begin sidebar -->
 	        <aside id="sidebar" class="one-fourth column-last">
 	            <div class="widget">    
-	            	<h2>Other albums</h2>
+	            	<h2>{L_OTHER_ALBUMS}</h2>
 	              	<div class="accordion">
 				        <!-- BEGIN albums_side -->
 				        <div>
-				            <span class="accordion-title">{albums_side.YEAR} ({albums_side.ALBUMS_COUNT} albums)</span>
+				            <span class="accordion-title">{albums_side.YEAR} ({albums_side.ALBUMS_COUNT} {L_ALBUMS})</span>
 				            <div class="accordion-inner">
-				            	<a href="{albums_side.PREVIEW_URL}" class="button colored">Preview {albums_side.YEAR}</a>
+				            	<a href="{albums_side.PREVIEW_URL}" class="button colored">{L_PREVIEW_ALBUM} {albums_side.YEAR}</a>
 				            	<hr>
 				            	<ul class="arrow">
 				            	<!-- BEGIN album -->

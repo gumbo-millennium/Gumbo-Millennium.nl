@@ -22,7 +22,11 @@
 	try {
     	$albums = $googleAPI->get_albums();
 	} catch (Exception $e) {
-	    echo 'Caught exception: ',  $e->getMessage(), "\n";
+		// if error, notify user 
+	    $template->assign_vars(array(
+			'PREVIEW_VALID'			=> false,
+			'PREVIEW_INVALID_TEXT'	=>  "Some error occurred, try again later"
+		));
 	}
 
 	if ($preview_year != 0) {
@@ -87,6 +91,13 @@
 		    $max_years_on_page--;
 		}
 	}
+
+	// Some default template bindings
+	 $template->assign_vars(array(
+			'L_ALBUMS'			=> $user->lang['ALUBMS'],
+			'L_OTHER_ALBUMS'	=> $user->lang['OTHER_ALUBMS'],
+			'L_PREVIEW_ALBUM'	=> $user->lang['PREVIEW_ALUBMS'],
+		));
 
 	// Add the title/breadcrumbs bar
 	$template->assign_vars(array(

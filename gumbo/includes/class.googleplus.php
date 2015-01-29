@@ -218,12 +218,12 @@ class googleplus
 		$title_convered = $this->album_title_converter($albumtitle, $published);
 		return array(
 			'total' => $total, 
-			'photos' => $albumdata, 
 			'albumtitle' => $title_convered['title'], 
 			'name' => $author, 
 			'url' => $url, 
 			'maxtotal' => $maxtotal, 
-			'published' => $title_convered['published']
+			'published' => $title_convered['published'],
+			'photos' => $albumdata 
 		);
 	}
 	

@@ -102,7 +102,15 @@ $lang = array_merge($lang, array(
     'NEWS_AVAILABLE_TITLE'  => 'Momenteel is er geen nieuws', 
     'NEWS_AVAILABLE_TEXT'   => 'Probeer het op een andere datum of tijd', 
 
+        // PICTURES
     'PIC_INVALID_YEAR'      => '%d niet bestaand jaar of er zijn geen fotos uit dat jaar',
+    'NOPHOTOS'              => 'Geen foto\'s in dit album, probeer later opnieuw', 
+    'PHOTOS'                => 'Foto\'s', 
+    'FOTOS_PUBLISHED'       => 'Datum', 
+    'RETURN_PICTURES'       => 'Terug naar albums overzicht', 
+    'ALUBMS'                => 'albums', 
+    'OTHER_ALUBMS'          => 'Andere albums', 
+    'PREVIEW_ALUBMS'        => 'Voorbeeld', 
 
 ));
 

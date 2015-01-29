@@ -19,17 +19,22 @@
 		exit;
 	}
 
+	$album = null; // set default value
 	try {
     	$album = $googleAPI->get_album($album_uuid);
 	} catch (Exception $e) {
-	    echo 'Caught exception: ',  $e->getMessage(), "<br>";
-	    // send messeage: something went wrong 
+	    
 	}	
 
-    if ( $album !=null ) {
+    if ( $album != null ) { // if album contains something
+
     	$template->assign_vars(array(
 			'FOTOS_FOUND'	=> true,
-			'ALBUMTITLE'	=> $album['albumtitle']
+			'ALBUMTITLE'	=> $album['albumtitle'],
+			'NRPHOTOS'		=> $album['total'],
+			'DATE'			=> $user->format_date( $album['published']->getTimestamp(), "j F Y"),
+			'L_PHOTOS'		=> $user->lang['PHOTOS'],
+			'L_FOTOS_PUBLISHED'	=> $user->lang['FOTOS_PUBLISHED'],
 		));
     	$i = 0;
     	//var_dump($album);
@@ -43,7 +48,11 @@
         }
     }else{
         $template->assign_vars(array(
-			'FOTOS_FOUND'	=> false
+			'FOTOS_FOUND'	=> false,
+			'NO_FOTOS_MESSAGE'		=>  $user->lang['NOPHOTOS'],
+			'L_RETURN_ALBUMS'		=>  $user->lang['RETURN_PICTURES'],
+			'A_RETURN_ALBUMS'		=>  append_sid("{$phpbb_root_path}gumbo/pictures.$phpEx" ),
+
 		));
     }
 
@@ -53,11 +62,17 @@
 	));
 	
 	// Set the breadcrumbs
+
 	$template->assign_block_vars('navlinks', array(
 		'FORUM_NAME'		=> $user->lang['PICTURES'],
-		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/pictures.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/pictures.$phpEx" ))       
 	);
 	
+	$template->assign_block_vars('navlinks', array(
+		'FORUM_NAME'		=> $album['albumtitle'], 
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/pictures.$phpEx", "a=".$album_uuid) 
+	));
+
 	// Output page
 	page_header($album['albumtitle']);
 	

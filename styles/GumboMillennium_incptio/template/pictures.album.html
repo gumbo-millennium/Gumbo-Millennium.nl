@@ -3,13 +3,22 @@
 	<!-- begin content -->
 	<section id="content">
 		<div class="container clearfix">
+		<!-- IF FOTOS_FOUND -->
 			<section>
 				<div class="one-fourth">
-
                     <div class="iconbox icon-left">
                         <a>
-                            <h2 class="iconbox-title">Photo's</h2>
-                            <p>123</p>
+                            <h2 class="iconbox-title">{L_PHOTOS}</h2>
+                            <p>{NRPHOTOS}</p>
+                            <div class="arrow-box-hover"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="one-fourth">
+                    <div class="iconbox icon-left">
+                        <a>
+                            <h2 class="iconbox-title">{L_FOTOS_PUBLISHED}</h2>
+                            <p>{DATE}</p>
                             <div class="arrow-box-hover"></div>
                         </a>
                     </div>
@@ -31,7 +40,15 @@
 		        </section>
 		        <div class="clear"></div>
 			</section>
-			
+		<!-- ELSE -->
+			<section>
+				<div class="notification-box notification-box-error">
+                    <p>{NO_FOTOS_MESSAGE}</p>
+                    <a href="#" class="notification-close notification-close-error">x</a>
+                </div>
+                <a href="{A_RETURN_ALBUMS}" class="button big colored">{L_RETURN_ALBUMS}</a>
+			</section>
+		<!-- ENDIF -->
 		</div>
 	</section>
 	<!-- end content -->
