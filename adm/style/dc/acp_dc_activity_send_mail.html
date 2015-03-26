@@ -4,7 +4,7 @@
 	// <![CDATA[
 
 		var form_name = '{FORM_TITLE}';
-		var text_name = 'config[description]';
+		var text_name = 'config[message]';
 
 		// Define the bbCode tags
 		var bbcode = new Array();
@@ -65,12 +65,48 @@
 		<fieldset>
 			<legend>{options.LEGEND}</legend>
 	<!-- ELSE -->
+		<!-- IF options.KEY == DESCRIPTION -->
+		<dt><label for="{options.KEY}">{options.TITLE}:</label>
+			<div id="format-buttons">
+		
+				<input type="button" class="button2" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px;" onclick="bbstyle(2)" onmouseover="helpline('i')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px;" onclick="bbstyle(4)" onmouseover="helpline('u')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="q" name="addbbcode6" value="Quote" style="width: 50px" onclick="bbstyle(6)" onmouseover="helpline('q')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="c" name="addbbcode8" value="Code" style="width: 40px" onclick="bbstyle(8)" onmouseover="helpline('c')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="l" name="addbbcode10" value="List" style="width: 40px" onclick="bbstyle(10)" onmouseover="helpline('l')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="o" name="addbbcode12" value="List=" style="width: 40px" onclick="bbstyle(12)" onmouseover="helpline('o')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="y" name="addlistitem" value="[*]" style="width: 40px" onclick="bbstyle(-1)" onmouseover="helpline('y')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="p" name="addbbcode14" value="Img" style="width: 40px" onclick="bbstyle(14)" onmouseover="helpline('p')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline; width: 40px" onclick="bbstyle(16)" onmouseover="helpline('w')" onmouseout="helpline('tip')" />
+				<input type="button" class="button2" accesskey="d" name="addbbcode18" value="Flash" onclick="bbstyle(18)" onmouseover="helpline('d')" onmouseout="helpline('tip')" />
 
+				{L_FONT_SIZE}: <select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" title="{L_FONT_SIZE}" onmouseover="helpline('f')" onmouseout="helpline('tip')">
+					<option value="50">{L_FONT_TINY}</option>
+					<option value="85">{L_FONT_SMALL}</option>
+					<option value="100" selected="selected">{L_FONT_NORMAL}</option>
+					<option value="150">{L_FONT_LARGE}</option>
+					<option value="200">{L_FONT_HUGE}</option>
+				</select>
+			</div>
+			<p><input type="text" class="text full" style="border: 0; background: none;" name="helpbox" value="{L_STYLES_TIP}" /></p>
+			<script type="text/javascript">
+			// <![CDATA[
+				colorPalette('h', 8, 10);
+			// ]]>
+			
+			</script>
+		</dt>
+			<dl>
+	
+					{options.CONTENT}
+			</dl>
+		<!-- ELSE -->
 		<dl>
 			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
 			<dd>{options.CONTENT}</dd>
 		</dl>
-
+		<!-- ENDIF -->
 	<!-- ENDIF -->
 <!-- END options -->
 
@@ -80,6 +116,11 @@
 	<!-- END auth_tpl -->
 <!-- ENDIF -->
 </fieldset>
+<!-- IF .custom_tags -->
+	<!-- BEGIN custom_tags -->
+		<input type="button" class="button2" name="addbbcode{custom_tags.BBCODE_ID}" value="{custom_tags.BBCODE_TAG}" onclick="bbstyle({custom_tags.BBCODE_ID})"<!-- IF custom_tags.BBCODE_HELPLINE !== '' --> onmouseover="helpline('cb_{custom_tags.BBCODE_ID}')" onmouseout="helpline('tip')"<!-- ENDIF --> />
+	<!-- END custom_tags -->
+<!-- ENDIF -->
 <!-- IF PREVIEW -->
 <fieldset>
 	<legend>{L_PREVIEW}</legend>
@@ -91,6 +132,7 @@
 		<dt><label>{L_FROM}</label></dt>
 		<dd>{S_FROM}</dd>
 	</dl>
+
 	<dl> 
 		<dt><label>{L_SUBJECT}</label></dt>
 		<dd>{S_SUBJECT}</dd>

@@ -396,7 +396,7 @@ class acp_dc_activity_management
 					)
 				);
 					
-					// Description is custom made because of the bbcode and smilies
+				// Description is custom made because of the bbcode and smilies
 				$template->assign_var('DESCRIPTION', 'description');							
 				
 				// Generate smilies on inline displaying
@@ -792,6 +792,11 @@ class acp_dc_activity_management
 				$this->tpl_name = 'dc/acp_dc_activity_enrolls';
 				break;
 			case 'send_mail':
+
+				if (!function_exists('display_custom_bbcodes'))
+				{
+					include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				}
 				
 				$user->add_lang('acp/email');
 				$form_key = 'acp_send_mail';
@@ -871,13 +876,18 @@ class acp_dc_activity_management
 					)
 				);
 
-					// set text for activities
-					$template->assign_vars(array(
-						'FORM_TITLE'			=> $form_title,
-						'EVENT_TITLE'			=> $activity->getName(),
-						'L_EVENT_TITLE'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_NAME'])),
-					));					
-				
+				// set text for activities
+				$template->assign_vars(array(
+					'FORM_TITLE'			=> $form_title,
+					'EVENT_TITLE'			=> $activity->getName(),
+					'L_EVENT_TITLE'			=> ucfirst(strtolower($user->lang['ACP_DC_ACT_NAME'])),
+				));
+
+				// Description is custom made because of the bbcode and smilies
+				$template->assign_var('DESCRIPTION', 'message');	
+
+				// Assigning custom bbcode	
+				display_custom_bbcodes();					
 			
 				$this->page_title = 'ACP_DC_AC_SEND_MAIL';
 				$this->tpl_name = 'dc/acp_dc_activity_send_mail';
@@ -1276,6 +1286,22 @@ class acp_dc_activity_management
 						unset($not_found_users);
 						
 					}
+
+					// parse bbcode in de message to html
+					$email_message = $cfg_array['message'];
+					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+					$enable_bbcode = $enable_magic_url = true;
+					$enable_smilies = false;
+					$bbcode_bitfield = $bbcode_uid = "";
+
+					generate_text_for_storage($email_message, $bbcode_uid, $bbcode_bitfield, $options, $enable_bbcode, $enable_magic_url, $enable_smilies);
+
+					$options = 	(($enable_bbcode) ? OPTION_FLAG_BBCODE : 0) +
+					(($enable_smilies) ? OPTION_FLAG_SMILIES : 0) + 
+					(($enable_magic_url) ? OPTION_FLAG_LINKS : 0);
+	
+
+					$email_message = generate_text_for_display($email_message, $bbcode_uid, $bbcode_bitfield, $options);
 					
 					break;
 			}
@@ -1433,7 +1459,7 @@ class acp_dc_activity_management
 						$messenger->assign_vars(array(
 							'ACTIVITY_NAME'    		=> $activity->getName(),
 							'USERNAME'    			=> $user_send['name'],
-							'MESSAGE'    			=> htmlspecialchars_decode($cfg_array['message']),
+							'MESSAGE'    			=> $email_message,
 							'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 							'COMMISSION'    		=> get_group_name($activity->getCommission())
 						));
@@ -1787,7 +1813,7 @@ class acp_dc_activity_management
 					$messenger->assign_vars(array(
 						'ACTIVITY_NAME'    		=> $activity->getName(),
 						'USERNAME'    			=> $action_users[0],
-						'MESSAGE'    			=> htmlspecialchars_decode($cfg_array['message']),
+						'MESSAGE'    			=> htmlspecialchars_decode($email_message),
 						'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 						'COMMISSION'    		=> get_group_name($activity->getCommission())
 					));
