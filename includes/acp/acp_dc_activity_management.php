@@ -801,12 +801,13 @@ class acp_dc_activity_management
 				$random_seed = $this->generateRandomString();
 				$email_to_users = utf8_normalize_nfc(request_var('usrid', $random_seed));	// get all the users ids to send to
 				$activity_id = intval(utf8_normalize_nfc(request_var('id', $random_seed)));	// get current event
+
 				
 				if($activity_id != $random_seed){										// check if event exists
-					$activity = Activity::get_activity($activity_id, $activities_handler);
-						
+					$activity = Activity::get_activity($activity_id);
 						if($activity == NULL){
 							trigger_error($user->lang['DC_ACT_NO_ACT']);
+
 						}
 						
 						if (!$activity->is_manager($user->data['user_id']))
@@ -1390,14 +1391,12 @@ class acp_dc_activity_management
 					$result = $db->sql_query($sql);
 					$row = $db->sql_fetchrow($result);
 
-					$i = $j = 0;
+					$i = 0;
 					
 					// Send with BCC
 					// Maximum number of bcc recipients
 					$max_chunk_size = (int) $config['email_max_chunk_size'];
 					$email_list = array();
-					$old_lang = $row['user_lang'];
-					$old_notify_type = $row['user_notify_type'];
 
 					do
 					{
@@ -1405,24 +1404,12 @@ class acp_dc_activity_management
 							($row['user_notify_type'] == NOTIFY_IM && $row['user_jabber']) ||
 							($row['user_notify_type'] == NOTIFY_BOTH && ($row['user_email'] || $row['user_jabber'])))
 						{
-							if ($i == $max_chunk_size || $row['user_lang'] != $old_lang || $row['user_notify_type'] != $old_notify_type)
-							{
-								$i = 0;
 
-								if (sizeof($email_list))
-								{
-									$j++;
-								}
-
-								$old_lang = $row['user_lang'];
-								$old_notify_type = $row['user_notify_type'];
-							}
-
-							$email_list[$j][$i]['lang']		= $row['user_lang'];
-							$email_list[$j][$i]['method']	= $row['user_notify_type'];
-							$email_list[$j][$i]['email']	= $row['user_email'];
-							$email_list[$j][$i]['name']		= $row['username'];
-							$email_list[$j][$i]['jabber']	= $row['user_jabber'];
+							$email_list[$i]['lang']		= $row['user_lang'];
+							$email_list[$i]['method']	= $row['user_notify_type'];
+							$email_list[$i]['email']	= $row['user_email'];
+							$email_list[$i]['name']		= $row['username'];
+							$email_list[$i]['jabber']	= $row['user_jabber'];
 							$i++;
 						}
 					}
@@ -1432,18 +1419,11 @@ class acp_dc_activity_management
 					$errored = false;
 					$url = generate_board_url() . '/dc/dc_activity.php'; 	// activity page
 
-					for ($i = 0, $size = sizeof($email_list); $i < $size; $i++)
-					{
+					foreach ($email_list as $key => $user_send) {
 						$messenger = new messenger(false);
-						$used_lang = $email_list[$i][0]['lang'];
+						$used_lang = $user_send['lang'];
+						$messenger->{'to'}($user_send['email'], $user_send['name']);
 
-						for ($j = 0, $list_size = sizeof($email_list[$i]); $j < $list_size; $j++)
-						{
-							$email_row = $email_list[$i][$j];
-
-							$messenger->{((sizeof($email_list[$i]) == 1) ? 'to' : 'bcc')}($email_row['email'], $email_row['name']);
-							$messenger->im($email_row['jabber'], $email_row['name']);
-						}
 						$messenger->template('dc_activity_message', $used_lang);
 
 						$messenger->anti_abuse_headers($config, $user);
@@ -1452,7 +1432,7 @@ class acp_dc_activity_management
 
 						$messenger->assign_vars(array(
 							'ACTIVITY_NAME'    		=> $activity->getName(),
-							'USERNAME'    			=> $email_row['name'],
+							'USERNAME'    			=> $user_send['name'],
 							'MESSAGE'    			=> htmlspecialchars_decode($cfg_array['message']),
 							'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 							'COMMISSION'    		=> get_group_name($activity->getCommission())
@@ -1468,9 +1448,10 @@ class acp_dc_activity_management
 						{
 							$errored = true;
 						}
-					}
-					unset($email_list);
 
+						
+					}
+					unset($email_list);					
 					$messenger->save_queue();
 					
 					if (!$errored)

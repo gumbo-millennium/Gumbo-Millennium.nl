@@ -63,7 +63,6 @@
  * <li>datetime datetime The date and time of the change  
  * <li>modification String The description of the change
  * </p>
-
 */
 
 /**
@@ -185,7 +184,6 @@ class activity {
 	* it will search in the activity handler.
 	* @param:
 	* $activity_id int the id of the activity to search for
-	* $activities_handler activities_handler if the param is given it will also search in the activity handler (which is faster that searching in the database)
 	* @returns:
 	* Activity object if found
 	* NULL if nothing is found
