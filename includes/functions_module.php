@@ -446,7 +446,7 @@ class p_master
 				trigger_error("Cannot find module $module_path/{$this->p_class}_$this->p_name.$phpEx", E_USER_ERROR);
 			}
 
-			include("$module_path/{$this->p_class}_$this->p_name.$phpEx");
+			include_once("$module_path/{$this->p_class}_$this->p_name.$phpEx");
 
 			if (!class_exists("{$this->p_class}_$this->p_name"))
 			{

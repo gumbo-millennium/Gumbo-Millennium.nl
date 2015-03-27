@@ -1459,6 +1459,8 @@ class acp_dc_activity_management
 						$messenger->assign_vars(array(
 							'ACTIVITY_NAME'    		=> $activity->getName(),
 							'USERNAME'    			=> $user_send['name'],
+							'YEAR'					=>  date("Y"),
+							'TITLE'    				=>	$cfg_array['subject'] ." - ". $activity->getName(),
 							'MESSAGE'    			=> $email_message,
 							'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 							'COMMISSION'    		=> get_group_name($activity->getCommission())
@@ -1810,9 +1812,12 @@ class acp_dc_activity_management
 					$messenger->template('dc_activity_message',$user->data['user_lang']);
 					$messenger->to($user->data['user_email'], $user->data['username']);
 					$messenger->im($user->data['user_jabber'], $user->data['username']);
+
 					$messenger->assign_vars(array(
 						'ACTIVITY_NAME'    		=> $activity->getName(),
 						'USERNAME'    			=> $action_users[0],
+						'YEAR'					=>  date("Y"),
+						'TITLE'    				=>	$cfg_array['subject'] ." - ". $activity->getName(),
 						'MESSAGE'    			=> htmlspecialchars_decode($email_message),
 						'LINK'    				=> $url ."?act=".$activity->getId(),		// remove all query parameters (like: ?sid=XXXX) and add only the current activity
 						'COMMISSION'    		=> get_group_name($activity->getCommission())
@@ -1839,7 +1844,7 @@ class acp_dc_activity_management
 					$template->assign_vars(array(
 						'PREVIEW'				=> true,
 						'L_MESSAGE'				=> $user->lang["MESSAGE"],
-						'S_MESSAGE'				=> nl2br($messenger->msg),
+						'S_MESSAGE'				=> $messenger->msg,
 						'L_SUBJECT'				=> $user->lang["SUBJECT"],
 						'S_SUBJECT'				=> $messenger->subject,
 						'L_RECIEVERS'			=> $user->lang["SEND_TO_USERS"], 

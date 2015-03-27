@@ -526,12 +526,12 @@ class messenger
 			{
 				// BEGIN GUMBO DC MOD (Gerco Versloot): Removed wordwrap
 				// OLD: $result = smtpmail($this->addresses, mail_encode($this->subject), nl2br(wordwrap(utf8_wordwrap($this->msg), 997, "\n", true)), $err_msg, $headers);
-			 	$result = smtpmail($this->addresses, mail_encode($this->subject), nl2br($this->msg), $err_msg, $headers);
+			 	$result = smtpmail($this->addresses, mail_encode($this->subject), $this->msg, $err_msg, $headers);
 			 	// END CD MOD (Gerco Versloot): Removed wordwrap
 			}
 			else
 			{
-				$result = phpbb_mail($mail_to, $this->subject, nl2br($this->msg), $headers, $this->eol, $err_msg);
+				$result = phpbb_mail($mail_to, $this->subject, $this->msg, $headers, $this->eol, $err_msg);
 			}
 
 			if (!$result)
@@ -546,7 +546,7 @@ class messenger
 				'to'			=> $to,
 				'addresses'		=> $this->addresses,
 				'subject'		=> $this->subject,
-				'msg'			=> nl2br($this->msg),
+				'msg'			=> $this->msg,
 				'headers'		=> $headers)
 			);
 		}

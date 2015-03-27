@@ -120,6 +120,8 @@ if($status != 0 && check_form_key('chance_the_subscribe_status') && $status != $
 					$messenger->assign_vars(array(
 						'ACTIVITY_NAME'    		=> $activity->getName(),
 						'USERNAME'    			=> $user->data['username'],
+						'YEAR'					=> date("Y"),
+						'TITLE'    				=> $activity->getName(),
 						'START_DATETIME'    	=> $user->format_date( $activity->getStartDatetime()->getTimestamp()),
 						'END_DATETIME'    		=> $user->format_date( $activity->getEndDatetime()->getTimestamp()),
 						'UNSUBSCRIBE_DATETIME'	=> $user->format_date( $activity->getUnsubscribeMaxDatetime()->getTimestamp() ),

@@ -1,10 +1,410 @@
-Subject: {SUBJECT}
+{SUBJECT}
+<html xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraph.org/schema/"> <head>
 
-Hello {USERNAME},
+<meta property="fb:page_id" content="43929265776" />        
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-{MESSAGE}
+<!-- Facebook sharing information tags -->
+<meta property="og:title" content="Subject: {TITLE}">
 
-<a href="{LINK}">Click here for the event</a>
+<title>Subject: {TITLE}</title>
 
-This event is hosted by the {COMMISSION}.
-S.V. Gumbo Millennium.
+<style type="text/css">
+#outlook a{
+	padding:0;
+}
+body{
+	width:100% !important;
+}
+.ReadMsgBody{
+	width:100%;
+}
+.ExternalClass{
+	width:100%;
+}
+body{
+	-webkit-text-size-adjust:none;
+}
+body{
+	margin:0;
+	padding:0;
+}
+img{
+	border:none;
+	height:auto;
+	line-height:100%;
+	margin:0;
+	outline:none;
+	padding:0;
+	text-decoration:none;
+}
+
+#data_table{
+	width: 580px;
+}
+#backgroundTable{
+	height:100% !important;
+	margin:0;
+	padding:0;
+	width:100% !important;
+}
+h1,.h1{
+	color:#303030;
+	display:block;
+	font-family:Verdana;
+	font-size:30px;
+	font-weight:bold;
+	line-height:100%;
+	margin-top:0;
+	margin-right:0;
+	margin-bottom:10px;
+	margin-left:0;
+	text-align:left;
+}
+h2,.h2{
+	color:#991b4a;
+	display:block;
+	font-family:Verdana;
+	font-size:20px;
+	font-weight:bold;
+	line-height:100%;
+	margin-top:0;
+	margin-right:0;
+	margin-bottom:10px;
+	margin-left:0;
+	text-align:left;
+}
+h3,.h3{
+	color:#303030;
+	display:block;
+	font-family:Verdana;
+	font-size:12px;
+	font-weight:bold;
+	line-height:100%;
+	margin-top:0;
+	margin-right:0;
+	margin-bottom:10px;
+	margin-left:0;
+	text-align:left;
+}
+h4,.h4{
+	color:#303030;
+	display:block;
+	font-family:Verdana;
+	font-size:14px;
+	font-weight:bold;
+	line-height:100%;
+	margin-top:0;
+	margin-right:0;
+	margin-bottom:10px;
+	margin-left:0;
+	text-align:left;
+}
+#templatePreheader{
+	background-color:#004933;
+	border-bottom:0;
+}
+.preheaderContent{
+	color:#FFFFFF;
+	font-family:Verdana;
+	font-size:9px;
+	line-height:100%;
+	text-align:left;
+}
+.preheaderContent a:link,.preheaderContent a:visited,.preheaderContent a .yshortcuts {
+	color:#FFFFFF;
+	font-weight:normal;
+	text-decoration:underline;
+}
+#templateHeader{
+	background-color:#F5F5F5;
+	border-top:0;
+	border-bottom:0;
+}
+.headerContent{
+	color:#303030;
+	font-family:Verdana;
+	font-size:14px;
+	font-weight:bold;
+	line-height:100%;
+	padding:0;
+	text-align:left;
+	vertical-align:middle;
+}
+.headerContent a:link,.headerContent a:visited,.headerContent a .yshortcuts {
+	color:#991B4A;
+	font-weight:normal;
+	text-decoration:underline;
+}
+#headerImage{
+	height:auto;
+	max-width:400px !important;
+}
+.leftColumnContent{
+	color:#505050;
+	font-family:Verdana;
+	font-size:12px;
+	line-height:150%;
+	text-align:left;
+}
+.leftColumnContent a:link,.leftColumnContent a:visited,.leftColumnContent a .yshortcuts {
+	color:#991B4A;
+	font-weight:normal;
+	text-decoration:none;
+}
+.centerColumnContent{
+	color:#505050;
+	font-family:Verdana;
+	font-size:12px;
+	line-height:150%;
+	text-align:left;
+}
+.centerColumnContent a:link,.centerColumnContent a:visited,.centerColumnContent a .yshortcuts {
+	color:#991B4A;
+	font-weight:normal;
+	text-decoration:none;
+}
+.rightColumnContent{
+	color:#505050;
+	font-family:Verdana;
+	font-size:12px;
+	line-height:150%;
+	text-align:left;
+}
+.rightColumnContent a:link,.rightColumnContent a:visited,.rightColumnContent a .yshortcuts {
+	color:#991B4A;
+	font-weight:normal;
+	text-decoration:none;
+}
+.leftColumnContent img,.centerColumnContent img,.rightColumnContent img{
+	display:inline;
+	height:auto;
+	max-width:180px !important;
+}
+#templateBody{
+	background-color:#F5F5F5;
+	border-top:0;
+	border-bottom:0;
+}
+.contentBlock{
+	background-color:#FFFFFF;
+}
+.bodyContent{
+	color:#303030;
+	font-family:Verdana;
+	font-size:13px;
+	line-height:150%;
+	text-align:left;
+}
+.bodyContent a:link,.bodyContent a:visited,.bodyContent a .yshortcuts {
+	color:#991B4A;
+	font-weight:normal;
+	text-decoration:underline;
+}
+.bodyContent img{
+	display:inline;
+	height:auto !important;
+	max-width:580px !important;
+}
+#templateFooter{
+	border-top:0;
+}
+body,#backgroundTable{
+	background-color:#DDDDDD;
+}
+.footerContent{
+	color:#505050;
+	font-family:Verdana;
+	font-size:11px;
+	line-height:125%;
+	text-align:left;
+}
+.footerContent a:link,.footerContent a:visited,.footerContent a .yshortcuts {
+	color:#505050;
+	font-weight:normal;
+	text-decoration:underline;
+}
+.footerContent img{
+	display:inline;
+}
+#monkeyRewards img{
+	max-width:190px;
+}
+</style>       
+</head> 
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: none;margin: 0;padding: 0;background-color: #DDDDDD;width: 100% !important;">
+	<center>
+		<table border="0" cellpadding="0" cellspacing="0" id="backgroundTable" style="margin: 0;padding: 0;background-color: #DDDDDD;">
+			<tr>
+				<td align="center" valign="top">
+					<!-- // Begin Template Preheader \\ -->
+					<table border="0" cellpadding="10" cellspacing="0" width="100%" id="templatePreheader" style="background-color: #004933;border-bottom: 0;">
+						<tr>
+							<td align="center" valign="top">
+
+								<!-- // Begin Module: Standard Preheader \ -->
+								<table border="0" cellpadding="0" cellspacing="0" width="600">
+									<tr>
+										<td valign="top" width="400" class="preheaderContent" style="padding-right: 20px;color: #FFFFFF;font-family: Verdana;font-size: 9px;line-height: 100%;text-align: left;">Onderwerp: {TITLE}</td>
+										<!--  -->
+									</tr>
+								</table>
+								<!-- // End Module: Standard Preheader \ -->
+
+							</td>
+						</tr>
+					</table>
+					<!-- // End Template Preheader \\ -->
+					<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainer">
+						<tr>
+							<td align="center" valign="top" id="templateHeader" style="padding: 20px;background-color: #F5F5F5;border-top: 0;border-bottom: 0;">
+								<!-- // Begin Template Header \\ -->
+								<table border="0" cellpadding="0" cellspacing="0" width="600">
+									<tr>
+										<td width="600" class="headerContent" style="padding-right: 20px;color: #303030;font-family: Verdana;font-size: 14px;font-weight: bold;line-height: 100%;padding: 0;text-align: center;vertical-align: middle;">
+											<img src="http://intro-informatica.nl/images/Gumbo_letters.png" alt="Gumbo Millennium logo" border="0" style="border: px none;border-color: ;border-style: none;border-width: px;height: 130px;width: 380px;margin: 0;padding: 0;max-width: 380px;line-height: 100%;outline: none;text-decoration: none;" width="380" height="130" id="headerImage campaign-icon">
+										</td>
+									</tr>
+								</table>
+								<!-- // End Template Header \\ -->
+							</td>
+						</tr>
+						<tr>
+							<td align="center" valign="top" id="templateBody" style="padding-bottom: 20px;background-color: #F5F5F5;border-top: 0;border-bottom: 0;">
+								<!-- // Begin Template Body \\ -->
+								<table border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td align="center" valign="top" width="600">
+											<table border="0" cellpadding="0" cellspacing="0" width="100%">
+												<tr>
+													<td valign="top" width="180" class="leftColumnContent" style="padding-top: 20px;padding-bottom: 20px;color: #505050;font-family: Verdana;font-size: 12px;line-height: 150%;text-align: left;">
+														<h4 style="color: #303030;display: block;font-family: Verdana;font-size: 14px;font-weight: bold;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;">
+															Hallo {USERNAME},
+														</h4>
+														Er is is een bericht over de activiteit: <a href="{LINK}">{ACTIVITY_NAME}</a> door {COMMISSION}.
+													</td>
+													<td width="30">
+														<br>
+													</td>
+
+														<td valign="top" width="180" style="padding-top:20px; padding-bottom:20px;">
+															<table brder="0" cellpadding="0" cellspacing="0" width="100%">
+																<td valign="top" width="180" class="centerColumnContent" style="padding-top: 20px;padding-bottom: 20px;color: #505050;font-family: Verdana;font-size: 12px;line-height: 150%;text-align: left;">
+																	<h4 style="color: #303030;display: block;font-family: Verdana;font-size: 14px;font-weight: bold;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;">
+																		Gumbo Millennium Website 
+																	</h4>
+																	&nbsp;<a href="http://gumbo-millennium.nl/site/" target="_self" style="color: #991B4A;font-weight: normal;text-decoration: none;">
+																		Gumbo-Millennium.nl
+																	</a>
+																</td>
+															</table>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td align="center" valign="top" width="600">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%">
+													<tr>
+														<td valign="top">
+															<table border="0" cellpadding="10" cellspacing="0" width="100%" class="contentBlock" style="background-color: #FFFFFF;">
+																<tr>
+																	<td valign="top" style="padding-right:20px; padding-bottom:0; padding-left:20px;">
+																		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+																			<tr>
+																				<td class="bodyContent" style="padding-bottom: 20px;color: #303030;font-family: Verdana;font-size: 13px;line-height: 150%;text-align: left;">
+																					<h1 class="mc-toc-title" style="font-size: 12px;font-family: 'Lucida Grande', 'Lucida Sans', 'Lucida Sans Unicode', sans-serif;line-height: 1.5;margin: 0px;padding: 0px;color: rgb(68, 68, 68) !important;display: block;font-weight: bold;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;">
+																						<span style="color:#FFF0F5">
+																						<span style="font-family:verdana; font-size:20px; line-height:20px">
+																						<span style="background-color:#006400">
+																							&nbsp;{TITLE}&nbsp;
+																						</span></span></span>
+																					</h1>
+
+																					<p style="font-size: 12px; color: #444444 !important; font-family: 'Lucida Grande', 'Lucida Sans', 'Lucida Sans Unicode', sans-serif; line-height: 1.5; margin: 0; padding: 0;">
+																						{MESSAGE}
+																					</p>
+
+																				</td>
+																			</tr>
+																			<tr>
+																				<td class="bodyContent" style="padding-bottom: 20px;color: #303030;font-family: Verdana;font-size: 13px;line-height: 150%;text-align: left;">
+																					<a href="{LINK}" target="_self" style="color: #991B4A;font-weight: normal;text-decoration: none;">Click to jump: {ACTIVITY_NAME}!</a>
+																				</td>
+																			</tr>
+																			<tr mc:repeatable="repeat_1" mc:repeatindex="0">
+																				<td class="bodyContent" style="border-top: 1px dotted #AAAAAA;padding-top: 20px;padding-bottom: 20px;color: #303030; text-align: left;">
+																					<table>
+																						<tr mc:hideable="hideable_1" mchideable="hideable_1">
+																							<td align="left" height="18" valign="top" width="18">
+																								<img src="http://intro-informatica.nl/images/icons/icon_sm_facebook.png" alt="Friend on Facebook" style="max-width: 18px !important;border: none;height: auto;line-height: 100%;margin: 0;outline: none;padding: 0;text-decoration: none;">
+																							</td>
+																							<td valign="middle" class="rightColumnContent" style="color: #505050;font-family: Verdana;font-size: 12px;line-height: 150%;text-align: left;">
+
+																								<a href="https://www.facebook.com/GumboMillennium" target="_blank" style="color: #991B4A;font-weight: normal;text-decoration: none;">Facebook
+																								</a> 
+																							</td>
+																							<td align="center" height="18" valign="top" width="18" >
+																								<img src="http://intro-informatica.nl/images/icons/icon_sm_twitter.png" alt="Follow on Twitter" style="max-width: 18px !important;border: none;height: auto;line-height: 100%;margin: 0;outline: none;padding: 0;text-decoration: none;">
+																							</td>
+																							<td valign="middle" class="rightColumnContent" style="color: #505050;font-family: Verdana;font-size: 12px;line-height: 150%;text-align: left;">
+																								<a href="https://twitter.com/gumbomillennium" target="_blank" style="color: #991B4A;font-weight: normal;text-decoration: none;">
+																									Twitter
+																								</a> 
+																							</td>
+																						</tr>
+																					</table>
+																				</td>		
+																			</tr>
+																		</table>
+																	</td>		
+																</tr>
+															</table>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+						<!-- // End Template Body \\ -->
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" valign="top">
+			<!-- // Begin Template Footer \\ -->
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="border-top: 0;">
+				<tr>
+					<td align="center" valign="top" style="padding-top:20px; padding-bottom:20px;">
+						<table border="0" cellpadding="0" cellspacing="0" width="600">
+							<tr>
+								<td valign="top" width="400" class="footerContent">
+									<strong>Met vriendelijke groeten,</strong>
+										<br/>
+									<p>
+										{COMMISSION}
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" valign="middle" class="footerContent" style="padding-top: 10px;color: #505050;font-family: Verdana;font-size: 11px;line-height: 125%;text-align: left;">
+									<em>Copyright &copy; {YEAR} S.V. Gumbo Millennium, All rights reserved. Powered by <a href="http://www.e-active.nl/">e-Active</a>. </em>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<!-- // End Template Footer \\ -->
+		</td>
+	</tr>
+</table>
+</center>
+</body>
+</html>
