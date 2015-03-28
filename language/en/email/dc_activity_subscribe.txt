@@ -281,7 +281,7 @@ body,#backgroundTable{
 														<h4 style="color: #303030;display: block;font-family: Verdana;font-size: 14px;font-weight: bold;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;">
 															Hello {USERNAME},
 														</h4>
-														Thank you of your subscription of {ACTIVITY_NAME}.
+														Thank you for your subscription of {ACTIVITY_NAME}.
 													</td>
 													<td width="30">
 														

@@ -1825,7 +1825,7 @@ function pm_notification($mode, $author, $recipients, $subject, $message, $msg_i
 
 	if (!function_exists('phpbb_get_banned_user_ids'))
 	{
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 	}
 	$banned_users = phpbb_get_banned_user_ids(array_keys($recipients));
 	$recipients = array_diff(array_keys($recipients), $banned_users);

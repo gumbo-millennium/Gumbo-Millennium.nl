@@ -189,7 +189,7 @@ class acp_import_users
 
 		
 		include($phpbb_root_path . 'includes/functions_profile_fields.' . $phpEx);
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 		
 		$user->add_lang('mods/acp_import_users');
 

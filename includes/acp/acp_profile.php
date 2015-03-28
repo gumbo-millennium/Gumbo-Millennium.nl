@@ -32,7 +32,7 @@ class acp_profile
 		global $phpbb_root_path, $phpbb_admin_path, $phpEx, $table_prefix;
 
 		include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 		include($phpbb_root_path . 'includes/functions_profile_fields.' . $phpEx);
 
 		$user->add_lang(array('ucp', 'acp/profile'));

@@ -22,7 +22,7 @@
 	include($phpbb_root_path . 'common.' . $phpEx);
 	include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-	include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+	include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 	$user->add_lang('common');
 

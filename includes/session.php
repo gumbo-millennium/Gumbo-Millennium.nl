@@ -2423,7 +2423,7 @@ class user extends session
 		{
 			global $phpbb_root_path, $phpEx;
 
-			include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 		}
 		if ($group = remove_newly_registered($this->data['user_id'], $this->data))
 		{

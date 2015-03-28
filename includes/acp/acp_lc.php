@@ -128,7 +128,7 @@ class acp_lc
 			// Whois (special case)
 			if ($action == 'whois')
 			{
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$user->add_lang('acp/users');
 				$this->page_title = 'WHOIS';

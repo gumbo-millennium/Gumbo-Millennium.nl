@@ -67,7 +67,7 @@ switch ($mode)
 {
 	case 'leaders':
 		// Display a listing of board admins, moderators
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 		$page_title = $user->lang['THE_TEAM'];
 		$template_html = 'memberlist_leaders.html';
@@ -553,7 +553,7 @@ switch ($mode)
 		{
 			if (!class_exists('p_master'))
 			{
-				include($phpbb_root_path . 'includes/functions_module.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_module.' . $phpEx);
 			}
 			$module = new p_master();
 

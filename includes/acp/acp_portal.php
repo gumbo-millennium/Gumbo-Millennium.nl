@@ -40,17 +40,17 @@ class acp_portal
 
 		if (!function_exists('column_string_const'))
 		{
-			include($phpbb_root_path . $portal_root_path . 'includes/functions_modules.' . $this->php_ex);
+			include_once($phpbb_root_path . $portal_root_path . 'includes/functions_modules.' . $this->php_ex);
 		}
 
 		if (!function_exists('mod_version_check'))
 		{
-			include($phpbb_root_path . $portal_root_path . 'includes/functions_version_check.' . $this->php_ex);
+			include_once($phpbb_root_path . $portal_root_path . 'includes/functions_version_check.' . $this->php_ex);
 		}
 
 		if(!function_exists('obtain_portal_config'))
 		{
-			include($phpbb_root_path . $portal_root_path . 'includes/functions.' . $this->php_ex);
+			include_once($phpbb_root_path . $portal_root_path . 'includes/functions.' . $this->php_ex);
 		}
 	}
 

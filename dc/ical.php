@@ -17,7 +17,7 @@
 	$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 	$phpEx = substr(strrchr(__FILE__, '.'), 1);
 	include($phpbb_root_path . 'common.' . $phpEx);
-	include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+	include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 	include_once ($phpbb_root_path . 'dc/dc_activities_handler.' . $phpEx);
 	include_once ($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);

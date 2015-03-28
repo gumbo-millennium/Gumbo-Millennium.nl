@@ -1192,7 +1192,7 @@ function user_notification($mode, $subject, $topic_title, $forum_name, $forum_id
 	// Exclude guests, current user and banned users from notifications
 	if (!function_exists('phpbb_get_banned_user_ids'))
 	{
-		include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 	}
 	$sql_ignore_users = phpbb_get_banned_user_ids();
 	$sql_ignore_users[ANONYMOUS] = ANONYMOUS;

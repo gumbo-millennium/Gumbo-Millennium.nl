@@ -51,7 +51,7 @@ class acp_users
 		// Whois (special case)
 		if ($action == 'whois')
 		{
-			include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 			$this->page_title = 'WHOIS';
 			$this->tpl_name = 'simple_body';
@@ -162,7 +162,7 @@ class acp_users
 		{
 			case 'overview':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$user->add_lang('acp/ban');
 
@@ -1302,7 +1302,7 @@ class acp_users
 
 			case 'profile':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 				include($phpbb_root_path . 'includes/functions_profile_fields.' . $phpEx);
 
 				$cp = new custom_profile();
@@ -1461,7 +1461,7 @@ class acp_users
 
 			case 'prefs':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$data = array(
 					'dateformat'		=> utf8_normalize_nfc(request_var('dateformat', $user_row['user_dateformat'], true)),
@@ -1698,7 +1698,7 @@ class acp_users
 			case 'avatar':
 
 				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$can_upload = (file_exists($phpbb_root_path . $config['avatar_path']) && phpbb_is_writable($phpbb_root_path . $config['avatar_path']) && $file_uploads) ? true : false;
 
@@ -2056,7 +2056,7 @@ class acp_users
 
 			case 'groups':
 
-				include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$user->add_lang(array('groups', 'acp/groups'));
 				$group_id = request_var('g', 0);
