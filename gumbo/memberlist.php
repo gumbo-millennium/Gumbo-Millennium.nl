@@ -1595,65 +1595,6 @@ switch ($mode)
 			}
 		}
 		
-		/**
-		* Pagination routine, generates page number sequence
-		* tpl_prefix is for using different pagination blocks at one page
-		*/
-		function generate_pagination_incptio($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
-		{
-			global $template, $user;
-
-			// Make sure $per_page is a valid value
-			$per_page = ($per_page <= 0) ? 1 : $per_page;
-			
-			$total_pages = ceil($num_items / $per_page);
-
-			if ($total_pages == 1 || !$num_items)
-			{
-				return false;
-			}
-
-			$on_page = floor($start_item / $per_page) + 1;
-			$url_delim = (strpos($base_url, '?') === false) ? '?' : ((strpos($base_url, '?') === strlen($base_url) - 1) ? '' : '&amp;');
-			
-			$page_string = '';
-			
-			$start_cnt = min(max(1, $on_page - 1), $total_pages - 4);
-			$end_cnt = max(min($on_page+4, $total_pages+1), 6);
-			
-			for($i = $start_cnt; $i < $end_cnt; $i++)
-			{	
-				$page_string .= ($i == $on_page) ? '<li class="current">' . $i . '</li>' : '<li><a href="' . $base_url . "{$url_delim}start=" . (($i - 1) * $per_page) . '">' . $i . '</a></li>';
-			}
-			
-			if ($add_prevnext_text)
-			{
-				if ($on_page != 1)
-				{
-					$page_string = '<li><a href="' . $base_url . $url_delim . 'start=1">« ' . $user->lang['FIRST'] . '</a></li><li><a href="' . $base_url . "{$url_delim}start=" . (($on_page - 2) * $per_page) . '">< ' . $user->lang['PREVIOUS'] . '</a></li>' . $page_string;
-				}
-
-				if ($on_page != $total_pages)
-				{
-					$page_string .= '<li><a href="' . $base_url . "{$url_delim}start=" . ($on_page * $per_page) . '">' . $user->lang['NEXT'] . ' ></a></li><li><a href="' . $base_url . "{$url_delim}start=" . (($total_pages-1) * $per_page) . '">' . $user->lang['LAST'] . ' »</a></li>';
-				}
-			}
-			
-			$page_string = '<ul>' . $page_string . '</ul>';
-			
-			$template->assign_vars(array(
-				$tpl_prefix . 'BASE_URL'		=> $base_url,
-				'A_' . $tpl_prefix . 'BASE_URL'	=> addslashes($base_url),
-				$tpl_prefix . 'PER_PAGE'		=> $per_page,
-
-				$tpl_prefix . 'PREVIOUS_PAGE'	=> ($on_page == 1) ? '' : $base_url . "{$url_delim}start=" . (($on_page - 2) * $per_page),
-				$tpl_prefix . 'NEXT_PAGE'		=> ($on_page == $total_pages) ? '' : $base_url . "{$url_delim}start=" . ($on_page * $per_page),
-				$tpl_prefix . 'TOTAL_PAGES'		=> $total_pages,
-			));
-
-			return $page_string;
-		}
-		
 		// Generate page
 		$template->assign_vars(array(
 			'PAGINATION'	=> generate_pagination_incptio($pagination_url, $total_users, $config['topics_per_page'], $start),

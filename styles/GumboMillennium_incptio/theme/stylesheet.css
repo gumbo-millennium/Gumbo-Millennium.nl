@@ -574,13 +574,25 @@ ul#navlist li a.selected {
 	padding: 15px 15px 20px;		
 }
 
+.iconbox input {
+	display: none;
+}
+
 .iconbox > a > * {
 	color: #333;	
 }
 
+.iconbox-selected {
+	background-color: #1a1a1a !important; 
+}
+
+.iconbox-title-selected {
+	color: #93ac12 !important; 
+}
 .iconbox > a:hover {
 	background-color: #fafafa;
 }
+
 
 .iconbox p:last-child {
 	margin-bottom: 0;
@@ -601,6 +613,7 @@ ul#navlist li a.selected {
 	display: inline-block;
 	max-width: 24px;
 	max-height: 20px;
+	padding-top: 7px;
 }
 
 .icon-top .iconbox-icon {
@@ -638,6 +651,10 @@ ul#navlist li a.selected {
 	transition: none !important;
 }
 
+.arrow-box-selected{
+	opacity: 1;
+}
+
 .iconbox a:hover .arrow-box-hover,
 .isotope-image:hover .arrow-box-hover,
 .news:hover .arrow-box-hover{
@@ -649,10 +666,10 @@ ul#navlist li a.selected {
 /* ---------------------------------------------------------------------- */
 
 /* Our Team */
-
 .team-member div.photo {
 	height: 147px;
 	margin: 0 auto 9px auto;
+
 }
 
 .team-member .photo, .team-member div.photo img {

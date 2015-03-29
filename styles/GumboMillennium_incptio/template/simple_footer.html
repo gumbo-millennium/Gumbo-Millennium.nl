@@ -1,10 +1,59 @@
-	</div>
-
-	<div class="copyright">{CREDIT_LINE}
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->
-		<!-- IF DEBUG_OUTPUT --><br />{DEBUG_OUTPUT}<!-- ENDIF -->
-	</div>
+<div class="container clearfix">
+	
+    <!-- begin clients -->
+        <section>
+        	<h2>{L_SPONSORS}</h2>
+            <ul class="clients clearfix">
+                <center>{ADS_7}
+				</center>
+            </ul>
+        </section>
+        <!-- end clients --> 
 </div>
+    <!-- begin footer -->
+	<footer id="footer">
+    	<!-- begin footer featured -->
+    	<!-- IF ADS_19 -->
+        <div id="footer-featured">
+        	<div class="container clearfix">
+                <div class="three-fourths">
+                    {ADS_19}
+                </div>
+                <div class="one-fourth column-last">
+                    <a class="entry-image" href="#" title="sponsor"><img src="{T_IMAGESET_PATH}/mail.png" alt="Mail"></a>
+                </div>
+            </div>
+        </div>
+        <!-- ENDIF -->
+        <!-- end footer featured -->	
+        <!-- begin footer bottom -->
+        <div id="footer-bottom">
+        	<div class="container clearfix">
+                <div class="one-half">
+                    <p>Copyright &copy; {L_YEAR} Gumbo Millennium. Created and maintained by the <a href="{U_DC}">{L_DC}</a>.</p>
+                    <!-- IF DEBUG_OUTPUT --><p>{DEBUG_OUTPUT}</p><!-- ENDIF -->
+                    <!-- IF not S_IS_BOT --><p><a href="{U_DELETE_COOKIES}">{L_DELETE_COOKIES}</a> </p> <!-- ENDIF -->
+                </div>
+        
+                <div class="one-half column-last">
+                    <ul class="social-links">
+                        <li class="twitter"><a href="http://www.twitter.com/GumboMillennium" title="Twitter" target="_blank">Twitter</a></li>
+                        <li class="facebook"><a href="http://www.facebook.com/GumboMillennium" title="Facebook" target="_blank">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end footer bottom -->
+	</footer>
+	
+	<!-- end footer -->  
+</div>
+<!-- IF not S_IS_BOT -->{RUN_CRON_TASK}<!-- ENDIF -->
+<!-- end container -->
+            </div><!-- /scroller-inner -->
+        </div><!-- /scroller -->
 
+    </div><!-- /pusher -->
+</div><!-- /menu-container -->
 </body>
 </html>

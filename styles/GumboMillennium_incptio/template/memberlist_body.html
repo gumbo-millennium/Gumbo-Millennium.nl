@@ -1,52 +1,126 @@
-<!-- INCLUDE overall_header.html -->	
-
-<!-- begin content -->
+<!-- IF S_IN_SEARCH_POPUP -->
+	<!-- INCLUDE simple_header.html -->
+	<!-- begin content -->
 	<section id="content">
 		<div class="container clearfix">
-			<!-- begin memberlist -->
+			<!-- begin singlepost -->
 			<section>
-				
-				<!-- BEGIN memberrow -->
-				<div class="one-sixth<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 == 0 --> column-last<!-- ENDIF -->">
-					<div class="team-member">
-						<!-- IF memberrow.AVATAR_IMG -->
-						<div class="photo">
-							{memberrow.AVATAR_IMG}
-						</div>
-						<!-- ELSE -->
-						<img class="photo" src="{T_IMAGESET_PATH}/team/team-member-1.png" alt="User avatar">
-						<!-- ENDIF -->
-						<div class="content">
-							<h3 class="name">{memberrow.USERNAME_FULL}</h3>
-							<!-- IF A_REALNAME -->
-							<span class="real-name">({memberrow.U_REAL_NAME})</span>
-							<!-- ENDIF -->
-							<span class="job-title">{memberrow.RANK_TITLE}</span>
-						</div>
-					</div>
-				</div>
-				<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 == 0 -->
-				<div class="clear"></div>
-				<!-- ENDIF -->
-				<!-- END memberrow -->
-				
-				<!-- IF (memberrow.S_ROW_COUNT + 1) % 6 != 0 -->
-				<div class="clear"></div>
-				<!-- ENDIF -->
-				
-				<!-- IF PAGINATION -->
-				<nav class="page-nav">
-					<span>
-						{PAGE_NUMBER}
-					</span>
-					{PAGINATION}
-				</nav>
-				<!-- ENDIF -->
-				
-			</section>
-			<!-- end memberlist -->
-		</div>
-	</section>
-	<!-- end content -->
+				<!-- INCLUDE memberlist_search.html -->
+				<form method="post" id="results" action="{S_MODE_ACTION}" onsubmit="insert_marked(this.user); return false">
 
-<!-- INCLUDE overall_footer.html -->
+				<!-- ELSEIF S_SEARCH_USER -->
+					<!-- INCLUDE overall_header.html -->	
+					<!-- INCLUDE memberlist_search.html -->
+					<form method="post" action="{S_MODE_ACTION}">
+
+				<!-- ELSE -->
+					<!-- INCLUDE overall_header.html -->
+					<form method="post" action="{S_MODE_ACTION}">
+
+				<!-- ENDIF -->
+				<!-- IF S_SHOW_GROUP -->
+
+					<!-- IF GROUP_COLOR --> style="color:#{GROUP_COLOR};"<!-- ENDIF --><h2>{GROUP_NAME} </h2>
+					<span>{GROUP_DESC} {GROUP_TYPE} </span>
+						<!-- IF AVATAR_IMG -->{AVATAR_IMG}<!-- ENDIF -->
+						<!-- IF RANK_IMG -->{RANK_IMG}<!-- ENDIF -->
+						<!-- IF GROUP_RANK -->{GROUP_RANK}<!-- ENDIF -->
+				<!-- ELSE -->
+					<h2>{PAGE_TITLE} </h2>
+					<!-- IF SEARCH_WORDS -->: <a href="{U_SEARCH_WORDS}">{SEARCH_WORDS}</a><!-- ENDIF -->
+					<!-- IF U_FIND_MEMBER and not S_SEARCH_USER --><a href="{U_FIND_MEMBER}">{L_FIND_USERNAME}</a> &bull; <!-- ELSEIF S_SEARCH_USER and U_HIDE_FIND_MEMBER and not S_IN_SEARCH_POPUP --><a href="{U_HIDE_FIND_MEMBER}">{L_HIDE_MEMBER_SEARCH}</a>  <!-- ENDIF -->
+
+					<nav class="page-nav">
+						<ul>
+						<!-- BEGIN first_char -->
+							<li><a href="{first_char.U_SORT}">{first_char.DESC}</a></li>
+						<!-- END first_char -->
+						</ul>
+					</nav>
+					<nav class="page-nav">
+						<span> {TOTAL_USERS} </span>
+						<!-- IF PAGINATION -->
+							<span>{PAGE_NUMBER}</span>{PAGINATION}
+						<!-- ELSE -->
+							{PAGE_NUMBER}
+						<!-- ENDIF -->
+					</nav>
+				<!-- ENDIF -->
+				<br>
+				<!-- IF S_LEADERS_SET or not S_SHOW_GROUP or not .memberrow -->
+					<a href="{U_SORT_RANK}">{L_RANK}</a><a href="{U_SORT_USERNAME}"><!-- IF S_SHOW_GROUP and .memberrow -->{L_GROUP_LEADER}<!-- ELSE -->{L_USERNAME}<!-- ENDIF --></a>
+					<!-- IF A_REALNAME --><th class="realname">{L_REALNAME}</th> <!-- ENDIF -->
+					<a href="{U_SORT_POSTS}#memberlist">{L_POSTS}</a>
+					<a href="{U_SORT_WEBSITE}#memberlist">{L_WEBSITE}</a>{L_COMMA_SEPARATOR}<a href="{U_SORT_LOCATION}">{L_LOCATION}</a>
+					<a href="{U_SORT_JOINED}#memberlist">{L_JOINED}</a>
+					<!-- IF U_SORT_ACTIVE --><a href="{U_SORT_ACTIVE}#memberlist">{L_LAST_ACTIVE}</a><!-- ENDIF -->
+				<!-- ENDIF -->
+				<div class="clear"></div>
+				<!-- BEGIN memberrow -->
+					<div class="one-fourth">
+	                    <div class="iconbox icon-left">
+	                        <a href="#" <!-- IF S_SELECT_SINGLE -->   
+	                        	onclick="insert_single('{memberrow.A_USERNAME}'); return false;"  
+	                        <!-- ELSE --> 
+                        		onclick="select_user(this); return false;"  
+                            <!-- ENDIF --> >
+	                        	<div class="iconbox-icon" >
+			                    	<!-- IF memberrow.AVATAR_IMG -->
+										{memberrow.AVATAR_IMG}
+									<!-- ELSE -->
+										<img src="{T_IMAGESET_PATH}/team/team-member-1.png" width="100" height="100" alt="User avatar">
+									<!-- ENDIF -->
+								</div>
+								<!-- IF S_IN_SEARCH_POPUP and not S_SELECT_SINGLE --><input  type="checkbox" name="user" value="{memberrow.USERNAME}" /> <!-- ENDIF -->
+	                            <h2 class="iconbox-title">{memberrow.USERNAME}</h2>
+	                            <!-- IF A_REALNAME -->
+	                            	<p class="call-to-action"><strong>{memberrow.U_REAL_NAME}</strong></p>
+	                            <!-- ENDIF -->
+	                            <p<!-- IF GROUP_COLOR --> style="color:#{GROUP_COLOR};"<!-- ENDIF -->>{memberrow.RANK_TITLE}</p>
+	                            <div class="arrow arrow-box-hover"></div>
+	                        </a>
+	                    </div>
+	                </div>
+					<!-- IF (memberrow.S_ROW_COUNT + 1) % 4 == 0 -->
+						<div class="clear"></div>
+					<!-- ENDIF -->
+					<!-- BEGINELSE -->
+						{L_NO_MEMBERS}
+					
+				<!-- END memberrow -->
+				<div class="clear"></div>
+				<!-- IF S_IN_SEARCH_POPUP and not S_SELECT_SINGLE -->	 
+					<input type="submit" name="submit" value="{L_SELECT_MARKED}" class="button2" />
+					<a href="#" onclick="marklist('results', 'user', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('results', 'user', false); return false;">{L_UNMARK_ALL}</a>
+				<!-- ENDIF -->
+
+			<!-- IF S_IN_SEARCH_POPUP -->
+				</form>
+				<form method="post" id="sort-results" action="{S_MODE_ACTION}">
+			<!-- ENDIF -->
+
+			<!-- IF S_IN_SEARCH_POPUP and not S_SEARCH_USER -->
+				<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
+				<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
+				<label for="sk">{L_SELECT_SORT_METHOD}: <select name="sk" id="sk">{S_MODE_SELECT}</select></label> 
+				<label for="sd">{L_ORDER} <select name="sd" id="sd">{S_ORDER_SELECT}</select> <input type="submit" name="sort" value="{L_SUBMIT}" class="button2" /></label>
+			<!-- ENDIF -->
+			</form>
+			<div>
+			<nav class="page-nav">
+			<span> {TOTAL_USERS} </span>
+			<!-- IF PAGINATION -->
+				<span>{PAGE_NUMBER}</span>{PAGINATION}
+			<!-- ELSE -->
+				{PAGE_NUMBER}
+			<!-- ENDIF -->
+			</nav>
+		</section>
+	</div>
+</section>
+
+<!-- IF S_IN_SEARCH_POPUP -->
+	<!-- INCLUDE simple_footer.html -->
+<!-- ELSE -->
+	<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

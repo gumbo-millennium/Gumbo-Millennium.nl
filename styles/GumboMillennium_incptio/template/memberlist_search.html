@@ -30,6 +30,24 @@ function insert_marked(users)
 	self.close();
 }
 
+function select_user(object){
+	var checkbox = jQuery(object).find("input[type='checkbox']");
+	var arrow = jQuery(object).find(".arrow");
+	var title = jQuery(object).find(".iconbox-title");
+    
+    if( !checkbox.prop("checked") ){
+        checkbox.prop("checked",true);
+        arrow.addClass('arrow-box-selected');
+        title.addClass('iconbox-title-selected');
+        jQuery(object).addClass('iconbox-selected');
+    } else {
+        checkbox.prop("checked",false);
+        arrow.removeClass('arrow-box-selected');
+        title.removeClass('iconbox-title-selected');
+        jQuery(object).removeClass('iconbox-selected');
+    }
+}
+
 function insert_single(user)
 {
 	opener.document.forms['{S_FORM_NAME}'].{S_FIELD_NAME}.value = user;
