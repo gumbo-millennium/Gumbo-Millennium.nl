@@ -317,9 +317,11 @@ if (sizeof($user_list))
 	}
 }
 
+$total_groups = sizeof($user_list);
+
 // Generate page
 $template->assign_vars(array(
-	'PAGINATION'	=> generate_pagination($pagination_url, $total_groups, $config['topics_per_page'], $start),
+	'PAGINATION'	=> generate_pagination_incptio($pagination_url, $total_groups, $config['topics_per_page'], $start),
 	'PAGE_NUMBER'	=> on_page($total_groups, $config['topics_per_page'], $start),
 	'TOTAL_GROUPS'	=> ($total_groups == 1) ? $user->lang['LIST_GROUP'] : sprintf($user->lang['LIST_GROUPS'], $total_groups),
 	

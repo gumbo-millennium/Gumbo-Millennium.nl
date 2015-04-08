@@ -30,6 +30,24 @@ function insert_marked(users)
 	self.close();
 }
 
+function select_user(object){
+	var checkbox = jQuery(object).find("input[type='checkbox']");
+	var arrow = jQuery(object).find(".arrow");
+	var title = jQuery(object).find(".iconbox-title");
+    
+    if( !checkbox.prop("checked") ){
+        checkbox.prop("checked",true);
+        arrow.addClass('arrow-box-selected');
+        title.addClass('iconbox-title-selected');
+        jQuery(object).addClass('iconbox-selected');
+    } else {
+        checkbox.prop("checked",false);
+        arrow.removeClass('arrow-box-selected');
+        title.removeClass('iconbox-title-selected');
+        jQuery(object).removeClass('iconbox-selected');
+    }
+}
+
 function insert_single(user)
 {
 	opener.document.forms['{S_FORM_NAME}'].{S_FIELD_NAME}.value = user;
@@ -39,16 +57,14 @@ function insert_single(user)
 </script>
 <script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/forum_fn.js"></script>
 <!-- ENDIF -->
+<section>
+<h2>{FIND_GROUP}</h2>
 
-<h2 class="solo">{FIND_GROUP}</h2>
-
-<form method="post" action="{S_MODE_ACTION}" id="search_memberlist">
-<div class="panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
+<form method="post" action="{S_MODE_ACTION}" id="search_memberlist" class="content-form">
+<div class="one-third">
 
 	<p>{FIND_GROUPNAME_EXPLAIN}</p>
 
-	<fieldset class="fields1 column1">
 	<dl>
 		<dt><label for="groupname">{L_GROUPNAME}:</label></dt>
 		<dd><input type="text" name="groupname" id="groupname" value="{GROUPNAME}" class="inputbox" /></dd>
@@ -57,19 +73,14 @@ function insert_single(user)
 		<dt><label for="sk" class="label3">{L_SORT_BY}:</label></dt>
 		<dd><select name="sk" id="sk">{S_SORT_OPTIONS}</select> <select name="sd">{S_ORDER_SELECT}</select></dd>
 	</dl>
-	</fieldset>
 
-	<div class="clear"></div>
-
-	<hr />
-
-	<fieldset class="submit-buttons">
-		<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp;
-		<input type="submit" name="submit" value="{L_SEARCH}" class="button1" />
+</div>
+<div class="clear"></div>
+<div>
+	<input type="reset" value="{L_RESET}" name="reset" class="button black" />&nbsp;
+		<input type="submit" name="submit" value="{L_SEARCH}" class="button colored" />
 		{S_FORM_TOKEN}
-	</fieldset>
-
-	<span class="corners-bottom"><span></span></span></div>
 </div>
 
 </form>
+<section>
