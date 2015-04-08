@@ -26,7 +26,6 @@
 						<!-- IF RANK_IMG -->{RANK_IMG}<!-- ENDIF -->
 						<!-- IF GROUP_RANK -->{GROUP_RANK}<!-- ENDIF -->
 				<!-- ELSE -->
-					<h2>{PAGE_TITLE} </h2>
 					<!-- IF SEARCH_WORDS -->: <a href="{U_SEARCH_WORDS}">{SEARCH_WORDS}</a><!-- ENDIF -->
 					<!-- IF U_FIND_MEMBER and not S_SEARCH_USER --><a href="{U_FIND_MEMBER}">{L_FIND_USERNAME}</a> &bull; <!-- ELSEIF S_SEARCH_USER and U_HIDE_FIND_MEMBER and not S_IN_SEARCH_POPUP --><a href="{U_HIDE_FIND_MEMBER}">{L_HIDE_MEMBER_SEARCH}</a>  <!-- ENDIF -->
 
@@ -90,8 +89,9 @@
 				<!-- END memberrow -->
 				<div class="clear"></div>
 				<!-- IF S_IN_SEARCH_POPUP and not S_SELECT_SINGLE -->	 
-					<input type="submit" name="submit" value="{L_SELECT_MARKED}" class="button2" />
-					<a href="#" onclick="marklist('results', 'user', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('results', 'user', false); return false;">{L_UNMARK_ALL}</a>
+					<input type="submit" name="submit" value="{L_SELECT_MARKED}" class="button" />
+					<a href="#" onclick="marklist('results', 'user', true); return false;" class="button teal">{L_MARK_ALL}</a> 
+					<a href="#" onclick="marklist('results', 'user', false); return false;" class="button teal">{L_UNMARK_ALL}</a>
 				<!-- ENDIF -->
 
 			<!-- IF S_IN_SEARCH_POPUP -->
@@ -103,7 +103,8 @@
 				<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
 				<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
 				<label for="sk">{L_SELECT_SORT_METHOD}: <select name="sk" id="sk">{S_MODE_SELECT}</select></label> 
-				<label for="sd">{L_ORDER} <select name="sd" id="sd">{S_ORDER_SELECT}</select> <input type="submit" name="sort" value="{L_SUBMIT}" class="button2" /></label>
+				<label for="sd">{L_ORDER} <select name="sd" id="sd">{S_ORDER_SELECT}</select> 
+				<input type="submit" name="sort" value="{L_SUBMIT}" class="button" /></label>
 			<!-- ENDIF -->
 			</form>
 			<div>
