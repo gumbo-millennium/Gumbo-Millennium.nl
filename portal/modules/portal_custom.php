@@ -285,7 +285,7 @@ class portal_custom_module
 
 				if(!function_exists('display_forums'))
 				{
-					include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+					include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 				}
 
 				// Build custom bbcodes array

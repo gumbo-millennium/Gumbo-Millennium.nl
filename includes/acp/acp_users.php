@@ -1697,7 +1697,7 @@ class acp_users
 
 			case 'avatar':
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 				include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 
 				$can_upload = (file_exists($phpbb_root_path . $config['avatar_path']) && phpbb_is_writable($phpbb_root_path . $config['avatar_path']) && $file_uploads) ? true : false;

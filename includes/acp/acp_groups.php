@@ -288,7 +288,7 @@ class acp_groups
 			case 'edit':
 			case 'add':
 
-				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+				include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 				$data = $submit_ary = array();
 

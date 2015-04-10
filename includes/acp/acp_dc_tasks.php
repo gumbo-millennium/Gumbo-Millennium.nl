@@ -29,7 +29,7 @@ include_once($phpbb_root_path . 'dc/dc_activity_class.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'dc/dc_functions.' . $phpEx);
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 /**
 * @package acp

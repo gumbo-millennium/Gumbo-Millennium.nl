@@ -305,7 +305,7 @@ class mcp_warn
 		// Generate the appropriate user information for the user we are looking at
 		if (!function_exists('get_user_avatar'))
 		{
-			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
 
 		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
@@ -410,7 +410,7 @@ class mcp_warn
 		// Generate the appropriate user information for the user we are looking at
 		if (!function_exists('get_user_avatar'))
 		{
-			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
 
 		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
