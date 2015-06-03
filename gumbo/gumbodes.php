@@ -56,6 +56,16 @@
 	// Output page
 	page_header($user->lang['FORUM']);
 
+	if ($user->data['user_id'] != ANONYMOUS) {
+		$template->set_filenames(array(
+			'body' => 'dc_singlepost_body.html')
+		);
+	}else{
+		$template->set_filenames(array(
+			'body' => 'login_body.html')
+		);
+	}
+
 	page_footer();
 
 ?>
