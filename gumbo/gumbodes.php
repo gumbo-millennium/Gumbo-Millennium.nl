@@ -27,7 +27,7 @@
 	$user->setup('viewforum');
 	
 	// Get the page content and title
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1256';
+	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1372';
 
 	$result = $db->sql_query_limit($sql, 1);
 	$row = $db->sql_fetchrow($result);
@@ -55,10 +55,6 @@
 	
 	// Output page
 	page_header($user->lang['FORUM']);
-	
-	$template->set_filenames(array(
-		'body' => 'under_construction.html')
-	);
 
 	page_footer();
 
