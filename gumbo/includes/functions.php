@@ -97,6 +97,7 @@ function get_preview($text, $bbcode_uid, $bbcode_bitfield, $max_senctences = 5 ,
 		return null;
 	if(gettype($images) != "boolean")
 		return null;
+
 	$pattern = 	"(?<=(\[preview:".$bbcode_uid."\]))".	// lookahead for [preview] (bbcode_uid is for the unique page)
 				"[\s\S]*".									// look all non white characters and all white characters (just all characters)
 				"(?=(\\r\\r))".
@@ -147,7 +148,9 @@ function get_preview($text, $bbcode_uid, $bbcode_bitfield, $max_senctences = 5 ,
 	$sentences = preg_split($pattern, $preview, -1, PREG_SPLIT_NO_EMPTY);
 	$max_senctences = ($max_senctences == 0) ? count($sentences) :  min($max_senctences, count($sentences));
 	
-
+	if (count($sentences) < 1) {
+		return "";
+	}
 	if($new_lines){
 		$preview = "";
 		for($i = 0; $i < $max_senctences; $i++ ){
@@ -157,8 +160,7 @@ function get_preview($text, $bbcode_uid, $bbcode_bitfield, $max_senctences = 5 ,
 		$new_lines = "";
 		//preg_match("/.*". preg_quote($sentences[$max_senctences-1])."/s", $preview, $matches);
 		//$preview = $matches[0];
-
-		$preview = substr($preview, 0, strpos($preview,$sentences[$max_senctences-1])) . $sentences[$max_senctences-1];
+		$preview = substr($preview, 0,strpos($preview,$sentences[$max_senctences-1])) . $sentences[$max_senctences-1];
 	}
 	
 	$options = 	(($bbcode) ? OPTION_FLAG_BBCODE : 0) +

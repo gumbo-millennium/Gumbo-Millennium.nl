@@ -1,0 +1,66 @@
+<!-- INCLUDE overall_header.html -->
+	
+	<!-- begin content -->
+	<section id="content">
+		<div class="container clearfix">
+			 <section>
+			 	<!-- IF .images -->
+	            	<!-- IF .images > 1 -->
+		            	<!-- begin entry slider -->
+		                <div class="entry-slider">
+		                    <div id="flexslider-portfolio-item" class="flex-container">
+		                        <div class="flexslider">
+		                            <ul class="slides">
+		                            	<!-- BEGIN images -->
+		                                <li><a class="entry-image image-block link-overlay" title="image"><span class="overlay"></span><img src="{images.URL}" alt="image"></a></li>
+		                                <!-- END images -->
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </div>	
+		                <!-- end entry slider -->
+	            	<!-- ELSE -->
+		            	<!-- BEGIN images -->
+		            		<a class="entry-image image-block link-overlay" title="image"><span class="overlay"></span><img src="{images.URL}" alt="image" class=""></a>
+		            	<!-- END images -->
+	            	<!-- ENDIF -->
+            	<!-- ENDIF -->
+            	</section>
+            	<section>
+	        	<div class="fullscreen">
+	            	<h2>{INFO_TITLE}</h2>
+	                <p>{GROUP_DESC}</p>
+	            </div>
+	            <div class="clear"></div>
+	        </section>
+	        <!-- begin our company -->
+	       
+	        <section>
+	        	<h2>{MEMBERS_TITLE}</h2>
+	            <!-- BEGIN members -->
+	            <div class="one-third ">
+	            	<div class="team-member">
+	            		 <a href="{members.U_VIEW_PROFILE}">
+	                    <!-- IF members.AVATAR -->
+								{members.AVATAR}
+						<!-- ELSE -->
+							<img src="{T_IMAGESET_PATH}/team/team-member-1.png" width="100" height="100" alt="User avatar" class="aligncenter">
+						<!-- ENDIF -->
+						</a>
+	                    <div class="content">
+	                        <a href="{members.U_VIEW_PROFILE}"><h3 class="name">{members.A_USERNAME}</h3></a>
+	                        <!-- IF A_REALNAME --><span class="job-title">{members.GUMBO_REALNAME}</span><!-- ENDIF -->
+	                       <hr>
+	                        <p>{members.INFO}</p>
+	                    </div>
+	                </div>
+	            </div>
+	            <!-- IF members.S_ROW_COUNT % 3 == 2 -->
+	            	<div class="clear"></div>
+	            <!-- ENDIF -->
+	            <!-- END members --> 
+		</div>
+	</section>
+	<!-- end content -->
+
+<!-- INCLUDE overall_footer.html -->

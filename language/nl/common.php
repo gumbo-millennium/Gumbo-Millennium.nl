@@ -877,7 +877,6 @@ $lang = array_merge($lang, array(
 	// The default dateformat which will be used on new installs in this language
 	// Translators should change this if a the usual date format is different
 	'default_dateformat'	=> 'D d M Y, H:i', // ma 10 jan 2005 17:57
-
 ));
 
 $lang['PROPHPBB_ANTISPAM'] = '<strong>Spam registration stopped</strong><br />&raquo; %1$s';

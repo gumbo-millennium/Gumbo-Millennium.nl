@@ -29,8 +29,8 @@ Author URI: http://www.ixtendo.com
 @import url('css/shortcodes.css');
        
                     
-         
-   
+            
+                 
 /* ---------------------------------------------------------------------- */
 /* Inceptio Styles
 /* ----------------------------------------------------------------------
@@ -511,7 +511,7 @@ ul#navlist li a.selected {
 .one-half, .one-third, .one-fourth, .one-sixth, .two-thirds, .three-fourths, .full-screen {
 	display: inline;
 	float: left;
-    margin-right: 1.5%;
+    margin-right: 1.4%;
 } 
     
 .full-screen {
@@ -752,9 +752,9 @@ ul#search-results h2 a strong {
 /* Pagination
 /* ---------------------------------------------------------------------- */
 .page-nav {
-	margin: 40px 0;
+	margin: 10px 0;
 	border-top: 1px solid #e5e5e5;
-	padding-top: 40px;
+	padding-top: 10px;
 }
 
 .page-nav.prev-next {
@@ -1377,11 +1377,11 @@ ol.comment-list, ol.children, ul.children {
 	list-style: none;
 	margin: 0;
 	padding: 0;	
-}
+}  
 
 #comment-1 {
 	border-top: none;	
-}
+}    
 
 li.comment .comment-wrap {
 	padding: 20px 0;
@@ -1394,7 +1394,7 @@ li.comment ol.children, li.comment ul.children {
 
 /* Comment List Content */
 
-ol.comment-list .avatar-wrap {
+ol.comment-list .avatar-wrap { 
 	float: left;
 	margin: 0 15px 10px 0;
 }
@@ -1404,7 +1404,7 @@ ol.comment-list .avatar img {
 	background-color: #fff;
 	padding: 3px;
 	border: 1px solid #d9d9d9;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);	
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);	 
 }
 
 ol.comment-list .avatar-wrap a.comment-edit-link {

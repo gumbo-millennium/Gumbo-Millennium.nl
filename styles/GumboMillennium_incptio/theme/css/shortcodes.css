@@ -127,6 +127,10 @@ TABLE OF CONTENTS
 	background-color: #f78e0c;	
 }
 
+.button.grey {
+	background-color: #e5e5e5;	
+}
+
 .button.yellow {
 	background-color: #FBB829;	
 }

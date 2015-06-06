@@ -1,11 +1,10 @@
 <?php
 /**
 *
-* @package phpBB3
+* @package gumbo_millennium_layout
 * @version $Id$
 * @author: Gerco Versloot
 * @date: 6 - 8 - 2012
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @Gumbo Millennium
 */
 
@@ -44,13 +43,13 @@ $lang = array_merge($lang, array(
     'SOCIETEIT'         => 'Society',
     'CONTACT'           => 'Contact',
     'BOARD_OF_DIRECTORS'=> 'The Daily Board',
-    'AC'                => 'The Activity Commission',
-    'BC'                => 'The Bras Commission',
-    'DC'                => 'De Digital Commission',
-    'KC'                => 'De Kas Commission',
-    'SC'                => 'De Soos Commission',
-    'GC'                => 'De Gumbode Commission',
-    'PC'                => 'De Plaza Commission',
+    'AC'                => 'The Activity Committee',
+    'BC'                => 'The Bras Committee',
+    'DC'                => 'De Digital Committee',
+    'KC'                => 'De Kas Committee',
+    'SC'                => 'De Soos Committee',
+    'GC'                => 'De Gumbode Committee',
+    'PC'                => 'De Plaza Committee',
     'IB'                => 'The Intro Board',
     'NICKNAME'          => 'Nickname',
     'REALNAME'          => 'Real Name',
@@ -67,7 +66,7 @@ $lang = array_merge($lang, array(
     'M-POWER'           => 'M-Power',
     'PROXIMUS'          => 'Proximus',
     'ALIQUANDO'         => 'Aliquando',
-    'COMMISSION'        => 'Commission',
+    'COMMITTEE'         => 'Committee',
 
     'BOARD_HISTORY'     => 'Board History',
     'NEWS_AND_EVENTS'   => 'News and Events',
@@ -113,6 +112,9 @@ $lang = array_merge($lang, array(
     'OTHER_ALUBMS'          => 'Other albums', 
     'PREVIEW_ALUBMS'        => 'Preview', 
     
+    //Commissions 
+    'COM_NO_DESC'           => 'This group is not interesting enough to have a description.', 
+    'COM_NO_INFO'           => 'Has no interesting story', 
 
 ));
 
