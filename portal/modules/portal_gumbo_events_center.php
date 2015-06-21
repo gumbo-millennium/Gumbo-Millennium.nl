@@ -1,10 +1,11 @@
 <?php
 /**
 *
-* @package Board3 Portal v2 - Recent
-* @copyright (c) Board3 Group ( www.board3.de )
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
+* @package gumbo_millennium_layout
+* @version v 1.11
+* @author: Gerco Versloot
+* @date: 6 - 5 - 2015
+* @Gumbo Millennium
 */
 
 /**
@@ -15,9 +16,6 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-/**
-* @package gumbo_events
-*/
 class portal_gumbo_events_center_module
 {
 	/**

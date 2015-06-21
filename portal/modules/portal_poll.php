@@ -160,7 +160,7 @@ class portal_poll_module
 		// check if we need to include the bbcode class
 		if(!class_exists('bbcode'))
 		{
-			include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 		}
 
 		$view = request_var('view', '');

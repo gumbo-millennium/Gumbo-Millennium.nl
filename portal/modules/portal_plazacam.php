@@ -19,6 +19,7 @@ if (!defined('IN_PHPBB'))
 * @package Modulname
 */
 
+
 class portal_plazacam_module
 {
 	/**
@@ -56,8 +57,8 @@ class portal_plazacam_module
 
 	public function get_template_center($module_id)
 	{
-		global $config, $template, $db, $user, $phpbb_root_path, $phpEx;
-		include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+		global $config, $template, $db, $user;
+
 		// 2014-02-24 tijdcheck ivm traffic 
 		$hourarray = array(23, 0, 1, 2, 3, 4, 5, 6);
 		$check = '';

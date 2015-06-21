@@ -1997,18 +1997,19 @@ input:focus {
 }
 
 #footer-bottom a {
-	color: #b2b2b2;
+	color: #b2b2b2; 
 }
 
 /* Footer Featured */
 
 #footer-featured {
-	padding: 20px 0 16px;
+	padding: 10px 5px 5px 10px;
 	background: url({T_IMAGESET_PATH}/footer-arrow-down.png) no-repeat center top;
 	color: #fff;
 }
 
 #footer-featured h1 {
+	color: #ffffff;
 	margin-top: 20px;
 }
 
@@ -2030,7 +2031,7 @@ input:focus {
 	font-weight: bold;
 }
 
-#footer-featured a:hover, #footer-featured a:hover strong {
+#footer-featured a:hover, #footer-featured a:hover strong,  #footer-featured h1:hover  {
 	color: #333;	
 }
 
