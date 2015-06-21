@@ -52,9 +52,9 @@ class portal_gumbo_intro_advertisement_module
 	*/
 	public $custom_acp_tpl = '';
 
+	public function get_template_center($module_id)
 	{
 		global $config, $template, $db, $user, $auth, $cache, $phpEx, $phpbb_root_path;
-	public function get_template_center($module_id)
 		
 		$post_id = intval($config['portal_gumbo_intro_advertisement_post_id_' . $module_id]);
 		$sql = 'SELECT post_text, bbcode_uid, bbcode_bitfield, enable_bbcode, enable_smilies, enable_magic_url  FROM ' . POSTS_TABLE . ' AS p WHERE post_id = '.$post_id;
