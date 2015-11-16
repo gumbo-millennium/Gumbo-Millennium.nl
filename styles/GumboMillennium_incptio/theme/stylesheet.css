@@ -2551,7 +2551,7 @@ input:focus {
 	background-color: #EEEEEE;
 	border-radius: 6px 6px 0 0;
 	border: 1px solid lightgray;
-	display: inline;
+	display: inline-block;
 	list-style-type: none;
 	padding: 0 2em;
 }
