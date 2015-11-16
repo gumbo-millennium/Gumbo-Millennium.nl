@@ -2553,7 +2553,7 @@ input:focus {
 	border: 1px solid lightgray;
 	display: inline-block;
 	list-style-type: none;
-	padding: 0 2em;
+	padding: 0 1em;
 }
 
 .postprofile{
