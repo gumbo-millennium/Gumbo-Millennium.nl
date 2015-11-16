@@ -2528,3 +2528,50 @@ input:focus {
 	display: inline-block;
 	width: 90%;
 }
+
+/* Hoi ik ben Sven */
+
+h3.first{
+	background-color: #93AC12;
+	border: 1px solid lightgray;
+	clear: both;
+	padding: 6px;
+}
+
+h3.first a{
+	color: white;
+}
+
+.postbody .profile-icons{
+	margin: 0;
+	padding: 0;
+}
+
+.postbody .profile-icons li{
+	background-color: #EEEEEE;
+	border-radius: 6px 6px 0 0;
+	border: 1px solid lightgray;
+	display: inline;
+	list-style-type: none;
+	padding: 0 2em;
+}
+
+.postprofile{
+	background-color: #EEEEEE;
+	float: left;
+	padding: 1px;
+	width: 20%;
+}
+
+.postbody .content{
+	float: right;
+	width: 75%;
+}
+
+.back2top{
+	clear: both;
+}
+
+.topic-actions{
+	display: none;
+}
