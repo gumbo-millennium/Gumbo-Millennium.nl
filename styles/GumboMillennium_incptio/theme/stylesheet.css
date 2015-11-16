@@ -2531,7 +2531,7 @@ input:focus {
 
 /* Hoi ik ben Sven */
 
-h3.first{
+.postbody h3{
 	background-color: #93AC12;
 	border: 1px solid lightgray;
 	clear: both;
