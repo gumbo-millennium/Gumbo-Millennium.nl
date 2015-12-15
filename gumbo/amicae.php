@@ -27,7 +27,7 @@
 	$user->setup('viewforum');
 	
 	// Get the page content and title
-	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1382';
+	$sql = 'SELECT * FROM ' . POSTS_TABLE . ' AS p WHERE post_id = 1386';
 
 	$result = $db->sql_query_limit($sql, 1);
 	$row = $db->sql_fetchrow($result);
@@ -49,12 +49,12 @@
 	
 	// Set the breadcrumbs
 	$template->assign_block_vars('navlinks', array(
-		'FORUM_NAME'		=> $user->lang['EQUESTER'],
-		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/equester.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
+		'FORUM_NAME'		=> $user->lang['AMICAE'],
+		'U_VIEW_FORUM'		=> append_sid("{$phpbb_root_path}gumbo/amicae.$phpEx" )) //The path to the custom file relative to the phpbb root path.            
 	);
 	
 	// Output page
-	page_header($user->lang['EQUESTER']);
+	page_header($user->lang['AMICAE']);
 	
 	$template->set_filenames(array(
 		'body' => 'dc_singlepost_body.html')

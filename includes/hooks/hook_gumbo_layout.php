@@ -58,6 +58,8 @@ function add_gumbo_layout()
 		'L_PROXIMUS'			=> $user->lang['PROXIMUS'],
 		'U_ALIQUANDO'			=> append_sid("{$phpbb_root_path}gumbo/aliquando.$phpEx"),
 		'L_ALIQUANDO'			=> $user->lang['ALIQUANDO'],
+		'U_AMICAE'				=> append_sid("{$phpbb_root_path}gumbo/amicae.$phpEx"),
+		'L_AMICAE'				=> $user->lang['AMICAE'],
 		'U_SPONSORS'			=> append_sid("{$phpbb_root_path}gumbo/sponsors.$phpEx"),
 		'L_SPONSORS'			=> $user->lang['SPONSOR'],
 

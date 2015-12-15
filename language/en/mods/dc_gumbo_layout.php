@@ -66,6 +66,7 @@ $lang = array_merge($lang, array(
     'M-POWER'           => 'M-Power',
     'PROXIMUS'          => 'Proximus',
     'ALIQUANDO'         => 'Aliquando',
+    'AMICAE'            => 'Amicae',
     'COMMITTEE'         => 'Committee',
 
     'BOARD_HISTORY'     => 'Board History',
