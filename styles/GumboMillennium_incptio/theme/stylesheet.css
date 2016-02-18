@@ -2509,7 +2509,7 @@ input:focus {
 	width: 298px;
 	height: 200px;
 	margin-bottom: 19px;
-	/*border: 1px solid #dbdbdb;*/
+	border: 1px solid #dbdbdb;
 	text-align: center;
 }
 
@@ -2520,7 +2520,7 @@ input:focus {
 .sponsor a{
 	width: 100%;
 	height: 100%;
-	vertical-align: middle;
+	display: inline-block;
 }
 
 .sponsor img {
