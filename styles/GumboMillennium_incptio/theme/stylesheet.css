@@ -2510,6 +2510,7 @@ input:focus {
 	height: 200px;
 	margin-bottom: 19px;
 	border: 1px solid #dbdbdb;
+	text-align: center;
 }
 
 .sponsor:hover {
