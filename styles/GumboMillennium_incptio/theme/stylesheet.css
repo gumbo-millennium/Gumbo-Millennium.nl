@@ -2526,6 +2526,7 @@ input:focus {
 
 .sponsor img {
 	display: inline-block;
+	margin: 0 auto;
 	max-height: 90%;
 	max-width: 90%;
 }
