@@ -2526,7 +2526,8 @@ input:focus {
 
 .sponsor img {
 	display: inline-block;
-	width: 90%;
+	max-height: 90%;
+	max-width: 90%;
 }
 
 /* Hoi ik ben Sven */
